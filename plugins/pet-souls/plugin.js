@@ -1,4 +1,5 @@
-// Pet Soul Tracker: souls still needed to raise each pet.
+// Pet Soul Tracker: souls still needed to raise each pet, and where each
+// pet's souls drop (sources.js, from metabot.gg; click a pet to see them).
 //
 // The game sends every pet's level and soul points once, at login (decoder
 // "pet-list"), then each soul as it is picked up ("soul-gained") and each
@@ -19,18 +20,46 @@ const els = {
   hideMax: document.querySelector(".hideMax"),
   genus: document.querySelector(".genus"),
   levels: document.querySelector(".levels"),
+  regions: document.querySelector(".regions"),
   head: document.querySelector(".head"),
   list: document.querySelector(".pets"),
   empty: document.querySelector(".empty"),
 };
 
-const empty = () => ({ levels: {}, points: {}, syncedAt: 0 });
+const empty = () => ({ levels: {}, points: {}, syncedAt: 0, lastGain: null });
 let key = null; // storage key of the character shown
 let state = empty();
 let names = {};
 let language = "en";
+let openId = null; // the pet whose sources are shown
 // How the list is sorted, and whether maxed pets show; kept across restarts.
-let prefs = { sort: "left", desc: false, hideMax: true, genus: "", level: "" };
+// hiddenRegions: null until the user picks; until then the other side's maps hide.
+let prefs = { sort: "left", desc: false, hideMax: true, genus: "", level: "", pinned: [], hiddenRegions: null };
+// Each side's maps. A server's number says the side, as for the meter's
+// Discord status: 1xxx Elyos, 2xxx Asmodian.
+const SIDE_MAPS = { elyos: ["Poeta", "Verteron", "Eltnen"], asmodian: ["Ishalgen", "Altgard", "Morheim"] };
+const sideOf = (charKey) => {
+  const server = Number((charKey || "").match(/^char-(\d+)-/)?.[1]);
+  return server >= 1000 && server < 2000 ? "elyos" : server >= 2000 && server < 3000 ? "asmodian" : null;
+};
+// The regions hidden: the user's pick, else the other side's maps.
+const hiddenRegions = () => {
+  // regionsPicked: an empty list saved by the version before this one wasn't a choice.
+  if (prefs.regionsPicked && Array.isArray(prefs.hiddenRegions)) return prefs.hiddenRegions;
+  const side = sideOf(key);
+  return side ? SIDE_MAPS[side === "elyos" ? "asmodian" : "elyos"] : [];
+};
+// A spawn's region: the map in "zone · map · N spawns" (none for a few).
+const regionOf = (drop) => {
+  const parts = (drop.where || "").split(" · ");
+  return parts.length > 2 ? parts[1] : "";
+};
+// The regions the sources name, Asmodian and Elyos maps first, then Reshanta.
+const REGIONS = [...new Set(Object.values(PET_SOURCES).flatMap((s) => s.drops.map(regionOf)).filter(Boolean))]
+  .sort((a, b) => a.includes("Reshanta") - b.includes("Reshanta") || a.localeCompare(b));
+// The pet you last picked up a soul for counts as being farmed this long, and
+// sorts first (after the pinned ones).
+const FARMING_MS = 30 * 60 * 1000;
 const GENUS_ORDER = ["cogni", "fera", "natura", "varian"];
 
 const savePrefs = () => a2.storage.set("prefs", prefs).catch(() => {});
@@ -97,11 +126,26 @@ function render() {
   renderChips(els.levels, "level", pets.filter(ofGenus),
     (p) => String(Math.min(p.level, MAX_LEVEL)),
     NEEDED.map((_, l) => [String(l), `Lv ${l}`]).concat([[String(MAX_LEVEL), `Lv ${MAX_LEVEL}`]]));
+  // Pinned pets first, in the order pinned; then the one being farmed; then the chosen sort.
+  const pinned = (prefs.pinned || []).map(String);
+  const farming = state.lastGain && Date.now() - state.lastGain.at < FARMING_MS ? String(state.lastGain.pet) : null;
+  const pinRank = (p) => (pinned.includes(p.id) ? pinned.indexOf(p.id) : pinned.length + (p.id === farming ? 0 : 1));
+  els.regions.replaceChildren(
+    ...REGIONS.map((region) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.dataset.region = region;
+      b.textContent = region.replace("Chaotic ", "");
+      b.title = region;
+      b.setAttribute("aria-pressed", String(!hiddenRegions().includes(region)));
+      return b;
+    }),
+  );
   const shown = listed
     .filter(ofGenus)
     .filter(ofLevel)
-    .filter(matches)
-    .sort((a, b) => dir * sort(a, b) || a.rank - b.rank || a.id - b.id);
+    .filter((p) => matches(p) || (!query && pinned.includes(p.id)))
+    .sort((a, b) => pinRank(a) - pinRank(b) || dir * sort(a, b) || a.rank - b.rank || a.id - b.id);
 
   for (const button of els.head.querySelectorAll("button")) {
     const active = button.dataset.sort === prefs.sort;
@@ -116,9 +160,22 @@ function render() {
       const li = document.createElement("li");
       const name = document.createElement("span");
       name.className = "name";
-      name.textContent = p.name;
+      const pin = document.createElement("button");
+      pin.type = "button";
+      pin.className = "pin";
+      pin.textContent = pinned.includes(p.id) ? "★" : "☆";
+      pin.title = pinned.includes(p.id) ? "Unpin" : "Pin to the top";
+      pin.setAttribute("aria-pressed", String(pinned.includes(p.id)));
+      name.append(pin, p.name);
+      if (p.id === farming) {
+        const tag = document.createElement("span");
+        tag.className = "farming";
+        tag.textContent = "farming";
+        tag.title = "You picked up a soul for this pet in the last 30 minutes";
+        name.append(tag);
+      }
       name.title = `${p.name} (double-click to rename)`;
-      name.addEventListener("dblclick", () => rename(p.id, name));
+      name.addEventListener("dblclick", (e) => { if (!e.target.closest(".pin")) rename(p.id, name); });
       const level = document.createElement("span");
       level.className = "level";
       level.textContent = p.level >= MAX_LEVEL ? "MAX" : `Lv ${p.level}`;
@@ -135,9 +192,61 @@ function render() {
       left.textContent = p.target ? String(p.left) : "";
       left.title = p.target ? `${p.left} souls to level 3` : "";
       li.append(level, name, bar, left);
+      li.dataset.id = p.id;
+      if (PET_SOURCES[p.id]) li.classList.add("hasWhere");
+      if (openId === p.id) {
+        li.classList.add("open");
+        li.append(whereOf(p.id));
+      }
       return li;
     }),
   );
+}
+
+// Where a pet's souls come from: the monsters that drop them (level, chance,
+// zone and map, nearest Kibelisk) and the chests that hold them, with the
+// metabot.gg page the data is from.
+function whereOf(id) {
+  const box = document.createElement("div");
+  box.className = "where";
+  const src = PET_SOURCES[id];
+  if (!src) {
+    box.textContent = "No source known.";
+    return box;
+  }
+  const line = (cls, ...parts) => {
+    const div = document.createElement("div");
+    div.className = cls;
+    div.textContent = parts.filter(Boolean).join(" · ");
+    return div;
+  };
+  const hidden = new Set(hiddenRegions());
+  const elsewhere = new Set();
+  for (const d of src.drops) {
+    if (hidden.has(regionOf(d))) {
+      elsewhere.add(regionOf(d));
+      continue;
+    }
+    box.append(line("who", d.name, d.level && `Lv ${d.level}`, d.chance));
+    // The teleport's number as the in-game map lists it, where known.
+    const kibelisk = d.kibelisk && (d.teleport ? `nearest teleport #${d.teleport} ${d.kibelisk}` : `near Kibelisk ${d.kibelisk}`);
+    box.append(line("at", d.where, kibelisk));
+  }
+  for (const c of src.chests) {
+    box.append(line("who", c.name, c.chance));
+    if (c.from) box.append(line("at", c.from));
+  }
+  if (!src.drops.length && !src.chests.length) box.append(line("at", "No drops or chests listed."));
+  if (elsewhere.size) box.append(line("at", `Also drops in ${[...elsewhere].join(", ")} (hidden)`));
+  const credit = document.createElement("div");
+  credit.className = "credit";
+  const link = document.createElement("a");
+  link.href = src.url;
+  link.textContent = `metabot.gg: ${src.title}`;
+  link.title = src.url;
+  credit.append("Source: ", link);
+  box.append(credit);
+  return box;
 }
 
 // A filter row (genus or level): All, then each choice with how many of
@@ -190,6 +299,20 @@ function rename(id, span) {
   input.focus();
 }
 
+// A pet whose souls reach what its level needs goes up a level, its count
+// starting again from 0 as the game's does (Karnif: 25 -> 0; Aberrant Bee,
+// 2026-10-12: carrying the extra over came out 2 above the game's 33). The
+// game's own level-up message doesn't come for every step (Brax: 24 souls
+// picked up at level 0 and no level-up seen), so the counts level themselves;
+// the next login's pet list corrects them either way.
+function levelUp(st, pet) {
+  const level = st.levels[pet] || 0;
+  if (level < MAX_LEVEL && (st.points[pet] || 0) >= NEEDED[level]) {
+    st.levels[pet] = level + 1;
+    st.points[pet] = 0;
+  }
+}
+
 // What each event does to a character's counts.
 const handle = {
   "decoded:pet-list"(st, data) {
@@ -201,9 +324,13 @@ const handle = {
   },
   "decoded:soul-gained"(st, { pet, amount }) {
     st.points[pet] = (st.points[pet] || 0) + amount;
+    st.lastGain = { pet, at: Date.now() };
+    levelUp(st, pet);
   },
   "decoded:level-up"(st, { pet, level }) {
-    // The game resets a pet's points as it levels (Karnif: 25 -> 0).
+    // The game resets a pet's points as it levels (Karnif: 25 -> 0). Already
+    // levelled from its souls: the souls picked up since stay.
+    if ((st.levels[pet] || 0) >= level) return;
     st.levels[pet] = level;
     st.points[pet] = 0;
   },
@@ -218,7 +345,20 @@ const keyFor = (character) =>
     : null;
 const loaded = new Map();
 const load = async (k) => {
-  if (!loaded.has(k)) loaded.set(k, (await a2.storage.get(k).catch(() => null)) || empty());
+  if (!loaded.has(k)) {
+    const st = (await a2.storage.get(k).catch(() => null)) || empty();
+    // Counts saved before pets levelled from their souls (a pet at level 0 with
+    // 24): the souls past each step, picked up one by one, count toward the next.
+    for (const pet of Object.keys(st.points || {})) {
+      let level = st.levels[pet] || 0;
+      while (level < MAX_LEVEL && st.points[pet] >= NEEDED[level]) {
+        st.points[pet] -= NEEDED[level];
+        level += 1;
+      }
+      st.levels[pet] = level;
+    }
+    loaded.set(k, st);
+  }
   return loaded.get(k);
 };
 // When the meter doesn't know who is playing: the character seen last.
@@ -235,11 +375,24 @@ const queued = (fn) => {
   chain = chain.then(fn).catch((e) => console.error(e));
 };
 
+// The last changes, kept with the counts to trace a count that drifts from
+// the game's: [time, event, pet, amount or level, level after, souls after].
+const HISTORY = 200;
+function note(st, event, data) {
+  const pets = event === "decoded:pet-list" ? [] : [data.pet];
+  const value = event === "decoded:soul-gained" ? data.amount : event === "decoded:level-up" ? data.level : null;
+  const entry = [new Date().toISOString(), event.replace("decoded:", ""), pets[0] ?? null, value];
+  if (pets.length) entry.push(st.levels[pets[0]] || 0, st.points[pets[0]] || 0);
+  else entry.push((data.levels || []).length, (data.points || []).length);
+  st.history = [...(st.history || []), entry].slice(-HISTORY);
+}
+
 for (const event of Object.keys(handle)) {
   a2.on(event, (data, meta) => queued(async () => {
     const k = keyFor(meta?.character) || (await fallbackKey());
     const st = await load(k);
     handle[event](st, data);
+    note(st, event, data);
     await a2.storage.set(k, st).catch(() => {});
     await a2.storage.set("last", k).catch(() => {});
     if (k !== key) await show(k);
@@ -266,9 +419,41 @@ for (const row of [els.genus, els.levels]) {
     render();
   });
 }
+els.regions.addEventListener("click", (e) => {
+  const button = e.target.closest("button[data-region]");
+  if (!button) return;
+  const hidden = new Set(hiddenRegions());
+  if (hidden.has(button.dataset.region)) hidden.delete(button.dataset.region);
+  else hidden.add(button.dataset.region);
+  prefs.hiddenRegions = [...hidden];
+  prefs.regionsPicked = true;
+  savePrefs();
+  render();
+});
 els.hideMax.addEventListener("change", () => {
   prefs.hideMax = els.hideMax.checked;
   savePrefs();
+  render();
+});
+// The plugin's frame can't open a browser: a link's click would only take the
+// window away from the plugin, so links are there to name and credit the page.
+document.addEventListener("click", (e) => {
+  if (e.target.closest("a")) e.preventDefault();
+});
+// A click on a pet shows or hides where its souls drop (a double click on
+// its name still renames it).
+els.list.addEventListener("click", (e) => {
+  const li = e.target.closest("li[data-id]");
+  if (!li) return;
+  if (e.target.closest(".pin")) {
+    const list = (prefs.pinned || []).map(String);
+    prefs.pinned = list.includes(li.dataset.id) ? list.filter((id) => id !== li.dataset.id) : [...list, li.dataset.id];
+    savePrefs();
+    render();
+    return;
+  }
+  if (e.detail > 1 || e.target.closest("input, a, .where")) return;
+  openId = openId === li.dataset.id ? null : li.dataset.id;
   render();
 });
 // A column's button sorts by it; pressing it again reverses the order.
@@ -287,6 +472,8 @@ els.head.addEventListener("click", (e) => {
   prefs = { ...prefs, ...((await a2.storage.get("prefs").catch(() => null)) || {}) };
   els.hideMax.checked = prefs.hideMax;
   await a2.ready();
+  // The "farming" mark wears off without an event to redraw it.
+  setInterval(() => { if (state.lastGain) render(); }, 60_000);
   // Without a character from the meter, show the last one tracked.
   queued(async () => { if (!key) await show(await fallbackKey()); });
 })();

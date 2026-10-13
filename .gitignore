@@ -1,5 +1,7 @@
 dist/
 __pycache__/
+# Pages downloaded by tools/metabot-souls/update.sh.
+tools/metabot-souls/cache/
 # Never commit a signing key.
 *.pem
 *.key

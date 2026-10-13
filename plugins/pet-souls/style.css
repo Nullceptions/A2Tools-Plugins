@@ -200,3 +200,29 @@ body.compact .foot {
 ::-webkit-scrollbar-thumb:active {
   background-color: rgba(255, 255, 255, 0.35);
 }
+
+/* Where a pet's souls drop, under its row. */
+.pets li.hasWhere { cursor: pointer; }
+.pets li.open { background: rgba(255, 255, 255, 0.05); }
+.where {
+  grid-column: 1 / -1;
+  margin: 4px 0 6px 34px;
+  font-size: 12px;
+  cursor: default;
+}
+.where .who { color: rgba(255, 255, 255, 0.9); margin-top: 3px; }
+.where .at { color: rgba(255, 255, 255, 0.55); }
+.where .credit { margin-top: 4px; font-size: 11px; color: rgba(255, 255, 255, 0.45); }
+.where a, .foot a { color: #8fc2ff; text-decoration: none; }
+
+/* Pin to the top, and the pet being farmed. */
+.pin {
+  margin-right: 4px; padding: 0; border: 0; background: none; cursor: pointer;
+  font: inherit; color: rgba(255, 255, 255, 0.35);
+}
+.pin[aria-pressed="true"] { color: #f5c542; }
+.pin:hover { color: #f5c542; }
+.farming {
+  margin-left: 6px; padding: 0 5px; border-radius: 999px; font-size: 10px;
+  color: #0a0e16; background: #6ee07a; vertical-align: 1px;
+}

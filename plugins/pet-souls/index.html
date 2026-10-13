@@ -11,6 +11,7 @@
       <div class="summary"></div>
       <div class="chips genus" role="group" aria-label="Genus"></div>
       <div class="chips levels" role="group" aria-label="Level"></div>
+      <div class="chips regions" role="group" aria-label="Regions shown in a pet's sources" title="Regions shown in a pet's sources: click to hide or show"></div>
       <label class="option"><input type="checkbox" class="hideMax" checked /> Hide pets at level 3</label>
       <input type="search" class="search" placeholder="Search pets" aria-label="Search pets" spellcheck="false" />
     </div>
@@ -22,9 +23,10 @@
     </div>
     <ol class="pets"></ol>
     <p class="empty" hidden>No pets match.</p>
-    <p class="foot">Double-click a name to rename it. Souls per level are 5, 25 and 75 (the first is inferred).</p>
+    <p class="foot">Click a pet to see where its souls drop (from <a href="https://metabot.gg/en/aion-2" class="metabot">metabot.gg</a>). ☆ pins a pet to the top, and the pet you last picked up a soul for shows first for 30 minutes. Double-click a name to rename it. Souls per level are 5, 25 and 75 (the first is inferred).</p>
     <script src="/_sdk/a2.js"></script>
     <script src="pets.js"></script>
+    <script src="sources.js"></script>
     <script src="plugin.js"></script>
   </body>
 </html>

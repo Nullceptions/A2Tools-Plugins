@@ -2,7 +2,7 @@
 
 Shows how many souls each of your pets still needs to reach level 3 (Special pets are left out: they come at their highest level). Filter by genus and level, or search by name: the bar shows the current level's progress, and **To Lv 3** the total still to collect.
 
-It reads three things the game sends: every pet's level and soul points when you log in, each soul as you pick it up, and each level a pet reaches. Counts are kept per character, so the list survives restarts; logging in again resyncs it from the game.
+It reads three things the game sends: every pet's level and soul points when you log in, each soul as you pick it up, and each level a pet reaches. Counts are kept per server, as the game keeps a pet collection for all your characters on a server, so the list survives restarts and switching characters; logging in again resyncs it from the game.
 
 Souls per level: 5 (level 0 → 1, inferred), 25 (1 → 2) and 75 (2 → 3).
 
@@ -25,8 +25,8 @@ The data is [metabot.gg](https://metabot.gg/en/aion-2)'s, one page per soul, whi
 ## Permissions
 
 - `decoder:pet-list`, `decoder:soul-gained`, `decoder:level-up`: read your own pets' levels and soul gains.
-- `events:character`: keep a separate list per character.
-- `storage`: save the counts (with the last 200 changes per character, to trace a count that drifts from the game's), your pet names, the sort order, pins and region choice on this computer.
+- `events:character`: keep a separate list per server.
+- `storage`: save the counts (with the last 200 changes per server, to trace a count that drifts from the game's), your pet names, the sort order, pins and region choice on this computer.
 
 ## Try it (developer mode)
 

@@ -3,7 +3,8 @@
 //
 // The game sends every pet's level and soul points once, at login (decoder
 // "pet-list"), then each soul as it is picked up ("soul-gained") and each
-// level reached ("level-up"). The counts are kept per character, so they
+// level reached ("level-up"). The counts are kept per server (a pet collection
+// is shared by all your characters on a server), so they
 // survive restarts; logging in again resyncs them from the game.
 
 // Souls a pet needs to go from level N to N + 1. The first is inferred: 26
@@ -39,7 +40,7 @@ let prefs = { sort: "left", desc: false, hideMax: true, genus: "", level: "", pi
 // Discord status: 1xxx Elyos, 2xxx Asmodian.
 const SIDE_MAPS = { elyos: ["Poeta", "Verteron", "Eltnen"], asmodian: ["Ishalgen", "Altgard", "Morheim"] };
 const sideOf = (charKey) => {
-  const server = Number((charKey || "").match(/^char-(\d+)-/)?.[1]);
+  const server = Number((charKey || "").match(/^(?:server|char)-(\d+)/)?.[1]);
   return server >= 1000 && server < 2000 ? "elyos" : server >= 2000 && server < 3000 ? "asmodian" : null;
 };
 // The regions hidden: the user's pick, else the other side's maps.
@@ -336,13 +337,25 @@ const handle = {
   },
 };
 
-// Counts are kept per character. Each event comes stamped with who was
-// playing when it happened, so a login on another character starts that
-// character's list rather than overwriting this one.
-const keyFor = (character) =>
+// Counts are kept per server: a pet collection is shared by every character
+// on a server. Each event comes stamped with who was playing when it
+// happened, so a login on another server starts that server's list rather
+// than overwriting this one. No server known (a new character still in the
+// tutorial): no key.
+const keyFor = (character) => (Number(character?.serverId) > 0 ? `server-${Number(character.serverId)}` : null);
+// Before 0.3.1 counts were kept per character, under this key.
+const characterKey = (character) =>
   character?.name
     ? `char-${character.serverId || 0}-${encodeURIComponent(character.name)}`.replace(/[^A-Za-z0-9_-]/g, "_").slice(0, 64)
     : null;
+// A server's counts start from the counts a character on it had saved, the
+// first time that character is seen (the plugin can't list its saved keys).
+const adopt = async (k, character) => {
+  const old = characterKey(character);
+  if (!k || !old || loaded.has(k) || (await a2.storage.get(k).catch(() => null))) return;
+  const saved = await a2.storage.get(old).catch(() => null);
+  if (saved) await a2.storage.set(k, saved).catch(() => {});
+};
 const loaded = new Map();
 const load = async (k) => {
   if (!loaded.has(k)) {
@@ -362,7 +375,7 @@ const load = async (k) => {
   return loaded.get(k);
 };
 // When the meter doesn't know who is playing: the character seen last.
-const UNNAMED_KEY = "char-unnamed";
+const UNNAMED_KEY = "server-unknown";
 const fallbackKey = async () => key || (await a2.storage.get("last").catch(() => null)) || "char-default";
 const show = async (k) => {
   key = k;
@@ -390,14 +403,14 @@ function note(st, event, data) {
 
 for (const event of Object.keys(handle)) {
   a2.on(event, (data, meta) => queued(async () => {
-    // A pet list replaces a character's counts, so one from a character the
-    // meter can't name (a new character still on its placeholder name, in
-    // the tutorial) gets a key of its own rather than the last character's:
-    // falling back there wiped Naicha's counts when an alt was created
-    // (2026-10-13). Single souls still fall back, for a meter started
-    // mid-session that hasn't seen the name yet.
+    // A pet list replaces a server's counts, so one from a character with no
+    // server yet (a new character in the tutorial) gets a key of its own
+    // rather than the last one's: falling back there wiped Naicha's counts
+    // when an alt was created (2026-10-13). Single souls still fall back,
+    // for a meter started mid-session that hasn't seen who is playing.
     const k = keyFor(meta?.character)
       || (event === "decoded:pet-list" ? UNNAMED_KEY : await fallbackKey());
+    await adopt(k, meta?.character);
     const st = await load(k);
     handle[event](st, data);
     note(st, event, data);
@@ -409,7 +422,9 @@ for (const event of Object.keys(handle)) {
 }
 // Who is playing as the window opens.
 a2.on("character", (character) => queued(async () => {
-  await show(keyFor(character) || (await fallbackKey()));
+  const k = keyFor(character);
+  await adopt(k, character);
+  await show(k || (await fallbackKey()));
 }));
 a2.on("language", (code) => {
   language = typeof code === "string" ? code : "en";

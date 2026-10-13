@@ -12,10 +12,10 @@
       "opcode": "00 90",
       "fields": [
         { "type": "skip:4" },
-        { "name": "levels", "type": "list", "count": "u8", "fields": [
+        { "name": "levels", "type": "list", "count": "varint", "fields": [
           { "name": "pet", "type": "u32" }, { "type": "skip:4" }, { "name": "level", "type": "u32" }
         ] },
-        { "name": "points", "type": "list", "count": "u8", "fields": [
+        { "name": "points", "type": "list", "count": "varint", "fields": [
           { "name": "pet", "type": "u32" }, { "name": "points", "type": "u32" }
         ] }
       ]

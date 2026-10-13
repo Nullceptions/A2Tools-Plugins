@@ -1,0 +1,157 @@
+"""Check every plugin under plugins/ and build the catalog the meter installs from.
+
+    python tools/build_catalog.py            check only (pull requests)
+    python tools/build_catalog.py dist       check, then write dist/
+
+dist/ then holds, ready to upload to cdn.a2tools.app/plugins/:
+
+    index.json                  every plugin: id, version, permissions, and each
+                                file's SHA-256 (the meter checks each file it
+                                downloads against this)
+    <id>/<version>/<file>       the plugin's files
+
+The release workflow signs index.json (index.json.sig) with the key only it
+holds. The meter refuses a catalog whose signature does not match, and a file
+whose hash does not match the signed catalog.
+"""
+
+import hashlib
+import json
+import re
+import shutil
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+PLUGINS = ROOT / "plugins"
+API_VERSIONS = {1, 2}  # 2: decoders' "self" field and the "window" permission
+MAX_PLUGIN = 8 * 1024 * 1024
+ID = re.compile(r"^[a-z0-9-]{1,40}$")
+VERSION = re.compile(r"^\d+\.\d+\.\d+$")
+PART = re.compile(r"^[A-Za-z0-9._-]+$")
+# What a plugin may ship: its page, scripts, styles, data and images.
+ALLOWED = {".html", ".js", ".css", ".json", ".png", ".jpg", ".jpeg", ".webp", ".svg", ".gif", ".md", ".txt"}
+# Not shipped to players (still reviewed in the repo).
+SKIP = {"README.md"}
+PERMISSIONS = {"storage", "notify", "events:character", "window"}
+DECODER_TYPES = {"u8", "u16", "u32", "u64", "i32", "varint", "list"}
+
+
+def fail(plugin, message):
+    raise SystemExit(f"plugins/{plugin}: {message}")
+
+
+def check_decoders(name, fields, depth=1):
+    if depth > 2:
+        fail(name, "decoders nest at most two lists deep")
+    if len(fields) > 32:
+        fail(name, "a decoder reads at most 32 fields")
+    for field in fields:
+        kind = field.get("type", "")
+        if kind.startswith("skip:"):
+            if not kind[5:].isdigit():
+                fail(name, f"bad skip {kind!r}")
+            continue
+        if kind not in DECODER_TYPES:
+            fail(name, f"field type {kind!r} is not one the meter knows")
+        if kind == "list":
+            if field.get("count") not in {"u8", "u16", "u32", "varint"}:
+                fail(name, "a list needs a count of u8, u16, u32 or varint")
+            check_decoders(name, field.get("fields", []), depth + 1)
+
+
+def check(folder):
+    name = folder.name
+    manifest_path = folder / "manifest.json"
+    if not manifest_path.is_file() or not (folder / "index.html").is_file():
+        fail(name, "needs manifest.json and index.html")
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if manifest.get("id") != name or not ID.match(name):
+        fail(name, "the manifest's id must match its folder: lowercase letters, digits and '-'")
+    if not VERSION.match(str(manifest.get("version", ""))):
+        fail(name, "version must look like 1.2.3")
+    api = manifest.get("apiVersion")
+    if api not in API_VERSIONS:
+        fail(name, f"apiVersion must be one of {sorted(API_VERSIONS)}")
+    if api < 2 and ("window" in manifest.get("permissions", []) or any("self" in d for d in manifest.get("decoders", []))):
+        fail(name, 'the "window" permission and a decoder\'s "self" need apiVersion 2')
+    for key in ("name", "description", "author"):
+        if not str(manifest.get(key, "")).strip():
+            fail(name, f"the manifest needs a {key}")
+    decoders = manifest.get("decoders", [])
+    decoder_names = {d.get("name") for d in decoders}
+    for permission in manifest.get("permissions", []):
+        if permission.startswith("decoder:"):
+            if permission[8:] not in decoder_names:
+                fail(name, f"{permission} has no decoder of that name")
+        elif permission not in PERMISSIONS:
+            fail(name, f"unknown permission {permission!r}")
+    for decoder in decoders:
+        if f"decoder:{decoder.get('name')}" not in manifest.get("permissions", []):
+            fail(name, f"decoder {decoder.get('name')} needs the permission decoder:{decoder.get('name')}")
+        if not re.fullmatch(r"[0-9A-Fa-f]{2} [0-9A-Fa-f]{2}", decoder.get("opcode", "")):
+            fail(name, f"decoder {decoder.get('name')}: opcode must look like \"0D 90\"")
+        check_decoders(name, decoder.get("fields", []))
+        if "self" in decoder:
+            numbers = {f.get("name") for f in decoder.get("fields", []) if f.get("type") in {"u16", "u32", "u64", "varint"}}
+            if decoder["self"] not in numbers:
+                fail(name, f"decoder {decoder.get('name')}: \"self\" must name one of its number fields")
+
+    files = {}
+    total = 0
+    for path in sorted(p for p in folder.rglob("*") if p.is_file()):
+        rel = path.relative_to(folder).as_posix()
+        if rel in SKIP or rel == ".unpublished":
+            continue
+        if not all(PART.match(part) and part not in {".", ".."} for part in rel.split("/")) or len(rel) > 128:
+            fail(name, f"file name {rel!r}: letters, digits, '.', '-' and '_' only")
+        if path.suffix.lower() not in ALLOWED:
+            fail(name, f"{rel}: {path.suffix} files are not allowed")
+        data = path.read_bytes()
+        total += len(data)
+        files[rel] = hashlib.sha256(data).hexdigest()
+    if total > MAX_PLUGIN:
+        fail(name, f"larger than {MAX_PLUGIN} bytes")
+    entry = {
+        "id": name,
+        "name": manifest["name"],
+        "version": manifest["version"],
+        "apiVersion": manifest["apiVersion"],
+        "description": manifest["description"],
+        "author": manifest["author"],
+        "permissions": manifest.get("permissions", []),
+        "source": f"https://github.com/taengu/A2Tools-Plugins/tree/main/plugins/{name}",
+        "files": files,
+    }
+    return entry
+
+
+def main():
+    folders = sorted(p for p in PLUGINS.iterdir() if p.is_dir())
+    # A folder with an `.unpublished` file is checked but kept out of the
+    # catalog: a plugin still in the works, used locally in developer mode.
+    entries = []
+    for folder in folders:
+        entry = check(folder)
+        if (folder / ".unpublished").exists():
+            print(f"--  {entry['id']} {entry['version']}  (unpublished: not in the catalog)")
+        else:
+            entries.append(entry)
+    for e in entries:
+        print(f"ok  {e['id']} {e['version']}  ({len(e['files'])} files)")
+    if len(sys.argv) < 2:
+        return
+    dist = Path(sys.argv[1])
+    shutil.rmtree(dist, ignore_errors=True)
+    for e in entries:
+        for rel in e["files"]:
+            target = dist / e["id"] / e["version"] / rel
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(PLUGINS / e["id"] / rel, target)
+    catalog = {"format": 1, "plugins": entries}
+    (dist / "index.json").write_text(json.dumps(catalog, ensure_ascii=False, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+    print(f"wrote {dist}/index.json")
+
+
+if __name__ == "__main__":
+    main()

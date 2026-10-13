@@ -1,0 +1,129 @@
+name: Publish plugins
+
+# On each merge to main: build the catalog, sign it, and upload it with the
+# plugins' files to cdn.a2tools.app/plugins/. The meter installs only from a
+# catalog this workflow signed.
+#
+# Secrets:
+#   PLUGIN_SIGNING_KEY     the Ed25519 private key (PEM) that signs index.json
+#   R2_ACCESS_KEY_ID       R2 API token, write access to the aion2-dps-meter bucket
+#   R2_SECRET_ACCESS_KEY
+# Third-party actions are pinned to exact commits: this job holds the signing key.
+# Without the R2 secrets the signed catalog is only kept as a run artifact,
+# for uploading by hand.
+
+on:
+  push:
+    branches: [main]
+    paths: ["plugins/**", "tools/**", ".github/workflows/publish.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+env:
+  CDN: https://cdn.a2tools.app/plugins
+  BUCKET: aion2-dps-meter
+  # The R2 API endpoint (https://<account>.r2.cloudflarestorage.com), a repository variable.
+  R2_ENDPOINT: ${{ vars.R2_ENDPOINT }}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      R2_SET: ${{ secrets.R2_ACCESS_KEY_ID != '' }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: "3.12"
+
+      - name: Build the catalog
+        run: python tools/build_catalog.py dist
+
+      - name: Sign it
+        env:
+          PLUGIN_SIGNING_KEY: ${{ secrets.PLUGIN_SIGNING_KEY }}
+        run: |
+          test -n "$PLUGIN_SIGNING_KEY" || { echo "::error::PLUGIN_SIGNING_KEY is not set"; exit 1; }
+          umask 077
+          printf '%s\n' "$PLUGIN_SIGNING_KEY" > "$RUNNER_TEMP/key.pem"
+          openssl pkeyutl -sign -inkey "$RUNNER_TEMP/key.pem" -rawin -in dist/index.json \
+            | od -An -v -tx1 | tr -d ' \n' > dist/index.json.sig
+          # Check it with the public half, as the meter will.
+          openssl pkey -in "$RUNNER_TEMP/key.pem" -pubout > "$RUNNER_TEMP/pub.pem"
+          xxd -r -p dist/index.json.sig > "$RUNNER_TEMP/sig.bin"
+          openssl pkeyutl -verify -pubin -inkey "$RUNNER_TEMP/pub.pem" -rawin -in dist/index.json -sigfile "$RUNNER_TEMP/sig.bin"
+          echo "Public key (hex): $(openssl pkey -in "$RUNNER_TEMP/key.pem" -pubout -outform DER | tail -c 32 | od -An -v -tx1 | tr -d ' \n')"
+          rm -f "$RUNNER_TEMP/key.pem"
+
+      - name: Refuse to change a published version
+        # A version, once published, is fixed: its files must not change
+        # under players who installed it. Changing a plugin means a new version.
+        run: |
+          python - <<'EOF'
+          import hashlib, json, os, sys, urllib.request, urllib.error
+          catalog = json.load(open("dist/index.json"))
+          cdn = os.environ["CDN"]
+          bad = []
+          for p in catalog["plugins"]:
+              for rel, sha in p["files"].items():
+                  url = f"{cdn}/{p['id']}/{p['version']}/{rel}"
+                  try:
+                      # Cloudflare refuses Python's default user agent (403).
+                      req = urllib.request.Request(url, headers={"User-Agent": "A2Tools-Plugins-Publish"})
+                      data = urllib.request.urlopen(req, timeout=20).read()
+                  except urllib.error.HTTPError as e:
+                      if e.code == 404:
+                          continue
+                      raise
+                  if hashlib.sha256(data).hexdigest() != sha:
+                      bad.append(f"{p['id']} {p['version']}: {rel}")
+          if bad:
+              print("::error::These files changed but their plugin's version did not. Bump the version:")
+              print("\n".join(bad))
+              sys.exit(1)
+          EOF
+
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
+        with:
+          name: plugin-catalog
+          path: dist/
+
+      - name: Upload to the CDN
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+        run: |
+          if [ -z "$AWS_ACCESS_KEY_ID" ]; then
+            echo "::notice::No R2 secrets: the signed catalog is in the run's artifact, to upload by hand."
+            exit 0
+          fi
+          # The plugins' files first, the catalog and its signature last, so a
+          # catalog never names a file that is not there yet. Plugin files go up
+          # as application/octet-stream: Cloudflare's bot protection injects a
+          # script into anything served as text/html, which would change the
+          # file and fail the meter's hash check. The meter ignores the type.
+          cd dist
+          find . -type f ! -name 'index.json' ! -name 'index.json.sig' | sed 's|^\./||' | while read -r f; do
+            aws s3api put-object --endpoint-url "$R2_ENDPOINT" --bucket "$BUCKET" --key "plugins/$f" \
+              --body "$f" --content-type application/octet-stream               --cache-control "public, max-age=31536000, immutable, no-transform" >/dev/null
+            echo "uploaded plugins/$f"
+          done
+          for f in index.json.sig index.json; do
+            aws s3api put-object --endpoint-url "$R2_ENDPOINT" --bucket "$BUCKET" --key "plugins/$f" \
+              --body "$f" --content-type "$([ "$f" = index.json ] && echo application/json || echo text/plain)"               --cache-control "no-cache" >/dev/null
+            echo "uploaded plugins/$f"
+          done
+
+      - name: Check the CDN serves what was signed
+        if: ${{ env.R2_SET == 'true' }}
+        run: |
+          curl -fsS "$CDN/index.json" | cmp - dist/index.json
+          curl -fsS "$CDN/index.json.sig" | cmp - dist/index.json.sig
+          echo "The CDN serves the signed catalog."

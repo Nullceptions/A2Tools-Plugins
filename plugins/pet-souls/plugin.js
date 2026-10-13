@@ -362,6 +362,7 @@ const load = async (k) => {
   return loaded.get(k);
 };
 // When the meter doesn't know who is playing: the character seen last.
+const UNNAMED_KEY = "char-unnamed";
 const fallbackKey = async () => key || (await a2.storage.get("last").catch(() => null)) || "char-default";
 const show = async (k) => {
   key = k;
@@ -389,7 +390,14 @@ function note(st, event, data) {
 
 for (const event of Object.keys(handle)) {
   a2.on(event, (data, meta) => queued(async () => {
-    const k = keyFor(meta?.character) || (await fallbackKey());
+    // A pet list replaces a character's counts, so one from a character the
+    // meter can't name (a new character still on its placeholder name, in
+    // the tutorial) gets a key of its own rather than the last character's:
+    // falling back there wiped Naicha's counts when an alt was created
+    // (2026-10-13). Single souls still fall back, for a meter started
+    // mid-session that hasn't seen the name yet.
+    const k = keyFor(meta?.character)
+      || (event === "decoded:pet-list" ? UNNAMED_KEY : await fallbackKey());
     const st = await load(k);
     handle[event](st, data);
     note(st, event, data);

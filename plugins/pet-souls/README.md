@@ -4,6 +4,8 @@ Shows how many souls each of your pets still needs to reach level 3 (Special pet
 
 It reads three things the game sends: every pet's level and soul points when you log in, each soul as you pick it up, and each level a pet reaches. Counts are kept per server, as the game keeps a pet collection for all your characters on a server, so the list survives restarts and switching characters; logging in again resyncs it from the game.
 
+A soul shows the moment you pick it up on a meter that sends a plugin's records as it reads them (`"immediate"` decoders); older meters, up to 2.0.63, show it half a second later. The pet list at login still waits that half second, so it is filed under the server you logged in on.
+
 Souls per level: 5 (level 0 → 1, inferred), 25 (1 → 2) and 75 (2 → 3).
 
 Pets show by their in-game names, in the meter's language (all ten; `pets.js`, built from the game's `String_str_veh_*` texts). Double-click a name to give it your own; clear it to go back. Search filters by name (shown or English) or id, and each column header sorts the list; pressing it again reverses the order.

@@ -92,6 +92,8 @@ def check(folder):
         if not re.fullmatch(r"[0-9A-Fa-f]{2} [0-9A-Fa-f]{2}", decoder.get("opcode", "")):
             fail(name, f"decoder {decoder.get('name')}: opcode must look like \"0D 90\"")
         check_decoders(name, decoder.get("fields", []))
+        if not isinstance(decoder.get("immediate", False), bool):
+            fail(name, f"decoder {decoder.get('name')}: \"immediate\" must be true or false")
         if "self" in decoder:
             numbers = {f.get("name") for f in decoder.get("fields", []) if f.get("type") in {"u16", "u32", "u64", "varint"}}
             if decoder["self"] not in numbers:

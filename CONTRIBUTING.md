@@ -69,6 +69,8 @@ Field types: `u8 u16 u32 u64 i32 varint`, `skip:N`, and `list` (with a `count` o
 
 `"self": "<field>"` (plugin API 2) names a number field that holds an entity id: the meter passes the event on only when that entity is the player's own character. Use it to tell "I did this" without ever seeing anyone else.
 
+With `events:character`, a plugin's events reach it half a second after they are read, stamped with the character: at login the game sends some data (the pet list) just before the record saying who is playing. `"immediate": true` on a decoder skips that wait, for records that never come at login, such as a soul picked up; it never overtakes an earlier event of the plugin that is still waiting. Meters up to 2.0.63 ignore it and hold the event as before, so it needs no new `apiVersion`.
+
 ## Plugin API versions
 
 - `"apiVersion": 1` runs on meter 2.0.60 and later.

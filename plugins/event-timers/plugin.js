@@ -847,6 +847,10 @@ function alertBanner(message) {
   while (lines.length > 3) lines.shift();
   els.bannerText.textContent = lines.join(" · ");
   els.banner.hidden = false;
+  // Flash it, from the start each time an alert comes in.
+  els.banner.classList.remove("pulse");
+  void els.banner.offsetWidth;
+  els.banner.classList.add("pulse");
   soundAlert();
   clearTimeout(bannerTimer);
   bannerTimer = setTimeout(clearBanner, BANNER_MS);

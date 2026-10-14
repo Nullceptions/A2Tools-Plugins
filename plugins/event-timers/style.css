@@ -341,6 +341,36 @@ input[type="checkbox"] {
 .banner[hidden] {
   display: none;
 }
+/* A new alert flashes: the banner turns inverted (solid in the alert's
+   colour, dark text) and back, six times, then settles. Not forever, so the
+   window isn't repainting for as long as an alert stays up. */
+@keyframes bannerPulse {
+  0%, 100% {
+    background: color-mix(in srgb, var(--alert) 18%, transparent);
+    color: inherit;
+  }
+  50% {
+    background: var(--alert);
+  }
+}
+@keyframes bannerPulseText {
+  0%, 100% { color: color-mix(in srgb, var(--alert) 40%, white); }
+  50% { color: #14100a; }
+}
+.banner.pulse {
+  animation: bannerPulse 0.6s ease-in-out 6;
+}
+.banner.pulse .bannerText {
+  animation: bannerPulseText 0.6s ease-in-out 6;
+}
+@media (prefers-reduced-motion: reduce) {
+  .banner.pulse,
+  .banner.pulse .bannerText {
+    animation-duration: 1.2s;
+    animation-iteration-count: 1;
+    animation-timing-function: steps(1, end);
+  }
+}
 .bannerText {
   flex: 1;
   font-weight: 600;

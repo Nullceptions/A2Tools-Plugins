@@ -34,6 +34,8 @@ const soundLength = (name) => Math.max(0, ...(SOUNDS[name] || []).map(([, start,
 // context suspended, its clock standing still until it is resumed, so it is
 // resumed before each sound; WebView2 (Windows) starts it running.
 let audio = null;
+// The notes still sounding, so a mute can cut them off.
+const sounding = new Set();
 
 async function playSound(name) {
   const notes = SOUNDS[name];
@@ -54,6 +56,18 @@ async function playSound(name) {
       osc.connect(gain).connect(ctx.destination);
       osc.start(at);
       osc.stop(at + length + 0.05);
+      sounding.add(osc);
+      osc.onended = () => sounding.delete(osc);
     }
   } catch {}
+}
+
+// Silence every note still playing or waiting to (an alert's Mute).
+function stopSounds() {
+  for (const osc of sounding) {
+    try {
+      osc.stop();
+    } catch {}
+  }
+  sounding.clear();
 }

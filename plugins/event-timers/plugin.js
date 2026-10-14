@@ -747,7 +747,7 @@ const lines = [];
 function stopSound() {
   clearTimeout(repeatTimer);
   repeatTimer = 0;
-  els.mute.hidden = true;
+  els.mute.disabled = true;
 }
 function soundAlert() {
   stopSound();
@@ -759,10 +759,13 @@ function soundAlert() {
   const play = () => {
     playSound(prefs.sound);
     left -= 1;
-    if (left > 0 && Date.now() < repeatUntil) repeatTimer = setTimeout(play, gap);
-    else stopSound();
+    // The last play: Mute stays live until it has finished.
+    repeatTimer = setTimeout(left > 0 && Date.now() < repeatUntil ? play : stopSound, gap);
   };
-  els.mute.hidden = left <= 1;
+  // Mute shows on every alert, left of ×: live while the sound can still
+  // play, dimmed once it is done or muted.
+  els.mute.hidden = false;
+  els.mute.disabled = false;
   play();
 }
 // Meters before plugin API 2 have no a2.window: the option then does nothing.
@@ -780,6 +783,7 @@ function updateWindow() {
 let bannerTimer = 0;
 function clearBanner() {
   stopSound();
+  stopSounds();
   clearTimeout(bannerTimer);
   lines.length = 0;
   els.banner.hidden = true;
@@ -795,7 +799,10 @@ function alertBanner(message) {
   bannerTimer = setTimeout(clearBanner, BANNER_MS);
   updateWindow();
 }
-els.mute.addEventListener("click", stopSound);
+els.mute.addEventListener("click", () => {
+  stopSound();
+  stopSounds();
+});
 els.dismiss.addEventListener("click", clearBanner);
 
 // Alerts: each goes off once, when its moment (the start less its lead)

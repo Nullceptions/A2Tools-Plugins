@@ -315,6 +315,10 @@ input[type="checkbox"] {
   flex: 1;
   font-weight: 600;
 }
+.banner .mute:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
 .banner .dismiss {
   width: 22px;
   padding: 0;

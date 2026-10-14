@@ -19,6 +19,8 @@ const els = {
   status: document.querySelector(".status"),
   summary: document.querySelector(".summary"),
   hideMax: document.querySelector(".hideMax"),
+  scaleLabel: document.querySelector(".scaleLabel"),
+  scale: document.querySelector(".scaleSelect"),
   genus: document.querySelector(".genus"),
   levels: document.querySelector(".levels"),
   regions: document.querySelector(".regions"),
@@ -35,7 +37,25 @@ let language = "en";
 let openId = null; // the pet whose sources are shown
 // How the list is sorted, and whether maxed pets show; kept across restarts.
 // hiddenRegions: null until the user picks; until then the other side's maps hide.
-let prefs = { sort: "left", desc: false, hideMax: true, genus: "", level: "", pinned: [], hiddenRegions: null };
+let prefs = { sort: "left", desc: false, hideMax: true, genus: "", level: "", pinned: [], hiddenRegions: null, scale: 1 };
+// Text size: the whole page scaled, spacing and controls with the text. 100%
+// is BASE_ZOOM, a little larger than the stylesheet's own sizes.
+const SCALES = [0.9, 1, 1.1, 1.25, 1.5];
+const BASE_ZOOM = 1.1;
+function applyScale() {
+  const scale = SCALES.includes(Number(prefs.scale)) ? Number(prefs.scale) : 1;
+  document.documentElement.style.zoom = String(Math.round(BASE_ZOOM * scale * 1000) / 1000);
+}
+function renderScale() {
+  els.scaleLabel.textContent = ui().textSize;
+  els.scale.replaceChildren(...SCALES.map((x) => {
+    const o = document.createElement("option");
+    o.value = String(x);
+    o.textContent = `${Math.round(x * 100)}%`;
+    return o;
+  }));
+  els.scale.value = String(SCALES.includes(Number(prefs.scale)) ? Number(prefs.scale) : 1);
+}
 // Each side's maps. A server's number says the side, as for the meter's
 // Discord status: 1xxx Elyos, 2xxx Asmodian.
 const SIDE_MAPS = { elyos: ["Poeta", "Verteron", "Eltnen"], asmodian: ["Ishalgen", "Altgard", "Morheim"] };
@@ -54,43 +74,43 @@ const hiddenRegions = () => {
 const text = (k) => SOURCE_TEXT[k]?.[language] ?? SOURCE_TEXT[k]?.en ?? String(k ?? "").replace(/^=/, "");
 // The words around them, in each of the meter's languages.
 const SOURCE_UI = {
-  en: { noSource: "No source known.", noDrops: "No drops or chests listed.", spawns: (n) => `${n} spawn${n === 1 ? "" : "s"}`,
+  en: { textSize: "Text size", noSource: "No source known.", noDrops: "No drops or chests listed.", spawns: (n) => `${n} spawn${n === 1 ? "" : "s"}`,
         teleport: (n, name) => `nearest teleport #${n} ${name}`, near: (name) => `near Kibelisk ${name}`,
         perOpening: (p) => `${p} per opening`, boxFrom: (x) => `The box comes from ${x}`, also: (x) => `Also drops in ${x} (hidden)`,
         more: ["More on ", ""] },
-  ko: { noSource: "알려진 출처가 없습니다.", noDrops: "드롭이나 상자 정보가 없습니다.", spawns: (n) => `${n}곳 출현`,
+  ko: { textSize: "글자 크기", noSource: "알려진 출처가 없습니다.", noDrops: "드롭이나 상자 정보가 없습니다.", spawns: (n) => `${n}곳 출현`,
         teleport: (n, name) => `가까운 텔레포트 #${n} ${name}`, near: (name) => `${name} 근처`,
         perOpening: (p) => `개봉당 ${p}`, boxFrom: (x) => `상자 획득처: ${x}`, also: (x) => `${x}에서도 드롭 (숨김)`,
         more: ["", "에서 더 보기"] },
-  ja: { noSource: "入手先は不明です。", noDrops: "ドロップや箱の情報はありません。", spawns: (n) => `出現 ${n}か所`,
+  ja: { textSize: "文字の大きさ", noSource: "入手先は不明です。", noDrops: "ドロップや箱の情報はありません。", spawns: (n) => `出現 ${n}か所`,
         teleport: (n, name) => `最寄りのテレポート #${n} ${name}`, near: (name) => `${name}付近`,
         perOpening: (p) => `開封ごとに ${p}`, boxFrom: (x) => `箱の入手先: ${x}`, also: (x) => `${x}でもドロップ（非表示）`,
         more: ["", " で詳しく見る"] },
-  de: { noSource: "Keine Quelle bekannt.", noDrops: "Keine Drops oder Truhen bekannt.", spawns: (n) => `${n} Spawn${n === 1 ? "" : "s"}`,
+  de: { textSize: "Textgröße", noSource: "Keine Quelle bekannt.", noDrops: "Keine Drops oder Truhen bekannt.", spawns: (n) => `${n} Spawn${n === 1 ? "" : "s"}`,
         teleport: (n, name) => `nächster Teleport #${n} ${name}`, near: (name) => `nahe ${name}`,
         perOpening: (p) => `${p} pro Öffnung`, boxFrom: (x) => `Die Truhe gibt es über: ${x}`, also: (x) => `Droppt auch in ${x} (ausgeblendet)`,
         more: ["Mehr auf ", ""] },
-  fr: { noSource: "Aucune source connue.", noDrops: "Aucun butin ni coffre répertorié.", spawns: (n) => `${n} apparition${n === 1 ? "" : "s"}`,
+  fr: { textSize: "Taille du texte", noSource: "Aucune source connue.", noDrops: "Aucun butin ni coffre répertorié.", spawns: (n) => `${n} apparition${n === 1 ? "" : "s"}`,
         teleport: (n, name) => `téléporteur le plus proche n° ${n} ${name}`, near: (name) => `près de ${name}`,
         perOpening: (p) => `${p} par ouverture`, boxFrom: (x) => `Le coffre s'obtient via : ${x}`, also: (x) => `Tombe aussi à ${x} (masqué)`,
         more: ["Plus sur ", ""] },
-  es: { noSource: "No se conoce ninguna fuente.", noDrops: "No hay botín ni cofres.", spawns: (n) => `${n} aparici${n === 1 ? "ón" : "ones"}`,
+  es: { textSize: "Tamaño del texto", noSource: "No se conoce ninguna fuente.", noDrops: "No hay botín ni cofres.", spawns: (n) => `${n} aparici${n === 1 ? "ón" : "ones"}`,
         teleport: (n, name) => `teletransporte más cercano n.º ${n} ${name}`, near: (name) => `cerca de ${name}`,
         perOpening: (p) => `${p} por apertura`, boxFrom: (x) => `El cofre se obtiene en: ${x}`, also: (x) => `También cae en ${x} (oculto)`,
         more: ["Más en ", ""] },
-  pt: { noSource: "Nenhuma fonte conhecida.", noDrops: "Nenhum drop ou baú listado.", spawns: (n) => `${n} apari${n === 1 ? "ção" : "ções"}`,
+  pt: { textSize: "Tamanho do texto", noSource: "Nenhuma fonte conhecida.", noDrops: "Nenhum drop ou baú listado.", spawns: (n) => `${n} apari${n === 1 ? "ção" : "ções"}`,
         teleport: (n, name) => `teleporte mais próximo nº ${n} ${name}`, near: (name) => `perto de ${name}`,
         perOpening: (p) => `${p} por abertura`, boxFrom: (x) => `O baú vem de: ${x}`, also: (x) => `Também dropa em ${x} (oculto)`,
         more: ["Mais em ", ""] },
-  ru: { noSource: "Источник неизвестен.", noDrops: "Нет данных о добыче и сундуках.", spawns: (n) => `мест появления: ${n}`,
+  ru: { textSize: "Размер текста", noSource: "Источник неизвестен.", noDrops: "Нет данных о добыче и сундуках.", spawns: (n) => `мест появления: ${n}`,
         teleport: (n, name) => `ближайший телепорт №${n} ${name}`, near: (name) => `рядом: ${name}`,
         perOpening: (p) => `${p} за открытие`, boxFrom: (x) => `Сундук можно получить: ${x}`, also: (x) => `Также выпадает: ${x} (скрыто)`,
         more: ["Подробнее на ", ""] },
-  "zh-Hant": { noSource: "來源不明。", noDrops: "沒有掉落或寶箱資料。", spawns: (n) => `${n} 個出現點`,
+  "zh-Hant": { textSize: "文字大小", noSource: "來源不明。", noDrops: "沒有掉落或寶箱資料。", spawns: (n) => `${n} 個出現點`,
         teleport: (n, name) => `最近的傳送點 #${n} ${name}`, near: (name) => `${name}附近`,
         perOpening: (p) => `每次開啟 ${p}`, boxFrom: (x) => `寶箱來源：${x}`, also: (x) => `${x}也會掉落（已隱藏）`,
         more: ["在 ", " 查看更多"] },
-  "zh-Hans": { noSource: "来源不明。", noDrops: "没有掉落或宝箱资料。", spawns: (n) => `${n} 个出现点`,
+  "zh-Hans": { textSize: "文字大小", noSource: "来源不明。", noDrops: "没有掉落或宝箱资料。", spawns: (n) => `${n} 个出现点`,
         teleport: (n, name) => `最近的传送点 #${n} ${name}`, near: (name) => `${name}附近`,
         perOpening: (p) => `每次开启 ${p}`, boxFrom: (x) => `宝箱来源：${x}`, also: (x) => `${x}也会掉落（已隐藏）`,
         more: ["在 ", " 查看更多"] },
@@ -510,6 +530,7 @@ a2.on("character", (character) => queued(async () => {
 }));
 a2.on("language", (code) => {
   language = typeof code === "string" ? code : "en";
+  renderScale();
   render();
 });
 // The window's fold button: the list (and its column headers) only.
@@ -534,6 +555,11 @@ els.regions.addEventListener("click", (e) => {
   prefs.regionsPicked = true;
   savePrefs();
   render();
+});
+els.scale.addEventListener("change", () => {
+  prefs.scale = Number(els.scale.value);
+  savePrefs();
+  applyScale();
 });
 els.hideMax.addEventListener("change", () => {
   prefs.hideMax = els.hideMax.checked;
@@ -571,6 +597,8 @@ els.head.addEventListener("click", (e) => {
   names = (await a2.storage.get("names").catch(() => null)) || {};
   prefs = { ...prefs, ...((await a2.storage.get("prefs").catch(() => null)) || {}) };
   els.hideMax.checked = prefs.hideMax;
+  applyScale();
+  renderScale();
   await a2.ready();
   // The "farming" mark wears off without an event to redraw it.
   setInterval(() => { if (state.lastGain) render(); }, 60_000);

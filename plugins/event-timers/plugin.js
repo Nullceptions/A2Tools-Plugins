@@ -56,6 +56,16 @@ const els = {
   zoneSelect: $(".zoneSelect"),
   scaleLabel: $(".scaleLabel"),
   scaleSelect: $(".scaleSelect"),
+  defaultLeadLabel: $(".defaultLeadLabel"),
+  defaultLead: $(".defaultLead"),
+  defaultClosedLabel: $(".defaultClosedLabel"),
+  defaultClosed: $(".defaultClosed"),
+  defaultsNote: $(".defaultsNote"),
+  applyAll: $(".applyAll"),
+  modal: $(".modal"),
+  modalText: $(".modalText"),
+  modalYes: $(".modalYes"),
+  modalNo: $(".modalNo"),
 };
 
 // How long before an event its alert goes off, in minutes (0 = as it starts).
@@ -186,73 +196,83 @@ const ALERT_UI = {
 
 // The words added with the tabs, the field bosses and repeating alerts.
 const MORE_UI = {
-  en: { textSize: "Text size", popNote: "The window stays hidden until an alert goes off. To see it before then: Settings → Plugins → Open.", events: "Events", bosses: "Bosses", region: "Region", daily: "Daily reset", weekly: "Weekly reset",
+  en: { allOn: "All on", allOff: "All off", defaultLead: "Alert time", defaultClosed: "Alert time while AION2 is closed", applyAll: "Apply to current alerts", applyAsk: (n, lead, closed) => `Set the ${n} alerts that are on to ${lead}, and ${closed} while AION2 is closed?`, apply: "Apply", cancel: "Cancel", defaultsNote: "New alerts start with these.",
+        textSize: "Text size", popNote: "The window stays hidden until an alert goes off. To see it before then: Settings → Plugins → Open.", events: "Events", bosses: "Bosses", region: "Region", daily: "Daily reset", weekly: "Weekly reset",
         scheduled: "Scheduled bosses", field: "Field bosses", fieldNote: "Shared by players' meters as they open their map.",
         noFeed: "Field boss timers need meter 2.0.65 or later.", feedFailed: "Couldn't read the field boss timers.",
-        noServer: "Log in to a character to see your server's field bosses.", up: "Up", upFor: (t) => `up ${t}`,
+        noServer: "Log in to a character to see your server's field bosses.", up: "Up", upFor: (t) => `for ${t}`,
         due: "Due", unknown: "No report yet", seen: (t) => `reported ${t} ago`, allField: "All field bosses",
         repeat: "Repeat", once: "Once", times: (n) => `${n} times`, untilMuted: "Until muted", mute: "Mute", dismiss: "Dismiss",
         bossSoon: (name, n) => `${name} back in ${n} min`, bossNow: (name) => `${name} is back` },
-  ko: { textSize: "글자 크기", popNote: "알림이 울릴 때까지 창이 숨겨져 있습니다. 그 전에 보려면: 설정 → 플러그인 → 열기.", events: "이벤트", bosses: "보스", region: "지역", daily: "일일 초기화", weekly: "주간 초기화",
+  ko: { allOn: "모두 켜기", allOff: "모두 끄기", defaultLead: "알림 시간", defaultClosed: "AION2가 꺼져 있을 때 알림 시간", applyAll: "현재 알림에 적용", applyAsk: (n, lead, closed) => `켜져 있는 알림 ${n}개를 ${lead}, AION2가 꺼져 있을 때는 ${closed}(으)로 바꿀까요?`, apply: "적용", cancel: "취소", defaultsNote: "새 알림은 이 설정으로 시작합니다.",
+        textSize: "글자 크기", popNote: "알림이 울릴 때까지 창이 숨겨져 있습니다. 그 전에 보려면: 설정 → 플러그인 → 열기.", events: "이벤트", bosses: "보스", region: "지역", daily: "일일 초기화", weekly: "주간 초기화",
         scheduled: "정기 보스", field: "필드 보스", fieldNote: "플레이어들이 지도를 열 때 미터가 공유한 정보입니다.",
         noFeed: "필드 보스 타이머는 미터 2.0.65 이상이 필요합니다.", feedFailed: "필드 보스 타이머를 읽지 못했습니다.",
-        noServer: "캐릭터로 접속하면 서버의 필드 보스가 표시됩니다.", up: "출현", upFor: (t) => `${t} 전 출현`,
+        noServer: "캐릭터로 접속하면 서버의 필드 보스가 표시됩니다.", up: "출현", upFor: (t) => `${t}째`,
         due: "곧 출현", unknown: "아직 정보 없음", seen: (t) => `${t} 전 보고`, allField: "모든 필드 보스",
         repeat: "반복", once: "1회", times: (n) => `${n}회`, untilMuted: "끌 때까지", mute: "소리 끄기", dismiss: "닫기",
         bossSoon: (name, n) => `${name} ${n}분 후 출현`, bossNow: (name) => `${name} 출현` },
-  ja: { textSize: "文字の大きさ", popNote: "通知が鳴るまでウィンドウは隠れています。それまでに見るには：設定 → プラグイン → 開く。", events: "イベント", bosses: "ボス", region: "地域", daily: "デイリーリセット", weekly: "ウィークリーリセット",
+  ja: { allOn: "すべてオン", allOff: "すべてオフ", defaultLead: "通知のタイミング", defaultClosed: "AION2を閉じているときの通知タイミング", applyAll: "現在の通知に適用", applyAsk: (n, lead, closed) => `オンの通知${n}件を${lead}、AION2を閉じているときは${closed}に変更しますか？`, apply: "適用", cancel: "キャンセル", defaultsNote: "新しい通知はこの設定で始まります。",
+        textSize: "文字の大きさ", popNote: "通知が鳴るまでウィンドウは隠れています。それまでに見るには：設定 → プラグイン → 開く。", events: "イベント", bosses: "ボス", region: "地域", daily: "デイリーリセット", weekly: "ウィークリーリセット",
         scheduled: "定時ボス", field: "フィールドボス", fieldNote: "プレイヤーがマップを開いたときにメーターが共有した情報です。",
         noFeed: "フィールドボスのタイマーにはメーター 2.0.65 以降が必要です。", feedFailed: "フィールドボスのタイマーを読み込めませんでした。",
-        noServer: "キャラクターでログインするとサーバーのフィールドボスが表示されます。", up: "出現中", upFor: (t) => `${t}前から出現`,
+        noServer: "キャラクターでログインするとサーバーのフィールドボスが表示されます。", up: "出現中", upFor: (t) => `${t}経過`,
         due: "まもなく", unknown: "情報なし", seen: (t) => `${t}前に報告`, allField: "すべてのフィールドボス",
         repeat: "繰り返し", once: "1回", times: (n) => `${n}回`, untilMuted: "ミュートするまで", mute: "ミュート", dismiss: "閉じる",
         bossSoon: (name, n) => `${name}まであと${n}分`, bossNow: (name) => `${name}出現` },
-  de: { textSize: "Textgröße", popNote: "Das Fenster bleibt verborgen, bis ein Alarm kommt. Um es vorher zu sehen: Einstellungen → Plugins → Öffnen.", events: "Events", bosses: "Bosse", region: "Region", daily: "Täglicher Reset", weekly: "Wöchentlicher Reset",
+  de: { allOn: "Alle an", allOff: "Alle aus", defaultLead: "Alarmzeit", defaultClosed: "Alarmzeit, wenn AION2 geschlossen ist", applyAll: "Auf aktuelle Alarme anwenden", applyAsk: (n, lead, closed) => `Die ${n} aktiven Alarme auf ${lead} setzen, und auf ${closed}, wenn AION2 geschlossen ist?`, apply: "Anwenden", cancel: "Abbrechen", defaultsNote: "Neue Alarme beginnen mit diesen Werten.",
+        textSize: "Textgröße", popNote: "Das Fenster bleibt verborgen, bis ein Alarm kommt. Um es vorher zu sehen: Einstellungen → Plugins → Öffnen.", events: "Events", bosses: "Bosse", region: "Region", daily: "Täglicher Reset", weekly: "Wöchentlicher Reset",
         scheduled: "Geplante Bosse", field: "Feldbosse", fieldNote: "Von den Metern der Spieler geteilt, wenn sie ihre Karte öffnen.",
         noFeed: "Feldboss-Timer brauchen Meter 2.0.65 oder neuer.", feedFailed: "Die Feldboss-Timer konnten nicht gelesen werden.",
         noServer: "Mit einem Charakter einloggen, um die Feldbosse deines Servers zu sehen.", up: "Da", upFor: (t) => `seit ${t}`,
         due: "Fällig", unknown: "Noch keine Meldung", seen: (t) => `vor ${t} gemeldet`, allField: "Alle Feldbosse",
         repeat: "Wiederholen", once: "Einmal", times: (n) => `${n}-mal`, untilMuted: "Bis stumm", mute: "Stumm", dismiss: "Schließen",
         bossSoon: (name, n) => `${name} in ${n} Min. zurück`, bossNow: (name) => `${name} ist zurück` },
-  fr: { textSize: "Taille du texte", popNote: "La fenêtre reste cachée jusqu'à une alerte. Pour la voir avant : Réglages → Plugins → Ouvrir.", events: "Événements", bosses: "Boss", region: "Région", daily: "Réinitialisation quotidienne", weekly: "Réinitialisation hebdomadaire",
+  fr: { allOn: "Tout activer", allOff: "Tout désactiver", defaultLead: "Moment de l'alerte", defaultClosed: "Moment de l'alerte quand AION2 est fermé", applyAll: "Appliquer aux alertes actuelles", applyAsk: (n, lead, closed) => `Régler les ${n} alertes actives sur ${lead}, et ${closed} quand AION2 est fermé ?`, apply: "Appliquer", cancel: "Annuler", defaultsNote: "Les nouvelles alertes partent de ces réglages.",
+        textSize: "Taille du texte", popNote: "La fenêtre reste cachée jusqu'à une alerte. Pour la voir avant : Réglages → Plugins → Ouvrir.", events: "Événements", bosses: "Boss", region: "Région", daily: "Réinitialisation quotidienne", weekly: "Réinitialisation hebdomadaire",
         scheduled: "Boss programmés", field: "Boss de terrain", fieldNote: "Partagés par les meters des joueurs quand ils ouvrent leur carte.",
         noFeed: "Les minuteurs des boss de terrain demandent le meter 2.0.65 ou plus récent.", feedFailed: "Impossible de lire les minuteurs des boss de terrain.",
         noServer: "Connectez-vous avec un personnage pour voir les boss de terrain de votre serveur.", up: "Présent", upFor: (t) => `depuis ${t}`,
         due: "Imminent", unknown: "Pas encore signalé", seen: (t) => `signalé il y a ${t}`, allField: "Tous les boss de terrain",
         repeat: "Répéter", once: "Une fois", times: (n) => `${n} fois`, untilMuted: "Jusqu'à coupure", mute: "Couper", dismiss: "Fermer",
         bossSoon: (name, n) => `${name} de retour dans ${n} min`, bossNow: (name) => `${name} est de retour` },
-  es: { textSize: "Tamaño del texto", popNote: "La ventana queda oculta hasta que suene una alerta. Para verla antes: Ajustes → Plugins → Abrir.", events: "Eventos", bosses: "Jefes", region: "Región", daily: "Reinicio diario", weekly: "Reinicio semanal",
+  es: { allOn: "Activar todo", allOff: "Desactivar todo", defaultLead: "Momento de la alerta", defaultClosed: "Momento de la alerta con AION2 cerrado", applyAll: "Aplicar a las alertas actuales", applyAsk: (n, lead, closed) => `¿Poner las ${n} alertas activas en ${lead}, y ${closed} con AION2 cerrado?`, apply: "Aplicar", cancel: "Cancelar", defaultsNote: "Las alertas nuevas empiezan con estos valores.",
+        textSize: "Tamaño del texto", popNote: "La ventana queda oculta hasta que suene una alerta. Para verla antes: Ajustes → Plugins → Abrir.", events: "Eventos", bosses: "Jefes", region: "Región", daily: "Reinicio diario", weekly: "Reinicio semanal",
         scheduled: "Jefes programados", field: "Jefes de campo", fieldNote: "Compartidos por los medidores de los jugadores al abrir su mapa.",
         noFeed: "Los temporizadores de jefes de campo necesitan el medidor 2.0.65 o posterior.", feedFailed: "No se pudieron leer los temporizadores de jefes de campo.",
-        noServer: "Entra con un personaje para ver los jefes de campo de tu servidor.", up: "Activo", upFor: (t) => `hace ${t}`,
+        noServer: "Entra con un personaje para ver los jefes de campo de tu servidor.", up: "Activo", upFor: (t) => `desde hace ${t}`,
         due: "Inminente", unknown: "Sin informes", seen: (t) => `informado hace ${t}`, allField: "Todos los jefes de campo",
         repeat: "Repetir", once: "Una vez", times: (n) => `${n} veces`, untilMuted: "Hasta silenciar", mute: "Silenciar", dismiss: "Cerrar",
         bossSoon: (name, n) => `${name} vuelve en ${n} min`, bossNow: (name) => `${name} ha vuelto` },
-  pt: { textSize: "Tamanho do texto", popNote: "A janela fica oculta até um alerta tocar. Para vê-la antes: Configurações → Plugins → Abrir.", events: "Eventos", bosses: "Chefes", region: "Região", daily: "Reinício diário", weekly: "Reinício semanal",
+  pt: { allOn: "Ativar todos", allOff: "Desativar todos", defaultLead: "Momento do alerta", defaultClosed: "Momento do alerta com o AION2 fechado", applyAll: "Aplicar aos alertas atuais", applyAsk: (n, lead, closed) => `Ajustar os ${n} alertas ativos para ${lead}, e ${closed} com o AION2 fechado?`, apply: "Aplicar", cancel: "Cancelar", defaultsNote: "Novos alertas começam com estes valores.",
+        textSize: "Tamanho do texto", popNote: "A janela fica oculta até um alerta tocar. Para vê-la antes: Configurações → Plugins → Abrir.", events: "Eventos", bosses: "Chefes", region: "Região", daily: "Reinício diário", weekly: "Reinício semanal",
         scheduled: "Chefes agendados", field: "Chefes de campo", fieldNote: "Compartilhados pelos medidores dos jogadores ao abrir o mapa.",
         noFeed: "Os timers de chefes de campo precisam do medidor 2.0.65 ou mais novo.", feedFailed: "Não foi possível ler os timers de chefes de campo.",
         noServer: "Entre com um personagem para ver os chefes de campo do seu servidor.", up: "Ativo", upFor: (t) => `há ${t}`,
         due: "Iminente", unknown: "Sem relatos ainda", seen: (t) => `relatado há ${t}`, allField: "Todos os chefes de campo",
         repeat: "Repetir", once: "Uma vez", times: (n) => `${n} vezes`, untilMuted: "Até silenciar", mute: "Silenciar", dismiss: "Fechar",
         bossSoon: (name, n) => `${name} volta em ${n} min`, bossNow: (name) => `${name} voltou` },
-  ru: { textSize: "Размер текста", popNote: "Окно скрыто, пока не сработает оповещение. Чтобы открыть его раньше: Настройки → Плагины → Открыть.", events: "События", bosses: "Боссы", region: "Регион", daily: "Ежедневный сброс", weekly: "Еженедельный сброс",
+  ru: { allOn: "Включить все", allOff: "Выключить все", defaultLead: "Время оповещения", defaultClosed: "Время оповещения, когда AION2 закрыт", applyAll: "Применить к текущим оповещениям", applyAsk: (n, lead, closed) => `Установить ${n} включённых оповещений на «${lead}», а когда AION2 закрыт — «${closed}»?`, apply: "Применить", cancel: "Отмена", defaultsNote: "Новые оповещения начинаются с этих значений.",
+        textSize: "Размер текста", popNote: "Окно скрыто, пока не сработает оповещение. Чтобы открыть его раньше: Настройки → Плагины → Открыть.", events: "События", bosses: "Боссы", region: "Регион", daily: "Ежедневный сброс", weekly: "Еженедельный сброс",
         scheduled: "Боссы по расписанию", field: "Полевые боссы", fieldNote: "Делятся метры игроков, когда те открывают карту.",
         noFeed: "Для таймеров полевых боссов нужен метр 2.0.65 или новее.", feedFailed: "Не удалось прочитать таймеры полевых боссов.",
         noServer: "Войдите персонажем, чтобы видеть полевых боссов своего сервера.", up: "На месте", upFor: (t) => `уже ${t}`,
         due: "Вот-вот", unknown: "Пока нет данных", seen: (t) => `данные ${t} назад`, allField: "Все полевые боссы",
         repeat: "Повтор", once: "Один раз", times: (n) => `${n} раз`, untilMuted: "Пока не выключить", mute: "Выключить звук", dismiss: "Закрыть",
         bossSoon: (name, n) => `${name} через ${n} мин`, bossNow: (name) => `${name} появился` },
-  "zh-Hant": { textSize: "文字大小", popNote: "提醒響起前視窗會保持隱藏。若要先查看：設定 → 外掛 → 開啟。", events: "活動", bosses: "首領", region: "地區", daily: "每日重置", weekly: "每週重置",
+  "zh-Hant": { allOn: "全部開啟", allOff: "全部關閉", defaultLead: "提醒時間", defaultClosed: "AION2 關閉時的提醒時間", applyAll: "套用到目前的提醒", applyAsk: (n, lead, closed) => `將已開啟的 ${n} 個提醒設為「${lead}」，AION2 關閉時設為「${closed}」？`, apply: "套用", cancel: "取消", defaultsNote: "新的提醒會以此設定開始。",
+        textSize: "文字大小", popNote: "提醒響起前視窗會保持隱藏。若要先查看：設定 → 外掛 → 開啟。", events: "活動", bosses: "首領", region: "地區", daily: "每日重置", weekly: "每週重置",
         scheduled: "定時首領", field: "野外首領", fieldNote: "由玩家開啟地圖時其計量器分享。",
         noFeed: "野外首領計時需要計量器 2.0.65 以上。", feedFailed: "無法讀取野外首領計時。",
-        noServer: "登入角色即可查看伺服器的野外首領。", up: "已出現", upFor: (t) => `${t} 前出現`,
+        noServer: "登入角色即可查看伺服器的野外首領。", up: "已出現", upFor: (t) => `已 ${t}`,
         due: "即將出現", unknown: "尚無回報", seen: (t) => `${t} 前回報`, allField: "所有野外首領",
         repeat: "重複", once: "一次", times: (n) => `${n} 次`, untilMuted: "直到靜音", mute: "靜音", dismiss: "關閉",
         bossSoon: (name, n) => `${name} ${n} 分鐘後出現`, bossNow: (name) => `${name} 已出現` },
-  "zh-Hans": { textSize: "文字大小", popNote: "提醒响起前窗口会保持隐藏。若要先查看：设置 → 插件 → 打开。", events: "活动", bosses: "首领", region: "地区", daily: "每日重置", weekly: "每周重置",
+  "zh-Hans": { allOn: "全部开启", allOff: "全部关闭", defaultLead: "提醒时间", defaultClosed: "AION2 关闭时的提醒时间", applyAll: "应用到当前的提醒", applyAsk: (n, lead, closed) => `将已开启的 ${n} 个提醒设为“${lead}”，AION2 关闭时设为“${closed}”？`, apply: "应用", cancel: "取消", defaultsNote: "新的提醒会以此设置开始。",
+        textSize: "文字大小", popNote: "提醒响起前窗口会保持隐藏。若要先查看：设置 → 插件 → 打开。", events: "活动", bosses: "首领", region: "地区", daily: "每日重置", weekly: "每周重置",
         scheduled: "定时首领", field: "野外首领", fieldNote: "由玩家打开地图时其计量器分享。",
         noFeed: "野外首领计时需要计量器 2.0.65 以上。", feedFailed: "无法读取野外首领计时。",
-        noServer: "登录角色即可查看服务器的野外首领。", up: "已出现", upFor: (t) => `${t} 前出现`,
+        noServer: "登录角色即可查看服务器的野外首领。", up: "已出现", upFor: (t) => `已 ${t}`,
         due: "即将出现", unknown: "尚无回报", seen: (t) => `${t} 前回报`, allField: "所有野外首领",
         repeat: "重复", once: "一次", times: (n) => `${n} 次`, untilMuted: "直到静音", mute: "静音", dismiss: "关闭",
         bossSoon: (name, n) => `${name} ${n} 分钟后出现`, bossNow: (name) => `${name} 已出现` },
@@ -270,9 +290,10 @@ let gameRunning = null;
 // alert then; absent = DEFAULT_CLOSED_LEAD.
 // repeat: how many times the sound plays (0 = until muted).
 // display: "system" (this computer's zone), "server", or a zone name.
+// defaultLead / defaultClosedLead: what an alert starts with when turned on.
 // lastServer: the last character's server, kept for when nobody is logged in.
 let prefs = { region: "auto", hidden: [], alerts: {}, leads: {}, closedLeads: {}, sound: "chime", repeat: 1, pop: false,
-  tab: "events", display: "system", lastServer: 0, scale: 1 };
+  tab: "events", display: "system", lastServer: 0, scale: 1, defaultLead: DEFAULT_LEAD, defaultClosedLead: DEFAULT_CLOSED_LEAD };
 // The field boss timers: { server, bosses, at, error }, from the feed and the
 // player's own map, the newest report of each boss kept.
 let feed = null;
@@ -283,6 +304,15 @@ const ui = () => ({ ...(UI[language] || UI.en), ...(MORE_UI[language] || MORE_UI
 const aui = () => ALERT_UI[language] || ALERT_UI.en;
 const text = (k) => EVENT_TEXT[k]?.[language] ?? EVENT_TEXT[k]?.en ?? k;
 const savePrefs = () => a2.storage.set("prefs", prefs).catch(() => {});
+const defaultLead = () => (LEADS.includes(Number(prefs.defaultLead)) ? Number(prefs.defaultLead) : DEFAULT_LEAD);
+const defaultClosed = () => {
+  const n = Number(prefs.defaultClosedLead);
+  return n === -1 || LEADS.includes(n) ? n : DEFAULT_CLOSED_LEAD;
+};
+const leadText = (n) => {
+  const a = aui();
+  return n < 0 ? a.off : n ? a.before(n) : a.atStart;
+};
 const option = (value, label) => {
   const o = document.createElement("option");
   o.value = String(value);
@@ -417,6 +447,17 @@ function renderStatic() {
   els.regionLabel.textContent = words.region;
   els.zoneLabel.textContent = a.showIn;
   els.scaleLabel.textContent = words.textSize;
+  $(".defaultsHead").textContent = a.alerts;
+  els.defaultLeadLabel.textContent = words.defaultLead;
+  els.defaultClosedLabel.textContent = words.defaultClosed;
+  els.defaultsNote.textContent = words.defaultsNote;
+  els.applyAll.textContent = words.applyAll;
+  els.modalYes.textContent = words.apply;
+  els.modalNo.textContent = words.cancel;
+  els.defaultLead.replaceChildren(...LEADS.map((n) => option(n, leadText(n))));
+  els.defaultLead.value = String(defaultLead());
+  els.defaultClosed.replaceChildren(...[-1, ...LEADS].map((n) => option(n, leadText(n))));
+  els.defaultClosed.value = String(defaultClosed());
   els.scaleSelect.replaceChildren(...SCALES.map((x) => option(x, `${Math.round(x * 100)}%`)));
   els.scaleSelect.value = String(prefs.scale);
   els.soundLabel.textContent = a.sound;
@@ -475,7 +516,13 @@ function renderHeader(now) {
   els.resets.textContent = resets.filter(Boolean).join(" · ");
 }
 
-// One countdown row: name (and a bell when its alert is on), where, and when.
+// Lucide's arrow-up (ISC licence), inline: the plugin's page loads nothing
+// from outside.
+const UP_ICON = '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.6" '
+  + 'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>';
+
+// One countdown row: name (and a bell when its alert is on), where, and when;
+// an up boss's countdown leads with an up arrow.
 function row({ id, name, where, countdown, at, running, up, hide }) {
   const li = document.createElement("li");
   li.classList.toggle("running", !!running);
@@ -497,6 +544,13 @@ function row({ id, name, where, countdown, at, running, up, hide }) {
   const c = document.createElement("div");
   c.className = "countdown";
   c.textContent = countdown;
+  if (up) {
+    const icon = document.createElement("span");
+    icon.className = "upIcon";
+    icon.title = ui().up;
+    icon.innerHTML = UP_ICON;
+    c.prepend(icon);
+  }
   const t = document.createElement("div");
   t.className = "at";
   t.textContent = at;
@@ -577,7 +631,7 @@ function renderField(now) {
     let up = false;
     if (t?.state === "up") {
       up = true;
-      countdown = t.upSince ? `${words.up} · ${words.upFor(span(now - t.upSince * 1000))}` : words.up;
+      countdown = t.upSince ? words.upFor(span(now - t.upSince * 1000)) : words.up;
       at = words.seen(age(now - (t.reportedAt || 0) * 1000));
     } else if (next) {
       countdown = next > now ? words.in(span(next - now)) : words.due;
@@ -615,11 +669,11 @@ function renderAlerts() {
     const lead = document.createElement("select");
     lead.className = "lead";
     lead.append(...LEADS.map((n) => option(n, n ? a.before(n) : a.atStart)));
-    lead.value = String(prefs.alerts[id] ?? prefs.leads[id] ?? DEFAULT_LEAD);
+    lead.value = String(prefs.alerts[id] ?? prefs.leads[id] ?? defaultLead());
     const closed = document.createElement("select");
     closed.className = "lead";
     closed.append(...[-1, ...LEADS].map((n) => option(n, n < 0 ? a.off : n ? a.before(n) : a.atStart)));
-    closed.value = String(prefs.closedLeads[id] ?? DEFAULT_CLOSED_LEAD);
+    closed.value = String(prefs.closedLeads[id] ?? defaultClosed());
     const closedRow = document.createElement("label");
     closedRow.className = "closedRow";
     const closedLabel = document.createElement("span");
@@ -648,17 +702,39 @@ function renderAlerts() {
     li.append(name, pick, closedRow);
     return li;
   };
-  const heading = (label) => {
+  // A group's heading, with a button turning every alert in it on or off
+  // (on: each with its own last lead, else the default).
+  const heading = (label, ids) => {
     const li = document.createElement("li");
     li.className = "group";
-    li.textContent = label;
+    const name = document.createElement("span");
+    name.textContent = label;
+    const allOn = ids.every((id) => id in prefs.alerts);
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = "groupToggle";
+    toggle.textContent = allOn ? words.allOff : words.allOn;
+    toggle.addEventListener("click", () => {
+      for (const id of ids) {
+        if (allOn) delete prefs.alerts[id];
+        else if (!(id in prefs.alerts)) prefs.alerts[id] = prefs.leads[id] ?? defaultLead();
+      }
+      savePrefs();
+      renderAlerts();
+      render();
+    });
+    li.append(name, toggle);
     return li;
   };
   const field = fieldBosses().sort((x, y) => text(x.where).localeCompare(text(y.where)) || text(x.name).localeCompare(text(y.name)));
+  const events = scheduled("event");
+  const bosses = scheduled("boss");
   els.alertList.replaceChildren(
-    heading(words.events), ...scheduled("event").map((ev) => item(ev.id, eventName(ev))),
-    heading(words.scheduled), ...scheduled("boss").map((ev) => item(ev.id, eventName(ev))),
-    heading(words.field), item(ALL_FIELD, words.allField),
+    heading(words.events, events.map((ev) => ev.id)), ...events.map((ev) => item(ev.id, eventName(ev))),
+    heading(words.scheduled, bosses.map((ev) => ev.id)), ...bosses.map((ev) => item(ev.id, eventName(ev))),
+    // The field bosses' button covers each boss, not "All field bosses",
+    // which stands for bosses with no alert of their own.
+    heading(words.field, field.map((b) => `field:${b.id}`)), item(ALL_FIELD, words.allField),
     ...field.map((b) => item(`field:${b.id}`, `${text(b.name)} · ${text(b.where)}`)),
   );
 }
@@ -733,7 +809,7 @@ function checkAlerts(now) {
   const words = ui();
   const closedNow = gameRunning === false;
   const minutesFor = (id) => {
-    const m = closedNow ? Number(prefs.closedLeads[id] ?? DEFAULT_CLOSED_LEAD) : prefs.alerts[id];
+    const m = closedNow ? Number(prefs.closedLeads[id] ?? defaultClosed()) : prefs.alerts[id];
     return m >= 0 ? m : null;
   };
   const due = (key, start, minutes) => {
@@ -827,6 +903,44 @@ els.pop.addEventListener("change", () => {
 els.zoneSelect.addEventListener("change", () => {
   prefs.display = els.zoneSelect.value;
   savePrefs();
+  render();
+});
+els.defaultLead.addEventListener("change", () => {
+  prefs.defaultLead = Number(els.defaultLead.value);
+  savePrefs();
+});
+els.defaultClosed.addEventListener("change", () => {
+  prefs.defaultClosedLead = Number(els.defaultClosed.value);
+  savePrefs();
+});
+// Apply to current alerts: every alert that is on takes the defaults, once
+// the player says yes (the plugin's frame may not use confirm()).
+const closeModal = () => {
+  els.modal.hidden = true;
+};
+els.applyAll.addEventListener("click", () => {
+  const ids = Object.keys(prefs.alerts);
+  if (!ids.length) return;
+  els.modalText.textContent = ui().applyAsk(ids.length, leadText(defaultLead()), leadText(defaultClosed()));
+  els.modal.hidden = false;
+  els.modalYes.focus();
+});
+els.modalNo.addEventListener("click", closeModal);
+els.modal.addEventListener("click", (e) => {
+  if (e.target === els.modal) closeModal();
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && !els.modal.hidden) closeModal();
+});
+els.modalYes.addEventListener("click", () => {
+  for (const id of Object.keys(prefs.alerts)) {
+    prefs.alerts[id] = defaultLead();
+    prefs.leads[id] = defaultLead();
+    prefs.closedLeads[id] = defaultClosed();
+  }
+  savePrefs();
+  closeModal();
+  renderAlerts();
   render();
 });
 els.scaleSelect.addEventListener("change", () => {

@@ -46,7 +46,21 @@
       <label class="setting"><span class="regionLabel">Region</span> <select class="regionSelect"></select></label>
       <label class="setting"><span class="zoneLabel">Show times in</span> <select class="zoneSelect"></select></label>
       <label class="setting"><span class="scaleLabel">Text size</span> <select class="scaleSelect"></select></label>
+      <h2 class="group alertDefaults"><span class="defaultsHead"></span></h2>
+      <label class="setting"><span class="defaultLeadLabel">Alert time</span> <select class="defaultLead"></select></label>
+      <label class="setting"><span class="defaultClosedLabel">Alert time while AION2 is closed</span> <select class="defaultClosed"></select></label>
+      <p class="note defaultsNote"></p>
+      <button type="button" class="applyAll">Apply to current alerts</button>
     </section>
+    <div class="modal" role="dialog" aria-modal="true" hidden>
+      <div class="modalBox">
+        <p class="modalText"></p>
+        <div class="modalButtons">
+          <button type="button" class="modalNo">Cancel</button>
+          <button type="button" class="modalYes">Apply</button>
+        </div>
+      </div>
+    </div>
     <script src="/_sdk/a2.js"></script>
     <script src="schedule.js"></script>
     <script src="sounds.js"></script>

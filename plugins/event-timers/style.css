@@ -483,12 +483,45 @@ input[type="checkbox"] {
   display: block;
   margin: 0 0 6px auto;
 }
-.alertSettings .applyAll {
-  margin-bottom: 10px;
-}
 /* Test Alert, at the end of the alert settings, on the right. */
 .alertSettings .testAlert {
   display: block;
   margin: 4px 0 0 auto;
   font-weight: 700;
+}
+/* The default times: one quiet box, its heading on top and Apply at its
+   foot, so they read as one thing rather than loose rows and a button. */
+.defaultsBox {
+  margin: 2px 0 10px;
+  padding: 7px 9px 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.03);
+}
+.defaultsBox .defaultsNote {
+  margin-bottom: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+}
+.defaultsBox .setting {
+  margin-bottom: 6px;
+}
+.defaultsFoot {
+  display: flex;
+  justify-content: flex-end;
+}
+.linkBtn {
+  padding: 0;
+  font: inherit;
+  font-size: 11px;
+  color: #8fc2ff;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.linkBtn:hover,
+.linkBtn:focus-visible {
+  color: #b8d8ff;
+  text-decoration: underline;
 }

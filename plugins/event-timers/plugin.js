@@ -211,7 +211,7 @@ const ALERT_UI = {
 // The words added with the tabs, the field bosses and repeating alerts.
 const MORE_UI = {
   en: { alertOptions: "Config", testAlert: "Test Alert", alertColor: "Alert colour", colors: {"orange": "Orange", "gold": "Gold", "red": "Red", "pink": "Pink", "purple": "Purple", "blue": "Blue", "green": "Green"},
-        whileOpen: "While AION2 is open", allOn: "All on", allOff: "All off", defaultLead: "Alert time", defaultClosed: "Alert time while AION2 is closed", applyAll: "Apply to current alerts", applyAsk: (n, lead, closed) => `Set the ${n} alerts that are on to ${lead}, and ${closed} while AION2 is closed?`, apply: "Apply", cancel: "Cancel", defaultsNote: "New alerts start with these.",
+        whileOpen: "While AION2 is open", allOn: "All on", allOff: "All off", defaultLead: "Alert time", defaultClosed: "Alert time while AION2 is closed", applyAll: "Apply to current alerts", applyAsk: (n, lead, closed) => `Set the ${n} alerts that are on to ${lead}, and ${closed} while AION2 is closed?`, apply: "Apply", cancel: "Cancel", defaultsNote: "Default times for new alerts",
         textSize: "Text size", popNote: "The window hides after 30 seconds without use, and comes back on its own when an alert goes off. To open it before then: Settings → Plugins → Open.", events: "Events", bosses: "Bosses", region: "Region", daily: "Daily reset", weekly: "Weekly reset",
         scheduled: "Scheduled bosses", field: "Field bosses", fieldNote: "Shared by players' meters as they open their map.",
         noFeed: "Field boss timers need meter 2.0.65 or later.", feedFailed: "Couldn't read the field boss timers.",
@@ -220,7 +220,7 @@ const MORE_UI = {
         repeat: "Repeat", once: "Once", times: (n) => `${n} times`, untilMuted: "Until muted", mute: "Mute", dismiss: "Dismiss",
         bossSoon: (name, n) => `${name} back in ${n} min`, bossNow: (name) => `${name} is back` },
   ko: { alertOptions: "구성", testAlert: "알림 테스트", alertColor: "알림 색상", colors: {"orange": "주황", "gold": "금색", "red": "빨강", "pink": "분홍", "purple": "보라", "blue": "파랑", "green": "초록"},
-        whileOpen: "AION2가 켜져 있을 때", allOn: "모두 켜기", allOff: "모두 끄기", defaultLead: "알림 시간", defaultClosed: "AION2가 꺼져 있을 때 알림 시간", applyAll: "현재 알림에 적용", applyAsk: (n, lead, closed) => `켜져 있는 알림 ${n}개를 ${lead}, AION2가 꺼져 있을 때는 ${closed}(으)로 바꿀까요?`, apply: "적용", cancel: "취소", defaultsNote: "새 알림은 이 설정으로 시작합니다.",
+        whileOpen: "AION2가 켜져 있을 때", allOn: "모두 켜기", allOff: "모두 끄기", defaultLead: "알림 시간", defaultClosed: "AION2가 꺼져 있을 때 알림 시간", applyAll: "현재 알림에 적용", applyAsk: (n, lead, closed) => `켜져 있는 알림 ${n}개를 ${lead}, AION2가 꺼져 있을 때는 ${closed}(으)로 바꿀까요?`, apply: "적용", cancel: "취소", defaultsNote: "새 알림의 기본 시간",
         textSize: "글자 크기", popNote: "30초 동안 사용하지 않으면 창이 숨겨지고, 알림이 울리면 다시 나타납니다. 그 전에 열려면: 설정 → 플러그인 → 열기.", events: "이벤트", bosses: "보스", region: "지역", daily: "일일 초기화", weekly: "주간 초기화",
         scheduled: "정기 보스", field: "필드 보스", fieldNote: "플레이어들이 지도를 열 때 미터가 공유한 정보입니다.",
         noFeed: "필드 보스 타이머는 미터 2.0.65 이상이 필요합니다.", feedFailed: "필드 보스 타이머를 읽지 못했습니다.",
@@ -229,7 +229,7 @@ const MORE_UI = {
         repeat: "반복", once: "1회", times: (n) => `${n}회`, untilMuted: "끌 때까지", mute: "소리 끄기", dismiss: "닫기",
         bossSoon: (name, n) => `${name} ${n}분 후 출현`, bossNow: (name) => `${name} 출현` },
   ja: { alertOptions: "構成", testAlert: "通知をテスト", alertColor: "通知の色", colors: {"orange": "オレンジ", "gold": "ゴールド", "red": "赤", "pink": "ピンク", "purple": "紫", "blue": "青", "green": "緑"},
-        whileOpen: "AION2を起動しているとき", allOn: "すべてオン", allOff: "すべてオフ", defaultLead: "通知のタイミング", defaultClosed: "AION2を閉じているときの通知タイミング", applyAll: "現在の通知に適用", applyAsk: (n, lead, closed) => `オンの通知${n}件を${lead}、AION2を閉じているときは${closed}に変更しますか？`, apply: "適用", cancel: "キャンセル", defaultsNote: "新しい通知はこの設定で始まります。",
+        whileOpen: "AION2を起動しているとき", allOn: "すべてオン", allOff: "すべてオフ", defaultLead: "通知のタイミング", defaultClosed: "AION2を閉じているときの通知タイミング", applyAll: "現在の通知に適用", applyAsk: (n, lead, closed) => `オンの通知${n}件を${lead}、AION2を閉じているときは${closed}に変更しますか？`, apply: "適用", cancel: "キャンセル", defaultsNote: "新しい通知の既定のタイミング",
         textSize: "文字の大きさ", popNote: "30秒操作がないとウィンドウは隠れ、通知が鳴ると自動で再表示されます。それまでに開くには：設定 → プラグイン → 開く。", events: "イベント", bosses: "ボス", region: "地域", daily: "デイリーリセット", weekly: "ウィークリーリセット",
         scheduled: "定時ボス", field: "フィールドボス", fieldNote: "プレイヤーがマップを開いたときにメーターが共有した情報です。",
         noFeed: "フィールドボスのタイマーにはメーター 2.0.65 以降が必要です。", feedFailed: "フィールドボスのタイマーを読み込めませんでした。",
@@ -238,7 +238,7 @@ const MORE_UI = {
         repeat: "繰り返し", once: "1回", times: (n) => `${n}回`, untilMuted: "ミュートするまで", mute: "ミュート", dismiss: "閉じる",
         bossSoon: (name, n) => `${name}まであと${n}分`, bossNow: (name) => `${name}出現` },
   de: { alertOptions: "Konfig", testAlert: "Testalarm", alertColor: "Alarmfarbe", colors: {"orange": "Orange", "gold": "Gold", "red": "Rot", "pink": "Pink", "purple": "Lila", "blue": "Blau", "green": "Grün"},
-        whileOpen: "Wenn AION2 offen ist", allOn: "Alle an", allOff: "Alle aus", defaultLead: "Alarmzeit", defaultClosed: "Alarmzeit, wenn AION2 geschlossen ist", applyAll: "Auf aktuelle Alarme anwenden", applyAsk: (n, lead, closed) => `Die ${n} aktiven Alarme auf ${lead} setzen, und auf ${closed}, wenn AION2 geschlossen ist?`, apply: "Anwenden", cancel: "Abbrechen", defaultsNote: "Neue Alarme beginnen mit diesen Werten.",
+        whileOpen: "Wenn AION2 offen ist", allOn: "Alle an", allOff: "Alle aus", defaultLead: "Alarmzeit", defaultClosed: "Alarmzeit, wenn AION2 geschlossen ist", applyAll: "Auf aktuelle Alarme anwenden", applyAsk: (n, lead, closed) => `Die ${n} aktiven Alarme auf ${lead} setzen, und auf ${closed}, wenn AION2 geschlossen ist?`, apply: "Anwenden", cancel: "Abbrechen", defaultsNote: "Standardzeiten für neue Alarme",
         textSize: "Textgröße", popNote: "Das Fenster verschwindet nach 30 Sekunden ohne Nutzung und kommt bei einem Alarm von selbst zurück. Um es vorher zu öffnen: Einstellungen → Plugins → Öffnen.", events: "Events", bosses: "Bosse", region: "Region", daily: "Täglicher Reset", weekly: "Wöchentlicher Reset",
         scheduled: "Geplante Bosse", field: "Feldbosse", fieldNote: "Von den Metern der Spieler geteilt, wenn sie ihre Karte öffnen.",
         noFeed: "Feldboss-Timer brauchen Meter 2.0.65 oder neuer.", feedFailed: "Die Feldboss-Timer konnten nicht gelesen werden.",
@@ -247,7 +247,7 @@ const MORE_UI = {
         repeat: "Wiederholen", once: "Einmal", times: (n) => `${n}-mal`, untilMuted: "Bis stumm", mute: "Stumm", dismiss: "Schließen",
         bossSoon: (name, n) => `${name} in ${n} Min. zurück`, bossNow: (name) => `${name} ist zurück` },
   fr: { alertOptions: "Config", testAlert: "Tester l'alerte", alertColor: "Couleur des alertes", colors: {"orange": "Orange", "gold": "Or", "red": "Rouge", "pink": "Rose", "purple": "Violet", "blue": "Bleu", "green": "Vert"},
-        whileOpen: "Quand AION2 est ouvert", allOn: "Tout activer", allOff: "Tout désactiver", defaultLead: "Moment de l'alerte", defaultClosed: "Moment de l'alerte quand AION2 est fermé", applyAll: "Appliquer aux alertes actuelles", applyAsk: (n, lead, closed) => `Régler les ${n} alertes actives sur ${lead}, et ${closed} quand AION2 est fermé ?`, apply: "Appliquer", cancel: "Annuler", defaultsNote: "Les nouvelles alertes partent de ces réglages.",
+        whileOpen: "Quand AION2 est ouvert", allOn: "Tout activer", allOff: "Tout désactiver", defaultLead: "Moment de l'alerte", defaultClosed: "Moment de l'alerte quand AION2 est fermé", applyAll: "Appliquer aux alertes actuelles", applyAsk: (n, lead, closed) => `Régler les ${n} alertes actives sur ${lead}, et ${closed} quand AION2 est fermé ?`, apply: "Appliquer", cancel: "Annuler", defaultsNote: "Moments par défaut des nouvelles alertes",
         textSize: "Taille du texte", popNote: "La fenêtre se masque après 30 secondes sans utilisation et revient d'elle-même lors d'une alerte. Pour l'ouvrir avant : Réglages → Plugins → Ouvrir.", events: "Événements", bosses: "Boss", region: "Région", daily: "Réinitialisation quotidienne", weekly: "Réinitialisation hebdomadaire",
         scheduled: "Boss programmés", field: "Boss de terrain", fieldNote: "Partagés par les meters des joueurs quand ils ouvrent leur carte.",
         noFeed: "Les minuteurs des boss de terrain demandent le meter 2.0.65 ou plus récent.", feedFailed: "Impossible de lire les minuteurs des boss de terrain.",
@@ -256,7 +256,7 @@ const MORE_UI = {
         repeat: "Répéter", once: "Une fois", times: (n) => `${n} fois`, untilMuted: "Jusqu'à coupure", mute: "Couper", dismiss: "Fermer",
         bossSoon: (name, n) => `${name} de retour dans ${n} min`, bossNow: (name) => `${name} est de retour` },
   es: { alertOptions: "Config", testAlert: "Probar alerta", alertColor: "Color de las alertas", colors: {"orange": "Naranja", "gold": "Dorado", "red": "Rojo", "pink": "Rosa", "purple": "Morado", "blue": "Azul", "green": "Verde"},
-        whileOpen: "Con AION2 abierto", allOn: "Activar todo", allOff: "Desactivar todo", defaultLead: "Momento de la alerta", defaultClosed: "Momento de la alerta con AION2 cerrado", applyAll: "Aplicar a las alertas actuales", applyAsk: (n, lead, closed) => `¿Poner las ${n} alertas activas en ${lead}, y ${closed} con AION2 cerrado?`, apply: "Aplicar", cancel: "Cancelar", defaultsNote: "Las alertas nuevas empiezan con estos valores.",
+        whileOpen: "Con AION2 abierto", allOn: "Activar todo", allOff: "Desactivar todo", defaultLead: "Momento de la alerta", defaultClosed: "Momento de la alerta con AION2 cerrado", applyAll: "Aplicar a las alertas actuales", applyAsk: (n, lead, closed) => `¿Poner las ${n} alertas activas en ${lead}, y ${closed} con AION2 cerrado?`, apply: "Aplicar", cancel: "Cancelar", defaultsNote: "Momentos predeterminados de las alertas nuevas",
         textSize: "Tamaño del texto", popNote: "La ventana se oculta tras 30 segundos sin uso y vuelve sola cuando suena una alerta. Para abrirla antes: Ajustes → Plugins → Abrir.", events: "Eventos", bosses: "Jefes", region: "Región", daily: "Reinicio diario", weekly: "Reinicio semanal",
         scheduled: "Jefes programados", field: "Jefes de campo", fieldNote: "Compartidos por los medidores de los jugadores al abrir su mapa.",
         noFeed: "Los temporizadores de jefes de campo necesitan el medidor 2.0.65 o posterior.", feedFailed: "No se pudieron leer los temporizadores de jefes de campo.",
@@ -265,7 +265,7 @@ const MORE_UI = {
         repeat: "Repetir", once: "Una vez", times: (n) => `${n} veces`, untilMuted: "Hasta silenciar", mute: "Silenciar", dismiss: "Cerrar",
         bossSoon: (name, n) => `${name} vuelve en ${n} min`, bossNow: (name) => `${name} ha vuelto` },
   pt: { alertOptions: "Config", testAlert: "Testar alerta", alertColor: "Cor dos alertas", colors: {"orange": "Laranja", "gold": "Dourado", "red": "Vermelho", "pink": "Rosa", "purple": "Roxo", "blue": "Azul", "green": "Verde"},
-        whileOpen: "Com o AION2 aberto", allOn: "Ativar todos", allOff: "Desativar todos", defaultLead: "Momento do alerta", defaultClosed: "Momento do alerta com o AION2 fechado", applyAll: "Aplicar aos alertas atuais", applyAsk: (n, lead, closed) => `Ajustar os ${n} alertas ativos para ${lead}, e ${closed} com o AION2 fechado?`, apply: "Aplicar", cancel: "Cancelar", defaultsNote: "Novos alertas começam com estes valores.",
+        whileOpen: "Com o AION2 aberto", allOn: "Ativar todos", allOff: "Desativar todos", defaultLead: "Momento do alerta", defaultClosed: "Momento do alerta com o AION2 fechado", applyAll: "Aplicar aos alertas atuais", applyAsk: (n, lead, closed) => `Ajustar os ${n} alertas ativos para ${lead}, e ${closed} com o AION2 fechado?`, apply: "Aplicar", cancel: "Cancelar", defaultsNote: "Momentos padrão dos novos alertas",
         textSize: "Tamanho do texto", popNote: "A janela some após 30 segundos sem uso e volta sozinha quando um alerta toca. Para abri-la antes: Configurações → Plugins → Abrir.", events: "Eventos", bosses: "Chefes", region: "Região", daily: "Reinício diário", weekly: "Reinício semanal",
         scheduled: "Chefes agendados", field: "Chefes de campo", fieldNote: "Compartilhados pelos medidores dos jogadores ao abrir o mapa.",
         noFeed: "Os timers de chefes de campo precisam do medidor 2.0.65 ou mais novo.", feedFailed: "Não foi possível ler os timers de chefes de campo.",
@@ -274,7 +274,7 @@ const MORE_UI = {
         repeat: "Repetir", once: "Uma vez", times: (n) => `${n} vezes`, untilMuted: "Até silenciar", mute: "Silenciar", dismiss: "Fechar",
         bossSoon: (name, n) => `${name} volta em ${n} min`, bossNow: (name) => `${name} voltou` },
   ru: { alertOptions: "Конфиг", testAlert: "Проверить", alertColor: "Цвет оповещений", colors: {"orange": "Оранжевый", "gold": "Золотой", "red": "Красный", "pink": "Розовый", "purple": "Фиолетовый", "blue": "Синий", "green": "Зелёный"},
-        whileOpen: "Когда AION2 открыт", allOn: "Включить все", allOff: "Выключить все", defaultLead: "Время оповещения", defaultClosed: "Время оповещения, когда AION2 закрыт", applyAll: "Применить к текущим оповещениям", applyAsk: (n, lead, closed) => `Установить ${n} включённых оповещений на «${lead}», а когда AION2 закрыт — «${closed}»?`, apply: "Применить", cancel: "Отмена", defaultsNote: "Новые оповещения начинаются с этих значений.",
+        whileOpen: "Когда AION2 открыт", allOn: "Включить все", allOff: "Выключить все", defaultLead: "Время оповещения", defaultClosed: "Время оповещения, когда AION2 закрыт", applyAll: "Применить к текущим оповещениям", applyAsk: (n, lead, closed) => `Установить ${n} включённых оповещений на «${lead}», а когда AION2 закрыт — «${closed}»?`, apply: "Применить", cancel: "Отмена", defaultsNote: "Время по умолчанию для новых оповещений",
         textSize: "Размер текста", popNote: "Окно скрывается после 30 секунд без действий и само появляется при оповещении. Чтобы открыть его раньше: Настройки → Плагины → Открыть.", events: "События", bosses: "Боссы", region: "Регион", daily: "Ежедневный сброс", weekly: "Еженедельный сброс",
         scheduled: "Боссы по расписанию", field: "Полевые боссы", fieldNote: "Делятся метры игроков, когда те открывают карту.",
         noFeed: "Для таймеров полевых боссов нужен метр 2.0.65 или новее.", feedFailed: "Не удалось прочитать таймеры полевых боссов.",
@@ -283,7 +283,7 @@ const MORE_UI = {
         repeat: "Повтор", once: "Один раз", times: (n) => `${n} раз`, untilMuted: "Пока не выключить", mute: "Выключить звук", dismiss: "Закрыть",
         bossSoon: (name, n) => `${name} через ${n} мин`, bossNow: (name) => `${name} появился` },
   "zh-Hant": { alertOptions: "配置", testAlert: "測試提醒", alertColor: "提醒顏色", colors: {"orange": "橘色", "gold": "金色", "red": "紅色", "pink": "粉紅", "purple": "紫色", "blue": "藍色", "green": "綠色"},
-        whileOpen: "AION2 開啟時", allOn: "全部開啟", allOff: "全部關閉", defaultLead: "提醒時間", defaultClosed: "AION2 關閉時的提醒時間", applyAll: "套用到目前的提醒", applyAsk: (n, lead, closed) => `將已開啟的 ${n} 個提醒設為「${lead}」，AION2 關閉時設為「${closed}」？`, apply: "套用", cancel: "取消", defaultsNote: "新的提醒會以此設定開始。",
+        whileOpen: "AION2 開啟時", allOn: "全部開啟", allOff: "全部關閉", defaultLead: "提醒時間", defaultClosed: "AION2 關閉時的提醒時間", applyAll: "套用到目前的提醒", applyAsk: (n, lead, closed) => `將已開啟的 ${n} 個提醒設為「${lead}」，AION2 關閉時設為「${closed}」？`, apply: "套用", cancel: "取消", defaultsNote: "新提醒的預設時間",
         textSize: "文字大小", popNote: "30 秒未使用後視窗會隱藏，提醒響起時會自動再出現。若要先開啟：設定 → 外掛 → 開啟。", events: "活動", bosses: "首領", region: "地區", daily: "每日重置", weekly: "每週重置",
         scheduled: "定時首領", field: "野外首領", fieldNote: "由玩家開啟地圖時其計量器分享。",
         noFeed: "野外首領計時需要計量器 2.0.65 以上。", feedFailed: "無法讀取野外首領計時。",
@@ -292,7 +292,7 @@ const MORE_UI = {
         repeat: "重複", once: "一次", times: (n) => `${n} 次`, untilMuted: "直到靜音", mute: "靜音", dismiss: "關閉",
         bossSoon: (name, n) => `${name} ${n} 分鐘後出現`, bossNow: (name) => `${name} 已出現` },
   "zh-Hans": { alertOptions: "配置", testAlert: "测试提醒", alertColor: "提醒颜色", colors: {"orange": "橙色", "gold": "金色", "red": "红色", "pink": "粉红", "purple": "紫色", "blue": "蓝色", "green": "绿色"},
-        whileOpen: "AION2 开启时", allOn: "全部开启", allOff: "全部关闭", defaultLead: "提醒时间", defaultClosed: "AION2 关闭时的提醒时间", applyAll: "应用到当前的提醒", applyAsk: (n, lead, closed) => `将已开启的 ${n} 个提醒设为“${lead}”，AION2 关闭时设为“${closed}”？`, apply: "应用", cancel: "取消", defaultsNote: "新的提醒会以此设置开始。",
+        whileOpen: "AION2 开启时", allOn: "全部开启", allOff: "全部关闭", defaultLead: "提醒时间", defaultClosed: "AION2 关闭时的提醒时间", applyAll: "应用到当前的提醒", applyAsk: (n, lead, closed) => `将已开启的 ${n} 个提醒设为“${lead}”，AION2 关闭时设为“${closed}”？`, apply: "应用", cancel: "取消", defaultsNote: "新提醒的默认时间",
         textSize: "文字大小", popNote: "30 秒未使用后窗口会隐藏，提醒响起时会自动再出现。若要先打开：设置 → 插件 → 打开。", events: "活动", bosses: "首领", region: "地区", daily: "每日重置", weekly: "每周重置",
         scheduled: "定时首领", field: "野外首领", fieldNote: "由玩家打开地图时其计量器分享。",
         noFeed: "野外首领计时需要计量器 2.0.65 以上。", feedFailed: "无法读取野外首领计时。",
@@ -481,8 +481,8 @@ function renderStatic() {
   }));
   els.colorSelect.value = ALERT_COLORS[prefs.alertColor] ? prefs.alertColor : "orange";
   $(".defaultsHead").textContent = a.alerts;
-  els.defaultLeadLabel.textContent = words.defaultLead;
-  els.defaultClosedLabel.textContent = words.defaultClosed;
+  els.defaultLeadLabel.textContent = words.whileOpen;
+  els.defaultClosedLabel.textContent = a.closed;
   els.defaultsNote.textContent = words.defaultsNote;
   els.applyAll.textContent = words.applyAll;
   els.modalYes.textContent = words.apply;

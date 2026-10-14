@@ -1,5 +1,9 @@
 /* Transparent: the window paints the panel, at the opacity the user picks.
    The look is the Pet Soul Tracker's. */
+:root {
+  /* The alert banner's colour (Settings: Alert colour). */
+  --alert: #ff9a3c;
+}
 html, body {
   margin: 0;
   background: transparent;
@@ -132,6 +136,7 @@ input[type="checkbox"] {
   color: #7ee0a0;
 }
 .list .name {
+  font-size: 14px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -159,6 +164,14 @@ input[type="checkbox"] {
 }
 .list li.up .countdown {
   color: #7ee0a0;
+}
+/* Starting or back within 15 minutes: amber, as an up boss is green. */
+.list li.soon .name,
+.list li.soon .countdown {
+  color: #ffc163;
+}
+.list li.soon .countdown {
+  font-weight: 600;
 }
 .list .upIcon {
   display: inline-flex;
@@ -321,8 +334,9 @@ input[type="checkbox"] {
   margin-bottom: 8px;
   padding: 6px 8px;
   border-radius: 4px;
-  background: rgba(143, 194, 255, 0.16);
-  border: 1px solid rgba(143, 194, 255, 0.45);
+  background: color-mix(in srgb, var(--alert) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--alert) 60%, transparent);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--alert) 25%, transparent);
 }
 .banner[hidden] {
   display: none;
@@ -330,6 +344,7 @@ input[type="checkbox"] {
 .bannerText {
   flex: 1;
   font-weight: 600;
+  color: color-mix(in srgb, var(--alert) 40%, white);
 }
 .banner .mute:disabled {
   opacity: 0.45;

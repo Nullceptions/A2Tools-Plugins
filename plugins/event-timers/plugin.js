@@ -35,6 +35,9 @@ const els = {
 // How long before an event its alert goes off, in minutes (0 = as it starts).
 const LEADS = [0, 1, 2, 3, 4, 5, 10, 15, 20, 30, 45, 60];
 const DEFAULT_LEAD = 5;
+// While the game is closed an alert can come earlier, to leave time to start
+// it and log in: by default a quarter of an hour.
+const DEFAULT_CLOSED_LEAD = 15;
 // The time zone this computer is set to, for showing times.
 const SYSTEM_ZONE = (() => {
   try {
@@ -97,43 +100,43 @@ const UI = {
 
 // The alerts' words, in each of the meter's languages.
 const ALERT_UI = {
-  en: { settings: "Settings", server: "Server", showIn: "Show times in", systemTime: (z) => `This computer's time (${z})`, serverTime: "Server time", enable: "Alert",
+  en: { closed: "While AION2 is closed", settings: "Settings", server: "Server", showIn: "Show times in", systemTime: (z) => `This computer's time (${z})`, serverTime: "Server time", enable: "Alert",
         timers: "Timers", alerts: "Alerts", sound: "Sound", play: "Play", none: "None", pop: "Show this window when an alert goes off",
         off: "Off", atStart: "As it starts", before: (n) => `${n} min before`, soon: (name, n) => `${name} in ${n} min`, now: (name) => `${name} is starting`,
         sounds: { chime: "Chime", bell: "Bell", sparkle: "Sparkle", ping: "Ping", soft: "Soft", gong: "Gong", horn: "Horn", harp: "Harp", alarm: "Alarm" } },
-  ko: { settings: "설정", server: "서버", showIn: "시간 표시", systemTime: (z) => `이 컴퓨터 시간 (${z})`, serverTime: "서버 시간", enable: "알림",
+  ko: { closed: "AION2가 꺼져 있을 때", settings: "설정", server: "서버", showIn: "시간 표시", systemTime: (z) => `이 컴퓨터 시간 (${z})`, serverTime: "서버 시간", enable: "알림",
         timers: "타이머", alerts: "알림", sound: "소리", play: "재생", none: "없음", pop: "알림이 울리면 이 창 표시",
         off: "끔", atStart: "시작할 때", before: (n) => `${n}분 전`, soon: (name, n) => `${name} ${n}분 전`, now: (name) => `${name} 시작`,
         sounds: { chime: "차임", bell: "종", sparkle: "반짝임", ping: "핑", soft: "부드러움", gong: "징", horn: "뿔피리", harp: "하프", alarm: "경보" } },
-  ja: { settings: "設定", server: "サーバー", showIn: "時刻の表示", systemTime: (z) => `このPCの時刻（${z}）`, serverTime: "サーバー時間", enable: "通知",
+  ja: { closed: "AION2を閉じているとき", settings: "設定", server: "サーバー", showIn: "時刻の表示", systemTime: (z) => `このPCの時刻（${z}）`, serverTime: "サーバー時間", enable: "通知",
         timers: "タイマー", alerts: "通知", sound: "サウンド", play: "再生", none: "なし", pop: "通知時にこのウィンドウを表示",
         off: "オフ", atStart: "開始時", before: (n) => `${n}分前`, soon: (name, n) => `${name}まであと${n}分`, now: (name) => `${name}開始`,
         sounds: { chime: "チャイム", bell: "ベル", sparkle: "きらめき", ping: "ピン", soft: "ソフト", gong: "銅鑼", horn: "ホルン", harp: "ハープ", alarm: "アラーム" } },
-  de: { settings: "Einstellungen", server: "Server", showIn: "Zeiten zeigen in", systemTime: (z) => `Zeit dieses Computers (${z})`, serverTime: "Serverzeit", enable: "Alarm",
+  de: { closed: "Wenn AION2 geschlossen ist", settings: "Einstellungen", server: "Server", showIn: "Zeiten zeigen in", systemTime: (z) => `Zeit dieses Computers (${z})`, serverTime: "Serverzeit", enable: "Alarm",
         timers: "Timer", alerts: "Alarme", sound: "Ton", play: "Abspielen", none: "Keiner", pop: "Dieses Fenster bei einem Alarm zeigen",
         off: "Aus", atStart: "Zum Start", before: (n) => `${n} Min. vorher`, soon: (name, n) => `${name} in ${n} Min.`, now: (name) => `${name} beginnt`,
         sounds: { chime: "Glockenspiel", bell: "Glocke", sparkle: "Funkeln", ping: "Ping", soft: "Sanft", gong: "Gong", horn: "Horn", harp: "Harfe", alarm: "Alarm" } },
-  fr: { settings: "Réglages", server: "Serveur", showIn: "Afficher les heures en", systemTime: (z) => `Heure de cet ordinateur (${z})`, serverTime: "Heure du serveur", enable: "Alerte",
+  fr: { closed: "Quand AION2 est fermé", settings: "Réglages", server: "Serveur", showIn: "Afficher les heures en", systemTime: (z) => `Heure de cet ordinateur (${z})`, serverTime: "Heure du serveur", enable: "Alerte",
         timers: "Minuteurs", alerts: "Alertes", sound: "Son", play: "Écouter", none: "Aucun", pop: "Afficher cette fenêtre lors d'une alerte",
         off: "Désactivée", atStart: "Au début", before: (n) => `${n} min avant`, soon: (name, n) => `${name} dans ${n} min`, now: (name) => `${name} commence`,
         sounds: { chime: "Carillon", bell: "Cloche", sparkle: "Scintillement", ping: "Ping", soft: "Doux", gong: "Gong", horn: "Cor", harp: "Harpe", alarm: "Alarme" } },
-  es: { settings: "Ajustes", server: "Servidor", showIn: "Mostrar horas en", systemTime: (z) => `Hora de este equipo (${z})`, serverTime: "Hora del servidor", enable: "Alerta",
+  es: { closed: "Con AION2 cerrado", settings: "Ajustes", server: "Servidor", showIn: "Mostrar horas en", systemTime: (z) => `Hora de este equipo (${z})`, serverTime: "Hora del servidor", enable: "Alerta",
         timers: "Temporizadores", alerts: "Alertas", sound: "Sonido", play: "Reproducir", none: "Ninguno", pop: "Mostrar esta ventana cuando suene una alerta",
         off: "Desactivada", atStart: "Al empezar", before: (n) => `${n} min antes`, soon: (name, n) => `${name} en ${n} min`, now: (name) => `Empieza ${name}`,
         sounds: { chime: "Campanilla", bell: "Campana", sparkle: "Destello", ping: "Ping", soft: "Suave", gong: "Gong", horn: "Cuerno", harp: "Arpa", alarm: "Alarma" } },
-  pt: { settings: "Configurações", server: "Servidor", showIn: "Mostrar horários em", systemTime: (z) => `Hora deste computador (${z})`, serverTime: "Hora do servidor", enable: "Alerta",
+  pt: { closed: "Com o AION2 fechado", settings: "Configurações", server: "Servidor", showIn: "Mostrar horários em", systemTime: (z) => `Hora deste computador (${z})`, serverTime: "Hora do servidor", enable: "Alerta",
         timers: "Timers", alerts: "Alertas", sound: "Som", play: "Tocar", none: "Nenhum", pop: "Mostrar esta janela quando um alerta tocar",
         off: "Desligado", atStart: "Ao começar", before: (n) => `${n} min antes`, soon: (name, n) => `${name} em ${n} min`, now: (name) => `${name} está começando`,
         sounds: { chime: "Carrilhão", bell: "Sino", sparkle: "Brilho", ping: "Ping", soft: "Suave", gong: "Gongo", horn: "Trompa", harp: "Harpa", alarm: "Alarme" } },
-  ru: { settings: "Настройки", server: "Сервер", showIn: "Показывать время", systemTime: (z) => `Время этого компьютера (${z})`, serverTime: "Время сервера", enable: "Оповещать",
+  ru: { closed: "Когда AION2 закрыт", settings: "Настройки", server: "Сервер", showIn: "Показывать время", systemTime: (z) => `Время этого компьютера (${z})`, serverTime: "Время сервера", enable: "Оповещать",
         timers: "Таймеры", alerts: "Оповещения", sound: "Звук", play: "Прослушать", none: "Нет", pop: "Показывать это окно при оповещении",
         off: "Выкл.", atStart: "При начале", before: (n) => `за ${n} мин`, soon: (name, n) => `${name} через ${n} мин`, now: (name) => `${name} начинается`,
         sounds: { chime: "Перезвон", bell: "Колокол", sparkle: "Искры", ping: "Пинг", soft: "Мягкий", gong: "Гонг", horn: "Рог", harp: "Арфа", alarm: "Тревога" } },
-  "zh-Hant": { settings: "設定", server: "伺服器", showIn: "時間顯示", systemTime: (z) => `本機時間（${z}）`, serverTime: "伺服器時間", enable: "提醒",
+  "zh-Hant": { closed: "AION2 關閉時", settings: "設定", server: "伺服器", showIn: "時間顯示", systemTime: (z) => `本機時間（${z}）`, serverTime: "伺服器時間", enable: "提醒",
         timers: "計時器", alerts: "提醒", sound: "音效", play: "播放", none: "無", pop: "提醒時顯示此視窗",
         off: "關閉", atStart: "開始時", before: (n) => `${n} 分鐘前`, soon: (name, n) => `${name} ${n} 分鐘後開始`, now: (name) => `${name} 開始`,
         sounds: { chime: "鐘聲", bell: "鈴聲", sparkle: "閃爍", ping: "叮", soft: "柔和", gong: "銅鑼", horn: "號角", harp: "豎琴", alarm: "警報" } },
-  "zh-Hans": { settings: "设置", server: "服务器", showIn: "时间显示", systemTime: (z) => `本机时间（${z}）`, serverTime: "服务器时间", enable: "提醒",
+  "zh-Hans": { closed: "AION2 关闭时", settings: "设置", server: "服务器", showIn: "时间显示", systemTime: (z) => `本机时间（${z}）`, serverTime: "服务器时间", enable: "提醒",
         timers: "计时器", alerts: "提醒", sound: "音效", play: "播放", none: "无", pop: "提醒时显示此窗口",
         off: "关闭", atStart: "开始时", before: (n) => `${n} 分钟前`, soon: (name, n) => `${name} ${n} 分钟后开始`, now: (name) => `${name} 开始`,
         sounds: { chime: "钟声", bell: "铃声", sparkle: "闪烁", ping: "叮", soft: "柔和", gong: "铜锣", horn: "号角", harp: "竖琴", alarm: "警报" } },
@@ -141,24 +144,34 @@ const ALERT_UI = {
 
 let language = "en";
 let character = null;
+// Whether AION2 is open, as the meter tells it; null on meters that don't
+// say, taken as open.
+let gameRunning = null;
 // alerts: event id -> minutes before (0 = as it starts); absent = off.
 // leads: the lead chosen per event, kept while its alert is off.
+// closedLeads: event id -> minutes before while the game is closed, or -1 for
+// no alert then; absent = DEFAULT_CLOSED_LEAD.
 // display: "system" (this computer's zone), "server", or a zone name.
-let prefs = { region: "auto", hidden: [], alerts: {}, leads: {}, sound: "chime", pop: false, tab: "timers", display: "system" };
+// lastServer: the last character's server, kept for when nobody is logged in.
+let prefs = { region: "auto", hidden: [], alerts: {}, leads: {}, closedLeads: {}, sound: "chime", pop: false, tab: "timers",
+  display: "system", lastServer: 0 };
 
 const ui = () => UI[language] || UI.en;
 const aui = () => ALERT_UI[language] || ALERT_UI.en;
 const text = (k) => EVENT_TEXT[k]?.[language] ?? EVENT_TEXT[k]?.en ?? k;
 const savePrefs = () => a2.storage.set("prefs", prefs).catch(() => {});
 
-// The character's server: its region (second digit) and side (first).
+// The character's server, or the last one seen: the game may be closed, the
+// alerts still wanted.
+const serverId = () => Number(character?.serverId) || Number(prefs.lastServer) || 0;
+// The server's region (second digit) and side (first).
 const serverRegion = () => {
-  const id = Number(character?.serverId);
+  const id = serverId();
   if (!(id >= 1000)) return null;
   return Number(String(id)[1]);
 };
 const serverSide = () => {
-  const id = Number(character?.serverId);
+  const id = serverId();
   if (!(id >= 1000)) return null;
   return String(id)[0] === "1" ? "elyos" : String(id)[0] === "2" ? "asmodian" : null;
 };
@@ -376,20 +389,38 @@ function renderAlerts() {
     }));
     lead.value = String(prefs.alerts[ev.id] ?? prefs.leads[ev.id] ?? DEFAULT_LEAD);
     lead.disabled = !on.checked;
+    // The same alert while AION2 is closed: earlier, or not at all.
+    const closed = document.createElement("select");
+    closed.className = "lead";
+    closed.append(...[-1, ...LEADS].map((n) => {
+      const o = document.createElement("option");
+      o.value = String(n);
+      o.textContent = n < 0 ? words.off : n ? words.before(n) : words.atStart;
+      return o;
+    }));
+    closed.value = String(prefs.closedLeads[ev.id] ?? DEFAULT_CLOSED_LEAD);
+    closed.disabled = !on.checked;
     const apply = () => {
       prefs.leads[ev.id] = Number(lead.value);
+      prefs.closedLeads[ev.id] = Number(closed.value);
       if (on.checked) prefs.alerts[ev.id] = Number(lead.value);
       else delete prefs.alerts[ev.id];
-      lead.disabled = !on.checked;
+      lead.disabled = closed.disabled = !on.checked;
       savePrefs();
       render();
     };
     on.addEventListener("change", apply);
     lead.addEventListener("change", apply);
+    closed.addEventListener("change", apply);
     const pick = document.createElement("span");
     pick.className = "pick";
     pick.append(on, lead);
-    li.append(name, pick);
+    const closedRow = document.createElement("span");
+    closedRow.className = "closedRow";
+    const closedLabel = document.createElement("span");
+    closedLabel.textContent = words.closed;
+    closedRow.append(closedLabel, closed);
+    li.append(name, pick, closedRow);
     return li;
   }));
 }
@@ -404,17 +435,21 @@ function checkAlerts(now) {
   const words = aui();
   for (const ev of eventsShown()) {
     if (!(ev.id in prefs.alerts) || (!tz && !ev.utc)) continue;
-    const lead = prefs.alerts[ev.id] * 60_000;
+    // While the game is closed, that lead instead (or none).
+    const closedNow = gameRunning === false;
+    const minutes = closedNow ? Number(prefs.closedLeads[ev.id] ?? DEFAULT_CLOSED_LEAD) : prefs.alerts[ev.id];
+    if (!(minutes >= 0)) continue;
+    const lead = minutes * 60_000;
     // The showing that is next once the lead is counted.
     const next = nextOf(ev, tz || "UTC", lastCheck + lead - 1);
     if (!next) continue;
     const at = next.start - lead;
-    const key = `${ev.id}@${next.start}`;
+    const key = `${closedNow ? "closed" : "open"}:${ev.id}@${next.start}`;
     if (at > lastCheck && at <= now && !fired.has(key)) {
       fired.add(key);
       const name = text(ev.name);
       if (prefs.sound !== "off") playSound(prefs.sound);
-      a2.notify(lead ? words.soon(name, prefs.alerts[ev.id]) : words.now(name)).catch(() => {});
+      a2.notify(lead ? words.soon(name, minutes) : words.now(name)).catch(() => {});
       if (prefs.pop && a2.window && typeof a2.window.show === "function") a2.window.show().catch(() => {});
     }
   }
@@ -451,6 +486,11 @@ els.regionSelect.addEventListener("change", () => {
 });
 a2.on("character", (c) => {
   character = c || null;
+  const id = Number(character?.serverId);
+  if (id >= 1000 && id !== Number(prefs.lastServer)) {
+    prefs.lastServer = id;
+    savePrefs();
+  }
   renderAlerts();
   render();
 });
@@ -462,10 +502,16 @@ a2.on("language", (code) => {
   render();
 });
 
+// Whether AION2 is open (meter 2.0.65 on).
+a2.on("game", (g) => {
+  gameRunning = typeof g?.running === "boolean" ? g.running : null;
+});
+
 a2.on("compact", (on) => document.body.classList.toggle("compact", !!on));
 
 (async () => {
   prefs = { ...prefs, ...((await a2.storage.get("prefs").catch(() => null)) || {}) };
+  prefs.closedLeads = prefs.closedLeads || {};
   renderRegions();
   renderTabs();
   renderAlerts();

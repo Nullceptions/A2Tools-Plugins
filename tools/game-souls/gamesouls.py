@@ -54,7 +54,7 @@ def v(x):
 
 
 def pct(p, scale):
-    """A probability as metabot writes it: 100%, 2.44%."""
+    """A probability as the plugin shows it: 100%, 2.44%."""
     x = p * 100.0 / scale
     if abs(x - round(x)) < 1e-9:
         return f"{int(round(x))}%"
@@ -112,6 +112,8 @@ def main():
     ap.add_argument("--tw-l10n", default=None, help="the Taiwan client's extracted Table/L10N folder (zh-TW)")
     ap.add_argument("--chances", action=argparse.BooleanOptionalAction, default=True,
                     help="include drop chances (from RewardData/RewardItem)")
+    ap.add_argument("--all-maps", action="store_true",
+                    help="keep drops on maps this client has not opened yet (see live_maps)")
     ap.add_argument("--infer-model-key", action="store_true",
                     help="also list Abyss NPCs whose reward_<ResourceKey>_key holds the soul")
     a = ap.parse_args()
@@ -178,6 +180,23 @@ def main():
     tele_art = {v(x["ID"]): x for x in load(T, "TeleportArtifact.json")}
     boxes = load(T, "BoxReward.json")
     routes = {v(x["ItemId"]): x for x in load(T, "ItemGetRoute.json")}
+
+    # The maps this client has opened: the client ships maps before they open
+    # (Eltnen, Morheim and Middle Reshanta came with Global's client ahead of
+    # their chapter), but its "where to get it" routes (ItemGetRoute, for every
+    # item) only name the open ones: the fields their monster routes are on,
+    # and the dungeons their dungeon and raid routes name.
+    dungeons = {v(x["ID"]): x for x in load(T, "Dungeon.json")}
+    live_maps = set()
+    for r in routes.values():
+        for m in r.get("MonsterGetRoutes", []):
+            live_maps.add(v(m["RegionInfo"]["MapId"]))
+        for key in ("PartyDungeonGetRoutes", "RaidInfo"):
+            for kv in r.get(key) or []:
+                val = kv.get("Value") if isinstance(kv, dict) else None
+                for t in (val.get("TableIds", []) if isinstance(val, dict) else []):
+                    if v(t) in dungeons:
+                        live_maps.add(v(dungeons[v(t)]["MapId"]))
     npc_loot = defaultdict(list)
     for x in load(T, "NpcLoot.json"):
         if v(x["VehicleSoulItemId"]):
@@ -410,6 +429,7 @@ def main():
             for nid in model_key_npcs.get(sname, []):
                 npc_src[nid].add("model_key")
         drops, dbg, sdrops = [], [], []
+        unreleased_rows = 0
         for npc_id in sorted(npc_src):
             n = npcs.get(npc_id)
             if not n:
@@ -432,6 +452,10 @@ def main():
             if not use:
                 use = {None: []}
             for mid, pos in sorted(use.items(), key=lambda kv: -len(kv[1])):
+                base_ = v(maps[mid]["BaseMapId"]) if mid in maps else 0
+                if not a.all_maps and mid is not None and mid not in live_maps and base_ not in live_maps:
+                    unreleased_rows += 1
+                    continue
                 d = {"name": tr(n["Desc"]["Key"]), "level": str(n["Level"])}
                 sd = {"npc": tk(n["Desc"]["Key"]), "level": n["Level"]}
                 if a.chances:
@@ -502,6 +526,10 @@ def main():
             schests.append(sc)
         out[str(pet_id)] = {"title": tr(soul["Desc"]["Key"]), "soul_item": sid, "drops": drops, "chests": chests}
         data[str(pet_id)] = {"title": tk(soul["Desc"]["Key"]), "drops": sdrops, "chests": schests}
+        # Every monster that drops it is on a map not open yet: not on this
+        # client's servers yet, so the plugin leaves it out of the list.
+        if unreleased_rows and not sdrops:
+            data[str(pet_id)]["unreleased"] = True
         debug[str(pet_id)] = dbg
 
     with open(a.out, "w", encoding="utf-8") as f:
@@ -618,17 +646,17 @@ def compare(game, path, report):
                 L.append(f"{pid} {g['title']}: only in game data ({len(g['drops'])} drops, {len(g['chests'])} chests)")
             continue
         if not g:
-            stats["pets_only_metabot"] += 1
-            L.append(f"{pid} {m['title']}: only in metabot")
+            stats["pets_only_earlier"] += 1
+            L.append(f"{pid} {m['title']}: only in the earlier file")
             continue
         stats["pets_both"] += 1
         if g["drops"]:
             stats["pets_game_has_drops"] += 1
         if m["drops"]:
-            stats["pets_metabot_has_drops"] += 1
+            stats["pets_earlier_has_drops"] += 1
         msgs = []
         if g["title"] != m["title"]:
-            msgs.append(f"  title game={g['title']!r} metabot={m['title']!r}")
+            msgs.append(f"  title game={g['title']!r} earlier={m['title']!r}")
 
         def dk(d):
             return (d["name"], str(d.get("level")), split_where(d)[1])
@@ -650,8 +678,8 @@ def compare(game, path, report):
                 msgs.append(f"  + game-only drop: {gd['name']} Lv {gd['level']} @ {gd.get('where', '?')} (kibelisk {gd.get('kibelisk', '-')} #{gd.get('teleport', '-')})")
                 continue
             if not gd:
-                stats["drop_only_metabot"] += 1
-                msgs.append(f"  - metabot-only drop: {md['name']} Lv {md.get('level')} {md.get('chance')} @ {md.get('where', '?')}")
+                stats["drop_only_earlier"] += 1
+                msgs.append(f"  - earlier-only drop: {md['name']} Lv {md.get('level')} {md.get('chance')} @ {md.get('where', '?')}")
                 continue
             stats["drop_match"] += 1
             if "chance" in gd and str(gd.get("chance")) != str(md.get("chance")):
@@ -667,17 +695,17 @@ def compare(game, path, report):
                     stats["zones_same_area"] += 1
                 else:
                     stats["zones_diff"] += 1
-                    msgs.append(f"  ~ {k[0]} Lv {k[1]} ({k[2]}): zones game={sorted(gz)} metabot={sorted(mz)}")
+                    msgs.append(f"  ~ {k[0]} Lv {k[1]} ({k[2]}): zones game={sorted(gz)} earlier={sorted(mz)}")
             if ms is not None:
                 if gs == ms:
                     stats["spawns_same"] += 1
                 elif ms == 60 and gs is not None and gs > 60:
-                    stats["spawns_metabot_capped_at_60"] += 1
+                    stats["spawns_earlier_capped_at_60"] += 1
                 elif gs is None:
                     stats["spawns_missing_game"] += 1
                 else:
                     stats["spawns_diff"] += 1
-                    msgs.append(f"  ~ {k[0]} Lv {k[1]} ({k[2]}): spawns game={gs} metabot={ms}")
+                    msgs.append(f"  ~ {k[0]} Lv {k[1]} ({k[2]}): spawns game={gs} earlier={ms}")
             elif gs is not None:
                 stats["spawns_only_game"] += 1
             gkn, gdist = split_kib(gd)
@@ -690,7 +718,7 @@ def compare(game, path, report):
                               "kibelisk_dist_within_5m" if abs(gdist - mdist) <= 5 else "kibelisk_dist_diff"] += 1
                 else:
                     stats["kibelisk_diff"] += 1
-                    msgs.append(f"  ~ {k[0]} Lv {k[1]} ({k[2]}): kibelisk game={gd.get('kibelisk')!r} metabot={md.get('kibelisk')!r}")
+                    msgs.append(f"  ~ {k[0]} Lv {k[1]} ({k[2]}): kibelisk game={gd.get('kibelisk')!r} earlier={md.get('kibelisk')!r}")
             elif gkn:
                 stats["kibelisk_only_game"] += 1
             if "teleport" in md:
@@ -707,23 +735,23 @@ def compare(game, path, report):
                 stats["chest_only_game"] += 1
                 msgs.append(f"  + game-only chest: {n} {gc[n]['chance']} ({gc[n].get('from', '')})")
             elif n not in gc:
-                stats["chest_only_metabot"] += 1
-                msgs.append(f"  - metabot-only chest: {n} {mc[n]['chance']}")
+                stats["chest_only_earlier"] += 1
+                msgs.append(f"  - earlier-only chest: {n} {mc[n]['chance']}")
             else:
                 stats["chest_match"] += 1
                 if gc[n]["chance"] != mc[n]["chance"]:
                     stats["chest_chance_diff"] += 1
-                    msgs.append(f"  ~ chest {n}: game={gc[n]['chance']} metabot={mc[n]['chance']}")
+                    msgs.append(f"  ~ chest {n}: game={gc[n]['chance']} earlier={mc[n]['chance']}")
                 if gc[n].get("from") != mc[n].get("from"):
                     stats["chest_from_diff"] += 1
-                    msgs.append(f"  ~ chest {n}: from game={gc[n].get('from')!r} metabot={mc[n].get('from')!r}")
+                    msgs.append(f"  ~ chest {n}: from game={gc[n].get('from')!r} earlier={mc[n].get('from')!r}")
         if msgs:
             stats["pets_with_diffs"] += 1
             L.append(f"{pid} {g['title']}:")
             L.extend(msgs)
         else:
             stats["pets_identical"] += 1
-    head = ["Summary (game tables + map data vs metabot sources.js):"] + [f"  {k}: {stats[k]}" for k in sorted(stats)] + [""]
+    head = ["Summary (this build vs the earlier sources.js):"] + [f"  {k}: {stats[k]}" for k in sorted(stats)] + [""]
     with open(report, "w", encoding="utf-8") as f:
         f.write("\n".join(head + L) + "\n")
     print("\n".join(head), file=sys.stderr)

@@ -1,5 +1,5 @@
 // Pet Soul Tracker: souls still needed to raise each pet, and where each
-// pet's souls drop (sources.js, from metabot.gg; click a pet to see them).
+// pet's souls drop (sources.js, from the game's own data; click a pet to see them).
 //
 // The game sends every pet's level and soul points once, at login (decoder
 // "pet-list"), then each soul as it is picked up ("soul-gained") and each
@@ -125,8 +125,9 @@ const SORTS = {
 function render() {
   const ids = new Set([...Object.keys(state.levels), ...Object.keys(state.points)]);
   // Special pets come at their highest level and take no souls, so they are
-  // left out. A pet missing from PET_GENUS (newer than this plugin) stays in.
-  const pets = [...ids].filter((id) => PET_GENUS[id] !== "special").map((id) => {
+  // left out, as are pets only found on maps not open yet (the game lists
+  // them anyway). A pet missing from PET_GENUS (newer than this plugin) stays in.
+  const pets = [...ids].filter((id) => PET_GENUS[id] !== "special" && !PET_SOURCES[id]?.unreleased).map((id) => {
     const level = state.levels[id] || 0;
     const points = state.points[id] || 0;
     const target = NEEDED[level];

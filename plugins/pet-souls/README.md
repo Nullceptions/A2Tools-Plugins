@@ -25,6 +25,8 @@ Click a pet to see where its souls come from: the monsters that drop them (level
 
 The data is the game's own: the soul items, which monsters drop them and how often, the chests and where they come from, and every spawn point and Kibelisk on each map, read from the game client's tables and map data. The plugin has no network access, so the data ships in `sources.js` and changes only with a new version. To rebuild it after a game patch, extract the client's `AION2/Content/Data/Table`, `Data/Map` and `Data/MapDataHierarchy` to JSON, then run `python tools/game-souls/gamesouls.py --tables <Output>/AION2/Content/Data/Table --tw-l10n <TW Output>/AION2/Content/Data/Table/L10N --compare plugins/pet-souls/sources.js` (the report lists what changed in English).
 
+Below a pet's sources, a link opens the soul's page on [metabot.gg](https://metabot.gg/en/aion-2) in your browser, for its maps and players' comments (`metabot.js` lists the pets that have one).
+
 Every name in a pet's sources (monsters, zones, maps, Kibelisks, chests) shows in the meter's language, in the game's own words: the Global client's eight languages, Traditional Chinese from the Taiwan client's strings (`--tw-l10n`, the `Data/Table/L10N` of its extract), and Simplified Chinese converted from it with OpenCC. A name the game spells the same as in English is kept once, in English.
 
 ## Permissions

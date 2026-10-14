@@ -525,3 +525,54 @@ input[type="checkbox"] {
   color: #b8d8ff;
   text-decoration: underline;
 }
+/* An on/off switch (a checkbox underneath, so keys and labels still work). */
+input.switch {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: none;
+  position: relative;
+  width: 30px;
+  height: 17px;
+  margin: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+input.switch::before {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  transition: transform 0.15s;
+}
+input.switch:checked {
+  background: #8fc2ff;
+  border-color: #8fc2ff;
+}
+input.switch:checked::before {
+  transform: translateX(13px);
+  background: #0a0e16;
+}
+input.switch:focus-visible {
+  outline: 2px solid rgba(143, 194, 255, 0.6);
+  outline-offset: 2px;
+}
+input.switch:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+@media (prefers-reduced-motion: reduce) {
+  input.switch,
+  input.switch::before {
+    transition: none;
+  }
+}
+.popRow {
+  cursor: pointer;
+}

@@ -684,7 +684,12 @@ function renderAlerts() {
       closedRow.hidden = !on.checked;
     };
     show();
-    const apply = () => {
+    const apply = (e) => {
+      // Switched on: its own last times, else the defaults as they are now.
+      if (e?.target === on && on.checked) {
+        lead.value = String(prefs.leads[id] ?? defaultLead());
+        closed.value = String(prefs.closedLeads[id] ?? defaultClosed());
+      }
       prefs.leads[id] = Number(lead.value);
       prefs.closedLeads[id] = Number(closed.value);
       if (on.checked) prefs.alerts[id] = Number(lead.value);
@@ -912,13 +917,17 @@ els.zoneSelect.addEventListener("change", () => {
   savePrefs();
   render();
 });
+// A new default: the alert list's dropdowns for alerts with no time of
+// their own show it from now on.
 els.defaultLead.addEventListener("change", () => {
   prefs.defaultLead = Number(els.defaultLead.value);
   savePrefs();
+  renderAlerts();
 });
 els.defaultClosed.addEventListener("change", () => {
   prefs.defaultClosedLead = Number(els.defaultClosed.value);
   savePrefs();
+  renderAlerts();
 });
 // Apply to current alerts: every alert that is on takes the defaults, once
 // the player says yes (the plugin's frame may not use confirm()).

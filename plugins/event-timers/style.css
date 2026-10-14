@@ -199,6 +199,9 @@ input[type="checkbox"] {
 .view.bosses .group:first-child {
   margin-top: 0;
 }
+.note[hidden] {
+  display: none;
+}
 .note {
   margin: 4px 0;
   font-size: 11px;

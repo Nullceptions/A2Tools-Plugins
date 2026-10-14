@@ -47,6 +47,7 @@ const els = {
   repeat: $(".repeat"),
   pop: $(".pop"),
   popLabel: $(".popLabel"),
+  popNote: $(".popNote"),
   alertList: $(".alertList"),
   regionLabel: $(".regionLabel"),
   regionSelect: $(".regionSelect"),
@@ -66,6 +67,11 @@ const REPEATS = [1, 2, 3, 5, 10, 0];
 const UNTIL_MUTED_MS = 5 * 60_000;
 // The alert sounds, in the order the list shows them (sounds.js).
 const SOUND_ORDER = ["chime", "bell", "sparkle", "ping", "soft", "gong", "horn", "harp", "alarm"];
+// With "only show this window when an alert goes off": hidden this long
+// after the last alert is dismissed (the Hidden Cube Alert's timing), and an
+// alert's banner clears itself after BANNER_MS.
+const HIDE_AFTER_MS = 4000;
+const BANNER_MS = 2 * 60_000;
 // The feed of field boss timers: read this often.
 const FEED_EVERY_MS = 15 * 60_000;
 // "All field bosses" in the alert list.
@@ -132,113 +138,113 @@ const UI = {
 // The alerts' words, in each of the meter's languages.
 const ALERT_UI = {
   en: { closed: "While AION2 is closed", settings: "Settings", server: "Server", showIn: "Show times in", systemTime: (z) => `This computer's time (${z})`, serverTime: "Server time", enable: "Alert",
-        timers: "Timers", alerts: "Alerts", sound: "Sound", play: "Play", none: "None", pop: "Show this window when an alert goes off",
+        timers: "Timers", alerts: "Alerts", sound: "Sound", play: "Play", none: "None", pop: "Only show this window when an alert goes off",
         off: "Off", atStart: "As it starts", before: (n) => `${n} min before`, soon: (name, n) => `${name} in ${n} min`, now: (name) => `${name} is starting`,
         sounds: { chime: "Chime", bell: "Bell", sparkle: "Sparkle", ping: "Ping", soft: "Soft", gong: "Gong", horn: "Horn", harp: "Harp", alarm: "Alarm" } },
   ko: { closed: "AION2가 꺼져 있을 때", settings: "설정", server: "서버", showIn: "시간 표시", systemTime: (z) => `이 컴퓨터 시간 (${z})`, serverTime: "서버 시간", enable: "알림",
-        timers: "타이머", alerts: "알림", sound: "소리", play: "재생", none: "없음", pop: "알림이 울리면 이 창 표시",
+        timers: "타이머", alerts: "알림", sound: "소리", play: "재생", none: "없음", pop: "알림이 울릴 때만 이 창 표시",
         off: "끔", atStart: "시작할 때", before: (n) => `${n}분 전`, soon: (name, n) => `${name} ${n}분 전`, now: (name) => `${name} 시작`,
         sounds: { chime: "차임", bell: "종", sparkle: "반짝임", ping: "핑", soft: "부드러움", gong: "징", horn: "뿔피리", harp: "하프", alarm: "경보" } },
   ja: { closed: "AION2を閉じているとき", settings: "設定", server: "サーバー", showIn: "時刻の表示", systemTime: (z) => `このPCの時刻（${z}）`, serverTime: "サーバー時間", enable: "通知",
-        timers: "タイマー", alerts: "通知", sound: "サウンド", play: "再生", none: "なし", pop: "通知時にこのウィンドウを表示",
+        timers: "タイマー", alerts: "通知", sound: "サウンド", play: "再生", none: "なし", pop: "通知時だけこのウィンドウを表示",
         off: "オフ", atStart: "開始時", before: (n) => `${n}分前`, soon: (name, n) => `${name}まであと${n}分`, now: (name) => `${name}開始`,
         sounds: { chime: "チャイム", bell: "ベル", sparkle: "きらめき", ping: "ピン", soft: "ソフト", gong: "銅鑼", horn: "ホルン", harp: "ハープ", alarm: "アラーム" } },
   de: { closed: "Wenn AION2 geschlossen ist", settings: "Einstellungen", server: "Server", showIn: "Zeiten zeigen in", systemTime: (z) => `Zeit dieses Computers (${z})`, serverTime: "Serverzeit", enable: "Alarm",
-        timers: "Timer", alerts: "Alarme", sound: "Ton", play: "Abspielen", none: "Keiner", pop: "Dieses Fenster bei einem Alarm zeigen",
+        timers: "Timer", alerts: "Alarme", sound: "Ton", play: "Abspielen", none: "Keiner", pop: "Dieses Fenster nur bei einem Alarm zeigen",
         off: "Aus", atStart: "Zum Start", before: (n) => `${n} Min. vorher`, soon: (name, n) => `${name} in ${n} Min.`, now: (name) => `${name} beginnt`,
         sounds: { chime: "Glockenspiel", bell: "Glocke", sparkle: "Funkeln", ping: "Ping", soft: "Sanft", gong: "Gong", horn: "Horn", harp: "Harfe", alarm: "Alarm" } },
   fr: { closed: "Quand AION2 est fermé", settings: "Réglages", server: "Serveur", showIn: "Afficher les heures en", systemTime: (z) => `Heure de cet ordinateur (${z})`, serverTime: "Heure du serveur", enable: "Alerte",
-        timers: "Minuteurs", alerts: "Alertes", sound: "Son", play: "Écouter", none: "Aucun", pop: "Afficher cette fenêtre lors d'une alerte",
+        timers: "Minuteurs", alerts: "Alertes", sound: "Son", play: "Écouter", none: "Aucun", pop: "N'afficher cette fenêtre que lors d'une alerte",
         off: "Désactivée", atStart: "Au début", before: (n) => `${n} min avant`, soon: (name, n) => `${name} dans ${n} min`, now: (name) => `${name} commence`,
         sounds: { chime: "Carillon", bell: "Cloche", sparkle: "Scintillement", ping: "Ping", soft: "Doux", gong: "Gong", horn: "Cor", harp: "Harpe", alarm: "Alarme" } },
   es: { closed: "Con AION2 cerrado", settings: "Ajustes", server: "Servidor", showIn: "Mostrar horas en", systemTime: (z) => `Hora de este equipo (${z})`, serverTime: "Hora del servidor", enable: "Alerta",
-        timers: "Temporizadores", alerts: "Alertas", sound: "Sonido", play: "Reproducir", none: "Ninguno", pop: "Mostrar esta ventana cuando suene una alerta",
+        timers: "Temporizadores", alerts: "Alertas", sound: "Sonido", play: "Reproducir", none: "Ninguno", pop: "Mostrar esta ventana solo cuando suene una alerta",
         off: "Desactivada", atStart: "Al empezar", before: (n) => `${n} min antes`, soon: (name, n) => `${name} en ${n} min`, now: (name) => `Empieza ${name}`,
         sounds: { chime: "Campanilla", bell: "Campana", sparkle: "Destello", ping: "Ping", soft: "Suave", gong: "Gong", horn: "Cuerno", harp: "Arpa", alarm: "Alarma" } },
   pt: { closed: "Com o AION2 fechado", settings: "Configurações", server: "Servidor", showIn: "Mostrar horários em", systemTime: (z) => `Hora deste computador (${z})`, serverTime: "Hora do servidor", enable: "Alerta",
-        timers: "Timers", alerts: "Alertas", sound: "Som", play: "Tocar", none: "Nenhum", pop: "Mostrar esta janela quando um alerta tocar",
+        timers: "Timers", alerts: "Alertas", sound: "Som", play: "Tocar", none: "Nenhum", pop: "Mostrar esta janela só quando um alerta tocar",
         off: "Desligado", atStart: "Ao começar", before: (n) => `${n} min antes`, soon: (name, n) => `${name} em ${n} min`, now: (name) => `${name} está começando`,
         sounds: { chime: "Carrilhão", bell: "Sino", sparkle: "Brilho", ping: "Ping", soft: "Suave", gong: "Gongo", horn: "Trompa", harp: "Harpa", alarm: "Alarme" } },
   ru: { closed: "Когда AION2 закрыт", settings: "Настройки", server: "Сервер", showIn: "Показывать время", systemTime: (z) => `Время этого компьютера (${z})`, serverTime: "Время сервера", enable: "Оповещать",
-        timers: "Таймеры", alerts: "Оповещения", sound: "Звук", play: "Прослушать", none: "Нет", pop: "Показывать это окно при оповещении",
+        timers: "Таймеры", alerts: "Оповещения", sound: "Звук", play: "Прослушать", none: "Нет", pop: "Показывать это окно только при оповещении",
         off: "Выкл.", atStart: "При начале", before: (n) => `за ${n} мин`, soon: (name, n) => `${name} через ${n} мин`, now: (name) => `${name} начинается`,
         sounds: { chime: "Перезвон", bell: "Колокол", sparkle: "Искры", ping: "Пинг", soft: "Мягкий", gong: "Гонг", horn: "Рог", harp: "Арфа", alarm: "Тревога" } },
   "zh-Hant": { closed: "AION2 關閉時", settings: "設定", server: "伺服器", showIn: "時間顯示", systemTime: (z) => `本機時間（${z}）`, serverTime: "伺服器時間", enable: "提醒",
-        timers: "計時器", alerts: "提醒", sound: "音效", play: "播放", none: "無", pop: "提醒時顯示此視窗",
+        timers: "計時器", alerts: "提醒", sound: "音效", play: "播放", none: "無", pop: "僅在提醒時顯示此視窗",
         off: "關閉", atStart: "開始時", before: (n) => `${n} 分鐘前`, soon: (name, n) => `${name} ${n} 分鐘後開始`, now: (name) => `${name} 開始`,
         sounds: { chime: "鐘聲", bell: "鈴聲", sparkle: "閃爍", ping: "叮", soft: "柔和", gong: "銅鑼", horn: "號角", harp: "豎琴", alarm: "警報" } },
   "zh-Hans": { closed: "AION2 关闭时", settings: "设置", server: "服务器", showIn: "时间显示", systemTime: (z) => `本机时间（${z}）`, serverTime: "服务器时间", enable: "提醒",
-        timers: "计时器", alerts: "提醒", sound: "音效", play: "播放", none: "无", pop: "提醒时显示此窗口",
+        timers: "计时器", alerts: "提醒", sound: "音效", play: "播放", none: "无", pop: "仅在提醒时显示此窗口",
         off: "关闭", atStart: "开始时", before: (n) => `${n} 分钟前`, soon: (name, n) => `${name} ${n} 分钟后开始`, now: (name) => `${name} 开始`,
         sounds: { chime: "钟声", bell: "铃声", sparkle: "闪烁", ping: "叮", soft: "柔和", gong: "铜锣", horn: "号角", harp: "竖琴", alarm: "警报" } },
 };
 
 // The words added with the tabs, the field bosses and repeating alerts.
 const MORE_UI = {
-  en: { events: "Events", bosses: "Bosses", region: "Region", daily: "Daily reset", weekly: "Weekly reset",
+  en: { popNote: "The window stays hidden until an alert goes off. To see it before then: Settings → Plugins → Open.", events: "Events", bosses: "Bosses", region: "Region", daily: "Daily reset", weekly: "Weekly reset",
         scheduled: "Scheduled bosses", field: "Field bosses", fieldNote: "Shared by players' meters as they open their map.",
         noFeed: "Field boss timers need meter 2.0.65 or later.", feedFailed: "Couldn't read the field boss timers.",
         noServer: "Log in to a character to see your server's field bosses.", up: "Up", upFor: (t) => `up ${t}`,
         due: "Due", unknown: "No report yet", seen: (t) => `reported ${t} ago`, allField: "All field bosses",
         repeat: "Repeat", once: "Once", times: (n) => `${n} times`, untilMuted: "Until muted", mute: "Mute", dismiss: "Dismiss",
         bossSoon: (name, n) => `${name} back in ${n} min`, bossNow: (name) => `${name} is back` },
-  ko: { events: "이벤트", bosses: "보스", region: "지역", daily: "일일 초기화", weekly: "주간 초기화",
+  ko: { popNote: "알림이 울릴 때까지 창이 숨겨져 있습니다. 그 전에 보려면: 설정 → 플러그인 → 열기.", events: "이벤트", bosses: "보스", region: "지역", daily: "일일 초기화", weekly: "주간 초기화",
         scheduled: "정기 보스", field: "필드 보스", fieldNote: "플레이어들이 지도를 열 때 미터가 공유한 정보입니다.",
         noFeed: "필드 보스 타이머는 미터 2.0.65 이상이 필요합니다.", feedFailed: "필드 보스 타이머를 읽지 못했습니다.",
         noServer: "캐릭터로 접속하면 서버의 필드 보스가 표시됩니다.", up: "출현", upFor: (t) => `${t} 전 출현`,
         due: "곧 출현", unknown: "아직 정보 없음", seen: (t) => `${t} 전 보고`, allField: "모든 필드 보스",
         repeat: "반복", once: "1회", times: (n) => `${n}회`, untilMuted: "끌 때까지", mute: "소리 끄기", dismiss: "닫기",
         bossSoon: (name, n) => `${name} ${n}분 후 출현`, bossNow: (name) => `${name} 출현` },
-  ja: { events: "イベント", bosses: "ボス", region: "地域", daily: "デイリーリセット", weekly: "ウィークリーリセット",
+  ja: { popNote: "通知が鳴るまでウィンドウは隠れています。それまでに見るには：設定 → プラグイン → 開く。", events: "イベント", bosses: "ボス", region: "地域", daily: "デイリーリセット", weekly: "ウィークリーリセット",
         scheduled: "定時ボス", field: "フィールドボス", fieldNote: "プレイヤーがマップを開いたときにメーターが共有した情報です。",
         noFeed: "フィールドボスのタイマーにはメーター 2.0.65 以降が必要です。", feedFailed: "フィールドボスのタイマーを読み込めませんでした。",
         noServer: "キャラクターでログインするとサーバーのフィールドボスが表示されます。", up: "出現中", upFor: (t) => `${t}前から出現`,
         due: "まもなく", unknown: "情報なし", seen: (t) => `${t}前に報告`, allField: "すべてのフィールドボス",
         repeat: "繰り返し", once: "1回", times: (n) => `${n}回`, untilMuted: "ミュートするまで", mute: "ミュート", dismiss: "閉じる",
         bossSoon: (name, n) => `${name}まであと${n}分`, bossNow: (name) => `${name}出現` },
-  de: { events: "Events", bosses: "Bosse", region: "Region", daily: "Täglicher Reset", weekly: "Wöchentlicher Reset",
+  de: { popNote: "Das Fenster bleibt verborgen, bis ein Alarm kommt. Um es vorher zu sehen: Einstellungen → Plugins → Öffnen.", events: "Events", bosses: "Bosse", region: "Region", daily: "Täglicher Reset", weekly: "Wöchentlicher Reset",
         scheduled: "Geplante Bosse", field: "Feldbosse", fieldNote: "Von den Metern der Spieler geteilt, wenn sie ihre Karte öffnen.",
         noFeed: "Feldboss-Timer brauchen Meter 2.0.65 oder neuer.", feedFailed: "Die Feldboss-Timer konnten nicht gelesen werden.",
         noServer: "Mit einem Charakter einloggen, um die Feldbosse deines Servers zu sehen.", up: "Da", upFor: (t) => `seit ${t}`,
         due: "Fällig", unknown: "Noch keine Meldung", seen: (t) => `vor ${t} gemeldet`, allField: "Alle Feldbosse",
         repeat: "Wiederholen", once: "Einmal", times: (n) => `${n}-mal`, untilMuted: "Bis stumm", mute: "Stumm", dismiss: "Schließen",
         bossSoon: (name, n) => `${name} in ${n} Min. zurück`, bossNow: (name) => `${name} ist zurück` },
-  fr: { events: "Événements", bosses: "Boss", region: "Région", daily: "Réinitialisation quotidienne", weekly: "Réinitialisation hebdomadaire",
+  fr: { popNote: "La fenêtre reste cachée jusqu'à une alerte. Pour la voir avant : Réglages → Plugins → Ouvrir.", events: "Événements", bosses: "Boss", region: "Région", daily: "Réinitialisation quotidienne", weekly: "Réinitialisation hebdomadaire",
         scheduled: "Boss programmés", field: "Boss de terrain", fieldNote: "Partagés par les meters des joueurs quand ils ouvrent leur carte.",
         noFeed: "Les minuteurs des boss de terrain demandent le meter 2.0.65 ou plus récent.", feedFailed: "Impossible de lire les minuteurs des boss de terrain.",
         noServer: "Connectez-vous avec un personnage pour voir les boss de terrain de votre serveur.", up: "Présent", upFor: (t) => `depuis ${t}`,
         due: "Imminent", unknown: "Pas encore signalé", seen: (t) => `signalé il y a ${t}`, allField: "Tous les boss de terrain",
         repeat: "Répéter", once: "Une fois", times: (n) => `${n} fois`, untilMuted: "Jusqu'à coupure", mute: "Couper", dismiss: "Fermer",
         bossSoon: (name, n) => `${name} de retour dans ${n} min`, bossNow: (name) => `${name} est de retour` },
-  es: { events: "Eventos", bosses: "Jefes", region: "Región", daily: "Reinicio diario", weekly: "Reinicio semanal",
+  es: { popNote: "La ventana queda oculta hasta que suene una alerta. Para verla antes: Ajustes → Plugins → Abrir.", events: "Eventos", bosses: "Jefes", region: "Región", daily: "Reinicio diario", weekly: "Reinicio semanal",
         scheduled: "Jefes programados", field: "Jefes de campo", fieldNote: "Compartidos por los medidores de los jugadores al abrir su mapa.",
         noFeed: "Los temporizadores de jefes de campo necesitan el medidor 2.0.65 o posterior.", feedFailed: "No se pudieron leer los temporizadores de jefes de campo.",
         noServer: "Entra con un personaje para ver los jefes de campo de tu servidor.", up: "Activo", upFor: (t) => `hace ${t}`,
         due: "Inminente", unknown: "Sin informes", seen: (t) => `informado hace ${t}`, allField: "Todos los jefes de campo",
         repeat: "Repetir", once: "Una vez", times: (n) => `${n} veces`, untilMuted: "Hasta silenciar", mute: "Silenciar", dismiss: "Cerrar",
         bossSoon: (name, n) => `${name} vuelve en ${n} min`, bossNow: (name) => `${name} ha vuelto` },
-  pt: { events: "Eventos", bosses: "Chefes", region: "Região", daily: "Reinício diário", weekly: "Reinício semanal",
+  pt: { popNote: "A janela fica oculta até um alerta tocar. Para vê-la antes: Configurações → Plugins → Abrir.", events: "Eventos", bosses: "Chefes", region: "Região", daily: "Reinício diário", weekly: "Reinício semanal",
         scheduled: "Chefes agendados", field: "Chefes de campo", fieldNote: "Compartilhados pelos medidores dos jogadores ao abrir o mapa.",
         noFeed: "Os timers de chefes de campo precisam do medidor 2.0.65 ou mais novo.", feedFailed: "Não foi possível ler os timers de chefes de campo.",
         noServer: "Entre com um personagem para ver os chefes de campo do seu servidor.", up: "Ativo", upFor: (t) => `há ${t}`,
         due: "Iminente", unknown: "Sem relatos ainda", seen: (t) => `relatado há ${t}`, allField: "Todos os chefes de campo",
         repeat: "Repetir", once: "Uma vez", times: (n) => `${n} vezes`, untilMuted: "Até silenciar", mute: "Silenciar", dismiss: "Fechar",
         bossSoon: (name, n) => `${name} volta em ${n} min`, bossNow: (name) => `${name} voltou` },
-  ru: { events: "События", bosses: "Боссы", region: "Регион", daily: "Ежедневный сброс", weekly: "Еженедельный сброс",
+  ru: { popNote: "Окно скрыто, пока не сработает оповещение. Чтобы открыть его раньше: Настройки → Плагины → Открыть.", events: "События", bosses: "Боссы", region: "Регион", daily: "Ежедневный сброс", weekly: "Еженедельный сброс",
         scheduled: "Боссы по расписанию", field: "Полевые боссы", fieldNote: "Делятся метры игроков, когда те открывают карту.",
         noFeed: "Для таймеров полевых боссов нужен метр 2.0.65 или новее.", feedFailed: "Не удалось прочитать таймеры полевых боссов.",
         noServer: "Войдите персонажем, чтобы видеть полевых боссов своего сервера.", up: "На месте", upFor: (t) => `уже ${t}`,
         due: "Вот-вот", unknown: "Пока нет данных", seen: (t) => `данные ${t} назад`, allField: "Все полевые боссы",
         repeat: "Повтор", once: "Один раз", times: (n) => `${n} раз`, untilMuted: "Пока не выключить", mute: "Выключить звук", dismiss: "Закрыть",
         bossSoon: (name, n) => `${name} через ${n} мин`, bossNow: (name) => `${name} появился` },
-  "zh-Hant": { events: "活動", bosses: "首領", region: "地區", daily: "每日重置", weekly: "每週重置",
+  "zh-Hant": { popNote: "提醒響起前視窗會保持隱藏。若要先查看：設定 → 外掛 → 開啟。", events: "活動", bosses: "首領", region: "地區", daily: "每日重置", weekly: "每週重置",
         scheduled: "定時首領", field: "野外首領", fieldNote: "由玩家開啟地圖時其計量器分享。",
         noFeed: "野外首領計時需要計量器 2.0.65 以上。", feedFailed: "無法讀取野外首領計時。",
         noServer: "登入角色即可查看伺服器的野外首領。", up: "已出現", upFor: (t) => `${t} 前出現`,
         due: "即將出現", unknown: "尚無回報", seen: (t) => `${t} 前回報`, allField: "所有野外首領",
         repeat: "重複", once: "一次", times: (n) => `${n} 次`, untilMuted: "直到靜音", mute: "靜音", dismiss: "關閉",
         bossSoon: (name, n) => `${name} ${n} 分鐘後出現`, bossNow: (name) => `${name} 已出現` },
-  "zh-Hans": { events: "活动", bosses: "首领", region: "地区", daily: "每日重置", weekly: "每周重置",
+  "zh-Hans": { popNote: "提醒响起前窗口会保持隐藏。若要先查看：设置 → 插件 → 打开。", events: "活动", bosses: "首领", region: "地区", daily: "每日重置", weekly: "每周重置",
         scheduled: "定时首领", field: "野外首领", fieldNote: "由玩家打开地图时其计量器分享。",
         noFeed: "野外首领计时需要计量器 2.0.65 以上。", feedFailed: "无法读取野外首领计时。",
         noServer: "登录角色即可查看服务器的野外首领。", up: "已出现", upFor: (t) => `${t} 前出现`,
@@ -406,6 +412,8 @@ function renderStatic() {
   els.test.textContent = a.play;
   els.repeatLabel.textContent = words.repeat;
   els.popLabel.textContent = a.pop;
+  els.popNote.textContent = words.popNote;
+  els.popNote.hidden = !prefs.pop;
   els.mute.textContent = words.mute;
   els.dismiss.title = words.dismiss;
   els.dismiss.setAttribute("aria-label", words.dismiss);
@@ -663,20 +671,38 @@ function soundAlert() {
   els.mute.hidden = left <= 1;
   play();
 }
+// Meters before plugin API 2 have no a2.window: the option then does nothing.
+const windowApi = () => (a2.window && typeof a2.window.show === "function" ? a2.window : null);
+// With the option on: shown while an alert's banner is up, hidden a little
+// after it goes (as the Hidden Cube Alert does with a cube in range).
+let hideTimer = 0;
+function updateWindow() {
+  const api = windowApi();
+  if (!api || !prefs.pop) return;
+  clearTimeout(hideTimer);
+  if (!els.banner.hidden) api.show().catch(() => {});
+  else hideTimer = setTimeout(() => api.hide().catch(() => {}), HIDE_AFTER_MS);
+}
+let bannerTimer = 0;
+function clearBanner() {
+  stopSound();
+  clearTimeout(bannerTimer);
+  lines.length = 0;
+  els.banner.hidden = true;
+  updateWindow();
+}
 function alertBanner(message) {
   lines.push(message);
   while (lines.length > 3) lines.shift();
   els.bannerText.textContent = lines.join(" · ");
   els.banner.hidden = false;
   soundAlert();
-  if (prefs.pop && a2.window && typeof a2.window.show === "function") a2.window.show().catch(() => {});
+  clearTimeout(bannerTimer);
+  bannerTimer = setTimeout(clearBanner, BANNER_MS);
+  updateWindow();
 }
 els.mute.addEventListener("click", stopSound);
-els.dismiss.addEventListener("click", () => {
-  stopSound();
-  lines.length = 0;
-  els.banner.hidden = true;
-});
+els.dismiss.addEventListener("click", clearBanner);
 
 // Alerts: each goes off once, when its moment (the start less its lead)
 // passes between one check and the next. Opening the window after the
@@ -764,7 +790,12 @@ els.repeat.addEventListener("change", () => {
 });
 els.pop.addEventListener("change", () => {
   prefs.pop = els.pop.checked;
+  els.popNote.hidden = !prefs.pop;
   savePrefs();
+  // Turned off: make sure the window is showing. Turned on: it hides shortly
+  // unless an alert is up (time enough to read the note).
+  if (!prefs.pop) windowApi()?.show().catch(() => {});
+  else updateWindow();
 });
 els.zoneSelect.addEventListener("change", () => {
   prefs.display = els.zoneSelect.value;
@@ -812,6 +843,11 @@ a2.on("compact", (on) => document.body.classList.toggle("compact", !!on));
     checkAlerts(now);
     render();
   }, 1000);
+  if (!windowApi()) {
+    els.pop.disabled = true;
+    els.pop.parentElement.title = "Needs a newer meter";
+  }
   await a2.ready();
   readFeed();
+  setTimeout(updateWindow, 1500);
 })();

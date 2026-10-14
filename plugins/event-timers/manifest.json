@@ -4,7 +4,7 @@
   "version": "0.3.0",
   "apiVersion": 2,
   "author": "A2 Tools",
-  "description": "Countdowns to the recurring events, the scheduled bosses and the field bosses (their timers shared by players' meters), in your server's time, with alerts before the ones you choose, even while the game is closed.",
+  "description": "Countdowns to events and bosses in your server's time, with alerts before the ones you pick.",
   "permissions": [
     "storage",
     "events:character",

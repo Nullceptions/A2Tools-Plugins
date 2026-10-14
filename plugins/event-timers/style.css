@@ -78,7 +78,7 @@ input[type="checkbox"] {
 select,
 .testSound,
 .banner button,
-.applyAll,
+.btn,
 .modal button {
   font: inherit;
   font-size: 12px;
@@ -92,7 +92,7 @@ select,
 select:focus,
 .testSound:focus-visible,
 .banner button:focus-visible,
-.applyAll:focus-visible,
+.btn:focus-visible,
 .modal button:focus-visible {
   border-color: rgba(143, 194, 255, 0.6);
 }
@@ -102,13 +102,13 @@ select option {
 }
 .testSound,
 .banner button,
-.applyAll,
+.btn,
 .modal button {
   cursor: pointer;
 }
 .testSound:hover,
 .banner button:hover,
-.applyAll:hover,
+.btn:hover,
 .modal button:hover {
   background: rgba(255, 255, 255, 0.1);
 }
@@ -382,9 +382,8 @@ input[type="checkbox"] {
   font-weight: 600;
   color: color-mix(in srgb, var(--alert) 40%, white);
 }
-.banner .mute:disabled {
-  opacity: 0.45;
-  cursor: default;
+.banner .mute[hidden] {
+  display: none;
 }
 .banner .dismiss {
   width: 22px;
@@ -419,7 +418,7 @@ input[type="checkbox"] {
 .alertDefaults:has(.defaultsHead:empty) {
   display: none;
 }
-.applyAll {
+.btn {
   margin-top: 2px;
 }
 .modal {
@@ -470,4 +469,11 @@ input[type="checkbox"] {
 /* The sound list: wide enough for its longest name. */
 .alertOptions .sound {
   min-width: 8.5em;
+}
+/* Alerts' shortcut to their options in Settings. */
+.alertOptionsBtn {
+  margin-bottom: 6px;
+}
+.alertSettings .applyAll {
+  margin-bottom: 10px;
 }

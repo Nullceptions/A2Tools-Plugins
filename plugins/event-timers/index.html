@@ -33,27 +33,25 @@
       <ol class="list fieldList"></ol>
     </section>
     <section class="view alerts" hidden>
-      <div class="alertOptions">
-        <label class="setting"><span class="soundLabel">Sound</span>
-          <span class="pick"><select class="sound"></select><button type="button" class="testSound">Play</button></span></label>
-        <label class="setting"><span class="repeatLabel">Repeat</span> <select class="repeat"></select></label>
-        <label class="option"><input type="checkbox" class="pop" /> <span class="popLabel">Only show this window when an alert goes off</span></label>
-        <p class="note popNote" hidden>The window stays hidden until an alert goes off. To see it before then: Settings → Plugins → Open.</p>
-      </div>
+      <button type="button" class="btn alertOptionsBtn">Alert Options</button>
       <ol class="alertList"></ol>
     </section>
     <section class="view settings" hidden>
       <label class="setting"><span class="regionLabel">Region</span> <select class="regionSelect"></select></label>
       <label class="setting"><span class="zoneLabel">Show times in</span> <select class="zoneSelect"></select></label>
       <label class="setting"><span class="scaleLabel">Text size</span> <select class="scaleSelect"></select></label>
-      <label class="setting"><span class="colorLabel">Alert colour</span> <select class="colorSelect"></select></label>
-      <h2 class="group alertDefaults"><span class="defaultsHead"></span></h2>
-      <label class="setting"><span class="defaultLeadLabel">Alert time</span> <select class="defaultLead"></select></label>
-      <label class="setting"><span class="defaultClosedLabel">Alert time while AION2 is closed</span> <select class="defaultClosed"></select></label>
-      <p class="note defaultsNote"></p>
-      <div class="settingButtons">
-        <button type="button" class="applyAll">Apply to current alerts</button>
-        <button type="button" class="applyAll testAlert">Test alert</button>
+      <div class="alertSettings">
+        <h2 class="group alertDefaults"><span class="defaultsHead"></span></h2>
+        <label class="setting"><span class="soundLabel">Sound</span> <select class="sound"></select></label>
+        <label class="setting"><span class="repeatLabel">Repeat</span> <select class="repeat"></select></label>
+        <label class="setting"><span class="colorLabel">Alert colour</span> <select class="colorSelect"></select></label>
+        <label class="setting"><span class="defaultLeadLabel">Alert time</span> <select class="defaultLead"></select></label>
+        <label class="setting"><span class="defaultClosedLabel">Alert time while AION2 is closed</span> <select class="defaultClosed"></select></label>
+        <p class="note defaultsNote"></p>
+        <button type="button" class="btn applyAll">Apply to current alerts</button>
+        <label class="option popRow"><input type="checkbox" class="pop" /> <span class="popLabel">Only show this window when an alert goes off</span></label>
+        <p class="note popNote" hidden>The window stays hidden until an alert goes off. To see it before then: Settings → Plugins → Open.</p>
+        <button type="button" class="btn testAlert">Test Alert</button>
       </div>
     </section>
     <div class="modal" role="dialog" aria-modal="true" hidden>

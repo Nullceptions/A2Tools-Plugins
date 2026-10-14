@@ -619,3 +619,19 @@ body.alertOnly .openFull:hover {
 .fieldCredit a:hover {
   text-decoration: underline;
 }
+/* Field bosses in groups: up, in window, upcoming, no report yet. */
+.list li.subhead {
+  display: block;
+  padding: 8px 0 2px;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  border-bottom: 0;
+}
+.list li.subhead.up { color: #7ee0a0; }
+.list li.subhead.window { color: #ffc163; }
+/* An up boss with a fresh HP: a thin bar of what is left under its row. */
+.list li.hasHp {
+  background: linear-gradient(90deg, rgba(126, 224, 160, 0.14) var(--hp, 0%), transparent var(--hp, 0%)) no-repeat
+    left bottom / 100% 2px;
+}

@@ -462,3 +462,8 @@ input[type="checkbox"] {
 .modal .modalYes:hover {
   background: #a9d0ff;
 }
+.settingButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}

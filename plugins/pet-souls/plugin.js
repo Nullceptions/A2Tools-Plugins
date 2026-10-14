@@ -309,7 +309,7 @@ function whereOf(id) {
   }
   if (!src.drops.length && !src.chests.length) box.append(line("at", words.noDrops));
   if (elsewhere.size) box.append(line("at", words.also(listOf([...elsewhere].map((r) => text(REGION_MAP[r]))))));
-  const page = soulPage(id, src);
+  const page = soulPage(src);
   if (page) {
     const more = document.createElement("div");
     more.className = "more";
@@ -323,10 +323,10 @@ function whereOf(id) {
   return box;
 }
 
-// The soul's page on metabot.gg (metabot.js), opened in the browser: its
-// address is the soul item's English name, apostrophes dropped.
-function soulPage(id, src) {
-  if (!METABOT_PAGES.has(Number(id))) return null;
+// The soul's page on metabot.gg, opened in the browser: its address is the
+// soul item's English name, apostrophes dropped. A pet metabot hasn't added
+// yet has no page there.
+function soulPage(src) {
   const slug = String(SOURCE_TEXT[src.title]?.en ?? "").toLowerCase()
     .replace(/['’]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
   return slug ? `https://metabot.gg/en/aion-2/items/${slug}` : null;

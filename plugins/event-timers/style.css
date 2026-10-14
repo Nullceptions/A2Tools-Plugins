@@ -252,16 +252,14 @@ input[type="checkbox"] {
   gap: 6px;
 }
 .alertList li {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 3px 8px;
   padding: 4px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 .alertList li.group {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   border-bottom-color: rgba(255, 255, 255, 0.14);
 }
 .groupToggle {
@@ -279,19 +277,37 @@ input[type="checkbox"] {
 .groupToggle:focus-visible {
   color: rgba(255, 255, 255, 0.95);
 }
-.alertList .name {
-  min-width: 0;
-  flex: 1;
-}
-/* The alert's lead while AION2 is closed, on a line of its own. */
-.alertList .closedRow {
-  flex-basis: 100%;
+/* An alert: its switch and name; under them, once on, its two times. */
+.alertHead {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  gap: 6px;
+  gap: 8px;
+  cursor: pointer;
+}
+.alertHead input {
+  flex: none;
+  margin: 0;
+}
+.alertList .name {
+  min-width: 0;
+}
+.alertList li.on .name {
+  color: rgba(255, 255, 255, 0.95);
+}
+.leads {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 4px 10px;
+  margin: 5px 0 2px 21px;
+}
+.leadRow {
+  display: contents;
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.55);
+}
+.leadRow select {
+  width: 9.5em;
 }
 .alertList [hidden] {
   display: none;

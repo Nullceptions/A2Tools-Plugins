@@ -467,3 +467,7 @@ input[type="checkbox"] {
   flex-wrap: wrap;
   gap: 6px;
 }
+/* The sound list: wide enough for its longest name. */
+.alertOptions .sound {
+  min-width: 8.5em;
+}

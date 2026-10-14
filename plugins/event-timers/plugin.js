@@ -45,7 +45,6 @@ const els = {
   sound: $(".sound"),
   test: $(".testSound"),
   testAlert: $(".testAlert"),
-  testAlert2: $(".testAlert2"),
   repeatLabel: $(".repeatLabel"),
   repeat: $(".repeat"),
   pop: $(".pop"),
@@ -495,7 +494,6 @@ function renderStatic() {
   els.soundLabel.textContent = a.sound;
   els.test.textContent = a.play;
   els.testAlert.textContent = words.testAlert;
-  els.testAlert2.textContent = words.testAlert;
   els.repeatLabel.textContent = words.repeat;
   els.popLabel.textContent = a.pop;
   els.popNote.textContent = words.popNote;
@@ -954,14 +952,14 @@ els.sound.addEventListener("change", () => {
   savePrefs();
   playSound(prefs.sound);
 });
-els.test.addEventListener("click", () => playSound(els.sound.value));
 // A sample alert, as a real one would come: banner, flash, sound and repeats.
 const testAlert = () => {
   const ev = scheduled("event")[0];
   alertBanner(aui().soon(ev ? text(ev.name) : "Shugo Festival", defaultLead()));
 };
+// Play (Alerts) and Test alert (Settings) both show one, not just its sound.
+els.test.addEventListener("click", testAlert);
 els.testAlert.addEventListener("click", testAlert);
-els.testAlert2.addEventListener("click", testAlert);
 els.repeat.addEventListener("change", () => {
   prefs.repeat = Number(els.repeat.value);
   savePrefs();

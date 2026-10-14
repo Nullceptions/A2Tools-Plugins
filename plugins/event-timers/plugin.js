@@ -11,7 +11,8 @@
 // Field bosses respawn a while after each kill: their timers come from what
 // players' meters read off the in-game map, shared through a2tools.app
 // (a2.bossTimers, meter 2.0.65 on), fetched when the window opens and every
-// 15 minutes.
+// 15 minutes; a map the player opens themselves comes straight from their
+// meter (a2.on("bossMap")), and for each boss the newest word stands.
 //
 // Alerts: each event or boss can sound an alert a set time before it starts,
 // once per showing, and another lead while AION2 is closed (to leave time to
@@ -272,8 +273,11 @@ let gameRunning = null;
 // lastServer: the last character's server, kept for when nobody is logged in.
 let prefs = { region: "auto", hidden: [], alerts: {}, leads: {}, closedLeads: {}, sound: "chime", repeat: 1, pop: false,
   tab: "events", display: "system", lastServer: 0, scale: 1 };
-// The field boss timers last read: { server, bosses, at } or { error }.
+// The field boss timers: { server, bosses, at, error }, from the feed and the
+// player's own map, the newest report of each boss kept.
 let feed = null;
+// Bosses read off the player's own map, kept across a feed refresh.
+let ownMap = { server: 0, bosses: {} };
 
 const ui = () => ({ ...(UI[language] || UI.en), ...(MORE_UI[language] || MORE_UI.en) });
 const aui = () => ALERT_UI[language] || ALERT_UI.en;
@@ -771,6 +775,15 @@ function checkAlerts(now) {
 // The field boss timers for the player's server: when the window opens, when
 // the server changes, and every 15 minutes.
 let feedTimer = 0;
+// Each boss's newest report, between the feed's and the player's own map's.
+function mergeOwn(bosses) {
+  const out = { ...bosses };
+  if (ownMap.server !== serverId()) return out;
+  for (const [id, mine] of Object.entries(ownMap.bosses)) {
+    if (!out[id] || (Number(out[id].reportedAt) || 0) <= (Number(mine.reportedAt) || 0)) out[id] = mine;
+  }
+  return out;
+}
 async function readFeed() {
   clearTimeout(feedTimer);
   feedTimer = setTimeout(readFeed, FEED_EVERY_MS);
@@ -778,9 +791,9 @@ async function readFeed() {
   if (!server || typeof a2.bossTimers !== "function") return;
   try {
     const data = await a2.bossTimers(server);
-    feed = { server, bosses: data?.bosses || {}, at: Date.now() };
+    feed = { server, bosses: mergeOwn(data?.bosses || {}), at: Date.now() };
   } catch {
-    feed = { server, error: true };
+    feed = { server, bosses: mergeOwn(feed?.server === server ? feed.bosses || {} : {}), error: true };
   }
   render();
 }
@@ -843,6 +856,18 @@ a2.on("language", (code) => {
   renderStatic();
   render();
 });
+// A map the player just opened, from their own meter: their server's bosses,
+// as of now (meter 2.0.65 on).
+a2.on("bossMap", (m) => {
+  const server = serverId();
+  if (!server || !m || typeof m.bosses !== "object") return;
+  if (ownMap.server !== server) ownMap = { server, bosses: {} };
+  Object.assign(ownMap.bosses, m.bosses);
+  const base = feed?.server === server ? feed.bosses || {} : {};
+  feed = { ...(feed?.server === server ? feed : {}), server, bosses: mergeOwn(base), at: Date.now(), error: false };
+  render();
+});
+
 // Whether AION2 is open (meter 2.0.65 on).
 a2.on("game", (g) => {
   gameRunning = typeof g?.running === "boolean" ? g.running : null;

@@ -1,0 +1,105 @@
+/* Transparent: the window paints the panel, at the opacity the user picks. */
+html, body {
+  margin: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.88);
+  font: 13px/1.4 "Segoe UI", system-ui, sans-serif;
+}
+body {
+  padding: 10px 12px;
+}
+body.compact .controls,
+body.compact .hidden,
+body.compact .events li:nth-child(n + 4) {
+  display: none;
+}
+.controls {
+  margin-bottom: 8px;
+}
+.status {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+.region {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.65);
+}
+.regionSelect {
+  font: inherit;
+  color: inherit;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  padding: 1px 4px;
+}
+.events {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.events li {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 2px 8px;
+  padding: 5px 2px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+.events li.running .name {
+  color: #7ee0a0;
+}
+.events .name {
+  font-weight: 600;
+}
+.events .where {
+  grid-column: 1;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+}
+.events .when {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.events .countdown {
+  font-weight: 600;
+}
+.events .at {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+}
+.events .hide,
+.hidden button {
+  font: inherit;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.45);
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.events .hide {
+  grid-row: 1 / span 2;
+  grid-column: 3;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  line-height: 1;
+}
+.events .hide:hover,
+.hidden button:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+.hidden {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 8px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.45);
+}
+.hidden button {
+  padding: 1px 7px;
+}

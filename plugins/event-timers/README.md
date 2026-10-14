@@ -13,11 +13,15 @@ Countdowns to AION 2's recurring events and scheduled bosses, in your server's t
 | Guardian Lord Nahma | Friday and Sunday at 21:00 |
 | Daily and weekly resets | 07:00 UTC; the weekly one on Wednesday |
 
-Each row shows how long until it starts and the start in your own clock; a running event shows how long it has left (where the game's data says how long it runs). × hides an event; the hidden ones are listed below the others, and clicking one shows it again. Folded (the window's compact button), only the next three show.
+Each row shows how long until it starts and the start time (in this computer's time zone, or another you pick under **Settings**, or the server's own clock); a running event shows how long it has left (where the game's data says how long it runs). × hides an event; the hidden ones are listed below the others, and clicking one shows it again. Folded (the window's compact button), only the next three show.
+
+## Alerts
+
+Under **Alerts**, switch on the events and bosses you want an alert for, and pick how long before each one (as it starts, or 1, 2, 3, 4, 5, 10, 15, 20, 30, 45 or 60 minutes before; 5 unless you change it). An alert plays a sound and shows a message in the window, once per showing; tick **Show this window when an alert goes off** to bring the window up too. The sounds are Hidden Cube Alert's (Chime, Bell, Sparkle, Ping, Soft) and four more (Gong, Horn, Harp, Alarm), made in the plugin, with no sound files. A timer with an alert set shows a 🔔.
 
 ## Server time
 
-Each Global region's servers keep their own clock: NA East is New York time, NA West Los Angeles, Europe Berlin, South America São Paulo, Asia Seoul. The region comes from your character's server (the second digit of its number), and so does your faction (the first). Before you log in, or to see another region's times, pick it under **Server time**. Korean and Taiwanese servers share their numbers and run some events on other cycles, so they aren't covered yet.
+Each Global region's servers keep their own clock: NA East is New York time, NA West Los Angeles, Europe Berlin, South America São Paulo, Asia Seoul. The region comes from your character's server (the second digit of its number), and so does your faction (the first). Before you log in, or to see another region's times, pick it under **Settings → Server**. Korean and Taiwanese servers share their numbers and run some events on other cycles, so they aren't covered yet.
 
 ## Where the times come from
 
@@ -32,4 +36,8 @@ Field bosses that respawn a while after they're killed (most of the world map's 
 ## Permissions
 
 - `events:character`: your server, for its time and your faction.
-- `storage`: your region choice and hidden events, on this computer.
+- `storage`: your settings, alerts and hidden events, on this computer.
+- `notify`: the alert's message in the window.
+- `window`: to bring the window up when an alert goes off, if you ask for it.
+
+Plugin API 2: needs meter 2.0.62 or later.

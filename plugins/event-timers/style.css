@@ -9,6 +9,8 @@ body {
   padding: 10px 12px;
 }
 body.compact .controls,
+body.compact .view.alerts,
+body.compact .view.settings,
 body.compact .hidden,
 body.compact .events li:nth-child(n + 4) {
   display: none;
@@ -25,7 +27,8 @@ body.compact .events li:nth-child(n + 4) {
   font-size: 12px;
   color: rgba(255, 255, 255, 0.65);
 }
-.regionSelect {
+.regionSelect,
+.zoneSelect {
   font: inherit;
   color: inherit;
   background: rgba(0, 0, 0, 0.35);
@@ -102,4 +105,95 @@ body.compact .events li:nth-child(n + 4) {
 }
 .hidden button {
   padding: 1px 7px;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+.tab {
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 10px;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.tab[aria-selected="true"] {
+  color: #0c1628;
+  background: #8fc2ff;
+  border-color: #8fc2ff;
+}
+.alertOptions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+.alertOptions .popRow {
+  flex-basis: 100%;
+}
+.sound,
+.lead {
+  font: inherit;
+  font-size: 12px;
+  color: inherit;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  padding: 1px 4px;
+}
+.testSound {
+  font: inherit;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  padding: 1px 8px;
+  cursor: pointer;
+}
+.alertList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.alertList li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 2px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+.alertList .name {
+  font-weight: 600;
+}
+
+.setting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+.setting select {
+  max-width: 62%;
+}
+.pick {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.lead:disabled {
+  opacity: 0.45;
 }

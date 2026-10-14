@@ -27,6 +27,9 @@ const SOUNDS = {
   ],
 };
 
+// How long a sound lasts, in seconds (its last note's end), for repeats.
+const soundLength = (name) => Math.max(0, ...(SOUNDS[name] || []).map(([, start, length]) => start + length));
+
 // One context for every alert. WebKitGTK (the meter on Linux) starts a new
 // context suspended, its clock standing still until it is resumed, so it is
 // resumed before each sound; WebView2 (Windows) starts it running.

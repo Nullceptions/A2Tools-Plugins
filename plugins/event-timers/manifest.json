@@ -1,11 +1,21 @@
 {
   "id": "event-timers",
   "name": "Event Timers",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "apiVersion": 2,
   "author": "A2 Tools",
-  "description": "Countdowns to the recurring events and scheduled bosses (Shugo Festival, Dimensional Invasion, Spacetime Rift, Artifact Siege, the Abyss bosses, resets), from the game's own schedules, in your server's time, with an alert before the ones you choose.",
-  "permissions": ["storage", "events:character", "notify", "window"],
+  "description": "Countdowns to the recurring events, the scheduled bosses and the field bosses (their timers shared by players' meters), in your server's time, with alerts before the ones you choose, even while the game is closed.",
+  "permissions": [
+    "storage",
+    "events:character",
+    "window",
+    "feed:boss-timers"
+  ],
   "decoders": [],
-  "ui": { "panel": { "width": 360, "height": 480 } }
+  "ui": {
+    "panel": {
+      "width": 360,
+      "height": 480
+    }
+  }
 }

@@ -1,4 +1,9 @@
-/* Transparent: the window paints the panel, at the opacity the user picks. */
+/* Transparent: the window paints the panel, at the opacity the user picks.
+   The look is the Pet Soul Tracker's. */
+:root {
+  /* Dark native controls: dropdown lists, checkboxes, scrollbars. */
+  color-scheme: dark;
+}
 html, body {
   margin: 0;
   background: transparent;
@@ -8,72 +13,147 @@ html, body {
 body {
   padding: 10px 12px;
 }
+/* Folded: just the next few events. */
 body.compact .controls,
+body.compact .view.bosses,
 body.compact .view.alerts,
 body.compact .view.settings,
 body.compact .hidden,
-body.compact .events li:nth-child(n + 4) {
+body.compact .eventList li:nth-child(n + 4) {
   display: none;
 }
-.controls {
-  margin-bottom: 8px;
+body.compact .view.events {
+  display: block;
 }
+
 .status {
   color: rgba(255, 255, 255, 0.55);
   font-size: 12px;
-  margin-bottom: 4px;
 }
-.region {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.65);
+.resets {
+  margin: 2px 0 8px;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: rgba(255, 255, 255, 0.45);
 }
-.regionSelect,
-.zoneSelect {
+.resets:empty {
+  display: none;
+}
+
+/* Tabs: the Pet Soul Tracker's chips. */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin-bottom: 8px;
+}
+.chips button {
+  padding: 2px 8px;
   font: inherit;
-  color: inherit;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 4px;
-  padding: 1px 4px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  cursor: pointer;
 }
-.events {
+.chips button:hover,
+.chips button:focus-visible {
+  color: rgba(255, 255, 255, 0.95);
+}
+.chips button[aria-selected="true"] {
+  color: #0a0e16;
+  background: #8fc2ff;
+  border-color: #8fc2ff;
+}
+
+/* Dropdowns, buttons and checkboxes, dark. */
+select,
+.testSound,
+.banner button {
+  font: inherit;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 4px;
+  padding: 2px 5px;
+  outline: none;
+}
+select:focus,
+.testSound:focus-visible,
+.banner button:focus-visible {
+  border-color: rgba(143, 194, 255, 0.6);
+}
+select option {
+  color: rgba(255, 255, 255, 0.9);
+  background: #161b26;
+}
+.testSound,
+.banner button {
+  cursor: pointer;
+}
+.testSound:hover,
+.banner button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+input[type="checkbox"] {
+  accent-color: #8fc2ff;
+}
+
+/* Countdown lists. */
+.list,
+.alertList {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-.events li {
+.list li {
   display: grid;
   grid-template-columns: 1fr auto auto;
   align-items: center;
-  gap: 2px 8px;
-  padding: 5px 2px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  gap: 1px 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
-.events li.running .name {
+.list li.running .name,
+.list li.up .name {
   color: #7ee0a0;
 }
-.events .name {
-  font-weight: 600;
+.list .name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
-.events .where {
+.list .bell {
+  margin-right: 4px;
+  font-size: 10px;
+}
+.list .where {
   grid-column: 1;
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.45);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
-.events .when {
+.list .when {
   grid-row: 1 / span 2;
   grid-column: 2;
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
-.events .countdown {
-  font-weight: 600;
+.list .countdown {
+  font-size: 12px;
 }
-.events .at {
+.list li.up .countdown {
+  color: #7ee0a0;
+}
+.list .at {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.45);
 }
-.events .hide,
+.list .hide,
 .hidden button {
   font: inherit;
   font-size: 11px;
@@ -83,7 +163,7 @@ body.compact .events li:nth-child(n + 4) {
   border-radius: 999px;
   cursor: pointer;
 }
-.events .hide {
+.list .hide {
   grid-row: 1 / span 2;
   grid-column: 3;
   width: 20px;
@@ -91,7 +171,7 @@ body.compact .events li:nth-child(n + 4) {
   padding: 0;
   line-height: 1;
 }
-.events .hide:hover,
+.list .hide:hover,
 .hidden button:hover {
   color: rgba(255, 255, 255, 0.85);
 }
@@ -107,77 +187,28 @@ body.compact .events li:nth-child(n + 4) {
   padding: 1px 7px;
 }
 
-.tabs {
-  display: flex;
-  gap: 4px;
-  margin-bottom: 6px;
-}
-.tab {
-  font: inherit;
-  font-size: 12px;
-  font-weight: 600;
-  padding: 2px 10px;
-  color: rgba(255, 255, 255, 0.6);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 999px;
-  cursor: pointer;
-}
-.tab[aria-selected="true"] {
-  color: #0c1628;
-  background: #8fc2ff;
-  border-color: #8fc2ff;
-}
-.alertOptions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px 8px;
-  margin-bottom: 8px;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.7);
-}
-.alertOptions .popRow {
-  flex-basis: 100%;
-}
-.sound,
-.lead {
-  font: inherit;
-  font-size: 12px;
-  color: inherit;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 4px;
-  padding: 1px 4px;
-}
-.testSound {
-  font: inherit;
+/* Section headings: the Bosses tab's two lists, the alert list's groups. */
+.group {
+  margin: 10px 0 2px;
+  padding-bottom: 3px;
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.7);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 4px;
-  padding: 1px 8px;
-  cursor: pointer;
-}
-.alertList {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.alertList li {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 4px 8px;
-  padding: 4px 2px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-}
-.alertList .name {
   font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+.view.bosses .group:first-child {
+  margin-top: 0;
+}
+.note {
+  margin: 4px 0;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
 }
 
+/* Alerts. */
+.alertOptions {
+  margin-bottom: 4px;
+}
 .setting {
   display: flex;
   align-items: center;
@@ -190,13 +221,33 @@ body.compact .events li:nth-child(n + 4) {
 .setting select {
   max-width: 62%;
 }
+.option {
+  display: block;
+  margin-bottom: 8px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+}
 .pick {
   display: inline-flex;
   align-items: center;
   gap: 6px;
 }
-.lead:disabled {
-  opacity: 0.45;
+.alertList li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3px 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.alertList li.group {
+  display: block;
+  border-bottom-color: rgba(255, 255, 255, 0.14);
+}
+.alertList .name {
+  min-width: 0;
+  flex: 1;
 }
 /* The alert's lead while AION2 is closed, on a line of its own. */
 .alertList .closedRow {
@@ -206,5 +257,52 @@ body.compact .events li:nth-child(n + 4) {
   justify-content: flex-end;
   gap: 6px;
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(255, 255, 255, 0.5);
+}
+.alertList [hidden] {
+  display: none;
+}
+
+/* An alert going off: on top, with its mute. */
+.banner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  background: rgba(143, 194, 255, 0.16);
+  border: 1px solid rgba(143, 194, 255, 0.45);
+}
+.banner[hidden] {
+  display: none;
+}
+.bannerText {
+  flex: 1;
+  font-weight: 600;
+}
+.banner .dismiss {
+  width: 22px;
+  padding: 0;
+}
+
+/* A quiet scrollbar: thin, no track, brighter only while in use. */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  min-height: 28px;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.22);
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:active {
+  background-color: rgba(255, 255, 255, 0.35);
 }

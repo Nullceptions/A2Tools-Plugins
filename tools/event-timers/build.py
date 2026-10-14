@@ -13,6 +13,10 @@ tools/game-souls). What comes from them:
   NpcData/Map     names; Map.json + MapData spawners for which boss a
                   spawner holds
   ItemGetRoute    which maps are open (as in tools/game-souls)
+  WorldMapFieldNamed  the field bosses that respawn a while after each kill
+                  (SpawnType Basic): their timers come from the feed players'
+                  meters share (a2.bossTimers), keyed by this table's ID
+--servers takes the meter's src/data/servers.json, for the servers' names.
 Times are server time; the plugin turns them into the player's own clock
 from their server's region. Writes plugins/event-timers/schedule.js.
 """
@@ -62,6 +66,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--tables", default=os.environ.get("A2_GAME_TABLES", ""))
     ap.add_argument("--tw-l10n", default=None, help="the Taiwan client's extracted Table/L10N folder (zh-TW)")
+    ap.add_argument("--servers", default=None, help="the meter's src/data/servers.json, for server names")
     ap.add_argument("--out", default=os.path.join(REPO, "plugins", "event-timers", "schedule.js"))
     a = ap.parse_args()
     T = a.tables
@@ -197,6 +202,28 @@ def main():
     events.append({"id": "weekly", "kind": "reset", "name": own("weekly"), "where": [], "side": None,
                    "days": [3], "starts": [7 * 60], "minutes": 0, "utc": True})
 
+    # Field bosses that respawn after each kill, on open maps: their timers
+    # come from players' meters (a2.bossTimers), keyed by world-map id.
+    race = {"ERace::Light": "elyos", "ERace::Dark": "asmodian"}
+    field = {}
+    for r in load(T, "WorldMapFieldNamed.json"):
+        mid = v(r["MapId"])
+        if not r["SpawnType"].endswith("::Basic") or mid not in live:
+            continue
+        npc = npcs.get(spawner_npc.get(r["FieldNamedSpawnerName"]))
+        if not npc:
+            continue
+        field[str(v(r["ID"]))] = {"name": tk(npc["Desc"]["Key"]), "where": map_text(mid),
+                                  "side": race.get(maps[mid].get("MapRace")), "level": npc.get("Level") or None}
+
+    # Global servers' names, in each language the meter has them in.
+    servers = {}
+    if a.servers:
+        with open(a.servers, encoding="utf-8") as f:
+            for sid, names in json.load(f)["servers"].items():
+                if len(sid) == 4 and sid[1] in "12345":
+                    servers[sid] = {k: n for k, n in names.items() if n and (k == "en" or n != names.get("en"))}
+
     try:
         import opencc
         t2s = opencc.OpenCC("t2s").convert
@@ -212,8 +239,13 @@ def main():
         f.write("// starts: minutes after midnight, server time (UTC with utc: true);\n")
         f.write("// days: 0 = Sunday; minutes: how long it runs, 0 if the tables don't say.\n")
         f.write("const EVENTS = " + json.dumps(events, ensure_ascii=False, indent=1) + ";\n")
+        f.write("// Field bosses that respawn after each kill, by world-map id: their timers\n")
+        f.write("// come from the feed players' meters share (a2.bossTimers).\n")
+        f.write("const FIELD_BOSSES = " + json.dumps(field, ensure_ascii=False, indent=1, sort_keys=True) + ";\n")
+        f.write("// Global servers' names, by server id, in each language that differs.\n")
+        f.write("const SERVERS = " + json.dumps(servers, ensure_ascii=False, indent=1, sort_keys=True) + ";\n")
         f.write("const EVENT_TEXT = " + json.dumps(text, ensure_ascii=False, indent=1, sort_keys=True) + ";\n")
-    print(f"wrote {a.out}: {len(events)} events", file=sys.stderr)
+    print(f"wrote {a.out}: {len(events)} events, {len(field)} field bosses, {len(servers)} servers", file=sys.stderr)
     for e in events:
         times = e["starts"]
         print(f"  {e['id']:28} {text[e['name']]['en'][:26]:26} days={e['days']} "

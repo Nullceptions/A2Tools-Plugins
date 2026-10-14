@@ -6,28 +6,43 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <div class="banner" role="alert" hidden>
+      <span class="bannerText"></span>
+      <button type="button" class="mute" hidden>Mute</button>
+      <button type="button" class="dismiss" aria-label="Dismiss">×</button>
+    </div>
     <div class="controls">
-      <div class="tabs" role="tablist">
-        <button type="button" class="tab" data-tab="timers" role="tab">Timers</button>
+      <div class="status"></div>
+      <div class="resets"></div>
+      <div class="chips tabs" role="tablist">
+        <button type="button" class="tab" data-tab="events" role="tab">Events</button>
+        <button type="button" class="tab" data-tab="bosses" role="tab">Bosses</button>
         <button type="button" class="tab" data-tab="alerts" role="tab">Alerts</button>
         <button type="button" class="tab" data-tab="settings" role="tab">Settings</button>
       </div>
-      <div class="status"></div>
     </div>
-    <section class="view timers">
-      <ol class="events"></ol>
+    <section class="view events">
+      <ol class="list eventList"></ol>
       <div class="hidden"></div>
+    </section>
+    <section class="view bosses" hidden>
+      <h2 class="group scheduledHead">Scheduled bosses</h2>
+      <ol class="list scheduledList"></ol>
+      <h2 class="group fieldHead">Field bosses</h2>
+      <p class="note fieldNote"></p>
+      <ol class="list fieldList"></ol>
     </section>
     <section class="view alerts" hidden>
       <div class="alertOptions">
-        <label class="soundRow"><span class="soundLabel">Sound</span> <select class="sound"></select></label>
-        <button type="button" class="testSound">Play</button>
-        <label class="popRow"><input type="checkbox" class="pop" /> <span class="popLabel">Show this window when an alert goes off</span></label>
+        <label class="setting"><span class="soundLabel">Sound</span>
+          <span class="pick"><select class="sound"></select><button type="button" class="testSound">Play</button></span></label>
+        <label class="setting"><span class="repeatLabel">Repeat</span> <select class="repeat"></select></label>
+        <label class="option"><input type="checkbox" class="pop" /> <span class="popLabel">Show this window when an alert goes off</span></label>
       </div>
       <ol class="alertList"></ol>
     </section>
     <section class="view settings" hidden>
-      <label class="setting"><span class="regionLabel">Server</span> <select class="regionSelect"></select></label>
+      <label class="setting"><span class="regionLabel">Region</span> <select class="regionSelect"></select></label>
       <label class="setting"><span class="zoneLabel">Show times in</span> <select class="zoneSelect"></select></label>
     </section>
     <script src="/_sdk/a2.js"></script>

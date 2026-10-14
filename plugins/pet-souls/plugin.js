@@ -121,10 +121,19 @@ function render() {
   const listed = els.hideMax.checked && prefs.level !== String(MAX_LEVEL) ? open : pets;
   const ofGenus = (p) => !prefs.genus || p.genus === prefs.genus;
   const ofLevel = (p) => !prefs.level || String(Math.min(p.level, MAX_LEVEL)) === prefs.level;
-  renderChips(els.genus, "genus", listed.filter(ofLevel), (p) => p.genus,
+  // With a region turned off, the pets whose souls drop only there leave the
+  // list. Chests don't count (nearly every pet has one, from the battle pass);
+  // a pet no monster is known to drop stays, as nothing says where it is.
+  const hidden = new Set(hiddenRegions());
+  const ofRegion = (p) => {
+    const src = PET_SOURCES[p.id];
+    if (!hidden.size || !src || !src.drops.length) return true;
+    return src.drops.some((d) => !regionOf(d) || !hidden.has(regionOf(d)));
+  };
+  renderChips(els.genus, "genus", listed.filter(ofLevel).filter(ofRegion), (p) => p.genus,
     GENUS_ORDER.map((g) => [g, genusName(g)]));
   // The level row counts every pet, level 3 included, so it shows how far along each level is.
-  renderChips(els.levels, "level", pets.filter(ofGenus),
+  renderChips(els.levels, "level", pets.filter(ofGenus).filter(ofRegion),
     (p) => String(Math.min(p.level, MAX_LEVEL)),
     NEEDED.map((_, l) => [String(l), `Lv ${l}`]).concat([[String(MAX_LEVEL), `Lv ${MAX_LEVEL}`]]));
   // Pinned pets first, in the order pinned; then the one being farmed; then the chosen sort.
@@ -138,7 +147,7 @@ function render() {
       b.dataset.region = region;
       b.textContent = region.replace("Chaotic ", "");
       b.title = region;
-      b.setAttribute("aria-pressed", String(!hiddenRegions().includes(region)));
+      b.setAttribute("aria-pressed", String(!hidden.has(region)));
       return b;
     }),
   );
@@ -146,6 +155,7 @@ function render() {
     .filter(ofGenus)
     .filter(ofLevel)
     .filter((p) => matches(p) || (!query && pinned.includes(p.id)))
+    .filter((p) => ofRegion(p) || pinned.includes(p.id))
     .sort((a, b) => pinRank(a) - pinRank(b) || dir * sort(a, b) || a.rank - b.rank || a.id - b.id);
 
   for (const button of els.head.querySelectorAll("button")) {

@@ -50,13 +50,57 @@ const hiddenRegions = () => {
   const side = sideOf(key);
   return side ? SIDE_MAPS[side === "elyos" ? "asmodian" : "elyos"] : [];
 };
-// A spawn's region: the map in "zone · map · N spawns" (none for a few).
-const regionOf = (drop) => {
-  const parts = (drop.where || "").split(" · ");
-  return parts.length > 2 ? parts[1] : "";
+// A text from sources.js in the meter's language, else English.
+const text = (k) => SOURCE_TEXT[k]?.[language] ?? SOURCE_TEXT[k]?.en ?? String(k ?? "").replace(/^=/, "");
+// The words around them, in each of the meter's languages.
+const SOURCE_UI = {
+  en: { noSource: "No source known.", noDrops: "No drops or chests listed.", spawns: (n) => `${n} spawn${n === 1 ? "" : "s"}`,
+        teleport: (n, name) => `nearest teleport #${n} ${name}`, near: (name) => `near Kibelisk ${name}`,
+        perOpening: (p) => `${p} per opening`, boxFrom: (x) => `The box comes from ${x}`, also: (x) => `Also drops in ${x} (hidden)` },
+  ko: { noSource: "알려진 출처가 없습니다.", noDrops: "드롭이나 상자 정보가 없습니다.", spawns: (n) => `${n}곳 출현`,
+        teleport: (n, name) => `가까운 텔레포트 #${n} ${name}`, near: (name) => `${name} 근처`,
+        perOpening: (p) => `개봉당 ${p}`, boxFrom: (x) => `상자 획득처: ${x}`, also: (x) => `${x}에서도 드롭 (숨김)` },
+  ja: { noSource: "入手先は不明です。", noDrops: "ドロップや箱の情報はありません。", spawns: (n) => `出現 ${n}か所`,
+        teleport: (n, name) => `最寄りのテレポート #${n} ${name}`, near: (name) => `${name}付近`,
+        perOpening: (p) => `開封ごとに ${p}`, boxFrom: (x) => `箱の入手先: ${x}`, also: (x) => `${x}でもドロップ（非表示）` },
+  de: { noSource: "Keine Quelle bekannt.", noDrops: "Keine Drops oder Truhen bekannt.", spawns: (n) => `${n} Spawn${n === 1 ? "" : "s"}`,
+        teleport: (n, name) => `nächster Teleport #${n} ${name}`, near: (name) => `nahe ${name}`,
+        perOpening: (p) => `${p} pro Öffnung`, boxFrom: (x) => `Die Truhe gibt es über: ${x}`, also: (x) => `Droppt auch in ${x} (ausgeblendet)` },
+  fr: { noSource: "Aucune source connue.", noDrops: "Aucun butin ni coffre répertorié.", spawns: (n) => `${n} apparition${n === 1 ? "" : "s"}`,
+        teleport: (n, name) => `téléporteur le plus proche n° ${n} ${name}`, near: (name) => `près de ${name}`,
+        perOpening: (p) => `${p} par ouverture`, boxFrom: (x) => `Le coffre s'obtient via : ${x}`, also: (x) => `Tombe aussi à ${x} (masqué)` },
+  es: { noSource: "No se conoce ninguna fuente.", noDrops: "No hay botín ni cofres.", spawns: (n) => `${n} aparici${n === 1 ? "ón" : "ones"}`,
+        teleport: (n, name) => `teletransporte más cercano n.º ${n} ${name}`, near: (name) => `cerca de ${name}`,
+        perOpening: (p) => `${p} por apertura`, boxFrom: (x) => `El cofre se obtiene en: ${x}`, also: (x) => `También cae en ${x} (oculto)` },
+  pt: { noSource: "Nenhuma fonte conhecida.", noDrops: "Nenhum drop ou baú listado.", spawns: (n) => `${n} apari${n === 1 ? "ção" : "ções"}`,
+        teleport: (n, name) => `teleporte mais próximo nº ${n} ${name}`, near: (name) => `perto de ${name}`,
+        perOpening: (p) => `${p} por abertura`, boxFrom: (x) => `O baú vem de: ${x}`, also: (x) => `Também dropa em ${x} (oculto)` },
+  ru: { noSource: "Источник неизвестен.", noDrops: "Нет данных о добыче и сундуках.", spawns: (n) => `мест появления: ${n}`,
+        teleport: (n, name) => `ближайший телепорт №${n} ${name}`, near: (name) => `рядом: ${name}`,
+        perOpening: (p) => `${p} за открытие`, boxFrom: (x) => `Сундук можно получить: ${x}`, also: (x) => `Также выпадает: ${x} (скрыто)` },
+  "zh-Hant": { noSource: "來源不明。", noDrops: "沒有掉落或寶箱資料。", spawns: (n) => `${n} 個出現點`,
+        teleport: (n, name) => `最近的傳送點 #${n} ${name}`, near: (name) => `${name}附近`,
+        perOpening: (p) => `每次開啟 ${p}`, boxFrom: (x) => `寶箱來源：${x}`, also: (x) => `${x}也會掉落（已隱藏）` },
+  "zh-Hans": { noSource: "来源不明。", noDrops: "没有掉落或宝箱资料。", spawns: (n) => `${n} 个出现点`,
+        teleport: (n, name) => `最近的传送点 #${n} ${name}`, near: (name) => `${name}附近`,
+        perOpening: (p) => `每次开启 ${p}`, boxFrom: (x) => `宝箱来源：${x}`, also: (x) => `${x}也会掉落（已隐藏）` },
 };
+const ui = () => SOURCE_UI[language] || SOURCE_UI.en;
+// "A, B and C" as the meter's language writes it.
+const listOf = (items) => {
+  try {
+    return new Intl.ListFormat(language, { type: "conjunction" }).format(items);
+  } catch {
+    return items.join(", ");
+  }
+};
+// A spawn's region: its map, by English name (as region choices are saved).
+const regionOf = (drop) => drop.region || "";
+// Each region's map name, to label its chip in the meter's language.
+const REGION_MAP = {};
+for (const s of Object.values(PET_SOURCES)) for (const d of s.drops) if (d.region) REGION_MAP[d.region] ||= d.map;
 // The regions the sources name, Asmodian and Elyos maps first, then Reshanta.
-const REGIONS = [...new Set(Object.values(PET_SOURCES).flatMap((s) => s.drops.map(regionOf)).filter(Boolean))]
+const REGIONS = Object.keys(REGION_MAP)
   .sort((a, b) => a.includes("Reshanta") - b.includes("Reshanta") || a.localeCompare(b));
 // The pet you last picked up a soul for counts as being farmed this long, and
 // sorts first (after the pinned ones).
@@ -121,10 +165,19 @@ function render() {
   const listed = els.hideMax.checked && prefs.level !== String(MAX_LEVEL) ? open : pets;
   const ofGenus = (p) => !prefs.genus || p.genus === prefs.genus;
   const ofLevel = (p) => !prefs.level || String(Math.min(p.level, MAX_LEVEL)) === prefs.level;
-  renderChips(els.genus, "genus", listed.filter(ofLevel), (p) => p.genus,
+  // With a region turned off, the pets whose souls drop only there leave the
+  // list. Chests don't count (nearly every pet has one, from the battle pass);
+  // a pet no monster is known to drop stays, as nothing says where it is.
+  const hidden = new Set(hiddenRegions());
+  const ofRegion = (p) => {
+    const src = PET_SOURCES[p.id];
+    if (!hidden.size || !src || !src.drops.length) return true;
+    return src.drops.some((d) => !regionOf(d) || !hidden.has(regionOf(d)));
+  };
+  renderChips(els.genus, "genus", listed.filter(ofLevel).filter(ofRegion), (p) => p.genus,
     GENUS_ORDER.map((g) => [g, genusName(g)]));
   // The level row counts every pet, level 3 included, so it shows how far along each level is.
-  renderChips(els.levels, "level", pets.filter(ofGenus),
+  renderChips(els.levels, "level", pets.filter(ofGenus).filter(ofRegion),
     (p) => String(Math.min(p.level, MAX_LEVEL)),
     NEEDED.map((_, l) => [String(l), `Lv ${l}`]).concat([[String(MAX_LEVEL), `Lv ${MAX_LEVEL}`]]));
   // Pinned pets first, in the order pinned; then the one being farmed; then the chosen sort.
@@ -136,9 +189,9 @@ function render() {
       const b = document.createElement("button");
       b.type = "button";
       b.dataset.region = region;
-      b.textContent = region.replace("Chaotic ", "");
-      b.title = region;
-      b.setAttribute("aria-pressed", String(!hiddenRegions().includes(region)));
+      b.textContent = text(REGION_MAP[region]).replace("Chaotic ", "");
+      b.title = text(REGION_MAP[region]);
+      b.setAttribute("aria-pressed", String(!hidden.has(region)));
       return b;
     }),
   );
@@ -146,6 +199,7 @@ function render() {
     .filter(ofGenus)
     .filter(ofLevel)
     .filter((p) => matches(p) || (!query && pinned.includes(p.id)))
+    .filter((p) => ofRegion(p) || pinned.includes(p.id))
     .sort((a, b) => pinRank(a) - pinRank(b) || dir * sort(a, b) || a.rank - b.rank || a.id - b.id);
 
   for (const button of els.head.querySelectorAll("button")) {
@@ -205,14 +259,15 @@ function render() {
 }
 
 // Where a pet's souls come from: the monsters that drop them (level, chance,
-// zone and map, nearest Kibelisk) and the chests that hold them, with the
-// metabot.gg page the data is from.
+// zone and map, nearest Kibelisk) and the chests that hold them, from the
+// game's own data (sources.js).
 function whereOf(id) {
   const box = document.createElement("div");
   box.className = "where";
   const src = PET_SOURCES[id];
+  const words = ui();
   if (!src) {
-    box.textContent = "No source known.";
+    box.textContent = words.noSource;
     return box;
   }
   const line = (cls, ...parts) => {
@@ -228,25 +283,21 @@ function whereOf(id) {
       elsewhere.add(regionOf(d));
       continue;
     }
-    box.append(line("who", d.name, d.level && `Lv ${d.level}`, d.chance));
+    box.append(line("who", text(d.npc), d.level && `Lv ${d.level}`, d.chance));
+    // In the Abyss each side has Kibelisks of its own: yours, when known.
+    const k = d.bySide?.[sideOf(key)] || d.kibelisk;
     // The teleport's number as the in-game map lists it, where known.
-    const kibelisk = d.kibelisk && (d.teleport ? `nearest teleport #${d.teleport} ${d.kibelisk}` : `near Kibelisk ${d.kibelisk}`);
-    box.append(line("at", d.where, kibelisk));
+    const kib = k && `${text(k.name)} · ${k.m.toLocaleString(language)} m`;
+    const kibelisk = kib && (k.teleport ? words.teleport(k.teleport, kib) : words.near(kib));
+    const zones = listOf((d.zones || []).map(text)) || "?";
+    box.append(line("at", zones, d.map && text(d.map), d.spawns && words.spawns(d.spawns), kibelisk));
   }
   for (const c of src.chests) {
-    box.append(line("who", c.name, c.chance));
-    if (c.from) box.append(line("at", c.from));
+    box.append(line("who", text(c.name), words.perOpening(c.chance)));
+    if (c.from) box.append(line("at", words.boxFrom(listOf(c.from.map(text)))));
   }
-  if (!src.drops.length && !src.chests.length) box.append(line("at", "No drops or chests listed."));
-  if (elsewhere.size) box.append(line("at", `Also drops in ${[...elsewhere].join(", ")} (hidden)`));
-  const credit = document.createElement("div");
-  credit.className = "credit";
-  const link = document.createElement("a");
-  link.href = src.url;
-  link.textContent = `metabot.gg: ${src.title}`;
-  link.title = src.url;
-  credit.append("Source: ", link);
-  box.append(credit);
+  if (!src.drops.length && !src.chests.length) box.append(line("at", words.noDrops));
+  if (elsewhere.size) box.append(line("at", words.also(listOf([...elsewhere].map((r) => text(REGION_MAP[r]))))));
   return box;
 }
 
@@ -457,11 +508,6 @@ els.hideMax.addEventListener("change", () => {
   prefs.hideMax = els.hideMax.checked;
   savePrefs();
   render();
-});
-// The plugin's frame can't open a browser: a link's click would only take the
-// window away from the plugin, so links are there to name and credit the page.
-document.addEventListener("click", (e) => {
-  if (e.target.closest("a")) e.preventDefault();
 });
 // A click on a pet shows or hides where its souls drop (a double click on
 // its name still renames it).

@@ -86,7 +86,9 @@ const SOUND_ORDER = ["chime", "bell", "sparkle", "ping", "soft", "gong", "horn",
 const HIDE_AFTER_MS = 4000;
 const BANNER_MS = 2 * 60_000;
 // Text size: the whole page scaled, spacing and controls with the text.
+// 100% is BASE_ZOOM, a little larger than the stylesheet's own sizes.
 const SCALES = [0.9, 1, 1.1, 1.25, 1.5];
+const BASE_ZOOM = 1.2;
 // The feed of field boss timers: read this often.
 const FEED_EVERY_MS = 15 * 60_000;
 // "All field bosses" in the alert list.
@@ -491,7 +493,7 @@ function renderStatic() {
 // together.
 function applyScale() {
   const scale = SCALES.includes(Number(prefs.scale)) ? Number(prefs.scale) : 1;
-  document.documentElement.style.zoom = scale === 1 ? "" : String(scale);
+  document.documentElement.style.zoom = String(Math.round(BASE_ZOOM * scale * 1000) / 1000);
 }
 
 function renderTabs() {

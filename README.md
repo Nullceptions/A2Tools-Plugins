@@ -69,3 +69,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md): how to try one locally in the meter's de
 ## Problems
 
 Report a problem with a plugin in this repository's issues, and a problem with the meter in [A2Tools-DPS-Meter](https://github.com/taengu/A2Tools-DPS-Meter/issues).
+
+## License
+
+[GPL-3.0](LICENSE), like the meter. The data the plugins ship (pet ids, names, souls per level, and where souls drop) is read from AION 2's own game files; see each plugin's README for how it is built.

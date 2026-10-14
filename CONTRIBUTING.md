@@ -86,3 +86,5 @@ Open a pull request. Before it's merged, review checks that:
 - the player's data stays on their computer.
 
 Before opening it, run `python tools/build_catalog.py`. It runs the same checks as CI.
+
+A plugin submitted here is published under this repository's [GPL-3.0](LICENSE) license.

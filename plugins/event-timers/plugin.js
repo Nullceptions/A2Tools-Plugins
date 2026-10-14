@@ -470,7 +470,12 @@ function renderStatic() {
   els.zoneLabel.textContent = a.showIn;
   els.scaleLabel.textContent = words.textSize;
   els.colorLabel.textContent = words.alertColor;
-  els.colorSelect.replaceChildren(...Object.keys(ALERT_COLORS).map((k) => option(k, words.colors[k])));
+  // Each colour shown in itself: a swatch and its name, on the list's dark.
+  els.colorSelect.replaceChildren(...Object.entries(ALERT_COLORS).map(([k, hex]) => {
+    const o = option(k, `● ${words.colors[k]}`);
+    o.style.color = hex;
+    return o;
+  }));
   els.colorSelect.value = ALERT_COLORS[prefs.alertColor] ? prefs.alertColor : "orange";
   $(".defaultsHead").textContent = a.alerts;
   els.defaultLeadLabel.textContent = words.defaultLead;
@@ -515,7 +520,10 @@ function renderStatic() {
 // zoom, not a font size: the styles are in pixels, and everything should grow
 // together.
 function applyColor() {
-  document.documentElement.style.setProperty("--alert", ALERT_COLORS[prefs.alertColor] || ALERT_COLORS.orange);
+  const hex = ALERT_COLORS[prefs.alertColor] || ALERT_COLORS.orange;
+  document.documentElement.style.setProperty("--alert", hex);
+  // The closed dropdown in the colour it names.
+  els.colorSelect.style.color = hex;
 }
 
 function applyScale() {

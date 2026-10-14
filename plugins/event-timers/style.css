@@ -478,3 +478,8 @@ input[type="checkbox"] {
 .alertSettings .applyAll {
   margin-bottom: 10px;
 }
+/* Test Alert, at the end of the alert settings, on the right. */
+.alertSettings .testAlert {
+  display: block;
+  margin: 4px 0 0 auto;
+}

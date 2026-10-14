@@ -576,3 +576,24 @@ input.switch:disabled {
 .popRow {
   cursor: pointer;
 }
+/* An alert's lines, one per event. */
+.bannerLine + .bannerLine {
+  margin-top: 2px;
+}
+/* An alert on its own: the window shows only the banner and the way to the
+   full window (plugin.js showAlertOnly). */
+body.alertOnly .controls,
+body.alertOnly .view {
+  display: none !important;
+}
+body.alertOnly .banner {
+  margin-bottom: 6px;
+}
+.openFull {
+  display: block;
+  width: 100%;
+  font-weight: 600;
+}
+.openFull[hidden] {
+  display: none;
+}

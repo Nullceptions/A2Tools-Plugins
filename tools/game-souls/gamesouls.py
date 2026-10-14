@@ -112,6 +112,8 @@ def main():
     ap.add_argument("--tw-l10n", default=None, help="the Taiwan client's extracted Table/L10N folder (zh-TW)")
     ap.add_argument("--chances", action=argparse.BooleanOptionalAction, default=True,
                     help="include drop chances (from RewardData/RewardItem)")
+    ap.add_argument("--all-maps", action="store_true",
+                    help="keep drops on maps this client has not opened yet (see live_maps)")
     ap.add_argument("--infer-model-key", action="store_true",
                     help="also list Abyss NPCs whose reward_<ResourceKey>_key holds the soul")
     a = ap.parse_args()
@@ -178,6 +180,23 @@ def main():
     tele_art = {v(x["ID"]): x for x in load(T, "TeleportArtifact.json")}
     boxes = load(T, "BoxReward.json")
     routes = {v(x["ItemId"]): x for x in load(T, "ItemGetRoute.json")}
+
+    # The maps this client has opened: the client ships maps before they open
+    # (Eltnen, Morheim and Middle Reshanta came with Global's client ahead of
+    # their chapter), but its "where to get it" routes (ItemGetRoute, for every
+    # item) only name the open ones: the fields their monster routes are on,
+    # and the dungeons their dungeon and raid routes name.
+    dungeons = {v(x["ID"]): x for x in load(T, "Dungeon.json")}
+    live_maps = set()
+    for r in routes.values():
+        for m in r.get("MonsterGetRoutes", []):
+            live_maps.add(v(m["RegionInfo"]["MapId"]))
+        for key in ("PartyDungeonGetRoutes", "RaidInfo"):
+            for kv in r.get(key) or []:
+                val = kv.get("Value") if isinstance(kv, dict) else None
+                for t in (val.get("TableIds", []) if isinstance(val, dict) else []):
+                    if v(t) in dungeons:
+                        live_maps.add(v(dungeons[v(t)]["MapId"]))
     npc_loot = defaultdict(list)
     for x in load(T, "NpcLoot.json"):
         if v(x["VehicleSoulItemId"]):
@@ -410,6 +429,7 @@ def main():
             for nid in model_key_npcs.get(sname, []):
                 npc_src[nid].add("model_key")
         drops, dbg, sdrops = [], [], []
+        unreleased_rows = 0
         for npc_id in sorted(npc_src):
             n = npcs.get(npc_id)
             if not n:
@@ -432,6 +452,10 @@ def main():
             if not use:
                 use = {None: []}
             for mid, pos in sorted(use.items(), key=lambda kv: -len(kv[1])):
+                base_ = v(maps[mid]["BaseMapId"]) if mid in maps else 0
+                if not a.all_maps and mid is not None and mid not in live_maps and base_ not in live_maps:
+                    unreleased_rows += 1
+                    continue
                 d = {"name": tr(n["Desc"]["Key"]), "level": str(n["Level"])}
                 sd = {"npc": tk(n["Desc"]["Key"]), "level": n["Level"]}
                 if a.chances:
@@ -502,6 +526,10 @@ def main():
             schests.append(sc)
         out[str(pet_id)] = {"title": tr(soul["Desc"]["Key"]), "soul_item": sid, "drops": drops, "chests": chests}
         data[str(pet_id)] = {"title": tk(soul["Desc"]["Key"]), "drops": sdrops, "chests": schests}
+        # Every monster that drops it is on a map not open yet: not on this
+        # client's servers yet, so the plugin leaves it out of the list.
+        if unreleased_rows and not sdrops:
+            data[str(pet_id)]["unreleased"] = True
         debug[str(pet_id)] = dbg
 
     with open(a.out, "w", encoding="utf-8") as f:

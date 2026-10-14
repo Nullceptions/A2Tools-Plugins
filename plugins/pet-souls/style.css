@@ -213,6 +213,8 @@ body.compact .foot {
 .where .who { color: rgba(255, 255, 255, 0.9); margin-top: 3px; }
 .where .at { color: rgba(255, 255, 255, 0.55); }
 .where a { color: #8fc2ff; text-decoration: none; }
+.where a:hover { text-decoration: underline; }
+.where .more { color: rgba(255, 255, 255, 0.55); margin-top: 5px; }
 
 /* Pin to the top, and the pet being farmed. */
 .pin {

@@ -59,6 +59,32 @@ body.compact .foot {
   color: rgba(255, 255, 255, 0.7);
   font-size: 12px;
 }
+/* Text size, beside the other options. color-scheme only on the dropdown:
+   on the page it would make the browser paint the frame opaque. */
+.sizeRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.scaleSelect {
+  color-scheme: dark;
+  font: inherit;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 4px;
+  padding: 2px 5px;
+  outline: none;
+}
+.scaleSelect:focus {
+  border-color: rgba(143, 194, 255, 0.6);
+}
+.scaleSelect option {
+  color: rgba(255, 255, 255, 0.9);
+  background: #161b26;
+}
 .pets {
   list-style: none;
   margin: 0;

@@ -5,6 +5,7 @@ Reviewed plugins for the [A2 Tools DPS Meter](https://a2tools.app), the damage m
 | Plugin | What it does |
 |---|---|
 | [Pet Soul Tracker](plugins/pet-souls) | How many souls each of your pets still needs to reach level 3, from the game's own pet data, with filters by genus and level, in all ten meter languages, and where each pet's souls drop and the nearest teleport, from the game's own data. |
+| [Event Timers](plugins/event-timers) | Countdowns to the recurring events and scheduled bosses (Shugo Festival, Dimensional Invasion, Spacetime Rift, Artifact Siege, the Abyss bosses, resets), from the game's own schedules, in your server's time and your language. |
 
 ## Install a plugin
 

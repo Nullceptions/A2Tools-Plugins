@@ -33,7 +33,9 @@ PART = re.compile(r"^[A-Za-z0-9._-]+$")
 ALLOWED = {".html", ".js", ".css", ".json", ".png", ".jpg", ".jpeg", ".webp", ".svg", ".gif", ".md", ".txt"}
 # Not shipped to players (still reviewed in the repo).
 SKIP = {"README.md"}
-PERMISSIONS = {"storage", "notify", "events:character", "window"}
+# feed:boss-timers: the shared field boss timers (a2.bossTimers, the bossMap
+# event; meter 2.0.65). A meter without it simply has no a2.bossTimers.
+PERMISSIONS = {"storage", "notify", "events:character", "window", "feed:boss-timers"}
 DECODER_TYPES = {"u8", "u16", "u32", "u64", "i32", "varint", "list"}
 
 

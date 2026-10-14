@@ -472,7 +472,8 @@ input[type="checkbox"] {
 }
 /* Alerts' shortcut to their options in Settings. */
 .alertOptionsBtn {
-  margin-bottom: 6px;
+  display: block;
+  margin: 0 0 6px auto;
 }
 .alertSettings .applyAll {
   margin-bottom: 10px;

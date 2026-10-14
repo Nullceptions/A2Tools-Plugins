@@ -954,6 +954,8 @@ els.sound.addEventListener("change", () => {
 });
 // A sample alert, as a real one would come: banner, flash, sound and repeats.
 const testAlert = () => {
+  // The banner is at the top of the window: bring it into view.
+  window.scrollTo({ top: 0 });
   const ev = scheduled("event")[0];
   alertBanner(aui().soon(ev ? text(ev.name) : "Shugo Festival", defaultLead()));
 };

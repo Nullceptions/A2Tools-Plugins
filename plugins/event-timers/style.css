@@ -415,6 +415,14 @@ input[type="checkbox"] {
 .view.settings .group {
   margin-top: 14px;
 }
+.view.settings .alertSettings .group {
+  margin-top: 0;
+}
+.alertSettings {
+  margin-bottom: 14px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
 .alertDefaults:has(.defaultsHead:empty) {
   display: none;
 }

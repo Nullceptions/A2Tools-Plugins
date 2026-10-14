@@ -54,7 +54,7 @@ def v(x):
 
 
 def pct(p, scale):
-    """A probability as metabot writes it: 100%, 2.44%."""
+    """A probability as the plugin shows it: 100%, 2.44%."""
     x = p * 100.0 / scale
     if abs(x - round(x)) < 1e-9:
         return f"{int(round(x))}%"
@@ -618,17 +618,17 @@ def compare(game, path, report):
                 L.append(f"{pid} {g['title']}: only in game data ({len(g['drops'])} drops, {len(g['chests'])} chests)")
             continue
         if not g:
-            stats["pets_only_metabot"] += 1
-            L.append(f"{pid} {m['title']}: only in metabot")
+            stats["pets_only_earlier"] += 1
+            L.append(f"{pid} {m['title']}: only in the earlier file")
             continue
         stats["pets_both"] += 1
         if g["drops"]:
             stats["pets_game_has_drops"] += 1
         if m["drops"]:
-            stats["pets_metabot_has_drops"] += 1
+            stats["pets_earlier_has_drops"] += 1
         msgs = []
         if g["title"] != m["title"]:
-            msgs.append(f"  title game={g['title']!r} metabot={m['title']!r}")
+            msgs.append(f"  title game={g['title']!r} earlier={m['title']!r}")
 
         def dk(d):
             return (d["name"], str(d.get("level")), split_where(d)[1])
@@ -650,8 +650,8 @@ def compare(game, path, report):
                 msgs.append(f"  + game-only drop: {gd['name']} Lv {gd['level']} @ {gd.get('where', '?')} (kibelisk {gd.get('kibelisk', '-')} #{gd.get('teleport', '-')})")
                 continue
             if not gd:
-                stats["drop_only_metabot"] += 1
-                msgs.append(f"  - metabot-only drop: {md['name']} Lv {md.get('level')} {md.get('chance')} @ {md.get('where', '?')}")
+                stats["drop_only_earlier"] += 1
+                msgs.append(f"  - earlier-only drop: {md['name']} Lv {md.get('level')} {md.get('chance')} @ {md.get('where', '?')}")
                 continue
             stats["drop_match"] += 1
             if "chance" in gd and str(gd.get("chance")) != str(md.get("chance")):
@@ -667,17 +667,17 @@ def compare(game, path, report):
                     stats["zones_same_area"] += 1
                 else:
                     stats["zones_diff"] += 1
-                    msgs.append(f"  ~ {k[0]} Lv {k[1]} ({k[2]}): zones game={sorted(gz)} metabot={sorted(mz)}")
+                    msgs.append(f"  ~ {k[0]} Lv {k[1]} ({k[2]}): zones game={sorted(gz)} earlier={sorted(mz)}")
             if ms is not None:
                 if gs == ms:
                     stats["spawns_same"] += 1
                 elif ms == 60 and gs is not None and gs > 60:
-                    stats["spawns_metabot_capped_at_60"] += 1
+                    stats["spawns_earlier_capped_at_60"] += 1
                 elif gs is None:
                     stats["spawns_missing_game"] += 1
                 else:
                     stats["spawns_diff"] += 1
-                    msgs.append(f"  ~ {k[0]} Lv {k[1]} ({k[2]}): spawns game={gs} metabot={ms}")
+                    msgs.append(f"  ~ {k[0]} Lv {k[1]} ({k[2]}): spawns game={gs} earlier={ms}")
             elif gs is not None:
                 stats["spawns_only_game"] += 1
             gkn, gdist = split_kib(gd)
@@ -690,7 +690,7 @@ def compare(game, path, report):
                               "kibelisk_dist_within_5m" if abs(gdist - mdist) <= 5 else "kibelisk_dist_diff"] += 1
                 else:
                     stats["kibelisk_diff"] += 1
-                    msgs.append(f"  ~ {k[0]} Lv {k[1]} ({k[2]}): kibelisk game={gd.get('kibelisk')!r} metabot={md.get('kibelisk')!r}")
+                    msgs.append(f"  ~ {k[0]} Lv {k[1]} ({k[2]}): kibelisk game={gd.get('kibelisk')!r} earlier={md.get('kibelisk')!r}")
             elif gkn:
                 stats["kibelisk_only_game"] += 1
             if "teleport" in md:
@@ -707,23 +707,23 @@ def compare(game, path, report):
                 stats["chest_only_game"] += 1
                 msgs.append(f"  + game-only chest: {n} {gc[n]['chance']} ({gc[n].get('from', '')})")
             elif n not in gc:
-                stats["chest_only_metabot"] += 1
-                msgs.append(f"  - metabot-only chest: {n} {mc[n]['chance']}")
+                stats["chest_only_earlier"] += 1
+                msgs.append(f"  - earlier-only chest: {n} {mc[n]['chance']}")
             else:
                 stats["chest_match"] += 1
                 if gc[n]["chance"] != mc[n]["chance"]:
                     stats["chest_chance_diff"] += 1
-                    msgs.append(f"  ~ chest {n}: game={gc[n]['chance']} metabot={mc[n]['chance']}")
+                    msgs.append(f"  ~ chest {n}: game={gc[n]['chance']} earlier={mc[n]['chance']}")
                 if gc[n].get("from") != mc[n].get("from"):
                     stats["chest_from_diff"] += 1
-                    msgs.append(f"  ~ chest {n}: from game={gc[n].get('from')!r} metabot={mc[n].get('from')!r}")
+                    msgs.append(f"  ~ chest {n}: from game={gc[n].get('from')!r} earlier={mc[n].get('from')!r}")
         if msgs:
             stats["pets_with_diffs"] += 1
             L.append(f"{pid} {g['title']}:")
             L.extend(msgs)
         else:
             stats["pets_identical"] += 1
-    head = ["Summary (game tables + map data vs metabot sources.js):"] + [f"  {k}: {stats[k]}" for k in sorted(stats)] + [""]
+    head = ["Summary (this build vs the earlier sources.js):"] + [f"  {k}: {stats[k]}" for k in sorted(stats)] + [""]
     with open(report, "w", encoding="utf-8") as f:
         f.write("\n".join(head + L) + "\n")
     print("\n".join(head), file=sys.stderr)

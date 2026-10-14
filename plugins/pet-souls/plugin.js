@@ -1,5 +1,5 @@
 // Pet Soul Tracker: souls still needed to raise each pet, and where each
-// pet's souls drop (sources.js, from metabot.gg; click a pet to see them).
+// pet's souls drop (sources.js, from the game's own data; click a pet to see them).
 //
 // The game sends every pet's level and soul points once, at login (decoder
 // "pet-list"), then each soul as it is picked up ("soul-gained") and each

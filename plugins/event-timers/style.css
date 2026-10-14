@@ -490,4 +490,5 @@ input[type="checkbox"] {
 .alertSettings .testAlert {
   display: block;
   margin: 4px 0 0 auto;
+  font-weight: 700;
 }

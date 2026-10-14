@@ -597,3 +597,18 @@ body.alertOnly .banner {
 .openFull[hidden] {
   display: none;
 }
+/* On its own, the window behind it is transparent: the banner and the button
+   carry solid backings of their own. */
+body.alertOnly {
+  padding: 4px;
+}
+body.alertOnly .banner {
+  background: color-mix(in srgb, var(--alert) 22%, #120d08);
+}
+body.alertOnly .openFull {
+  background: #161b26;
+  border-color: rgba(255, 255, 255, 0.22);
+}
+body.alertOnly .openFull:hover {
+  background: #1f2633;
+}

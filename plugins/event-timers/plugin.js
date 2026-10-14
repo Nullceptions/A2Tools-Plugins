@@ -53,6 +53,8 @@ const els = {
   regionSelect: $(".regionSelect"),
   zoneLabel: $(".zoneLabel"),
   zoneSelect: $(".zoneSelect"),
+  scaleLabel: $(".scaleLabel"),
+  scaleSelect: $(".scaleSelect"),
 };
 
 // How long before an event its alert goes off, in minutes (0 = as it starts).
@@ -72,6 +74,8 @@ const SOUND_ORDER = ["chime", "bell", "sparkle", "ping", "soft", "gong", "horn",
 // alert's banner clears itself after BANNER_MS.
 const HIDE_AFTER_MS = 4000;
 const BANNER_MS = 2 * 60_000;
+// Text size: the whole page scaled, spacing and controls with the text.
+const SCALES = [0.9, 1, 1.1, 1.25, 1.5];
 // The feed of field boss timers: read this often.
 const FEED_EVERY_MS = 15 * 60_000;
 // "All field bosses" in the alert list.
@@ -181,70 +185,70 @@ const ALERT_UI = {
 
 // The words added with the tabs, the field bosses and repeating alerts.
 const MORE_UI = {
-  en: { popNote: "The window stays hidden until an alert goes off. To see it before then: Settings → Plugins → Open.", events: "Events", bosses: "Bosses", region: "Region", daily: "Daily reset", weekly: "Weekly reset",
+  en: { textSize: "Text size", popNote: "The window stays hidden until an alert goes off. To see it before then: Settings → Plugins → Open.", events: "Events", bosses: "Bosses", region: "Region", daily: "Daily reset", weekly: "Weekly reset",
         scheduled: "Scheduled bosses", field: "Field bosses", fieldNote: "Shared by players' meters as they open their map.",
         noFeed: "Field boss timers need meter 2.0.65 or later.", feedFailed: "Couldn't read the field boss timers.",
         noServer: "Log in to a character to see your server's field bosses.", up: "Up", upFor: (t) => `up ${t}`,
         due: "Due", unknown: "No report yet", seen: (t) => `reported ${t} ago`, allField: "All field bosses",
         repeat: "Repeat", once: "Once", times: (n) => `${n} times`, untilMuted: "Until muted", mute: "Mute", dismiss: "Dismiss",
         bossSoon: (name, n) => `${name} back in ${n} min`, bossNow: (name) => `${name} is back` },
-  ko: { popNote: "알림이 울릴 때까지 창이 숨겨져 있습니다. 그 전에 보려면: 설정 → 플러그인 → 열기.", events: "이벤트", bosses: "보스", region: "지역", daily: "일일 초기화", weekly: "주간 초기화",
+  ko: { textSize: "글자 크기", popNote: "알림이 울릴 때까지 창이 숨겨져 있습니다. 그 전에 보려면: 설정 → 플러그인 → 열기.", events: "이벤트", bosses: "보스", region: "지역", daily: "일일 초기화", weekly: "주간 초기화",
         scheduled: "정기 보스", field: "필드 보스", fieldNote: "플레이어들이 지도를 열 때 미터가 공유한 정보입니다.",
         noFeed: "필드 보스 타이머는 미터 2.0.65 이상이 필요합니다.", feedFailed: "필드 보스 타이머를 읽지 못했습니다.",
         noServer: "캐릭터로 접속하면 서버의 필드 보스가 표시됩니다.", up: "출현", upFor: (t) => `${t} 전 출현`,
         due: "곧 출현", unknown: "아직 정보 없음", seen: (t) => `${t} 전 보고`, allField: "모든 필드 보스",
         repeat: "반복", once: "1회", times: (n) => `${n}회`, untilMuted: "끌 때까지", mute: "소리 끄기", dismiss: "닫기",
         bossSoon: (name, n) => `${name} ${n}분 후 출현`, bossNow: (name) => `${name} 출현` },
-  ja: { popNote: "通知が鳴るまでウィンドウは隠れています。それまでに見るには：設定 → プラグイン → 開く。", events: "イベント", bosses: "ボス", region: "地域", daily: "デイリーリセット", weekly: "ウィークリーリセット",
+  ja: { textSize: "文字の大きさ", popNote: "通知が鳴るまでウィンドウは隠れています。それまでに見るには：設定 → プラグイン → 開く。", events: "イベント", bosses: "ボス", region: "地域", daily: "デイリーリセット", weekly: "ウィークリーリセット",
         scheduled: "定時ボス", field: "フィールドボス", fieldNote: "プレイヤーがマップを開いたときにメーターが共有した情報です。",
         noFeed: "フィールドボスのタイマーにはメーター 2.0.65 以降が必要です。", feedFailed: "フィールドボスのタイマーを読み込めませんでした。",
         noServer: "キャラクターでログインするとサーバーのフィールドボスが表示されます。", up: "出現中", upFor: (t) => `${t}前から出現`,
         due: "まもなく", unknown: "情報なし", seen: (t) => `${t}前に報告`, allField: "すべてのフィールドボス",
         repeat: "繰り返し", once: "1回", times: (n) => `${n}回`, untilMuted: "ミュートするまで", mute: "ミュート", dismiss: "閉じる",
         bossSoon: (name, n) => `${name}まであと${n}分`, bossNow: (name) => `${name}出現` },
-  de: { popNote: "Das Fenster bleibt verborgen, bis ein Alarm kommt. Um es vorher zu sehen: Einstellungen → Plugins → Öffnen.", events: "Events", bosses: "Bosse", region: "Region", daily: "Täglicher Reset", weekly: "Wöchentlicher Reset",
+  de: { textSize: "Textgröße", popNote: "Das Fenster bleibt verborgen, bis ein Alarm kommt. Um es vorher zu sehen: Einstellungen → Plugins → Öffnen.", events: "Events", bosses: "Bosse", region: "Region", daily: "Täglicher Reset", weekly: "Wöchentlicher Reset",
         scheduled: "Geplante Bosse", field: "Feldbosse", fieldNote: "Von den Metern der Spieler geteilt, wenn sie ihre Karte öffnen.",
         noFeed: "Feldboss-Timer brauchen Meter 2.0.65 oder neuer.", feedFailed: "Die Feldboss-Timer konnten nicht gelesen werden.",
         noServer: "Mit einem Charakter einloggen, um die Feldbosse deines Servers zu sehen.", up: "Da", upFor: (t) => `seit ${t}`,
         due: "Fällig", unknown: "Noch keine Meldung", seen: (t) => `vor ${t} gemeldet`, allField: "Alle Feldbosse",
         repeat: "Wiederholen", once: "Einmal", times: (n) => `${n}-mal`, untilMuted: "Bis stumm", mute: "Stumm", dismiss: "Schließen",
         bossSoon: (name, n) => `${name} in ${n} Min. zurück`, bossNow: (name) => `${name} ist zurück` },
-  fr: { popNote: "La fenêtre reste cachée jusqu'à une alerte. Pour la voir avant : Réglages → Plugins → Ouvrir.", events: "Événements", bosses: "Boss", region: "Région", daily: "Réinitialisation quotidienne", weekly: "Réinitialisation hebdomadaire",
+  fr: { textSize: "Taille du texte", popNote: "La fenêtre reste cachée jusqu'à une alerte. Pour la voir avant : Réglages → Plugins → Ouvrir.", events: "Événements", bosses: "Boss", region: "Région", daily: "Réinitialisation quotidienne", weekly: "Réinitialisation hebdomadaire",
         scheduled: "Boss programmés", field: "Boss de terrain", fieldNote: "Partagés par les meters des joueurs quand ils ouvrent leur carte.",
         noFeed: "Les minuteurs des boss de terrain demandent le meter 2.0.65 ou plus récent.", feedFailed: "Impossible de lire les minuteurs des boss de terrain.",
         noServer: "Connectez-vous avec un personnage pour voir les boss de terrain de votre serveur.", up: "Présent", upFor: (t) => `depuis ${t}`,
         due: "Imminent", unknown: "Pas encore signalé", seen: (t) => `signalé il y a ${t}`, allField: "Tous les boss de terrain",
         repeat: "Répéter", once: "Une fois", times: (n) => `${n} fois`, untilMuted: "Jusqu'à coupure", mute: "Couper", dismiss: "Fermer",
         bossSoon: (name, n) => `${name} de retour dans ${n} min`, bossNow: (name) => `${name} est de retour` },
-  es: { popNote: "La ventana queda oculta hasta que suene una alerta. Para verla antes: Ajustes → Plugins → Abrir.", events: "Eventos", bosses: "Jefes", region: "Región", daily: "Reinicio diario", weekly: "Reinicio semanal",
+  es: { textSize: "Tamaño del texto", popNote: "La ventana queda oculta hasta que suene una alerta. Para verla antes: Ajustes → Plugins → Abrir.", events: "Eventos", bosses: "Jefes", region: "Región", daily: "Reinicio diario", weekly: "Reinicio semanal",
         scheduled: "Jefes programados", field: "Jefes de campo", fieldNote: "Compartidos por los medidores de los jugadores al abrir su mapa.",
         noFeed: "Los temporizadores de jefes de campo necesitan el medidor 2.0.65 o posterior.", feedFailed: "No se pudieron leer los temporizadores de jefes de campo.",
         noServer: "Entra con un personaje para ver los jefes de campo de tu servidor.", up: "Activo", upFor: (t) => `hace ${t}`,
         due: "Inminente", unknown: "Sin informes", seen: (t) => `informado hace ${t}`, allField: "Todos los jefes de campo",
         repeat: "Repetir", once: "Una vez", times: (n) => `${n} veces`, untilMuted: "Hasta silenciar", mute: "Silenciar", dismiss: "Cerrar",
         bossSoon: (name, n) => `${name} vuelve en ${n} min`, bossNow: (name) => `${name} ha vuelto` },
-  pt: { popNote: "A janela fica oculta até um alerta tocar. Para vê-la antes: Configurações → Plugins → Abrir.", events: "Eventos", bosses: "Chefes", region: "Região", daily: "Reinício diário", weekly: "Reinício semanal",
+  pt: { textSize: "Tamanho do texto", popNote: "A janela fica oculta até um alerta tocar. Para vê-la antes: Configurações → Plugins → Abrir.", events: "Eventos", bosses: "Chefes", region: "Região", daily: "Reinício diário", weekly: "Reinício semanal",
         scheduled: "Chefes agendados", field: "Chefes de campo", fieldNote: "Compartilhados pelos medidores dos jogadores ao abrir o mapa.",
         noFeed: "Os timers de chefes de campo precisam do medidor 2.0.65 ou mais novo.", feedFailed: "Não foi possível ler os timers de chefes de campo.",
         noServer: "Entre com um personagem para ver os chefes de campo do seu servidor.", up: "Ativo", upFor: (t) => `há ${t}`,
         due: "Iminente", unknown: "Sem relatos ainda", seen: (t) => `relatado há ${t}`, allField: "Todos os chefes de campo",
         repeat: "Repetir", once: "Uma vez", times: (n) => `${n} vezes`, untilMuted: "Até silenciar", mute: "Silenciar", dismiss: "Fechar",
         bossSoon: (name, n) => `${name} volta em ${n} min`, bossNow: (name) => `${name} voltou` },
-  ru: { popNote: "Окно скрыто, пока не сработает оповещение. Чтобы открыть его раньше: Настройки → Плагины → Открыть.", events: "События", bosses: "Боссы", region: "Регион", daily: "Ежедневный сброс", weekly: "Еженедельный сброс",
+  ru: { textSize: "Размер текста", popNote: "Окно скрыто, пока не сработает оповещение. Чтобы открыть его раньше: Настройки → Плагины → Открыть.", events: "События", bosses: "Боссы", region: "Регион", daily: "Ежедневный сброс", weekly: "Еженедельный сброс",
         scheduled: "Боссы по расписанию", field: "Полевые боссы", fieldNote: "Делятся метры игроков, когда те открывают карту.",
         noFeed: "Для таймеров полевых боссов нужен метр 2.0.65 или новее.", feedFailed: "Не удалось прочитать таймеры полевых боссов.",
         noServer: "Войдите персонажем, чтобы видеть полевых боссов своего сервера.", up: "На месте", upFor: (t) => `уже ${t}`,
         due: "Вот-вот", unknown: "Пока нет данных", seen: (t) => `данные ${t} назад`, allField: "Все полевые боссы",
         repeat: "Повтор", once: "Один раз", times: (n) => `${n} раз`, untilMuted: "Пока не выключить", mute: "Выключить звук", dismiss: "Закрыть",
         bossSoon: (name, n) => `${name} через ${n} мин`, bossNow: (name) => `${name} появился` },
-  "zh-Hant": { popNote: "提醒響起前視窗會保持隱藏。若要先查看：設定 → 外掛 → 開啟。", events: "活動", bosses: "首領", region: "地區", daily: "每日重置", weekly: "每週重置",
+  "zh-Hant": { textSize: "文字大小", popNote: "提醒響起前視窗會保持隱藏。若要先查看：設定 → 外掛 → 開啟。", events: "活動", bosses: "首領", region: "地區", daily: "每日重置", weekly: "每週重置",
         scheduled: "定時首領", field: "野外首領", fieldNote: "由玩家開啟地圖時其計量器分享。",
         noFeed: "野外首領計時需要計量器 2.0.65 以上。", feedFailed: "無法讀取野外首領計時。",
         noServer: "登入角色即可查看伺服器的野外首領。", up: "已出現", upFor: (t) => `${t} 前出現`,
         due: "即將出現", unknown: "尚無回報", seen: (t) => `${t} 前回報`, allField: "所有野外首領",
         repeat: "重複", once: "一次", times: (n) => `${n} 次`, untilMuted: "直到靜音", mute: "靜音", dismiss: "關閉",
         bossSoon: (name, n) => `${name} ${n} 分鐘後出現`, bossNow: (name) => `${name} 已出現` },
-  "zh-Hans": { popNote: "提醒响起前窗口会保持隐藏。若要先查看：设置 → 插件 → 打开。", events: "活动", bosses: "首领", region: "地区", daily: "每日重置", weekly: "每周重置",
+  "zh-Hans": { textSize: "文字大小", popNote: "提醒响起前窗口会保持隐藏。若要先查看：设置 → 插件 → 打开。", events: "活动", bosses: "首领", region: "地区", daily: "每日重置", weekly: "每周重置",
         scheduled: "定时首领", field: "野外首领", fieldNote: "由玩家打开地图时其计量器分享。",
         noFeed: "野外首领计时需要计量器 2.0.65 以上。", feedFailed: "无法读取野外首领计时。",
         noServer: "登录角色即可查看服务器的野外首领。", up: "已出现", upFor: (t) => `${t} 前出现`,
@@ -267,7 +271,7 @@ let gameRunning = null;
 // display: "system" (this computer's zone), "server", or a zone name.
 // lastServer: the last character's server, kept for when nobody is logged in.
 let prefs = { region: "auto", hidden: [], alerts: {}, leads: {}, closedLeads: {}, sound: "chime", repeat: 1, pop: false,
-  tab: "events", display: "system", lastServer: 0 };
+  tab: "events", display: "system", lastServer: 0, scale: 1 };
 // The field boss timers last read: { server, bosses, at } or { error }.
 let feed = null;
 
@@ -408,6 +412,9 @@ function renderStatic() {
   for (const tab of els.tabs) tab.textContent = labels[tab.dataset.tab];
   els.regionLabel.textContent = words.region;
   els.zoneLabel.textContent = a.showIn;
+  els.scaleLabel.textContent = words.textSize;
+  els.scaleSelect.replaceChildren(...SCALES.map((x) => option(x, `${Math.round(x * 100)}%`)));
+  els.scaleSelect.value = String(prefs.scale);
   els.soundLabel.textContent = a.sound;
   els.test.textContent = a.play;
   els.repeatLabel.textContent = words.repeat;
@@ -433,6 +440,13 @@ function renderStatic() {
   els.pop.checked = !!prefs.pop;
   renderTabs();
   renderAlerts();
+}
+
+// zoom, not a font size: the styles are in pixels, and everything should grow
+// together.
+function applyScale() {
+  const scale = SCALES.includes(Number(prefs.scale)) ? Number(prefs.scale) : 1;
+  document.documentElement.style.zoom = scale === 1 ? "" : String(scale);
 }
 
 function renderTabs() {
@@ -802,6 +816,11 @@ els.zoneSelect.addEventListener("change", () => {
   savePrefs();
   render();
 });
+els.scaleSelect.addEventListener("change", () => {
+  prefs.scale = Number(els.scaleSelect.value);
+  savePrefs();
+  applyScale();
+});
 els.regionSelect.addEventListener("change", () => {
   prefs.region = els.regionSelect.value;
   savePrefs();
@@ -835,6 +854,7 @@ a2.on("compact", (on) => document.body.classList.toggle("compact", !!on));
   prefs.closedLeads = prefs.closedLeads || {};
   // The old single "timers" tab is the events one now.
   if (!els.views[prefs.tab]) prefs.tab = "events";
+  applyScale();
   renderStatic();
   render();
   lastCheck = Date.now();

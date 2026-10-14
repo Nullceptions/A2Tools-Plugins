@@ -360,6 +360,12 @@ input[type="checkbox"] {
 .banner.pulse {
   animation: bannerPulse 0.6s ease-in-out 6;
 }
+/* Its buttons stay crisp on the solid colour. */
+.banner.pulse button {
+  color: rgba(255, 255, 255, 0.92);
+  background: rgba(14, 10, 4, 0.72);
+  border-color: rgba(0, 0, 0, 0.55);
+}
 .banner.pulse .bannerText {
   animation: bannerPulseText 0.6s ease-in-out 6;
 }

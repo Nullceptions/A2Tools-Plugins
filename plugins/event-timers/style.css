@@ -612,3 +612,10 @@ body.alertOnly .openFull {
 body.alertOnly .openFull:hover {
   background: #1f2633;
 }
+.fieldCredit a {
+  color: #8fc2ff;
+  text-decoration: none;
+}
+.fieldCredit a:hover {
+  text-decoration: underline;
+}

@@ -43,6 +43,7 @@ const els = {
   fieldHead: $(".fieldHead"),
   fieldNote: $(".fieldNote"),
   field: $(".fieldList"),
+  fieldCredit: $(".fieldCredit"),
   soundLabel: $(".soundLabel"),
   sound: $(".sound"),
   testAlert: $(".testAlert"),
@@ -660,6 +661,10 @@ function renderHidden(shown) {
 // meter has reported yet.
 function renderField(now) {
   const words = ui();
+  // Timers from Aion 2 Timers (the shared feed marks them): credited, with a
+  // link to their site, wherever they show.
+  const fromA2t = fieldBosses().some((b) => fieldTimer(b.id)?.source === "a2t");
+  els.fieldCredit.hidden = !fromA2t;
   const fmt = clock();
   if (typeof a2.bossTimers !== "function") els.fieldNote.textContent = words.noFeed;
   else if (!serverId()) els.fieldNote.textContent = words.noServer;

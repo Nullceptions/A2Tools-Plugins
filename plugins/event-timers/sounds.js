@@ -33,6 +33,10 @@ const soundLength = (name) => Math.max(0, ...(SOUNDS[name] || []).map(([, start,
 // One context for every alert. WebKitGTK (the meter on Linux) starts a new
 // context suspended, its clock standing still until it is resumed, so it is
 // resumed before each sound; WebView2 (Windows) starts it running.
+//
+// The resume is not awaited: in a hidden window WebKitGTK's resume() waits
+// until the page is used, so an alert that waited for it stayed silent until
+// the window was opened. Scheduled at once, the notes play as it resumes.
 let audio = null;
 // The notes still sounding, so a mute can cut them off.
 const sounding = new Set();
@@ -42,7 +46,7 @@ async function playSound(name) {
   if (!notes) return;
   try {
     audio ||= new AudioContext();
-    if (audio.state !== "running") await audio.resume();
+    if (audio.state !== "running") audio.resume().catch(() => {});
     const ctx = audio;
     for (const [freq, start, length, wave, volume] of notes) {
       const osc = ctx.createOscillator();

@@ -10,43 +10,43 @@
 // and pinnedIconOnly() before an alert brings up the window.
 
 const PIN_UI = {
-  en: { pin: "Pin as icon", show: "Show", always: "Always", before: (n) => `${n} min before`, name: "Show name",
+  en: { killed: "Killed", pin: "Pin as icon", show: "Show", always: "Always", before: (n) => `${n} min before`, name: "Show name",
     effect: "When due", shake: "Shake", glow: "Glow", nothing: "Nothing", iconOnly: "Alert with the icon, not the window",
     lock: "Lock pinned icons", lockNote: "Locked icons let clicks through to the game and can't be moved. Double-click an unlocked icon to open this window.",
     needsMeter: "Pinned icons need meter 2.0.68 or newer", now: "Now" },
-  ko: { pin: "아이콘으로 고정", show: "표시", always: "항상", before: (n) => `${n}분 전부터`, name: "이름 표시",
+  ko: { killed: "처치", pin: "아이콘으로 고정", show: "표시", always: "항상", before: (n) => `${n}분 전부터`, name: "이름 표시",
     effect: "시간이 되면", shake: "흔들기", glow: "빛나기", nothing: "없음", iconOnly: "창 대신 아이콘으로 알림",
     lock: "고정된 아이콘 잠금", lockNote: "잠긴 아이콘은 클릭이 게임으로 통과되고 움직일 수 없습니다. 잠기지 않은 아이콘을 더블클릭하면 이 창이 열립니다.",
     needsMeter: "아이콘 고정은 미터 2.0.68 이상이 필요합니다", now: "지금" },
-  ja: { pin: "アイコンで固定", show: "表示", always: "常に", before: (n) => `${n}分前から`, name: "名前を表示",
+  ja: { killed: "討伐", pin: "アイコンで固定", show: "表示", always: "常に", before: (n) => `${n}分前から`, name: "名前を表示",
     effect: "時間になったら", shake: "揺らす", glow: "光らせる", nothing: "なし", iconOnly: "ウィンドウではなくアイコンで通知",
     lock: "固定アイコンをロック", lockNote: "ロックしたアイコンはクリックがゲームに通り、動かせません。ロックしていないアイコンをダブルクリックするとこのウィンドウが開きます。",
     needsMeter: "アイコンの固定にはメーター2.0.68以降が必要です", now: "今" },
-  de: { pin: "Als Symbol anheften", show: "Anzeigen", always: "Immer", before: (n) => `${n} Min. vorher`, name: "Name anzeigen",
+  de: { killed: "Besiegt", pin: "Als Symbol anheften", show: "Anzeigen", always: "Immer", before: (n) => `${n} Min. vorher`, name: "Name anzeigen",
     effect: "Wenn fällig", shake: "Wackeln", glow: "Leuchten", nothing: "Nichts", iconOnly: "Mit dem Symbol statt dem Fenster alarmieren",
     lock: "Angeheftete Symbole sperren", lockNote: "Gesperrte Symbole lassen Klicks zum Spiel durch und lassen sich nicht verschieben. Ein Doppelklick auf ein nicht gesperrtes Symbol öffnet dieses Fenster.",
     needsMeter: "Angeheftete Symbole brauchen Meter 2.0.68 oder neuer", now: "Jetzt" },
-  fr: { pin: "Épingler en icône", show: "Afficher", always: "Toujours", before: (n) => `${n} min avant`, name: "Afficher le nom",
+  fr: { killed: "Vaincu", pin: "Épingler en icône", show: "Afficher", always: "Toujours", before: (n) => `${n} min avant`, name: "Afficher le nom",
     effect: "À l'échéance", shake: "Secouer", glow: "Briller", nothing: "Rien", iconOnly: "Alerter avec l'icône, pas la fenêtre",
     lock: "Verrouiller les icônes épinglées", lockNote: "Les icônes verrouillées laissent passer les clics vers le jeu et ne bougent pas. Double-cliquez sur une icône non verrouillée pour ouvrir cette fenêtre.",
     needsMeter: "Les icônes épinglées nécessitent le compteur 2.0.68 ou plus récent", now: "Maintenant" },
-  es: { pin: "Fijar como icono", show: "Mostrar", always: "Siempre", before: (n) => `${n} min antes`, name: "Mostrar nombre",
+  es: { killed: "Derrotado", pin: "Fijar como icono", show: "Mostrar", always: "Siempre", before: (n) => `${n} min antes`, name: "Mostrar nombre",
     effect: "Al llegar la hora", shake: "Agitar", glow: "Brillar", nothing: "Nada", iconOnly: "Avisar con el icono, no con la ventana",
     lock: "Bloquear iconos fijados", lockNote: "Los iconos bloqueados dejan pasar los clics al juego y no se pueden mover. Haz doble clic en un icono sin bloquear para abrir esta ventana.",
     needsMeter: "Los iconos fijados necesitan el medidor 2.0.68 o posterior", now: "Ahora" },
-  pt: { pin: "Fixar como ícone", show: "Mostrar", always: "Sempre", before: (n) => `${n} min antes`, name: "Mostrar nome",
+  pt: { killed: "Derrotado", pin: "Fixar como ícone", show: "Mostrar", always: "Sempre", before: (n) => `${n} min antes`, name: "Mostrar nome",
     effect: "Na hora", shake: "Tremer", glow: "Brilhar", nothing: "Nada", iconOnly: "Alertar com o ícone, não com a janela",
     lock: "Travar ícones fixados", lockNote: "Ícones travados deixam os cliques passarem para o jogo e não se movem. Clique duas vezes num ícone destravado para abrir esta janela.",
     needsMeter: "Ícones fixados precisam do medidor 2.0.68 ou mais recente", now: "Agora" },
-  ru: { pin: "Закрепить значком", show: "Показывать", always: "Всегда", before: (n) => `за ${n} мин`, name: "Показывать название",
+  ru: { killed: "Убит", pin: "Закрепить значком", show: "Показывать", always: "Всегда", before: (n) => `за ${n} мин`, name: "Показывать название",
     effect: "Когда пора", shake: "Трясти", glow: "Светиться", nothing: "Ничего", iconOnly: "Оповещать значком, а не окном",
     lock: "Зафиксировать значки", lockNote: "Зафиксированные значки пропускают клики в игру и не двигаются. Двойной клик по незафиксированному значку открывает это окно.",
     needsMeter: "Для значков нужен счётчик 2.0.68 или новее", now: "Сейчас" },
-  "zh-Hant": { pin: "釘選為圖示", show: "顯示", always: "一律", before: (n) => `${n} 分鐘前`, name: "顯示名稱",
+  "zh-Hant": { killed: "已擊殺", pin: "釘選為圖示", show: "顯示", always: "一律", before: (n) => `${n} 分鐘前`, name: "顯示名稱",
     effect: "時間到時", shake: "晃動", glow: "發光", nothing: "無", iconOnly: "以圖示提醒，不開視窗",
     lock: "鎖定釘選圖示", lockNote: "鎖定的圖示會讓點擊穿透到遊戲，且無法移動。雙擊未鎖定的圖示可開啟此視窗。",
     needsMeter: "釘選圖示需要計量器 2.0.68 以上", now: "現在" },
-  "zh-Hans": { pin: "固定为图标", show: "显示", always: "始终", before: (n) => `${n} 分钟前`, name: "显示名称",
+  "zh-Hans": { killed: "已击杀", pin: "固定为图标", show: "显示", always: "始终", before: (n) => `${n} 分钟前`, name: "显示名称",
     effect: "时间到时", shake: "晃动", glow: "发光", nothing: "无", iconOnly: "用图标提醒，不打开窗口",
     lock: "锁定固定的图标", lockNote: "锁定的图标会让点击穿透到游戏，且无法移动。双击未锁定的图标可打开此窗口。",
     needsMeter: "固定图标需要计量器 2.0.68 或更新版本", now: "现在" },
@@ -57,6 +57,12 @@ const PIN_SHOW = [-1, 5, 10, 15, 20, 30, 45, 60, 120];
 const PIN_EFFECTS = ["shake", "glow", "nothing"];
 // How long a pin counts as due after its timer starts, so the effect is seen.
 const DUE_AFTER_MS = 60_000;
+// A pinned field boss seen up and then killed shows "Killed" this long, then
+// goes (or, pinned to show always, counts down to its respawn).
+const KILLED_SHOW_MS = 20_000;
+// Field bosses seen up, and when each pinned one was seen killed.
+const seenUp = new Set();
+const killedAt = new Map();
 const canPin = () => !!(a2.widgets && typeof a2.widgets.open === "function");
 const pins = () => (prefs.pins ||= {});
 const pinOf = (id) => pins()[id] || null;
@@ -89,7 +95,16 @@ function pinState(id, now) {
     // Its HP while it is up and the report is fresh (the feed drops it after
     // 30 minutes), for the ring around its icon.
     const hp = t?.state === "up" && t.hp != null && t.hpAt ? Math.max(0, Math.min(100, Number(t.hp))) : null;
-    return { name: text(b.name), kind: "field", start: next, running: t?.state === "up", end: null, hp };
+    // Up, then dead: killed just now.
+    if (t?.state === "up") {
+      seenUp.add(id);
+      killedAt.delete(id);
+    } else if (t?.state === "dead" && seenUp.has(id)) {
+      seenUp.delete(id);
+      killedAt.set(id, now);
+    }
+    const killed = killedAt.has(id) && now - killedAt.get(id) < KILLED_SHOW_MS;
+    return { name: text(b.name), kind: "field", start: next, running: t?.state === "up", end: null, hp, killed };
   }
   const ev = EVENTS.find((e) => e.id === id);
   if (!ev) return null;
@@ -105,6 +120,19 @@ function pinState(id, now) {
     // Open to enter until `end` (nextOf counts only that while as running).
     entry: !!ev.enter,
   };
+}
+
+// Whether a pinned field boss is up, due within 5 minutes or overdue: the
+// feed is then read every few seconds (plugin.js), for its HP and its kill.
+function pinnedBossLive(now) {
+  if (!canPin()) return false;
+  return Object.keys(pins()).some((id) => {
+    if (!id.startsWith("field:")) return false;
+    const t = fieldTimer(id.slice(6));
+    if (t?.state === "up" || seenUp.has(id)) return true;
+    const next = t?.state === "dead" && t.nextSpawn ? t.nextSpawn * 1000 : 0;
+    return next > 0 && next - now <= 5 * 60_000 && now - next <= WINDOW_MS;
+  });
 }
 
 // Whether an alert for `id` should come with its icon alone.
@@ -188,6 +216,9 @@ let pinsBusy = false;
 // its countdown.
 async function updatePins(now) {
   if (!canPin() || pinsBusy) return;
+  // A pinned boss just started to matter: read the feed now, not at its next
+  // scheduled read.
+  if (pinnedBossLive(now) && typeof readFeed === "function" && (!feed || !feed.at || now - feed.at >= FEED_PINNED_MS)) readFeed();
   pinsBusy = true;
   try {
     const p = pinUi();
@@ -198,7 +229,7 @@ async function updatePins(now) {
       if (!state) continue;
       const lead = Number(pin.show);
       const until = state.start != null ? state.start - now : null;
-      const visible = lead < 0 || state.running || (until != null && until <= lead * 60_000);
+      const visible = lead < 0 || state.running || state.killed || (until != null && until <= lead * 60_000);
       if (!visible) continue;
       // Due: within its alert's lead (or the last minute), and for a minute
       // after it starts.
@@ -208,13 +239,15 @@ async function updatePins(now) {
         || (state.running && (state.entry || (state.start != null && now - state.start < DUE_AFTER_MS)));
       // While it can be entered: the time left to enter, and "Enter" under
       // it, as the game's own icon shows.
-      const countdown = state.running
-        ? (state.entry && state.end != null ? span(state.end - now) : state.kind === "field" ? words.up : p.now)
-        : until != null ? span(until) : "–";
+      const countdown = state.killed ? p.killed
+        : state.running
+          ? (state.entry && state.end != null ? span(state.end - now) : state.kind === "field" ? words.up : p.now)
+          : until != null ? span(until) : "–";
       const sub = state.running && state.entry ? enterWord() : state.hp != null ? `${Math.round(state.hp)}%` : "";
       wanted.set(widgetName(id), {
         id,
-        data: { name: state.name, showName: !!pin.name, countdown, sub, hp: state.hp ?? null, running: state.running, due, effect: pin.effect, kind: state.kind,
+        data: { name: state.name, showName: !!pin.name, countdown, sub: state.killed ? "" : sub, hp: state.killed ? 0 : state.hp ?? null,
+          running: state.running, due: due && !state.killed, effect: pin.effect, kind: state.kind,
           icon: pinIcon(id, state.kind) },
       });
     }

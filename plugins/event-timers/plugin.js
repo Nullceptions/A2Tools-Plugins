@@ -110,6 +110,9 @@ const BASE_ZOOM = 1.2;
 // or an HP report).
 const FEED_EVERY_MS = 15 * 60_000;
 const FEED_BUSY_MS = 2 * 60_000;
+// While a pinned field boss is up, about to spawn or overdue (pins.js): its
+// HP and its kill, as often as the feed's file can change on the CDN.
+const FEED_PINNED_MS = 10_000;
 // An overdue boss counts as "in its window" this long after its time.
 const WINDOW_MS = 2 * 3600_000;
 // "All field bosses" in the alert list.
@@ -1069,21 +1072,28 @@ function feedBusy(now) {
   });
 }
 
+let feedReading = false;
 async function readFeed() {
+  if (feedReading) return;
   clearTimeout(feedTimer);
   feedTimer = setTimeout(readFeed, FEED_EVERY_MS);
   const server = serverId();
   if (!server || typeof a2.bossTimers !== "function") return;
+  feedReading = true;
   try {
     const data = await a2.bossTimers(server);
     feed = { server, bosses: mergeOwn(data?.bosses || {}), at: Date.now() };
   } catch {
-    feed = { server, bosses: mergeOwn(feed?.server === server ? feed.bosses || {} : {}), error: true };
+    feed = { server, bosses: mergeOwn(feed?.server === server ? feed.bosses || {} : {}), error: true, at: Date.now() };
+  } finally {
+    feedReading = false;
   }
-  // Sooner while it changes fast.
-  if (feedBusy(Date.now())) {
+  // Sooner while it changes fast, and every few seconds while a pinned boss
+  // is being waited for or fought.
+  const pinned = typeof pinnedBossLive === "function" && pinnedBossLive(Date.now());
+  if (pinned || feedBusy(Date.now())) {
     clearTimeout(feedTimer);
-    feedTimer = setTimeout(readFeed, FEED_BUSY_MS);
+    feedTimer = setTimeout(readFeed, pinned ? FEED_PINNED_MS : FEED_BUSY_MS);
   }
   render();
 }

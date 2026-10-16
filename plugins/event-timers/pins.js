@@ -10,43 +10,43 @@
 // and pinnedIconOnly() before an alert brings up the window.
 
 const PIN_UI = {
-  en: { killed: "Killed", pin: "Pin as icon", show: "Show", always: "Always", before: (n) => `${n} min before`, name: "Show name",
+  en: { open: "Open", killed: "Killed", pin: "Pin as icon", show: "Show", always: "Always", before: (n) => `${n} min before`, name: "Show name",
     effect: "When due", shake: "Shake", glow: "Glow", nothing: "Nothing", iconOnly: "Alert with the icon, not the window",
     lock: "Lock pinned icons", lockNote: "Locked icons let clicks through to the game and can't be moved. Double-click an unlocked icon to open this window.",
     needsMeter: "Pinned icons need meter 2.0.68 or newer", now: "Now" },
-  ko: { killed: "처치", pin: "아이콘으로 고정", show: "표시", always: "항상", before: (n) => `${n}분 전부터`, name: "이름 표시",
+  ko: { open: "열림", killed: "처치", pin: "아이콘으로 고정", show: "표시", always: "항상", before: (n) => `${n}분 전부터`, name: "이름 표시",
     effect: "시간이 되면", shake: "흔들기", glow: "빛나기", nothing: "없음", iconOnly: "창 대신 아이콘으로 알림",
     lock: "고정된 아이콘 잠금", lockNote: "잠긴 아이콘은 클릭이 게임으로 통과되고 움직일 수 없습니다. 잠기지 않은 아이콘을 더블클릭하면 이 창이 열립니다.",
     needsMeter: "아이콘 고정은 미터 2.0.68 이상이 필요합니다", now: "지금" },
-  ja: { killed: "討伐", pin: "アイコンで固定", show: "表示", always: "常に", before: (n) => `${n}分前から`, name: "名前を表示",
+  ja: { open: "開放中", killed: "討伐", pin: "アイコンで固定", show: "表示", always: "常に", before: (n) => `${n}分前から`, name: "名前を表示",
     effect: "時間になったら", shake: "揺らす", glow: "光らせる", nothing: "なし", iconOnly: "ウィンドウではなくアイコンで通知",
     lock: "固定アイコンをロック", lockNote: "ロックしたアイコンはクリックがゲームに通り、動かせません。ロックしていないアイコンをダブルクリックするとこのウィンドウが開きます。",
     needsMeter: "アイコンの固定にはメーター2.0.68以降が必要です", now: "今" },
-  de: { killed: "Besiegt", pin: "Als Symbol anheften", show: "Anzeigen", always: "Immer", before: (n) => `${n} Min. vorher`, name: "Name anzeigen",
+  de: { open: "Offen", killed: "Besiegt", pin: "Als Symbol anheften", show: "Anzeigen", always: "Immer", before: (n) => `${n} Min. vorher`, name: "Name anzeigen",
     effect: "Wenn fällig", shake: "Wackeln", glow: "Leuchten", nothing: "Nichts", iconOnly: "Mit dem Symbol statt dem Fenster alarmieren",
     lock: "Angeheftete Symbole sperren", lockNote: "Gesperrte Symbole lassen Klicks zum Spiel durch und lassen sich nicht verschieben. Ein Doppelklick auf ein nicht gesperrtes Symbol öffnet dieses Fenster.",
     needsMeter: "Angeheftete Symbole brauchen Meter 2.0.68 oder neuer", now: "Jetzt" },
-  fr: { killed: "Vaincu", pin: "Épingler en icône", show: "Afficher", always: "Toujours", before: (n) => `${n} min avant`, name: "Afficher le nom",
+  fr: { open: "Ouvert", killed: "Vaincu", pin: "Épingler en icône", show: "Afficher", always: "Toujours", before: (n) => `${n} min avant`, name: "Afficher le nom",
     effect: "À l'échéance", shake: "Secouer", glow: "Briller", nothing: "Rien", iconOnly: "Alerter avec l'icône, pas la fenêtre",
     lock: "Verrouiller les icônes épinglées", lockNote: "Les icônes verrouillées laissent passer les clics vers le jeu et ne bougent pas. Double-cliquez sur une icône non verrouillée pour ouvrir cette fenêtre.",
     needsMeter: "Les icônes épinglées nécessitent le compteur 2.0.68 ou plus récent", now: "Maintenant" },
-  es: { killed: "Derrotado", pin: "Fijar como icono", show: "Mostrar", always: "Siempre", before: (n) => `${n} min antes`, name: "Mostrar nombre",
+  es: { open: "Abierto", killed: "Derrotado", pin: "Fijar como icono", show: "Mostrar", always: "Siempre", before: (n) => `${n} min antes`, name: "Mostrar nombre",
     effect: "Al llegar la hora", shake: "Agitar", glow: "Brillar", nothing: "Nada", iconOnly: "Avisar con el icono, no con la ventana",
     lock: "Bloquear iconos fijados", lockNote: "Los iconos bloqueados dejan pasar los clics al juego y no se pueden mover. Haz doble clic en un icono sin bloquear para abrir esta ventana.",
     needsMeter: "Los iconos fijados necesitan el medidor 2.0.68 o posterior", now: "Ahora" },
-  pt: { killed: "Derrotado", pin: "Fixar como ícone", show: "Mostrar", always: "Sempre", before: (n) => `${n} min antes`, name: "Mostrar nome",
+  pt: { open: "Aberto", killed: "Derrotado", pin: "Fixar como ícone", show: "Mostrar", always: "Sempre", before: (n) => `${n} min antes`, name: "Mostrar nome",
     effect: "Na hora", shake: "Tremer", glow: "Brilhar", nothing: "Nada", iconOnly: "Alertar com o ícone, não com a janela",
     lock: "Travar ícones fixados", lockNote: "Ícones travados deixam os cliques passarem para o jogo e não se movem. Clique duas vezes num ícone destravado para abrir esta janela.",
     needsMeter: "Ícones fixados precisam do medidor 2.0.68 ou mais recente", now: "Agora" },
-  ru: { killed: "Убит", pin: "Закрепить значком", show: "Показывать", always: "Всегда", before: (n) => `за ${n} мин`, name: "Показывать название",
+  ru: { open: "Открыт", killed: "Убит", pin: "Закрепить значком", show: "Показывать", always: "Всегда", before: (n) => `за ${n} мин`, name: "Показывать название",
     effect: "Когда пора", shake: "Трясти", glow: "Светиться", nothing: "Ничего", iconOnly: "Оповещать значком, а не окном",
     lock: "Зафиксировать значки", lockNote: "Зафиксированные значки пропускают клики в игру и не двигаются. Двойной клик по незафиксированному значку открывает это окно.",
     needsMeter: "Для значков нужен счётчик 2.0.68 или новее", now: "Сейчас" },
-  "zh-Hant": { killed: "已擊殺", pin: "釘選為圖示", show: "顯示", always: "一律", before: (n) => `${n} 分鐘前`, name: "顯示名稱",
+  "zh-Hant": { open: "開啟中", killed: "已擊殺", pin: "釘選為圖示", show: "顯示", always: "一律", before: (n) => `${n} 分鐘前`, name: "顯示名稱",
     effect: "時間到時", shake: "晃動", glow: "發光", nothing: "無", iconOnly: "以圖示提醒，不開視窗",
     lock: "鎖定釘選圖示", lockNote: "鎖定的圖示會讓點擊穿透到遊戲，且無法移動。雙擊未鎖定的圖示可開啟此視窗。",
     needsMeter: "釘選圖示需要計量器 2.0.68 以上", now: "現在" },
-  "zh-Hans": { killed: "已击杀", pin: "固定为图标", show: "显示", always: "始终", before: (n) => `${n} 分钟前`, name: "显示名称",
+  "zh-Hans": { open: "开启中", killed: "已击杀", pin: "固定为图标", show: "显示", always: "始终", before: (n) => `${n} 分钟前`, name: "显示名称",
     effect: "时间到时", shake: "晃动", glow: "发光", nothing: "无", iconOnly: "用图标提醒，不打开窗口",
     lock: "锁定固定的图标", lockNote: "锁定的图标会让点击穿透到游戏，且无法移动。双击未锁定的图标可打开此窗口。",
     needsMeter: "固定图标需要计量器 2.0.68 或更新版本", now: "现在" },
@@ -244,11 +244,15 @@ async function updatePins(now) {
         || (state.running && (state.entry || (state.start != null && now - state.start < DUE_AFTER_MS)));
       // While it can be entered: the time left to enter, and "Enter" under
       // it, as the game's own icon shows.
+      // An event that lasts a while (the rift's 10 minutes, an entrance's 3):
+      // the time it has left, and under it "Enter" or "Open".
+      const lasts = state.running && state.end != null && state.end > now && state.kind !== "field";
       const countdown = state.killed ? p.killed
         : state.running
-          ? (state.entry && state.end != null ? span(state.end - now) : state.kind === "field" ? words.up : p.now)
+          ? (lasts ? span(state.end - now) : state.kind === "field" ? words.up : p.now)
           : until != null ? span(until) : "–";
-      const sub = state.running && state.entry ? enterWord() : state.hp != null ? `${Math.round(state.hp)}%` : "";
+      const sub = state.running && state.entry ? enterWord() : lasts ? p.open
+        : state.hp != null ? `${Math.round(state.hp)}%` : "";
       wanted.set(widgetName(id), {
         id,
         data: { name: state.name, showName: !!pin.name, countdown, sub: state.killed ? "" : sub, hp: state.killed ? 0 : state.hp ?? null,

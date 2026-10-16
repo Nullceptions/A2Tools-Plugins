@@ -56,6 +56,12 @@ document.addEventListener("mousedown", (e) => {
   e.preventDefault();
   a2.widget.drag().catch(() => {});
 });
+// A right-click stops its alert's sound (unlocked: a locked icon lets clicks
+// through to the game).
+document.addEventListener("contextmenu", (e) => {
+  e.preventDefault();
+  a2.widget.post({ mute: true }).catch(() => {});
+});
 document.addEventListener("dblclick", () => {
   if (!locked) a2.widget.post({ open: true }).catch(() => {});
 });

@@ -818,9 +818,9 @@ function renderAlerts() {
     const head = document.createElement("label");
     head.className = "alertHead";
     head.append(on, name);
+    // Its own sound, repeats and icon, under its times (pins.js).
+    if (typeof pinControls === "function") leads.append(pinControls(id));
     li.append(head, leads);
-    // Pinned as an icon of its own (pins.js, meter 2.0.68 on).
-    if (typeof pinControls === "function" && id !== ALL_FIELD) li.append(pinControls(id));
     return li;
   };
   // A group's heading, with a button turning every alert in it on or off
@@ -870,15 +870,18 @@ function stopSound() {
   repeatTimer = 0;
   els.mute.hidden = true;
 }
-function soundAlert() {
+// An alert's sound: its own (`key`'s, pins.js) if it has one, else the
+// default's.
+function soundAlert(key) {
   stopSound();
-  if (prefs.sound === "off") return;
-  const times = Number(prefs.repeat);
-  const gap = (soundLength(prefs.sound) + 0.7) * 1000;
+  const own = typeof alertSound === "function" ? alertSound(key) : { sound: prefs.sound, repeat: Number(prefs.repeat) };
+  if (own.sound === "off") return;
+  const times = Number(own.repeat);
+  const gap = (soundLength(own.sound) + 0.7) * 1000;
   let left = times === 0 ? Infinity : Math.max(1, times);
   repeatUntil = Date.now() + UNTIL_MUTED_MS;
   const play = () => {
-    playSound(prefs.sound);
+    playSound(own.sound);
     left -= 1;
     // The last play: Mute stays live until it has finished.
     repeatTimer = setTimeout(left > 0 && Date.now() < repeatUntil ? play : stopSound, gap);
@@ -971,7 +974,7 @@ function renderLines() {
   }));
 }
 
-function alertBanner(message, { preview = false } = {}) {
+function alertBanner(message, { preview = false, key = null } = {}) {
   lines.push(message);
   while (lines.length > 5) lines.shift();
   renderLines();
@@ -984,7 +987,7 @@ function alertBanner(message, { preview = false } = {}) {
   els.banner.classList.remove("pulse");
   void els.banner.offsetWidth;
   els.banner.classList.add("pulse");
-  soundAlert();
+  soundAlert(key);
   clearTimeout(bannerTimer);
   bannerTimer = setTimeout(clearBanner, BANNER_MS);
   updateWindow();
@@ -1003,9 +1006,11 @@ const fired = new Set();
 function checkAlerts(now) {
   // An alert pinned to come with its icon alone sounds, and leaves the
   // window as it is (pins.js).
-  const announce = (id, message) => {
-    if (typeof pinnedIconOnly === "function" && pinnedIconOnly(id)) soundAlert();
-    else alertBanner(message);
+  // As its icon (pins.js): the sound, and the icon shakes or glows; or as a
+  // banner in this window. `key` is the alert whose settings apply.
+  const announce = (id, message, key = id) => {
+    if (typeof pinnedIconOnly === "function" && pinnedIconOnly(id)) soundAlert(key);
+    else alertBanner(message, { key });
   };
   const tz = timeZone();
   const a = aui();
@@ -1045,7 +1050,7 @@ function checkAlerts(now) {
     if (minutes === null) continue;
     if (due(id, t.nextSpawn * 1000, minutes)) {
       const name = text(b.name);
-      announce(id, minutes ? words.bossSoon(name, minutes) : words.bossNow(name));
+      announce(id, minutes ? words.bossSoon(name, minutes) : words.bossNow(name), own ? id : ALL_FIELD);
     }
   }
   lastCheck = now;

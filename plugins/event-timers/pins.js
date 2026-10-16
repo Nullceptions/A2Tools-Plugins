@@ -122,17 +122,20 @@ function pinState(id, now) {
   };
 }
 
-// Whether a pinned field boss is up, due within 5 minutes or overdue: the
-// feed is then read every few seconds (plugin.js), for its HP and its kill.
+// "up" while a pinned field boss is up, "soon" while one is due within 5
+// minutes or overdue, else "": how often plugin.js reads the feed, for its
+// HP as it falls and its kill.
 function pinnedBossLive(now) {
-  if (!canPin()) return false;
-  return Object.keys(pins()).some((id) => {
-    if (!id.startsWith("field:")) return false;
+  if (!canPin()) return "";
+  let soon = false;
+  for (const id of Object.keys(pins())) {
+    if (!id.startsWith("field:")) continue;
     const t = fieldTimer(id.slice(6));
-    if (t?.state === "up" || seenUp.has(id)) return true;
+    if (t?.state === "up" || seenUp.has(id)) return "up";
     const next = t?.state === "dead" && t.nextSpawn ? t.nextSpawn * 1000 : 0;
-    return next > 0 && next - now <= 5 * 60_000 && now - next <= WINDOW_MS;
-  });
+    if (next > 0 && next - now <= 5 * 60_000 && now - next <= WINDOW_MS) soon = true;
+  }
+  return soon ? "soon" : "";
 }
 
 // Whether an alert for `id` should come with its icon alone.
@@ -218,7 +221,9 @@ async function updatePins(now) {
   if (!canPin() || pinsBusy) return;
   // A pinned boss just started to matter: read the feed now, not at its next
   // scheduled read.
-  if (pinnedBossLive(now) && typeof readFeed === "function" && (!feed || !feed.at || now - feed.at >= FEED_PINNED_MS)) readFeed();
+  const live = pinnedBossLive(now);
+  const every = live === "up" ? FEED_PINNED_UP_MS : FEED_PINNED_MS;
+  if (live && typeof readFeed === "function" && (!feed || !feed.at || now - feed.at >= every)) readFeed();
   pinsBusy = true;
   try {
     const p = pinUi();

@@ -281,6 +281,51 @@ function pinControls(id) {
   return box;
 }
 
+// Live updates (meter 2.0.68 with a site that pushes them): the field bosses
+// with an icon that are up, due soon, overdue or just killed are followed,
+// and each change the site pushes lands in the feed at once. While the
+// connection is up, reading the feed is only the fallback.
+let followed = "";
+let liveUp = false;
+function followLive(now) {
+  if (typeof a2.followBosses !== "function") return;
+  const server = serverId();
+  if (!server) return;
+  const ids = Object.keys(iconPins())
+    .filter((id) => id.startsWith("field:"))
+    .filter((id) => {
+      const t = fieldTimer(id.slice(6));
+      if (t?.state === "up" || seenUp.has(id) || killedAt.has(id)) return true;
+      const next = t?.state === "dead" && t.nextSpawn ? t.nextSpawn * 1000 : 0;
+      return next > 0 && next - now <= 5 * 60_000 && now - next <= WINDOW_MS;
+    })
+    .map((id) => id.slice(6))
+    .sort();
+  const key = `${server}:${ids.join(",")}`;
+  if (key === followed) return;
+  const before = followed;
+  followed = key;
+  // A different server: stop following the old one.
+  const oldServer = Number(before.split(":")[0]);
+  if (oldServer && oldServer !== server) a2.followBosses(oldServer, []).catch(() => {});
+  a2.followBosses(server, ids).catch(() => { followed = before; });
+}
+a2.on("bossLive", (m) => {
+  if (!m || Number(m.server) !== serverId()) return;
+  if (m.type === "status") {
+    liveUp = !!m.connected;
+    return;
+  }
+  const base = feed?.server === serverId() ? feed : { server: serverId(), bosses: {}, at: Date.now() };
+  const bosses = { ...(base.bosses || {}) };
+  if (m.type === "state" && m.bosses && typeof m.bosses === "object") Object.assign(bosses, m.bosses);
+  else if (m.type === "boss" && m.boss != null && m.entry) bosses[String(m.boss)] = m.entry;
+  else return;
+  liveUp = true;
+  feed = { ...base, bosses };
+  updatePins(Date.now());
+});
+
 // The open widgets, by widget name: the timer each shows and its height.
 const openPins = new Map();
 let pinsBusy = false;
@@ -292,7 +337,9 @@ async function updatePins(now) {
   // A field boss just started to matter: read the feed now, not at its next
   // scheduled read.
   const live = pinnedBossLive(now);
-  const every = live === "up" ? FEED_PINNED_UP_MS : FEED_PINNED_MS;
+  followLive(now);
+  // Pushed live: the feed only as a fallback, every 30 s.
+  const every = liveUp ? 30_000 : live === "up" ? FEED_PINNED_UP_MS : FEED_PINNED_MS;
   if (live && typeof readFeed === "function" && (!feed || !feed.at || now - feed.at >= every)) readFeed();
   pinsBusy = true;
   try {

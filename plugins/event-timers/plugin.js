@@ -1100,7 +1100,9 @@ async function readFeed() {
   const pinned = typeof pinnedBossLive === "function" ? pinnedBossLive(Date.now()) : "";
   if (pinned || feedBusy(Date.now())) {
     clearTimeout(feedTimer);
-    feedTimer = setTimeout(readFeed, pinned === "up" ? FEED_PINNED_UP_MS : pinned ? FEED_PINNED_MS : FEED_BUSY_MS);
+    // Pushed live (pins.js): the feed only as a fallback.
+    const live = typeof liveUp !== "undefined" && liveUp;
+    feedTimer = setTimeout(readFeed, live && pinned ? 30_000 : pinned === "up" ? FEED_PINNED_UP_MS : pinned ? FEED_PINNED_MS : FEED_BUSY_MS);
   }
   render();
 }

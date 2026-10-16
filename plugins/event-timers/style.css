@@ -635,3 +635,10 @@ body.alertOnly .openFull:hover {
   background: linear-gradient(90deg, rgba(126, 224, 160, 0.14) var(--hp, 0%), transparent var(--hp, 0%)) no-repeat
     left bottom / 100% 2px;
 }
+
+/* Pinned as an icon (pins.js): under each alert's row. */
+.pinBox { margin: 4px 0 2px 24px; }
+.pinHead { display: flex; align-items: center; gap: 6px; opacity: 0.85; }
+.pinOpts { display: grid; gap: 4px; margin: 4px 0 2px 22px; }
+.pinCheck { display: flex; align-items: center; gap: 6px; }
+.pinLockNote { margin-top: -4px; }

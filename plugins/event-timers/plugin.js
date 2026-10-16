@@ -539,6 +539,7 @@ function renderStatic() {
   els.pop.checked = !!prefs.pop;
   renderTabs();
   renderAlerts();
+  if (typeof renderPinLock === "function") renderPinLock();
 }
 
 // zoom, not a font size: the styles are in pixels, and everything should grow
@@ -805,6 +806,8 @@ function renderAlerts() {
     head.className = "alertHead";
     head.append(on, name);
     li.append(head, leads);
+    // Pinned as an icon of its own (pins.js, meter 2.0.68 on).
+    if (typeof pinControls === "function" && id !== ALL_FIELD) li.append(pinControls(id));
     return li;
   };
   // A group's heading, with a button turning every alert in it on or off
@@ -985,6 +988,12 @@ els.dismiss.addEventListener("click", clearBanner);
 let lastCheck = Date.now();
 const fired = new Set();
 function checkAlerts(now) {
+  // An alert pinned to come with its icon alone sounds, and leaves the
+  // window as it is (pins.js).
+  const announce = (id, message) => {
+    if (typeof pinnedIconOnly === "function" && pinnedIconOnly(id)) soundAlert();
+    else alertBanner(message);
+  };
   const tz = timeZone();
   const a = aui();
   const words = ui();
@@ -1010,7 +1019,7 @@ function checkAlerts(now) {
     const next = nextOf(ev, tz || "UTC", lastCheck + minutes * 60_000 - 1);
     if (next && due(ev.id, next.start, minutes)) {
       const name = text(ev.name);
-      alertBanner(minutes ? a.soon(name, minutes) : a.now(name));
+      announce(ev.id, minutes ? a.soon(name, minutes) : a.now(name));
     }
   }
   for (const b of fieldBosses()) {
@@ -1023,7 +1032,7 @@ function checkAlerts(now) {
     if (minutes === null) continue;
     if (due(id, t.nextSpawn * 1000, minutes)) {
       const name = text(b.name);
-      alertBanner(minutes ? words.bossSoon(name, minutes) : words.bossNow(name));
+      announce(id, minutes ? words.bossSoon(name, minutes) : words.bossNow(name));
     }
   }
   lastCheck = now;
@@ -1223,6 +1232,7 @@ a2.on("compact", (on) => document.body.classList.toggle("compact", !!on));
     const now = Date.now();
     checkAlerts(now);
     render();
+    if (typeof updatePins === "function") updatePins(now);
   }, 1000);
   if (!windowApi()) {
     els.pop.disabled = true;

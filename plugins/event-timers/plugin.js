@@ -113,7 +113,7 @@ const FEED_BUSY_MS = 2 * 60_000;
 // While a pinned field boss is up (pins.js): its HP as it falls and its kill,
 // about as often as the feed's file changes on the CDN; while one is about to
 // spawn or overdue, often enough to see it come up.
-const FEED_PINNED_UP_MS = 3_000;
+const FEED_PINNED_UP_MS = 5_000;
 const FEED_PINNED_MS = 10_000;
 // An overdue boss counts as "in its window" this long after its time.
 const WINDOW_MS = 2 * 3600_000;

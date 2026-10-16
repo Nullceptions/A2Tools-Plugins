@@ -7,6 +7,7 @@
   "description": "For Chanters: your mantras on or off, how many party members they reach, an alert the moment one drops in a fight, and each fight's uptime.",
   "permissions": [
     "storage",
+    "events:character",
     "window",
     "decoder:mantra-tick",
     "decoder:my-hit",
@@ -54,7 +55,8 @@
           "name": "q",
           "type": "u8"
         }
-      ]
+      ],
+      "immediate": true
     },
     {
       "name": "my-hit",
@@ -81,7 +83,8 @@
           "name": "skill",
           "type": "u32"
         }
-      ]
+      ],
+      "immediate": true
     },
     {
       "name": "map-load",

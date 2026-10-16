@@ -77,6 +77,26 @@ a2.on("decoded:landed", (_d, meta) => {
   update();
 });
 
+// Another character: what was on is the last one's. A class the meter knows
+// that isn't Chanter has no mantras, so no alert (null: not known yet).
+const CHANTER = "호법성"; // the meter names classes in Korean
+let who = null;
+let chanter = null;
+a2.on("character", (c) => {
+  const key = c?.name ? `${c.name}@${c.serverId}` : null;
+  if (key && who && key !== who) {
+    fight = null;
+    lastHit = 0;
+    for (const m of MANTRAS) {
+      delete lastTick[m];
+      reach[m]?.clear();
+    }
+  }
+  if (key) who = key;
+  chanter = c?.class ? c.class === CHANTER : null;
+  update();
+});
+
 function endFight() {
   if (!fight) return;
   const f = fight;
@@ -119,7 +139,7 @@ function update() {
     $(".reach", li).textContent = on && n ? `+${n}` : "";
     $(".reach", li).title = "Party members it reaches";
   }
-  $(".fight").textContent = fight ? `Fighting ${mmss(fight.last - fight.start)} · ${MANTRAS.map((m) => pct(fight.uptime(m))).join(" · ")}` : lastFightText();
+  $(".fight").textContent = chanter === false ? "Not a Chanter: no alerts" : fight ?`Fighting ${mmss(fight.last - fight.start)} · ${MANTRAS.map((m) => pct(fight.uptime(m))).join(" · ")}` : lastFightText();
   checkDrops(now);
 }
 
@@ -134,7 +154,7 @@ function lastFightText() {
 // A mantra that was up and stopped ticking: in a fight (or always, or never,
 // as chosen). The alert goes when it is back, or the fight is over.
 function checkDrops(now) {
-  const watching = now >= quietUntil && (prefs.alert === "always" || (prefs.alert === "fight" && inFight(now)));
+  const watching = chanter !== false && now >= quietUntil && (prefs.alert === "always" || (prefs.alert === "fight" && inFight(now)));
   const nowDropped = new Set(
     watching ? MANTRAS.filter((m) => lastTick[m] && !isOn(m, now) && now - lastTick[m] < 60_000 * 10) : [],
   );

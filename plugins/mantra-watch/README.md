@@ -13,6 +13,10 @@ hit to 8 s after your last; fights under 10 s aren't kept.
 
 ⚙: when to alert (in a fight, always, never) and the sound.
 
+Switching character starts over (with `events:character`, meter 2.0.65 on):
+a mantra from the last character is not "off" on this one. On a character
+the meter knows isn't a Chanter there is no alert at all.
+
 ## What it reads
 
 - `2B 38`, a mantra ticking (`self: caster`): a mantra ticks once a second

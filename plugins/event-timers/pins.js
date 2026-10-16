@@ -7,6 +7,11 @@
 // their names, the lock); each alert can override any of them. "Show alerts
 // as: This window" keeps the old way, a banner in this window.
 //
+// A field boss's alert can also come when the boss is being fought (its HP
+// reported falling), for players who want to go and join: once per spawn,
+// the icon showing "Fighting" and its HP. "Remind me: Don't remind" leaves
+// only that.
+//
 // Loaded after plugin.js, whose timers it reads: plugin.js calls
 // pinControls() for each alert row, updatePins() every second,
 // pinnedIconOnly() before an alert brings up the window, and alertSound() for
@@ -17,51 +22,61 @@ const PIN_UI = {
     name: "Name on the icon", effect: "Icon when due", shake: "Shake", glow: "Glow", nothing: "Nothing", style: "Show alerts as", icons: "Icons", window: "This window",
     deflt: "Default", shown: "Shown", hiddenName: "Hidden", sound: "Sound", repeat: "Repeat",
     lock: "Lock the icons", lockNote: "Locked icons let clicks through to the game and can't be moved. Double-click an unlocked icon to open this window. Right-click an icon to stop its sound.",
+    fought: "When it's being fought", alertMe: "Alert me", noRemind: "Don't remind", fighting: "Fighting", foughtMsg: (name, hp) => `${name} is being fought (${hp}%), go join!`,
     needsMeter: "Icons need meter 2.0.68 or newer", now: "Now" },
   ko: { keep: "아이콘 계속 표시", keepAll: "아이콘 계속 표시", more: "추가 설정", open: "열림", killed: "처치",
     name: "아이콘에 이름", effect: "시간이 되면 아이콘", shake: "흔들기", glow: "빛나기", nothing: "없음", style: "알림 표시 방식", icons: "아이콘", window: "이 창",
     deflt: "기본값", shown: "표시", hiddenName: "숨김", sound: "소리", repeat: "반복",
     lock: "아이콘 잠금", lockNote: "잠긴 아이콘은 클릭이 게임으로 통과되고 움직일 수 없습니다. 잠기지 않은 아이콘을 더블클릭하면 이 창이 열립니다. 아이콘을 우클릭하면 소리가 멈춥니다.",
+    fought: "전투가 시작되면", alertMe: "알림", noRemind: "알리지 않음", fighting: "전투 중", foughtMsg: (name, hp) => `${name} 전투 중 (${hp}%), 지금 합류하세요!`,
     needsMeter: "아이콘은 미터 2.0.68 이상이 필요합니다", now: "지금" },
   ja: { keep: "アイコンを常に表示", keepAll: "アイコンを常に表示", more: "その他の設定", open: "開放中", killed: "討伐",
     name: "アイコンに名前", effect: "時間になったらアイコンを", shake: "揺らす", glow: "光らせる", nothing: "なし", style: "通知の表示", icons: "アイコン", window: "このウィンドウ",
     deflt: "既定", shown: "表示", hiddenName: "非表示", sound: "サウンド", repeat: "繰り返し",
     lock: "アイコンをロック", lockNote: "ロックしたアイコンはクリックがゲームに通り、動かせません。ロックしていないアイコンをダブルクリックするとこのウィンドウが開きます。 アイコンを右クリックすると音が止まります。",
+    fought: "戦闘が始まったら", alertMe: "通知する", noRemind: "通知しない", fighting: "戦闘中", foughtMsg: (name, hp) => `${name}が戦闘中（${hp}%）、参加しよう！`,
     needsMeter: "アイコンにはメーター2.0.68以降が必要です", now: "今" },
   de: { keep: "Symbol immer anzeigen", keepAll: "Symbole immer anzeigen", more: "Weitere Optionen", open: "Offen", killed: "Besiegt",
     name: "Name am Symbol", effect: "Symbol, wenn fällig", shake: "Wackeln", glow: "Leuchten", nothing: "Nichts", style: "Alarme zeigen als", icons: "Symbole", window: "Dieses Fenster",
     deflt: "Standard", shown: "Angezeigt", hiddenName: "Ausgeblendet", sound: "Ton", repeat: "Wiederholen",
     lock: "Symbole sperren", lockNote: "Gesperrte Symbole lassen Klicks zum Spiel durch und lassen sich nicht verschieben. Ein Doppelklick auf ein nicht gesperrtes Symbol öffnet dieses Fenster. Ein Rechtsklick auf ein Symbol stoppt seinen Ton.",
+    fought: "Wenn er bekämpft wird", alertMe: "Alarm", noRemind: "Nicht erinnern", fighting: "Im Kampf", foughtMsg: (name, hp) => `${name} wird bekämpft (${hp} %), mach mit!`,
     needsMeter: "Symbole brauchen Meter 2.0.68 oder neuer", now: "Jetzt" },
   fr: { keep: "Garder l'icône à l'écran", keepAll: "Garder les icônes à l'écran", more: "Plus d'options", open: "Ouvert", killed: "Vaincu",
     name: "Nom sur l'icône", effect: "Icône à l'échéance", shake: "Secouer", glow: "Briller", nothing: "Rien", style: "Afficher les alertes en", icons: "Icônes", window: "Cette fenêtre",
     deflt: "Par défaut", shown: "Affiché", hiddenName: "Masqué", sound: "Son", repeat: "Répéter",
     lock: "Verrouiller les icônes", lockNote: "Les icônes verrouillées laissent passer les clics vers le jeu et ne bougent pas. Double-cliquez sur une icône non verrouillée pour ouvrir cette fenêtre. Un clic droit sur une icône arrête son son.",
+    fought: "Quand il est attaqué", alertMe: "M'alerter", noRemind: "Ne pas rappeler", fighting: "Attaqué", foughtMsg: (name, hp) => `${name} est attaqué (${hp} %), rejoignez le combat !`,
     needsMeter: "Les icônes nécessitent le compteur 2.0.68 ou plus récent", now: "Maintenant" },
   es: { keep: "Mantener el icono en pantalla", keepAll: "Mantener los iconos en pantalla", more: "Más opciones", open: "Abierto", killed: "Derrotado",
     name: "Nombre en el icono", effect: "Icono al llegar la hora", shake: "Agitar", glow: "Brillar", nothing: "Nada", style: "Mostrar las alertas como", icons: "Iconos", window: "Esta ventana",
     deflt: "Predeterminado", shown: "Visible", hiddenName: "Oculto", sound: "Sonido", repeat: "Repetir",
     lock: "Bloquear los iconos", lockNote: "Los iconos bloqueados dejan pasar los clics al juego y no se pueden mover. Haz doble clic en un icono sin bloquear para abrir esta ventana. Haz clic derecho en un icono para detener su sonido.",
+    fought: "Cuando lo estén atacando", alertMe: "Avisarme", noRemind: "No avisar", fighting: "En combate", foughtMsg: (name, hp) => `Están atacando a ${name} (${hp}%), ¡únete!`,
     needsMeter: "Los iconos necesitan el medidor 2.0.68 o posterior", now: "Ahora" },
   pt: { keep: "Manter o ícone na tela", keepAll: "Manter os ícones na tela", more: "Mais opções", open: "Aberto", killed: "Derrotado",
     name: "Nome no ícone", effect: "Ícone na hora", shake: "Tremer", glow: "Brilhar", nothing: "Nada", style: "Mostrar os alertas como", icons: "Ícones", window: "Esta janela",
     deflt: "Padrão", shown: "Visível", hiddenName: "Oculto", sound: "Som", repeat: "Repetir",
     lock: "Travar os ícones", lockNote: "Ícones travados deixam os cliques passarem para o jogo e não se movem. Clique duas vezes num ícone destravado para abrir esta janela. Clique com o botão direito num ícone para parar o som.",
+    fought: "Quando estiver sendo atacado", alertMe: "Avisar-me", noRemind: "Não avisar", fighting: "Em combate", foughtMsg: (name, hp) => `${name} está sendo atacado (${hp}%), junte-se!`,
     needsMeter: "Os ícones precisam do medidor 2.0.68 ou mais recente", now: "Agora" },
   ru: { keep: "Всегда показывать значок", keepAll: "Всегда показывать значки", more: "Дополнительно", open: "Открыт", killed: "Убит",
     name: "Название на значке", effect: "Значок, когда пора", shake: "Трясти", glow: "Светиться", nothing: "Ничего", style: "Показывать оповещения", icons: "Значками", window: "В этом окне",
     deflt: "По умолчанию", shown: "Показано", hiddenName: "Скрыто", sound: "Звук", repeat: "Повтор",
     lock: "Зафиксировать значки", lockNote: "Зафиксированные значки пропускают клики в игру и не двигаются. Двойной клик по незафиксированному значку открывает это окно. Правый клик по значку останавливает звук.",
+    fought: "Когда его атакуют", alertMe: "Оповестить", noRemind: "Не напоминать", fighting: "Бой", foughtMsg: (name, hp) => `${name} атакуют (${hp}%), присоединяйтесь!`,
     needsMeter: "Для значков нужен счётчик 2.0.68 или новее", now: "Сейчас" },
   "zh-Hant": { keep: "持續顯示圖示", keepAll: "持續顯示圖示", more: "更多選項", open: "開啟中", killed: "已擊殺",
     name: "圖示上的名稱", effect: "時間到時圖示", shake: "晃動", glow: "發光", nothing: "無", style: "提醒顯示為", icons: "圖示", window: "此視窗",
     deflt: "預設", shown: "顯示", hiddenName: "隱藏", sound: "音效", repeat: "重複",
     lock: "鎖定圖示", lockNote: "鎖定的圖示會讓點擊穿透到遊戲，且無法移動。雙擊未鎖定的圖示可開啟此視窗。右鍵點擊圖示可停止音效。",
+    fought: "開始戰鬥時", alertMe: "提醒我", noRemind: "不提醒", fighting: "戰鬥中", foughtMsg: (name, hp) => `${name} 戰鬥中（${hp}%），快去加入！`,
     needsMeter: "圖示需要計量器 2.0.68 以上", now: "現在" },
   "zh-Hans": { keep: "持续显示图标", keepAll: "持续显示图标", more: "更多选项", open: "开启中", killed: "已击杀",
     name: "图标上的名称", effect: "时间到时图标", shake: "晃动", glow: "发光", nothing: "无", style: "提醒显示为", icons: "图标", window: "此窗口",
     deflt: "默认", shown: "显示", hiddenName: "隐藏", sound: "音效", repeat: "重复",
     lock: "锁定图标", lockNote: "锁定的图标会让点击穿透到游戏，且无法移动。双击未锁定的图标可打开此窗口。右键点击图标可停止音效。",
+    fought: "开始战斗时", alertMe: "提醒我", noRemind: "不提醒", fighting: "战斗中", foughtMsg: (name, hp) => `${name} 战斗中（${hp}%），快去加入！`,
     needsMeter: "图标需要计量器 2.0.68 或更新版本", now: "现在" },
 };
 const pinUi = () => PIN_UI[language] || PIN_UI.en;
@@ -74,6 +89,13 @@ const KILLED_SHOW_MS = 20_000;
 // Field bosses seen up, and when each was seen killed.
 const seenUp = new Set();
 const killedAt = new Map();
+// A boss counts as fought while it is up and a report from the last 3
+// minutes has its HP below 99%.
+const FOUGHT_BELOW = 99;
+const FOUGHT_FRESH_MS = 3 * 60_000;
+// When each boss was first seen fought this spawn, and the spawns alerted.
+const foughtAt = new Map();
+const foughtAlerted = new Set();
 const canPin = () => !!(a2.widgets && typeof a2.widgets.open === "function");
 // Icons are the alerts, unless the player chose the window (or the meter has
 // no widgets).
@@ -125,6 +147,7 @@ function iconPins() {
       effect: o.effect ?? prefs.iconEffect ?? "shake",
       name: o.name ?? prefs.iconName ?? true,
       lead: Number(prefs.alerts[key] ?? 0),
+      fought: !!prefs.fought?.[key],
     };
   };
   const out = {};
@@ -173,7 +196,8 @@ function pinState(id, now) {
       killedAt.set(id, now);
     }
     const killed = killedAt.has(id) && now - killedAt.get(id) < KILLED_SHOW_MS;
-    return { name: text(b.name), kind: "field", start: next, running: t?.state === "up", end: null, hp, killed };
+    return { name: text(b.name), kind: "field", start: next, running: t?.state === "up", end: null, hp, killed,
+      fought: bossFought(t, now) };
   }
   const ev = EVENTS.find((e) => e.id === id);
   if (!ev) return null;
@@ -194,10 +218,13 @@ function pinState(id, now) {
 // "up" while a field boss with an icon is up, "soon" while one is due within
 // 5 minutes or overdue, else "": how often plugin.js reads the feed, for its
 // HP as it falls and its kill.
+// The field bosses whose news matters now: those with an icon, and those
+// watched for being fought.
+const watchedField = () => [...new Set([...Object.keys(iconPins()).filter((id) => id.startsWith("field:")), ...foughtWatched()])];
+
 function pinnedBossLive(now) {
   let soon = false;
-  for (const id of Object.keys(iconPins())) {
-    if (!id.startsWith("field:")) continue;
+  for (const id of watchedField()) {
     const t = fieldTimer(id.slice(6));
     if (t?.state === "up" || seenUp.has(id)) return "up";
     const next = t?.state === "dead" && t.nextSpawn ? t.nextSpawn * 1000 : 0;
@@ -209,6 +236,73 @@ function pinnedBossLive(now) {
 // Whether an alert comes as its icon (and sound) rather than this window.
 function pinnedIconOnly() {
   return iconStyle();
+}
+
+// Whether a field boss is being fought: up, and a fresh report has its HP
+// falling below 99%.
+function bossFought(t, now) {
+  return t?.state === "up" && t.hp != null && !!t.hpAt && Number(t.hp) < FOUGHT_BELOW
+    && now - t.hpAt * 1000 < FOUGHT_FRESH_MS;
+}
+
+// The alert whose settings a field boss follows ("field:<id>", or "All field
+// bosses" for one without its own), if it is on.
+function fieldAlertKey(id) {
+  if (id in prefs.alerts) return id;
+  return ALL_FIELD in prefs.alerts ? ALL_FIELD : null;
+}
+
+// The field bosses whose alert asks to be told when they are fought.
+function foughtWatched() {
+  if (!prefs.fought) return [];
+  return fieldBosses().map((b) => `field:${b.id}`).filter((id) => {
+    const key = fieldAlertKey(id);
+    return key && prefs.fought[key];
+  });
+}
+
+// Each check (plugin.js, with its announce): a watched boss newly fought
+// alerts, once per spawn; not while AION2 is closed if its alert is off then.
+function checkFights(now, announce) {
+  const p = pinUi();
+  for (const id of foughtWatched()) {
+    const t = fieldTimer(id.slice(6));
+    if (t?.state !== "up") {
+      foughtAt.delete(id);
+      continue;
+    }
+    if (!bossFought(t, now)) continue;
+    if (!foughtAt.has(id)) foughtAt.set(id, now);
+    const spawn = `${id}@${t.upSince ?? ""}`;
+    if (foughtAlerted.has(spawn)) continue;
+    foughtAlerted.add(spawn);
+    const key = fieldAlertKey(id);
+    if (gameRunning === false && Number(prefs.closedLeads[key] ?? defaultClosed()) < 0) continue;
+    const b = fieldBosses().find((x) => `field:${x.id}` === id);
+    announce(id, p.foughtMsg(b ? text(b.name) : id, Math.round(Number(t.hp))), key);
+  }
+}
+
+// The alert's "When it's being fought" line, for field bosses.
+function fightControl(id) {
+  const p = pinUi();
+  const row = document.createElement("label");
+  row.className = "leadRow";
+  const label = document.createElement("span");
+  label.textContent = p.fought;
+  const s = document.createElement("select");
+  s.className = "lead";
+  s.append(option("off", aui().off), option("on", p.alertMe));
+  s.value = prefs.fought?.[id] ? "on" : "off";
+  s.addEventListener("change", () => {
+    prefs.fought ||= {};
+    if (s.value === "on") prefs.fought[id] = true;
+    else delete prefs.fought[id];
+    savePrefs();
+    updatePins(Date.now());
+  });
+  row.append(label, s);
+  return row;
 }
 
 // The sound and repeats for an alert: its own, else the defaults.
@@ -291,8 +385,7 @@ function followLive(now) {
   if (typeof a2.followBosses !== "function") return;
   const server = serverId();
   if (!server) return;
-  const ids = Object.keys(iconPins())
-    .filter((id) => id.startsWith("field:"))
+  const ids = watchedField()
     .filter((id) => {
       const t = fieldTimer(id.slice(6));
       if (t?.state === "up" || seenUp.has(id) || killedAt.has(id)) return true;
@@ -333,7 +426,7 @@ let pinsBusy = false;
 // Every second: open the icons that should show, close the rest, and send
 // each its countdown.
 async function updatePins(now) {
-  if (!canPin() || pinsBusy) return;
+  if (pinsBusy) return;
   // A field boss just started to matter: read the feed now, not at its next
   // scheduled read.
   const live = pinnedBossLive(now);
@@ -341,6 +434,7 @@ async function updatePins(now) {
   // Pushed live: the feed only as a fallback, every 30 s.
   const every = liveUp ? 30_000 : live === "up" ? FEED_PINNED_UP_MS : FEED_PINNED_MS;
   if (live && typeof readFeed === "function" && (!feed || !feed.at || now - feed.at >= every)) readFeed();
+  if (!canPin()) return;
   pinsBusy = true;
   try {
     const p = pinUi();
@@ -350,19 +444,27 @@ async function updatePins(now) {
       const state = pinState(id, now);
       if (!state) continue;
       const until = state.start != null ? state.start - now : null;
-      // It appears when its alert reminds (or stays on screen), and while
-      // the event is on or the boss up.
-      const visible = pin.always || state.running || state.killed
-        || (until != null && until <= Math.max(0, pin.lead) * 60_000 + 1000);
+      const reminds = pin.lead >= 0;
+      // Being fought, and its alert asks for that.
+      const fight = pin.fought && state.fought;
+      // It appears when its alert reminds (or stays on screen), while the
+      // event is on or the boss up, and when the boss is being fought. With
+      // "Don't remind", only then (and its kill, if it showed).
+      const visible = pin.always || fight
+        || (state.killed && (reminds || openPins.has(widgetName(id))))
+        || (reminds && (state.running || (until != null && until <= pin.lead * 60_000 + 1000)));
       if (!visible) continue;
       // Due: from its alert's time (or the last minute), and for a minute
-      // after it starts; an event that can be entered, while it can be.
-      const due = (until != null && until <= Math.max(1, pin.lead) * 60_000 && until > -DUE_AFTER_MS)
-        || (state.running && (state.entry || (state.start != null && now - state.start < DUE_AFTER_MS)));
+      // after it starts; an event that can be entered, while it can be; a
+      // boss for a minute after it is first seen fought.
+      const due = (reminds && until != null && until <= Math.max(1, pin.lead) * 60_000 && until > -DUE_AFTER_MS)
+        || (reminds && state.running && (state.entry || (state.start != null && now - state.start < DUE_AFTER_MS)))
+        || (fight && now - (foughtAt.get(id) ?? now) < DUE_AFTER_MS);
       // An event that lasts a while (the rift's 10 minutes, an entrance's 3):
       // the time it has left, and under it "Enter" or "Open".
       const lasts = state.running && state.end != null && state.end > now && state.kind !== "field";
       const countdown = state.killed ? p.killed
+        : fight ? p.fighting
         : state.running
           ? (lasts ? span(state.end - now) : state.kind === "field" ? words.up : p.now)
           : until != null ? span(until) : "–";

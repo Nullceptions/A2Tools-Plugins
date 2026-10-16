@@ -793,6 +793,13 @@ function renderAlerts() {
     const leads = document.createElement("div");
     leads.className = "leads";
     leads.append(timeRow(words.whileOpen, lead), timeRow(a.closed, closed));
+    // A field boss: also, or only ("Don't remind"), when it is being fought
+    // (pins.js).
+    if (id.startsWith("field:") && typeof fightControl === "function") {
+      lead.prepend(option(-1, pinUi().noRemind));
+      lead.value = String(prefs.alerts[id] ?? prefs.leads[id] ?? defaultLead());
+      leads.append(fightControl(id));
+    }
     const show = () => {
       leads.hidden = !on.checked;
       li.classList.toggle("on", on.checked);
@@ -1053,6 +1060,8 @@ function checkAlerts(now) {
       announce(id, minutes ? words.bossSoon(name, minutes) : words.bossNow(name), own ? id : ALL_FIELD);
     }
   }
+  // Field bosses being fought, for those who want to join (pins.js).
+  if (typeof checkFights === "function") checkFights(now, announce);
   lastCheck = now;
 }
 

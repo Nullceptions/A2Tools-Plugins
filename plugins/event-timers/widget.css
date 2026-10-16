@@ -47,6 +47,9 @@ body.locked .pin { cursor: default; }
 }
 .time { font-variant-numeric: tabular-nums; font-size: 13px; }
 .name { font-weight: 500; font-size: 11px; opacity: 0.9; }
+/* "Enter" under the time while a field event can be entered, as in game. */
+.sub { font-size: 12px; font-weight: 700; color: #ffe08a; text-shadow: 0 0 3px #000, 0 1px 2px #000; }
+.sub:empty { display: none; }
 .name:empty { display: none; }
 
 /* Due: the badge shakes or glows until it is no longer due. */

@@ -76,7 +76,7 @@ const pinIcon = (id, kind) => {
   return "";
 };
 // A pin's window: room for its countdown, and its name, on two lines each.
-const pinSize = (showName) => ({ width: 104, height: showName ? 120 : 90 });
+const pinSize = (showName) => ({ width: 104, height: showName ? 134 : 104 });
 
 // What a pinned timer is doing now: its name, kind, the next start (ms) or
 // null, and whether it is running (an event under way, a field boss up).
@@ -99,6 +99,8 @@ function pinState(id, now) {
     start: next ? next.start : null,
     end: next ? next.end : null,
     running: !!next && next.start <= now,
+    // Open to enter until `end` (nextOf counts only that while as running).
+    entry: !!ev.enter,
   };
 }
 
@@ -198,14 +200,18 @@ async function updatePins(now) {
       // Due: within its alert's lead (or the last minute), and for a minute
       // after it starts.
       const alertLead = id in prefs.alerts ? prefs.alerts[id] : 1;
+      // An event that can be entered stays due for as long as it can be.
       const due = (until != null && until <= Math.max(1, alertLead) * 60_000 && until > -DUE_AFTER_MS)
-        || (state.running && state.start != null && now - state.start < DUE_AFTER_MS);
+        || (state.running && (state.entry || (state.start != null && now - state.start < DUE_AFTER_MS)));
+      // While it can be entered: the time left to enter, and "Enter" under
+      // it, as the game's own icon shows.
       const countdown = state.running
-        ? (state.kind === "field" ? words.up : p.now)
+        ? (state.entry && state.end != null ? span(state.end - now) : state.kind === "field" ? words.up : p.now)
         : until != null ? span(until) : "–";
+      const sub = state.running && state.entry ? enterWord() : "";
       wanted.set(widgetName(id), {
         id,
-        data: { name: state.name, showName: !!pin.name, countdown, running: state.running, due, effect: pin.effect, kind: state.kind,
+        data: { name: state.name, showName: !!pin.name, countdown, sub, running: state.running, due, effect: pin.effect, kind: state.kind,
           icon: pinIcon(id, state.kind) },
       });
     }

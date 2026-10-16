@@ -46,7 +46,8 @@ const EVENTS = [
    1350,
    1410
   ],
-  "minutes": 13
+  "minutes": 13,
+  "enter": 180
  },
  {
   "id": "festival-elyos",
@@ -91,7 +92,8 @@ const EVENTS = [
    1320,
    1380
   ],
-  "minutes": 7
+  "minutes": 7,
+  "enter": 180
  },
  {
   "id": "invasion-asmodian",
@@ -136,7 +138,8 @@ const EVENTS = [
    1350,
    1410
   ],
-  "minutes": 13
+  "minutes": 13,
+  "enter": 180
  },
  {
   "id": "festival-asmodian",
@@ -181,7 +184,8 @@ const EVENTS = [
    1320,
    1380
   ],
-  "minutes": 7
+  "minutes": 7,
+  "enter": 180
  },
  {
   "id": "artifact",

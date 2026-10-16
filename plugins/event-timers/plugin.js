@@ -173,6 +173,11 @@ const UI = {
         now: "进行中", left: (t) => `剩余 ${t}`, in: (t) => `${t} 后`, hide: "隐藏", hidden: "已隐藏：", elyos: "天族", asmodian: "魔族" },
 };
 
+// "Enter", as the game labels a field event's entrance while it is open.
+const ENTER = { en: "Enter", ko: "입장", ja: "入場", de: "Betreten", fr: "Entrer", es: "Entrar", pt: "Entrar", ru: "Вход",
+  "zh-Hant": "進入", "zh-Hans": "进入" };
+const enterWord = () => ENTER[language] || ENTER.en;
+
 // The alerts' words, in each of the meter's languages.
 const ALERT_UI = {
   en: { closed: "While AION2 is closed", settings: "Settings", server: "Server", showIn: "Show times in", systemTime: (z) => `This computer's time (${z})`, serverTime: "Server time", enable: "Alert",
@@ -410,10 +415,13 @@ const wallToMs = (tz, y, m, d, minutes) => {
   return guess - offsetAt(tz, first);
 };
 
-// An event's current or next showing: { start, end } in ms.
+// An event's current or next showing: { start, end } in ms. One that can only
+// be entered for a while after it starts (the Shugo Festa and the Dimensional
+// Invasion: 3 minutes, then the game closes the entrance) counts as running
+// for that while only, so the next one shows once it can no longer be joined.
 const nextOf = (ev, tz, now) => {
   const zone = ev.utc ? "UTC" : tz;
-  const runMs = (ev.minutes || 0) * 60_000;
+  const runMs = ev.enter ? ev.enter * 1000 : (ev.minutes || 0) * 60_000;
   let best = null;
   for (let back = -1; back <= 8; back++) {
     const p = partsIn(zone, now + back * 86_400_000);
@@ -648,7 +656,7 @@ function renderSchedule(list, events, now, { hideable }) {
     return row({
       id: ev.id, name: eventName(ev), where: ev.where.map(text).join(", "), running, hide,
       soon: next.start - now <= SOON_MS,
-      countdown: running ? `${words.now} · ${words.left(span(next.end - now))}` : words.in(span(next.start - now)),
+      countdown: running ? `${ev.enter ? enterWord() : words.now} · ${words.left(span(next.end - now))}` : words.in(span(next.start - now)),
       at: fmt.format(new Date(next.start)),
     });
   }));

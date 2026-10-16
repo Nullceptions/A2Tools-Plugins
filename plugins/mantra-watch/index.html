@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mantra Watch</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="banner" hidden></div>
+    <ul class="mantras"></ul>
+    <div class="foot">
+      <span class="fight"></span>
+      <button type="button" class="gear" title="Settings">⚙</button>
+    </div>
+    <div class="settings" hidden>
+      <label>Alert when one drops
+        <select class="alert">
+          <option value="fight">In a fight</option>
+          <option value="always">Always</option>
+          <option value="off">Never</option>
+        </select>
+      </label>
+      <label>Sound
+        <span>
+          <select class="sound">
+            <option value="alarm">Alarm</option><option value="chime">Chime</option><option value="ping">Ping</option>
+            <option value="">None</option>
+          </select>
+          <button type="button" class="test">Test</button>
+        </span>
+      </label>
+    </div>
+    <script src="/_sdk/a2.js"></script>
+    <script src="logic.js"></script>
+    <script src="plugin.js"></script>
+  </body>
+</html>

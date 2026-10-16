@@ -13,61 +13,58 @@
 // an alert's sound and repeats.
 
 const PIN_UI = {
-  en: { open: "Open", killed: "Killed", show: "Icon appears", always: "Always", before: (n) => `${n} min before`, withAlert: "At its alert time",
+  en: { keep: "Keep the icon on screen", keepAll: "Keep icons on screen", more: "More options", open: "Open", killed: "Killed",
     name: "Name on the icon", effect: "Icon when due", shake: "Shake", glow: "Glow", nothing: "Nothing", style: "Show alerts as", icons: "Icons", window: "This window",
-    custom: "Customise this alert", deflt: "Default", shown: "Shown", hiddenName: "Hidden", sound: "Sound", repeat: "Repeat",
+    deflt: "Default", shown: "Shown", hiddenName: "Hidden", sound: "Sound", repeat: "Repeat",
     lock: "Lock the icons", lockNote: "Locked icons let clicks through to the game and can't be moved. Double-click an unlocked icon to open this window. Right-click an icon to stop its sound.",
     needsMeter: "Icons need meter 2.0.68 or newer", now: "Now" },
-  ko: { open: "열림", killed: "처치", show: "아이콘 표시", always: "항상", before: (n) => `${n}분 전부터`, withAlert: "알림 시간에",
+  ko: { keep: "아이콘 계속 표시", keepAll: "아이콘 계속 표시", more: "추가 설정", open: "열림", killed: "처치",
     name: "아이콘에 이름", effect: "시간이 되면 아이콘", shake: "흔들기", glow: "빛나기", nothing: "없음", style: "알림 표시 방식", icons: "아이콘", window: "이 창",
-    custom: "이 알림 따로 설정", deflt: "기본값", shown: "표시", hiddenName: "숨김", sound: "소리", repeat: "반복",
+    deflt: "기본값", shown: "표시", hiddenName: "숨김", sound: "소리", repeat: "반복",
     lock: "아이콘 잠금", lockNote: "잠긴 아이콘은 클릭이 게임으로 통과되고 움직일 수 없습니다. 잠기지 않은 아이콘을 더블클릭하면 이 창이 열립니다. 아이콘을 우클릭하면 소리가 멈춥니다.",
     needsMeter: "아이콘은 미터 2.0.68 이상이 필요합니다", now: "지금" },
-  ja: { open: "開放中", killed: "討伐", show: "アイコンの表示", always: "常に", before: (n) => `${n}分前から`, withAlert: "通知のタイミングで",
+  ja: { keep: "アイコンを常に表示", keepAll: "アイコンを常に表示", more: "その他の設定", open: "開放中", killed: "討伐",
     name: "アイコンに名前", effect: "時間になったらアイコンを", shake: "揺らす", glow: "光らせる", nothing: "なし", style: "通知の表示", icons: "アイコン", window: "このウィンドウ",
-    custom: "この通知を個別に設定", deflt: "既定", shown: "表示", hiddenName: "非表示", sound: "サウンド", repeat: "繰り返し",
+    deflt: "既定", shown: "表示", hiddenName: "非表示", sound: "サウンド", repeat: "繰り返し",
     lock: "アイコンをロック", lockNote: "ロックしたアイコンはクリックがゲームに通り、動かせません。ロックしていないアイコンをダブルクリックするとこのウィンドウが開きます。 アイコンを右クリックすると音が止まります。",
     needsMeter: "アイコンにはメーター2.0.68以降が必要です", now: "今" },
-  de: { open: "Offen", killed: "Besiegt", show: "Symbol erscheint", always: "Immer", before: (n) => `${n} Min. vorher`, withAlert: "Zur Alarmzeit",
+  de: { keep: "Symbol immer anzeigen", keepAll: "Symbole immer anzeigen", more: "Weitere Optionen", open: "Offen", killed: "Besiegt",
     name: "Name am Symbol", effect: "Symbol, wenn fällig", shake: "Wackeln", glow: "Leuchten", nothing: "Nichts", style: "Alarme zeigen als", icons: "Symbole", window: "Dieses Fenster",
-    custom: "Diesen Alarm anpassen", deflt: "Standard", shown: "Angezeigt", hiddenName: "Ausgeblendet", sound: "Ton", repeat: "Wiederholen",
+    deflt: "Standard", shown: "Angezeigt", hiddenName: "Ausgeblendet", sound: "Ton", repeat: "Wiederholen",
     lock: "Symbole sperren", lockNote: "Gesperrte Symbole lassen Klicks zum Spiel durch und lassen sich nicht verschieben. Ein Doppelklick auf ein nicht gesperrtes Symbol öffnet dieses Fenster. Ein Rechtsklick auf ein Symbol stoppt seinen Ton.",
     needsMeter: "Symbole brauchen Meter 2.0.68 oder neuer", now: "Jetzt" },
-  fr: { open: "Ouvert", killed: "Vaincu", show: "L'icône apparaît", always: "Toujours", before: (n) => `${n} min avant`, withAlert: "À l'heure de l'alerte",
+  fr: { keep: "Garder l'icône à l'écran", keepAll: "Garder les icônes à l'écran", more: "Plus d'options", open: "Ouvert", killed: "Vaincu",
     name: "Nom sur l'icône", effect: "Icône à l'échéance", shake: "Secouer", glow: "Briller", nothing: "Rien", style: "Afficher les alertes en", icons: "Icônes", window: "Cette fenêtre",
-    custom: "Personnaliser cette alerte", deflt: "Par défaut", shown: "Affiché", hiddenName: "Masqué", sound: "Son", repeat: "Répéter",
+    deflt: "Par défaut", shown: "Affiché", hiddenName: "Masqué", sound: "Son", repeat: "Répéter",
     lock: "Verrouiller les icônes", lockNote: "Les icônes verrouillées laissent passer les clics vers le jeu et ne bougent pas. Double-cliquez sur une icône non verrouillée pour ouvrir cette fenêtre. Un clic droit sur une icône arrête son son.",
     needsMeter: "Les icônes nécessitent le compteur 2.0.68 ou plus récent", now: "Maintenant" },
-  es: { open: "Abierto", killed: "Derrotado", show: "El icono aparece", always: "Siempre", before: (n) => `${n} min antes`, withAlert: "A la hora de la alerta",
+  es: { keep: "Mantener el icono en pantalla", keepAll: "Mantener los iconos en pantalla", more: "Más opciones", open: "Abierto", killed: "Derrotado",
     name: "Nombre en el icono", effect: "Icono al llegar la hora", shake: "Agitar", glow: "Brillar", nothing: "Nada", style: "Mostrar las alertas como", icons: "Iconos", window: "Esta ventana",
-    custom: "Personalizar esta alerta", deflt: "Predeterminado", shown: "Visible", hiddenName: "Oculto", sound: "Sonido", repeat: "Repetir",
+    deflt: "Predeterminado", shown: "Visible", hiddenName: "Oculto", sound: "Sonido", repeat: "Repetir",
     lock: "Bloquear los iconos", lockNote: "Los iconos bloqueados dejan pasar los clics al juego y no se pueden mover. Haz doble clic en un icono sin bloquear para abrir esta ventana. Haz clic derecho en un icono para detener su sonido.",
     needsMeter: "Los iconos necesitan el medidor 2.0.68 o posterior", now: "Ahora" },
-  pt: { open: "Aberto", killed: "Derrotado", show: "O ícone aparece", always: "Sempre", before: (n) => `${n} min antes`, withAlert: "Na hora do alerta",
+  pt: { keep: "Manter o ícone na tela", keepAll: "Manter os ícones na tela", more: "Mais opções", open: "Aberto", killed: "Derrotado",
     name: "Nome no ícone", effect: "Ícone na hora", shake: "Tremer", glow: "Brilhar", nothing: "Nada", style: "Mostrar os alertas como", icons: "Ícones", window: "Esta janela",
-    custom: "Personalizar este alerta", deflt: "Padrão", shown: "Visível", hiddenName: "Oculto", sound: "Som", repeat: "Repetir",
+    deflt: "Padrão", shown: "Visível", hiddenName: "Oculto", sound: "Som", repeat: "Repetir",
     lock: "Travar os ícones", lockNote: "Ícones travados deixam os cliques passarem para o jogo e não se movem. Clique duas vezes num ícone destravado para abrir esta janela. Clique com o botão direito num ícone para parar o som.",
     needsMeter: "Os ícones precisam do medidor 2.0.68 ou mais recente", now: "Agora" },
-  ru: { open: "Открыт", killed: "Убит", show: "Значок появляется", always: "Всегда", before: (n) => `за ${n} мин`, withAlert: "Во время оповещения",
+  ru: { keep: "Всегда показывать значок", keepAll: "Всегда показывать значки", more: "Дополнительно", open: "Открыт", killed: "Убит",
     name: "Название на значке", effect: "Значок, когда пора", shake: "Трясти", glow: "Светиться", nothing: "Ничего", style: "Показывать оповещения", icons: "Значками", window: "В этом окне",
-    custom: "Настроить это оповещение", deflt: "По умолчанию", shown: "Показано", hiddenName: "Скрыто", sound: "Звук", repeat: "Повтор",
+    deflt: "По умолчанию", shown: "Показано", hiddenName: "Скрыто", sound: "Звук", repeat: "Повтор",
     lock: "Зафиксировать значки", lockNote: "Зафиксированные значки пропускают клики в игру и не двигаются. Двойной клик по незафиксированному значку открывает это окно. Правый клик по значку останавливает звук.",
     needsMeter: "Для значков нужен счётчик 2.0.68 или новее", now: "Сейчас" },
-  "zh-Hant": { open: "開啟中", killed: "已擊殺", show: "圖示出現", always: "一律", before: (n) => `${n} 分鐘前`, withAlert: "在提醒時間",
+  "zh-Hant": { keep: "持續顯示圖示", keepAll: "持續顯示圖示", more: "更多選項", open: "開啟中", killed: "已擊殺",
     name: "圖示上的名稱", effect: "時間到時圖示", shake: "晃動", glow: "發光", nothing: "無", style: "提醒顯示為", icons: "圖示", window: "此視窗",
-    custom: "個別設定此提醒", deflt: "預設", shown: "顯示", hiddenName: "隱藏", sound: "音效", repeat: "重複",
+    deflt: "預設", shown: "顯示", hiddenName: "隱藏", sound: "音效", repeat: "重複",
     lock: "鎖定圖示", lockNote: "鎖定的圖示會讓點擊穿透到遊戲，且無法移動。雙擊未鎖定的圖示可開啟此視窗。右鍵點擊圖示可停止音效。",
     needsMeter: "圖示需要計量器 2.0.68 以上", now: "現在" },
-  "zh-Hans": { open: "开启中", killed: "已击杀", show: "图标出现", always: "始终", before: (n) => `${n} 分钟前`, withAlert: "在提醒时间",
+  "zh-Hans": { keep: "持续显示图标", keepAll: "持续显示图标", more: "更多选项", open: "开启中", killed: "已击杀",
     name: "图标上的名称", effect: "时间到时图标", shake: "晃动", glow: "发光", nothing: "无", style: "提醒显示为", icons: "图标", window: "此窗口",
-    custom: "单独设置此提醒", deflt: "默认", shown: "显示", hiddenName: "隐藏", sound: "音效", repeat: "重复",
+    deflt: "默认", shown: "显示", hiddenName: "隐藏", sound: "音效", repeat: "重复",
     lock: "锁定图标", lockNote: "锁定的图标会让点击穿透到游戏，且无法移动。双击未锁定的图标可打开此窗口。右键点击图标可停止音效。",
     needsMeter: "图标需要计量器 2.0.68 或更新版本", now: "现在" },
 };
 const pinUi = () => PIN_UI[language] || PIN_UI.en;
-// When an icon appears: -2 = at its alert's time, -1 = always, else minutes
-// before its timer.
-const PIN_SHOW = [-2, -1, 5, 10, 15, 20, 30, 45, 60, 120];
 const PIN_EFFECTS = ["shake", "glow", "nothing"];
 // How long a pin counts as due after its timer starts, so the effect is seen.
 const DUE_AFTER_MS = 60_000;
@@ -86,14 +83,26 @@ const overrides = () => (prefs.overrides ||= {});
 // "field-101006").
 const widgetName = (id) => id.toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 32) || "timer";
 
-// Pins made while icons were a separate option (0.4.0 test builds): each
-// becomes an alert with its own icon settings.
+// Settings from the 0.4.0 test builds: pins made while icons were a separate
+// option become alerts, and "Icon appears" (always, or minutes before)
+// becomes "Keep the icon on screen" (an icon otherwise appears when its alert
+// reminds).
 function migratePins() {
+  if (prefs.iconShow != null) {
+    prefs.iconAlways = Number(prefs.iconShow) === -1;
+    delete prefs.iconShow;
+    savePrefs();
+  }
+  for (const o of Object.values(overrides())) {
+    if (o.show == null) continue;
+    if (Number(o.show) === -1) o.always = true;
+    delete o.show;
+  }
   if (!prefs.pins) return;
   for (const [id, pin] of Object.entries(prefs.pins)) {
     if (!(id in prefs.alerts)) prefs.alerts[id] = prefs.leads[id] ?? defaultLead();
     const o = { ...(overrides()[id] || {}) };
-    if (pin.show != null) o.show = Number(pin.show);
+    if (Number(pin.show) === -1) o.always = true;
     if (pin.effect) o.effect = pin.effect;
     if (pin.name != null) o.name = !!pin.name;
     overrides()[id] = o;
@@ -112,7 +121,7 @@ function iconPins() {
     const o = overrides()[key] || {};
     return {
       key,
-      show: Number(o.show ?? prefs.iconShow ?? -2),
+      always: !!(o.always ?? prefs.iconAlways ?? false),
       effect: o.effect ?? prefs.iconEffect ?? "shake",
       name: o.name ?? prefs.iconName ?? true,
       lead: Number(prefs.alerts[key] ?? 0),
@@ -208,24 +217,16 @@ function alertSound(key) {
   return { sound: o.sound ?? prefs.sound, repeat: Number(o.repeat ?? prefs.repeat) };
 }
 
-// "Customise this alert", under an alert that is on: its sound, repeats and
-// icon, each "Default" (Settings) unless changed.
+// "More options" under an alert that is on: its own sound, repeats and icon,
+// each "Default" (Settings) unless changed.
 function pinControls(id) {
   const p = pinUi();
   const a = aui();
   const words = ui();
-  const box = document.createElement("div");
-  box.className = "pinBox";
-  const head = document.createElement("label");
-  head.className = "pinCheck";
-  const on = document.createElement("input");
-  on.type = "checkbox";
-  on.checked = !!overrides()[id];
-  const span = document.createElement("span");
-  span.textContent = p.custom;
-  head.append(on, span);
-  const opts = document.createElement("div");
-  opts.className = "pinOpts";
+  const box = document.createElement("details");
+  box.className = "pinMore";
+  const summary = document.createElement("summary");
+  summary.textContent = p.more;
   const select = (values) => {
     const s = document.createElement("select");
     s.append(...values.map(([v, l]) => option(v, l)));
@@ -233,7 +234,7 @@ function pinControls(id) {
   };
   const sound = select([["", p.deflt], ...[...SOUND_ORDER, "off"].map((v) => [v, v === "off" ? a.none : a.sounds[v]])]);
   const repeat = select([["", p.deflt], ...REPEATS.map((n) => [n, n === 0 ? words.untilMuted : n === 1 ? words.once : words.times(n)])]);
-  const show = select([["", p.deflt], ...PIN_SHOW.map((n) => [n, n === -2 ? p.withAlert : n === -1 ? p.always : p.before(n)])]);
+  const keep = select([["", p.deflt], ["on", p.shown], ["off", p.hiddenName]]);
   const effect = select([["", p.deflt], ...PIN_EFFECTS.map((e) => [e, p[e]])]);
   const name = select([["", p.deflt], ["on", p.shown], ["off", p.hiddenName]]);
   const line = (label, control, icon) => {
@@ -245,39 +246,38 @@ function pinControls(id) {
     row.append(s, control);
     return row;
   };
-  opts.append(line(p.sound, sound), line(p.repeat, repeat), line(p.show, show, true), line(p.effect, effect, true), line(p.name, name, true));
+  box.append(summary, line(p.sound, sound), line(p.repeat, repeat), line(p.keep, keep, true), line(p.effect, effect, true),
+    line(p.name, name, true));
   const fill = () => {
     const o = overrides()[id] || {};
     sound.value = o.sound ?? "";
     repeat.value = o.repeat != null ? String(o.repeat) : "";
-    show.value = o.show != null ? String(o.show) : "";
+    keep.value = o.always == null ? "" : o.always ? "on" : "off";
     effect.value = o.effect ?? "";
     name.value = o.name == null ? "" : o.name ? "on" : "off";
-    opts.hidden = !on.checked;
-    for (const row of opts.querySelectorAll(".iconOnlyRow")) row.hidden = !iconStyle();
+    for (const row of box.querySelectorAll(".iconOnlyRow")) row.hidden = !iconStyle();
+    // Open while anything differs from the defaults, so it shows.
+    box.classList.toggle("changed", Object.keys(o).length > 0);
   };
   fill();
+  if (Object.keys(overrides()[id] || {}).length) box.open = true;
   const save = () => {
-    if (!on.checked) {
-      delete overrides()[id];
-    } else {
-      const o = {};
-      if (sound.value) o.sound = sound.value;
-      if (repeat.value !== "") o.repeat = Number(repeat.value);
-      if (show.value !== "") o.show = Number(show.value);
-      if (effect.value) o.effect = effect.value;
-      if (name.value) o.name = name.value === "on";
-      overrides()[id] = o;
-    }
+    const o = {};
+    if (sound.value) o.sound = sound.value;
+    if (repeat.value !== "") o.repeat = Number(repeat.value);
+    if (keep.value) o.always = keep.value === "on";
+    if (effect.value) o.effect = effect.value;
+    if (name.value) o.name = name.value === "on";
+    if (Object.keys(o).length) overrides()[id] = o;
+    else delete overrides()[id];
     fill();
     savePrefs();
     updatePins(Date.now());
   };
-  for (const control of [on, sound, repeat, show, effect, name]) control.addEventListener("change", save);
+  for (const control of [sound, repeat, keep, effect, name]) control.addEventListener("change", save);
   sound.addEventListener("change", () => {
     if (sound.value && sound.value !== "off") playSound(sound.value);
   });
-  box.append(head, opts);
   return box;
 }
 
@@ -350,10 +350,10 @@ async function updatePins(now) {
       const state = pinState(id, now);
       if (!state) continue;
       const until = state.start != null ? state.start - now : null;
-      // At its alert's time by default: as many minutes before as the alert.
-      const showFrom = pin.show === -2 ? pin.lead : pin.show;
-      const visible = pin.show === -1 || state.running || state.killed
-        || (until != null && until <= Math.max(0, showFrom) * 60_000 + 1000);
+      // It appears when its alert reminds (or stays on screen), and while
+      // the event is on or the boss up.
+      const visible = pin.always || state.running || state.killed
+        || (until != null && until <= Math.max(0, pin.lead) * 60_000 + 1000);
       if (!visible) continue;
       // Due: from its alert's time (or the last minute), and for a minute
       // after it starts; an event that can be entered, while it can be.
@@ -409,7 +409,9 @@ a2.on("widget-message", (msg) => {
   }
 });
 
-// Settings: how alerts show, the icons' defaults, and the lock.
+// Settings, under Alerts: how alerts show, the icons' defaults, and the lock.
+// The window-only option ("keep this window hidden until an alert") shows
+// only for alerts shown in this window.
 function renderPinLock() {
   const view = document.querySelector(".view.settings");
   if (!view) return;
@@ -426,33 +428,35 @@ function renderPinLock() {
       r.append(s, control);
       return r;
     };
+    const switchBox = (cls) => {
+      const c = document.createElement("input");
+      c.type = "checkbox";
+      c.className = `${cls} switch`;
+      c.setAttribute("role", "switch");
+      return c;
+    };
     const style = document.createElement("select");
     style.className = "alertStyle";
-    const show = document.createElement("select");
-    show.className = "iconShow";
+    const keep = switchBox("iconKeep");
     const effect = document.createElement("select");
     effect.className = "iconEffect";
-    const name = document.createElement("input");
-    name.type = "checkbox";
-    name.className = "iconName switch";
-    name.setAttribute("role", "switch");
-    const lock = document.createElement("input");
-    lock.type = "checkbox";
-    lock.className = "pinLock switch";
-    lock.setAttribute("role", "switch");
+    const name = switchBox("iconName");
+    const lock = switchBox("pinLock");
     const note = document.createElement("p");
     note.className = "note pinLockNote";
-    box.append(row("styleRow", style), row("showRow", show), row("effectRow", effect), row("nameRow", name), row("lockRow", lock), note);
-    const target = view.querySelector(".alertSettings") || view;
-    target.prepend(box);
+    box.append(row("styleRow", style), row("keepRow", keep), row("effectRow", effect), row("nameRow", name), row("lockRow", lock), note);
+    // First under the Alerts heading.
+    const heading = view.querySelector(".alertDefaults");
+    if (heading) heading.after(box);
+    else view.prepend(box);
     style.addEventListener("change", () => {
       prefs.alertStyle = style.value;
       savePrefs();
       renderStatic();
       updatePins(Date.now());
     });
-    show.addEventListener("change", () => {
-      prefs.iconShow = Number(show.value);
+    keep.addEventListener("change", () => {
+      prefs.iconAlways = keep.checked;
       savePrefs();
       updatePins(Date.now());
     });
@@ -473,7 +477,7 @@ function renderPinLock() {
   }
   const label = (cls, text) => { box.querySelector(`.${cls} .iconSettingLabel`).textContent = text; };
   label("styleRow", p.style);
-  label("showRow", p.show);
+  label("keepRow", p.keepAll);
   label("effectRow", p.effect);
   label("nameRow", p.name);
   label("lockRow", p.lock);
@@ -481,14 +485,42 @@ function renderPinLock() {
   style.replaceChildren(option("icons", p.icons), option("window", p.window));
   style.value = iconStyle() ? "icons" : "window";
   style.disabled = !canPin();
-  const show = box.querySelector(".iconShow");
-  show.replaceChildren(...PIN_SHOW.map((n) => option(n, n === -2 ? p.withAlert : n === -1 ? p.always : p.before(n))));
-  show.value = String(prefs.iconShow ?? -2);
+  box.querySelector(".iconKeep").checked = !!prefs.iconAlways;
   const effect = box.querySelector(".iconEffect");
   effect.replaceChildren(...PIN_EFFECTS.map((e) => option(e, p[e])));
   effect.value = prefs.iconEffect ?? "shake";
   box.querySelector(".iconName").checked = prefs.iconName ?? true;
-  for (const cls of ["showRow", "effectRow", "nameRow", "lockRow"]) box.querySelector(`.${cls}`).hidden = !iconStyle();
-  box.querySelector(".pinLockNote").textContent = canPin() ? p.lockNote : p.needsMeter;
-  box.querySelector(".pinLockNote").hidden = canPin() && !iconStyle();
+  for (const cls of ["keepRow", "effectRow", "nameRow", "lockRow"]) box.querySelector(`.${cls}`).hidden = !iconStyle();
+  const note = box.querySelector(".pinLockNote");
+  note.textContent = canPin() ? p.lockNote : p.needsMeter;
+  note.hidden = canPin() && !iconStyle();
+  // The banner's colour and "keep this window hidden until an alert": only
+  // for alerts shown in this window.
+  for (const sel of [".popRow", ".colorRow"]) {
+    const el = view.querySelector(sel);
+    if (el) el.hidden = iconStyle();
+  }
+  const popNote = view.querySelector(".popNote");
+  if (popNote && iconStyle()) popNote.hidden = true;
 }
+
+// Test Alert, with alerts as icons: a sample icon for 10 seconds, due, with
+// the default sound.
+let testTimer = 0;
+function testIcon() {
+  const ev = scheduled("event").find((e) => e.id.startsWith("festival")) || scheduled("event")[0];
+  const name = ev ? text(ev.name) : "Shugo Festival";
+  const show = prefs.iconName ?? true;
+  const data = { name, showName: show, countdown: span(5 * 60_000), sub: "", hp: null, running: false, due: true,
+    effect: prefs.iconEffect ?? "shake", kind: "event", icon: ev ? pinIcon(ev.id, "event") : "shugo" };
+  a2.widgets.open("test", pinSize(show)).then(() => a2.widgets.send("test", data)).catch(() => {});
+  soundAlert(null);
+  clearTimeout(testTimer);
+  testTimer = setTimeout(() => a2.widgets.close("test").catch(() => {}), 10_000);
+}
+
+// plugin.js may have drawn its tabs before this file loaded: draw them again
+// with the alerts' options and the icons' settings.
+setTimeout(() => {
+  if (typeof renderStatic === "function") renderStatic();
+}, 0);

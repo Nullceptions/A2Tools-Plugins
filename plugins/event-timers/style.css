@@ -636,9 +636,13 @@ body.alertOnly .openFull:hover {
     left bottom / 100% 2px;
 }
 
-/* Pinned as an icon (pins.js): under each alert's row. */
-.pinBox { margin: 4px 0 2px 24px; }
-.pinHead { display: flex; align-items: center; gap: 6px; opacity: 0.85; }
-.pinOpts { display: grid; gap: 4px; margin: 4px 0 2px 22px; }
-.pinCheck { display: flex; align-items: center; gap: 6px; }
+/* An alert's "More options" (pins.js): its own sound, repeats and icon. */
+.pinMore { margin: 6px 0 2px; }
+.pinMore > summary { cursor: pointer; opacity: 0.8; font-size: 0.95em; }
+.pinMore > summary:hover { opacity: 1; }
+.pinMore.changed > summary { opacity: 1; font-weight: 600; }
+.pinMore[open] > summary { margin-bottom: 4px; }
 .pinLockNote { margin-top: -4px; }
+
+/* A row hidden for the other alert style (pins.js): over .setting's flex. */
+.view.settings [hidden] { display: none !important; }

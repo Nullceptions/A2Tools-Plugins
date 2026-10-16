@@ -31,11 +31,18 @@ body.locked .pin { cursor: default; }
 .pin.field .badge { --ring: #ff7a6b; }
 .pin.running .badge { --ring: #5fe08a; }
 .glyph { font-size: 15px; letter-spacing: 0.5px; text-shadow: 0 1px 2px #000; }
+.art { width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 1px 1px #000); }
+.art[hidden], .glyph[hidden] { display: none; }
+/* Countdown and name wrap onto a second line rather than being cut short. */
 .time, .name {
-  max-width: 92px;
+  max-width: 100px;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   text-shadow: 0 0 3px #000, 0 1px 2px #000, 0 0 1px #000;
 }
 .time { font-variant-numeric: tabular-nums; font-size: 13px; }

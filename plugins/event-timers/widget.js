@@ -3,6 +3,7 @@
 // double-click opens the plugin's window.
 const pin = document.querySelector(".pin");
 const glyph = document.querySelector(".glyph");
+const art = document.querySelector(".art");
 const time = document.querySelector(".time");
 const nameEl = document.querySelector(".name");
 let locked = false;
@@ -18,6 +19,14 @@ const initials = (name) => {
 
 a2.on("widget", (d) => {
   if (!d) return;
+  // The game's icon when there is one, else the initials.
+  const src = d.icon ? `icons/${d.icon}.png` : "";
+  if (art.getAttribute("src") !== src) {
+    if (src) art.setAttribute("src", src);
+    else art.removeAttribute("src");
+  }
+  art.hidden = !src;
+  glyph.hidden = !!src;
   glyph.textContent = initials(d.name);
   time.textContent = d.countdown || "";
   nameEl.textContent = d.showName ? d.name : "";

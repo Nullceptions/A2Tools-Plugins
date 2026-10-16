@@ -64,6 +64,20 @@ const pinOf = (id) => pins()[id] || null;
 // "field-101006").
 const widgetName = (id) => id.toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 32) || "timer";
 
+// The game's own icon for a timer (icons/, from the game files): Shugo Festa,
+// the Dimensional Invasion, the rift, Artifact War, and the boss marker for
+// every boss. Anything else shows its initials.
+const pinIcon = (id, kind) => {
+  if (id.startsWith("field:") || kind === "boss") return "boss";
+  if (id.startsWith("festival")) return "shugo";
+  if (id.startsWith("invasion")) return "invasion";
+  if (id === "rift") return "rift";
+  if (id === "artifact") return "artifact";
+  return "";
+};
+// A pin's window: room for its countdown, and its name, on two lines each.
+const pinSize = (showName) => ({ width: 104, height: showName ? 120 : 90 });
+
 // What a pinned timer is doing now: its name, kind, the next start (ms) or
 // null, and whether it is running (an event under way, a field boss up).
 function pinState(id, now) {
@@ -191,7 +205,8 @@ async function updatePins(now) {
         : until != null ? span(until) : "–";
       wanted.set(widgetName(id), {
         id,
-        data: { name: state.name, showName: !!pin.name, countdown, running: state.running, due, effect: pin.effect, kind: state.kind },
+        data: { name: state.name, showName: !!pin.name, countdown, running: state.running, due, effect: pin.effect, kind: state.kind,
+          icon: pinIcon(id, state.kind) },
       });
     }
     for (const [name, open] of openPins) {
@@ -202,10 +217,12 @@ async function updatePins(now) {
       void open;
     }
     for (const [name, { id, data }] of wanted) {
-      if (!openPins.has(name)) {
-        const ok = await a2.widgets.open(name, { width: 96, height: data.showName ? 92 : 76 }).then(() => true, () => false);
+      // Opened, or opened again at its new size (its name turned on or off).
+      const size = pinSize(data.showName);
+      if (openPins.get(name)?.height !== size.height) {
+        const ok = await a2.widgets.open(name, size).then(() => true, () => false);
         if (!ok) continue;
-        openPins.set(name, id);
+        openPins.set(name, { id, height: size.height });
       }
       a2.widgets.send(name, data).catch(() => {});
     }

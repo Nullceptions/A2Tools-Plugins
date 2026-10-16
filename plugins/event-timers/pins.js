@@ -86,7 +86,10 @@ function pinState(id, now) {
     if (!b) return null;
     const t = fieldTimer(b.id);
     const next = t?.state === "dead" && t.nextSpawn ? t.nextSpawn * 1000 : null;
-    return { name: text(b.name), kind: "field", start: next, running: t?.state === "up", end: null };
+    // Its HP while it is up and the report is fresh (the feed drops it after
+    // 30 minutes), for the ring around its icon.
+    const hp = t?.state === "up" && t.hp != null && t.hpAt ? Math.max(0, Math.min(100, Number(t.hp))) : null;
+    return { name: text(b.name), kind: "field", start: next, running: t?.state === "up", end: null, hp };
   }
   const ev = EVENTS.find((e) => e.id === id);
   if (!ev) return null;
@@ -208,10 +211,10 @@ async function updatePins(now) {
       const countdown = state.running
         ? (state.entry && state.end != null ? span(state.end - now) : state.kind === "field" ? words.up : p.now)
         : until != null ? span(until) : "–";
-      const sub = state.running && state.entry ? enterWord() : "";
+      const sub = state.running && state.entry ? enterWord() : state.hp != null ? `${Math.round(state.hp)}%` : "";
       wanted.set(widgetName(id), {
         id,
-        data: { name: state.name, showName: !!pin.name, countdown, sub, running: state.running, due, effect: pin.effect, kind: state.kind,
+        data: { name: state.name, showName: !!pin.name, countdown, sub, hp: state.hp ?? null, running: state.running, due, effect: pin.effect, kind: state.kind,
           icon: pinIcon(id, state.kind) },
       });
     }

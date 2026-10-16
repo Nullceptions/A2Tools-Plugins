@@ -7,6 +7,7 @@ const art = document.querySelector(".art");
 const time = document.querySelector(".time");
 const nameEl = document.querySelector(".name");
 const sub = document.querySelector(".sub");
+const badge = document.querySelector(".badge");
 let locked = false;
 
 // Two letters for the badge: the first of each of the first two words, or the
@@ -31,6 +32,16 @@ a2.on("widget", (d) => {
   glyph.textContent = initials(d.name);
   time.textContent = d.countdown || "";
   sub.textContent = d.sub || "";
+  // A field boss's HP: the ring drains from the top as it falls.
+  const hasHp = typeof d.hp === "number";
+  badge.classList.toggle("hasHp", hasHp);
+  const hpColor = hasHp ? (d.hp > 50 ? "#5fe08a" : d.hp > 20 ? "#ffd54a" : "#ff5a4f") : "";
+  if (hasHp) {
+    badge.style.setProperty("--hp", `${d.hp}%`);
+    badge.style.setProperty("--hp-color", hpColor);
+  }
+  // The HP in the ring's colour; "Enter" keeps its own.
+  sub.style.color = hpColor;
   nameEl.textContent = d.showName ? d.name : "";
   pin.className = `pin ${d.kind || "event"}${d.running ? " running" : ""}${d.due ? " due" : ""} ${d.effect || "shake"}`;
   document.title = d.name || "Event Timers";

@@ -27,6 +27,24 @@ body.locked .pin { cursor: default; }
   background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.22), rgba(12, 16, 26, 0.92) 70%);
   box-shadow: 0 0 0 2px var(--ring), 0 2px 6px rgba(0, 0, 0, 0.6);
 }
+/* A field boss's HP (widget.js): a faint full ring, and over it the HP's
+   share of the ring, drained from the top. */
+.badge { position: relative; }
+.badge.hasHp { box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6); }
+.badge.hasHp::before,
+.badge.hasHp::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.18);
+  pointer-events: none;
+}
+.badge.hasHp::after {
+  border-color: var(--hp-color, #5fe08a);
+  clip-path: inset(calc(100% - var(--hp, 100%)) 0 0 0);
+  transition: clip-path 0.6s ease;
+}
 .pin.boss .badge { --ring: #c08bff; }
 .pin.field .badge { --ring: #ff7a6b; }
 .pin.running .badge { --ring: #5fe08a; }

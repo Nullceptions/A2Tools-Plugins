@@ -631,7 +631,7 @@ function renderPinLock() {
   const popRow = view.querySelector(".popRow");
   if (popRow) popRow.hidden = false;
   const popLabel = view.querySelector(".popLabel");
-  if (popLabel) popLabel.textContent = iconStyle() ? p.hideIdle : ui().pop;
+  if (popLabel) popLabel.textContent = iconStyle() ? p.hideIdle : aui().pop;
   const popNote = view.querySelector(".popNote");
   if (popNote) {
     popNote.textContent = iconStyle() ? p.hideIdleNote : ui().popNote;

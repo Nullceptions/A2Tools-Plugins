@@ -83,19 +83,47 @@ a2.on("locked", (on) => {
   document.body.classList.toggle("locked", locked);
 });
 
+// A press becomes a drag only once the pointer moves: a window drag starts
+// at once took the mouse (Windows), so the release never reached the page
+// and a double-click never happened. Two clicks within DOUBLE_MS open the
+// plugin's window.
+const DRAG_PX = 4;
+const DOUBLE_MS = 400;
+let press = null;
+let lastClick = 0;
 document.addEventListener("mousedown", (e) => {
   if (e.button !== 0 || locked || !(e.target instanceof Element) || !e.target.closest(SHOWN)) return;
   e.preventDefault();
-  a2.widget.drag().catch(() => {});
+  press = { x: e.screenX, y: e.screenY };
+});
+document.addEventListener("mousemove", (e) => {
+  if (!press) return;
+  if (!(e.buttons & 1)) {
+    press = null;
+    return;
+  }
+  if (Math.abs(e.screenX - press.x) + Math.abs(e.screenY - press.y) >= DRAG_PX) {
+    press = null;
+    lastClick = 0;
+    a2.widget.drag().catch(() => {});
+  }
+});
+document.addEventListener("mouseup", (e) => {
+  if (e.button !== 0 || !press) return;
+  press = null;
+  const now = Date.now();
+  if (now - lastClick <= DOUBLE_MS) {
+    lastClick = 0;
+    a2.widget.post({ open: true }).catch(() => {});
+  } else {
+    lastClick = now;
+  }
 });
 // A right-click stops its alert's sound (unlocked: a locked icon lets clicks
 // through to the game).
 document.addEventListener("contextmenu", (e) => {
   e.preventDefault();
   a2.widget.post({ mute: true }).catch(() => {});
-});
-document.addEventListener("dblclick", () => {
-  if (!locked) a2.widget.post({ open: true }).catch(() => {});
 });
 
 a2.ready();

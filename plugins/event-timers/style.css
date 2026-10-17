@@ -652,3 +652,107 @@ body.alertOnly .openFull:hover {
 
 /* A row hidden for the other alert style (pins.js): over .setting's flex. */
 .view.settings [hidden] { display: none !important; }
+
+/* The Bosses tab's section headings: each folds its list away (plugin.js
+   renderFolds), the chevron pointing down while open. */
+.foldBtn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.foldBtn:hover,
+.foldBtn:focus-visible {
+  color: rgba(255, 255, 255, 0.85);
+  outline: none;
+}
+.foldBtn .chevron {
+  flex: none;
+  transition: transform 0.15s;
+}
+.foldBtn[aria-expanded="false"] .chevron {
+  transform: rotate(-90deg);
+}
+.view.bosses.scheduledFolded .scheduledList,
+.view.bosses.fieldFolded .fieldNote,
+.view.bosses.fieldFolded .fieldList,
+.view.bosses.fieldFolded .fieldCredit {
+  display: none;
+}
+
+/* A boss row's buttons, right of its time: its alert on or off (a bell,
+   filled while on), and its settings (a gear, lit while the alert is on). */
+.list .rowActions {
+  grid-row: 1 / span 2;
+  grid-column: 3;
+  display: flex;
+  gap: 1px;
+}
+.list .rowBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  color: rgba(255, 255, 255, 0.35);
+  background: none;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.list .rowBtn:hover {
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.07);
+}
+.list .rowBtn:focus-visible {
+  outline: 2px solid rgba(143, 194, 255, 0.6);
+  outline-offset: -1px;
+}
+.list .alertBtn.own,
+.list .gearBtn.lit {
+  color: #8fc2ff;
+}
+.list .alertBtn.own .fillable {
+  fill: currentColor;
+}
+/* Covered by "All field bosses" only: half lit. */
+.list .alertBtn.all {
+  color: rgba(143, 194, 255, 0.6);
+}
+.list .alertBtn.all .fillable {
+  fill: rgba(143, 194, 255, 0.2);
+}
+.list .alertBtn.own:hover,
+.list .alertBtn.all:hover,
+.list .gearBtn.lit:hover {
+  color: #b8d8ff;
+}
+.list .gearBtn[aria-disabled="true"] {
+  color: rgba(255, 255, 255, 0.18);
+  background: none;
+  cursor: default;
+}
+/* The alert a boss's gear led to: a flash, then as it was. */
+@keyframes alertFlash {
+  0%, 35% { background: rgba(143, 194, 255, 0.22); box-shadow: inset 2px 0 #8fc2ff; }
+  100% { background: transparent; box-shadow: inset 2px 0 transparent; }
+}
+.alertList li.flash {
+  animation: alertFlash 2s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .foldBtn .chevron {
+    transition: none;
+  }
+  .alertList li.flash {
+    animation-timing-function: steps(1, end);
+  }
+}

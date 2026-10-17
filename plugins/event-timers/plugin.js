@@ -333,6 +333,31 @@ const MORE_UI = {
         bossSoon: (name, n) => `${name} ${n} 分钟后出现`, bossNow: (name) => `${name} 已出现` },
 };
 
+// The Bosses tab's row buttons: each boss's alert on or off, and the way to
+// its settings in Alerts.
+const ROW_UI = {
+  en: { alertOn: "Turn this alert on", alertOff: "Turn this alert off", viaAll: "On with “All field bosses”: click for an alert of its own",
+        settings: "This alert's settings", settingsOff: "Turn the alert on to set it" },
+  ko: { alertOn: "이 알림 켜기", alertOff: "이 알림 끄기", viaAll: "“모든 필드 보스”로 켜져 있음: 클릭하면 이 보스만의 알림",
+        settings: "이 알림 설정", settingsOff: "알림을 켜면 설정할 수 있습니다" },
+  ja: { alertOn: "この通知をオン", alertOff: "この通知をオフ", viaAll: "「すべてのフィールドボス」でオン：クリックでこのボス個別の通知",
+        settings: "この通知の設定", settingsOff: "通知をオンにすると設定できます" },
+  de: { alertOn: "Diesen Alarm einschalten", alertOff: "Diesen Alarm ausschalten", viaAll: "An über „Alle Feldbosse“: klicken für einen eigenen Alarm",
+        settings: "Einstellungen dieses Alarms", settingsOff: "Alarm einschalten, um ihn einzustellen" },
+  fr: { alertOn: "Activer cette alerte", alertOff: "Désactiver cette alerte", viaAll: "Active via « Tous les boss de terrain » : cliquez pour une alerte à lui",
+        settings: "Réglages de cette alerte", settingsOff: "Activez l'alerte pour la régler" },
+  es: { alertOn: "Activar esta alerta", alertOff: "Desactivar esta alerta", viaAll: "Activa con «Todos los jefes de campo»: haz clic para una alerta propia",
+        settings: "Ajustes de esta alerta", settingsOff: "Activa la alerta para ajustarla" },
+  pt: { alertOn: "Ativar este alerta", alertOff: "Desativar este alerta", viaAll: "Ativo por “Todos os chefes de campo”: clique para um alerta próprio",
+        settings: "Configurações deste alerta", settingsOff: "Ative o alerta para configurá-lo" },
+  ru: { alertOn: "Включить это оповещение", alertOff: "Выключить это оповещение", viaAll: "Включено через «Все полевые боссы»: нажмите для отдельного оповещения",
+        settings: "Настройки этого оповещения", settingsOff: "Включите оповещение, чтобы настроить его" },
+  "zh-Hant": { alertOn: "開啟此提醒", alertOff: "關閉此提醒", viaAll: "已透過「所有野外首領」開啟：點擊為它設定專屬提醒",
+        settings: "此提醒的設定", settingsOff: "開啟提醒後即可設定" },
+  "zh-Hans": { alertOn: "开启此提醒", alertOff: "关闭此提醒", viaAll: "已通过“所有野外首领”开启：点击为它设置专属提醒",
+        settings: "此提醒的设置", settingsOff: "开启提醒后即可设置" },
+};
+
 let language = "en";
 let character = null;
 // Whether AION2 is open, as the meter tells it; null on meters that don't
@@ -348,9 +373,10 @@ let gameRunning = null;
 // defaultLead / defaultClosedLead: what an alert starts with when turned on.
 // lastServer: the last character's server, kept for when nobody is logged in.
 // alsoAtStart: an alert with a lead goes off again as its event starts.
+// folded: the Bosses tab's sections folded away ({ scheduled, field }).
 let prefs = { region: "auto", hidden: [], alerts: {}, leads: {}, closedLeads: {}, sound: "chime", repeat: 1, pop: false,
   tab: "events", display: "system", lastServer: 0, scale: 1, defaultLead: DEFAULT_LEAD, defaultClosedLead: DEFAULT_CLOSED_LEAD,
-  alertColor: "orange", alsoAtStart: false };
+  alertColor: "orange", alsoAtStart: false, folded: {} };
 // The field boss timers: { server, bosses, at, error }, from the feed and the
 // player's own map, the newest report of each boss kept.
 let feed = null;
@@ -359,6 +385,7 @@ let ownMap = { server: 0, bosses: {} };
 
 const ui = () => ({ ...(UI[language] || UI.en), ...(MORE_UI[language] || MORE_UI.en) });
 const aui = () => ALERT_UI[language] || ALERT_UI.en;
+const rui = () => ROW_UI[language] || ROW_UI.en;
 const text = (k) => EVENT_TEXT[k]?.[language] ?? EVENT_TEXT[k]?.en ?? k;
 const savePrefs = () => a2.storage.set("prefs", prefs).catch(() => {});
 const defaultLead = () => (LEADS.includes(Number(prefs.defaultLead)) ? Number(prefs.defaultLead) : DEFAULT_LEAD);
@@ -540,8 +567,9 @@ function renderStatic() {
   els.dismiss.title = words.dismiss;
   els.openFull.textContent = words.openFull;
   els.dismiss.setAttribute("aria-label", words.dismiss);
-  els.scheduledHead.textContent = words.scheduled;
-  els.fieldHead.textContent = words.field;
+  els.scheduledHead.querySelector(".foldLabel").textContent = words.scheduled;
+  els.fieldHead.querySelector(".foldLabel").textContent = words.field;
+  renderFolds();
   els.zoneSelect.replaceChildren(option("system", a.systemTime(SYSTEM_ZONE || "?")), option("server", a.serverTime),
     ...ALL_ZONES.map((z) => option(z, z.replaceAll("_", " "))));
   els.zoneSelect.value = prefs.display;
@@ -601,9 +629,130 @@ function renderHeader(now) {
 const UP_ICON = '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.6" '
   + 'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>';
 
+// Lucide's bell and settings (ISC licence), for the Bosses tab's row buttons.
+const BELL_ICON = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" '
+  + 'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.268 21a2 2 0 0 0 3.464 0"/>'
+  + '<path class="fillable" d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8'
+  + 'c0 4.499-1.411 5.956-2.738 7.326"/></svg>';
+const GEAR_ICON = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" '
+  + 'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 '
+  + '1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 '
+  + '1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 '
+  + '2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15'
+  + '-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 '
+  + '0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>';
+
+// A boss's alert as the Bosses tab shows it: "own" (its own alert is on),
+// "all" (a field boss with no alert of its own, covered by "All field
+// bosses"), or "" (none). `key` is the alert entry its settings are in.
+function bossAlert(id) {
+  if (id in prefs.alerts) return { state: "own", key: id };
+  if (id.startsWith("field:") && ALL_FIELD in prefs.alerts) return { state: "all", key: ALL_FIELD };
+  return { state: "", key: null };
+}
+
+// The bell and the gear on a boss's row. The bell turns the boss's own alert
+// on (with its last time, else the default, as the Alerts tab's "All on"
+// does) or off, in the same prefs.alerts the Alerts tab uses. The gear, lit
+// while an alert covers the boss, opens that alert in the Alerts tab.
+function rowActions(id) {
+  const r = rui();
+  const { state, key } = bossAlert(id);
+  const box = document.createElement("span");
+  box.className = "rowActions";
+  const bell = document.createElement("button");
+  bell.type = "button";
+  bell.className = `rowBtn alertBtn${state ? ` ${state}` : ""}`;
+  bell.dataset.act = "alert";
+  bell.dataset.id = id;
+  bell.setAttribute("aria-pressed", String(state === "own"));
+  bell.title = state === "own" ? r.alertOff : state === "all" ? r.viaAll : r.alertOn;
+  bell.setAttribute("aria-label", bell.title);
+  bell.innerHTML = BELL_ICON;
+  const gear = document.createElement("button");
+  gear.type = "button";
+  gear.className = `rowBtn gearBtn${state ? " lit" : ""}`;
+  gear.dataset.act = "settings";
+  gear.dataset.id = id;
+  gear.setAttribute("aria-disabled", String(!state));
+  gear.title = state ? r.settings : r.settingsOff;
+  gear.setAttribute("aria-label", gear.title);
+  gear.innerHTML = GEAR_ICON;
+  box.append(bell, gear);
+  return box;
+}
+
+function toggleBossAlert(id) {
+  if (id in prefs.alerts) delete prefs.alerts[id];
+  else prefs.alerts[id] = prefs.leads[id] ?? defaultLead();
+  savePrefs();
+  renderAlerts();
+  render();
+}
+
+// The Alerts tab, scrolled to an alert's entry, which flashes.
+function openAlert(key) {
+  prefs.tab = "alerts";
+  savePrefs();
+  renderTabs();
+  const li = [...els.alertList.children].find((x) => x.dataset.alert === key);
+  if (!li) return;
+  li.scrollIntoView({ block: "center" });
+  li.classList.remove("flash");
+  void li.offsetWidth;
+  li.classList.add("flash");
+  li.querySelector(".alertOn")?.focus({ preventScroll: true });
+}
+
+// The Bosses tab's buttons, on the lists (their rows are drawn anew every
+// second). A click is taken here and goes no further than its button.
+for (const list of [els.scheduled, els.field]) {
+  list.addEventListener("click", (e) => {
+    const btn = e.target.closest?.(".rowBtn");
+    if (!btn || !list.contains(btn)) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const id = btn.dataset.id;
+    if (btn.dataset.act === "alert") toggleBossAlert(id);
+    else if (btn.dataset.act === "settings") {
+      const { key } = bossAlert(id);
+      if (key) openAlert(key);
+    }
+  });
+}
+// While a button is held, its list isn't redrawn: a click whose press and
+// release land on two drawings of the row would be lost.
+let rowPress = false;
+const endPress = () => { rowPress = false; };
+for (const list of [els.scheduled, els.field]) {
+  list.addEventListener("pointerdown", (e) => {
+    if (e.target.closest?.(".rowBtn")) rowPress = true;
+  });
+}
+document.addEventListener("pointerup", endPress, true);
+document.addEventListener("pointercancel", endPress, true);
+window.addEventListener("blur", endPress);
+
+// The Bosses tab's two sections, each folded away or open, as last left.
+function renderFolds() {
+  for (const btn of document.querySelectorAll(".foldBtn")) {
+    const folded = !!prefs.folded?.[btn.dataset.fold];
+    btn.setAttribute("aria-expanded", String(!folded));
+    els.views.bosses.classList.toggle(`${btn.dataset.fold}Folded`, folded);
+  }
+}
+for (const btn of document.querySelectorAll(".foldBtn")) {
+  btn.addEventListener("click", () => {
+    prefs.folded = { ...(prefs.folded || {}), [btn.dataset.fold]: !prefs.folded?.[btn.dataset.fold] };
+    savePrefs();
+    renderFolds();
+  });
+}
+
 // One countdown row: name (and a bell when its alert is on), where, and when;
-// an up boss's countdown leads with an up arrow.
-function row({ id, name, where, countdown, at, running, up, soon, hide }) {
+// an up boss's countdown leads with an up arrow. A boss's row has its alert's
+// buttons (rowActions) in place of the bell.
+function row({ id, name, where, countdown, at, running, up, soon, hide, actions }) {
   const li = document.createElement("li");
   li.classList.toggle("running", !!running);
   li.classList.toggle("up", !!up);
@@ -611,7 +760,7 @@ function row({ id, name, where, countdown, at, running, up, soon, hide }) {
   const n = document.createElement("span");
   n.className = "name";
   n.textContent = name;
-  if (id in prefs.alerts || (id.startsWith("field:") && ALL_FIELD in prefs.alerts)) {
+  if (!actions && (id in prefs.alerts || (id.startsWith("field:") && ALL_FIELD in prefs.alerts))) {
     const bell = document.createElement("span");
     bell.className = "bell";
     bell.textContent = "🔔";
@@ -638,11 +787,12 @@ function row({ id, name, where, countdown, at, running, up, soon, hide }) {
   when.append(c, t);
   li.append(n, when);
   if (hide) li.append(hide);
+  if (actions) li.append(rowActions(id));
   li.append(w);
   return li;
 }
 
-function renderSchedule(list, events, now, { hideable }) {
+function renderSchedule(list, events, now, { hideable, actions = false }) {
   const words = ui();
   const tz = timeZone();
   const fmt = clock();
@@ -664,7 +814,7 @@ function renderSchedule(list, events, now, { hideable }) {
       });
     }
     return row({
-      id: ev.id, name: eventName(ev), where: ev.where.map(text).join(", "), running, hide,
+      id: ev.id, name: eventName(ev), where: ev.where.map(text).join(", "), running, hide, actions,
       soon: next.start - now <= SOON_MS,
       countdown: running ? `${ev.enter ? enterWord() : words.now} · ${words.left(span(next.end - now))}` : words.in(span(next.start - now)),
       at: fmt.format(new Date(next.start)),
@@ -745,7 +895,7 @@ function renderField(now) {
     }
     const name = text(b.name) + (b.level ? ` · Lv ${b.level}` : "");
     const soon = group === "window" || (group === "upcoming" && next - now <= SOON_MS);
-    const li = row({ id: `field:${b.id}`, name, where: text(b.where), countdown, at, up: group === "up", soon });
+    const li = row({ id: `field:${b.id}`, name, where: text(b.where), countdown, at, up: group === "up", soon, actions: true });
     if (group === "up" && t.hp != null && t.hpAt) li.style.setProperty("--hp", `${Math.max(0, Math.min(100, t.hp))}%`);
     li.classList.toggle("hasHp", group === "up" && t.hp != null && !!t.hpAt);
     items.push(li);
@@ -757,8 +907,17 @@ function render() {
   const now = Date.now();
   renderHeader(now);
   renderHidden(renderSchedule(els.events, scheduled("event"), now, { hideable: true }));
-  renderSchedule(els.scheduled, scheduled("boss"), now, { hideable: false });
+  // Not while a row's button is pressed; a focused one keeps its focus.
+  if (rowPress) return;
+  const focused = document.activeElement?.closest?.(".rowBtn");
+  const refocus = focused && { act: focused.dataset.act, id: focused.dataset.id };
+  renderSchedule(els.scheduled, scheduled("boss"), now, { hideable: false, actions: true });
   renderField(now);
+  if (refocus) {
+    const again = [...els.views.bosses.querySelectorAll(".rowBtn")]
+      .find((b) => b.dataset.act === refocus.act && b.dataset.id === refocus.id);
+    again?.focus({ preventScroll: true });
+  }
 }
 
 // The alert list: every event, the scheduled bosses, all field bosses at once,
@@ -769,6 +928,7 @@ function renderAlerts() {
   const a = aui();
   const item = (id, label) => {
     const li = document.createElement("li");
+    li.dataset.alert = id;
     const name = document.createElement("span");
     name.className = "name";
     name.textContent = label;

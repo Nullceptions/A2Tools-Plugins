@@ -436,10 +436,28 @@ a2.on("bossLive", (m) => {
     return;
   }
   const base = feed?.server === serverId() ? feed : { server: serverId(), bosses: {}, at: Date.now() };
-  const bosses = { ...(base.bosses || {}) };
-  if (m.type === "state" && m.bosses && typeof m.bosses === "object") Object.assign(bosses, m.bosses);
-  else if (m.type === "boss" && m.boss != null && m.entry) bosses[String(m.boss)] = m.entry;
+  let bosses = { ...(base.bosses || {}) };
+  // The newest report of each boss stands, as for the feed (mergeOwn): the
+  // site's older word overwrote the player's own map's, and the boss went
+  // from up to dead and back with each read, its icon opening and closing.
+  const take = (id, entry) => {
+    const have = bosses[id];
+    if (!have || (Number(have.reportedAt) || 0) <= (Number(entry?.reportedAt) || 0)) {
+      bosses[id] = entry;
+      return;
+    }
+    // An older report can still bring newer HP: the site's HP updates leave
+    // reportedAt as it was. Taken for the same life still up.
+    const sameLife = have.state === "up" && entry?.state === "up"
+      && (!have.upSince || !entry.upSince || Number(have.upSince) === Number(entry.upSince));
+    if (sameLife && entry.hp != null && (Number(entry.hpAt) || 0) > (Number(have.hpAt) || 0)) {
+      bosses[id] = { ...have, hp: entry.hp, hpAt: entry.hpAt };
+    }
+  };
+  if (m.type === "state" && m.bosses && typeof m.bosses === "object") for (const [id, e] of Object.entries(m.bosses)) take(id, e);
+  else if (m.type === "boss" && m.boss != null && m.entry) take(String(m.boss), m.entry);
   else return;
+  bosses = mergeOwn(bosses);
   liveUp = true;
   feed = { ...base, bosses };
   updatePins(Date.now());

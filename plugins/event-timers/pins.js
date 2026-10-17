@@ -150,8 +150,17 @@ function iconPins() {
       fought: !!prefs.fought?.[key],
     };
   };
+  // Only this player's side, as the lists and alerts have it: an alert set
+  // for both sides' Shugo Festa (or one set before the side was known) gave
+  // two icons for one event.
+  const side = serverSide();
+  const otherSide = (id) => {
+    if (!side) return false;
+    const of = id.startsWith("field:") ? FIELD_BOSSES[id.slice(6)] : EVENTS.find((ev) => ev.id === id);
+    return !!of?.side && of.side !== side;
+  };
   const out = {};
-  for (const id of Object.keys(prefs.alerts)) if (id !== ALL_FIELD) out[id] = cfg(id);
+  for (const id of Object.keys(prefs.alerts)) if (id !== ALL_FIELD && !otherSide(id)) out[id] = cfg(id);
   if (ALL_FIELD in prefs.alerts) {
     for (const b of fieldBosses()) {
       const id = `field:${b.id}`;
@@ -388,7 +397,8 @@ function followLive(now) {
   const ids = watchedField()
     .filter((id) => {
       const t = fieldTimer(id.slice(6));
-      if (t?.state === "up" || seenUp.has(id) || killedAt.has(id)) return true;
+      // Just killed: while it shows "Killed" (it was followed forever after).
+      if (t?.state === "up" || seenUp.has(id) || now - (killedAt.get(id) ?? -Infinity) < KILLED_SHOW_MS) return true;
       const next = t?.state === "dead" && t.nextSpawn ? t.nextSpawn * 1000 : 0;
       return next > 0 && next - now <= 5 * 60_000 && now - next <= WINDOW_MS;
     })

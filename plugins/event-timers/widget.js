@@ -21,8 +21,9 @@ const initials = (name) => {
 
 a2.on("widget", (d) => {
   if (!d) return;
-  // The game's icon when there is one, else the initials.
-  const src = d.icon ? `icons/${d.icon}.png` : "";
+  // The game's icon when there is one, else the initials. Taken from the
+  // page's own copy (widget.html), which on Linux is the image itself.
+  const src = (d.icon && document.querySelector(`.icons img[data-icon="${d.icon}"]`)?.getAttribute("src")) || "";
   if (art.getAttribute("src") !== src) {
     if (src) art.setAttribute("src", src);
     else art.removeAttribute("src");

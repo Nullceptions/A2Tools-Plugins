@@ -110,6 +110,11 @@ const BASE_ZOOM = 1.2;
 // or an HP report).
 const FEED_EVERY_MS = 15 * 60_000;
 const FEED_BUSY_MS = 2 * 60_000;
+// While a pinned field boss is up (pins.js): its HP as it falls and its kill,
+// about as often as the feed's file changes on the CDN; while one is about to
+// spawn or overdue, often enough to see it come up.
+const FEED_PINNED_UP_MS = 5_000;
+const FEED_PINNED_MS = 10_000;
 // An overdue boss counts as "in its window" this long after its time.
 const WINDOW_MS = 2 * 3600_000;
 // "All field bosses" in the alert list.
@@ -173,17 +178,22 @@ const UI = {
         now: "进行中", left: (t) => `剩余 ${t}`, in: (t) => `${t} 后`, hide: "隐藏", hidden: "已隐藏：", elyos: "天族", asmodian: "魔族" },
 };
 
+// "Enter", as the game labels a field event's entrance while it is open.
+const ENTER = { en: "Enter", ko: "입장", ja: "入場", de: "Betreten", fr: "Entrer", es: "Entrar", pt: "Entrar", ru: "Вход",
+  "zh-Hant": "進入", "zh-Hans": "进入" };
+const enterWord = () => ENTER[language] || ENTER.en;
+
 // The alerts' words, in each of the meter's languages.
 const ALERT_UI = {
-  en: { closed: "While AION2 is closed", settings: "Settings", server: "Server", showIn: "Show times in", systemTime: (z) => `This computer's time (${z})`, serverTime: "Server time", enable: "Alert",
+  en: { closed: "If AION2 is closed", settings: "Settings", server: "Server", showIn: "Show times in", systemTime: (z) => `This computer's time (${z})`, serverTime: "Server time", enable: "Alert",
         timers: "Timers", alerts: "Alerts", sound: "Sound", play: "Play", none: "None", pop: "Keep this window hidden until an alert goes off",
         off: "Off", atStart: "As it starts", before: (n) => `${n} min before`, soon: (name, n) => `${name} in ${n} min`, now: (name) => `${name} is starting`,
         sounds: { chime: "Chime", bell: "Bell", sparkle: "Sparkle", ping: "Ping", soft: "Soft", gong: "Gong", horn: "Horn", harp: "Harp", alarm: "Alarm" } },
-  ko: { closed: "AION2가 꺼져 있을 때", settings: "설정", server: "서버", showIn: "시간 표시", systemTime: (z) => `이 컴퓨터 시간 (${z})`, serverTime: "서버 시간", enable: "알림",
+  ko: { closed: "AION2가 꺼져 있으면", settings: "설정", server: "서버", showIn: "시간 표시", systemTime: (z) => `이 컴퓨터 시간 (${z})`, serverTime: "서버 시간", enable: "알림",
         timers: "타이머", alerts: "알림", sound: "소리", play: "재생", none: "없음", pop: "알림이 울릴 때까지 이 창 숨기기",
         off: "끔", atStart: "시작할 때", before: (n) => `${n}분 전`, soon: (name, n) => `${name} ${n}분 전`, now: (name) => `${name} 시작`,
         sounds: { chime: "차임", bell: "종", sparkle: "반짝임", ping: "핑", soft: "부드러움", gong: "징", horn: "뿔피리", harp: "하프", alarm: "경보" } },
-  ja: { closed: "AION2を閉じているとき", settings: "設定", server: "サーバー", showIn: "時刻の表示", systemTime: (z) => `このPCの時刻（${z}）`, serverTime: "サーバー時間", enable: "通知",
+  ja: { closed: "AION2を閉じている場合", settings: "設定", server: "サーバー", showIn: "時刻の表示", systemTime: (z) => `このPCの時刻（${z}）`, serverTime: "サーバー時間", enable: "通知",
         timers: "タイマー", alerts: "通知", sound: "サウンド", play: "再生", none: "なし", pop: "通知が鳴るまでこのウィンドウを隠す",
         off: "オフ", atStart: "開始時", before: (n) => `${n}分前`, soon: (name, n) => `${name}まであと${n}分`, now: (name) => `${name}開始`,
         sounds: { chime: "チャイム", bell: "ベル", sparkle: "きらめき", ping: "ピン", soft: "ソフト", gong: "銅鑼", horn: "ホルン", harp: "ハープ", alarm: "アラーム" } },
@@ -191,27 +201,27 @@ const ALERT_UI = {
         timers: "Timer", alerts: "Alarme", sound: "Ton", play: "Abspielen", none: "Keiner", pop: "Dieses Fenster bis zu einem Alarm verbergen",
         off: "Aus", atStart: "Zum Start", before: (n) => `${n} Min. vorher`, soon: (name, n) => `${name} in ${n} Min.`, now: (name) => `${name} beginnt`,
         sounds: { chime: "Glockenspiel", bell: "Glocke", sparkle: "Funkeln", ping: "Ping", soft: "Sanft", gong: "Gong", horn: "Horn", harp: "Harfe", alarm: "Alarm" } },
-  fr: { closed: "Quand AION2 est fermé", settings: "Réglages", server: "Serveur", showIn: "Afficher les heures en", systemTime: (z) => `Heure de cet ordinateur (${z})`, serverTime: "Heure du serveur", enable: "Alerte",
+  fr: { closed: "Si AION2 est fermé", settings: "Réglages", server: "Serveur", showIn: "Afficher les heures en", systemTime: (z) => `Heure de cet ordinateur (${z})`, serverTime: "Heure du serveur", enable: "Alerte",
         timers: "Minuteurs", alerts: "Alertes", sound: "Son", play: "Écouter", none: "Aucun", pop: "Masquer cette fenêtre jusqu'à une alerte",
         off: "Désactivée", atStart: "Au début", before: (n) => `${n} min avant`, soon: (name, n) => `${name} dans ${n} min`, now: (name) => `${name} commence`,
         sounds: { chime: "Carillon", bell: "Cloche", sparkle: "Scintillement", ping: "Ping", soft: "Doux", gong: "Gong", horn: "Cor", harp: "Harpe", alarm: "Alarme" } },
-  es: { closed: "Con AION2 cerrado", settings: "Ajustes", server: "Servidor", showIn: "Mostrar horas en", systemTime: (z) => `Hora de este equipo (${z})`, serverTime: "Hora del servidor", enable: "Alerta",
+  es: { closed: "Si AION2 está cerrado", settings: "Ajustes", server: "Servidor", showIn: "Mostrar horas en", systemTime: (z) => `Hora de este equipo (${z})`, serverTime: "Hora del servidor", enable: "Alerta",
         timers: "Temporizadores", alerts: "Alertas", sound: "Sonido", play: "Reproducir", none: "Ninguno", pop: "Ocultar esta ventana hasta que suene una alerta",
         off: "Desactivada", atStart: "Al empezar", before: (n) => `${n} min antes`, soon: (name, n) => `${name} en ${n} min`, now: (name) => `Empieza ${name}`,
         sounds: { chime: "Campanilla", bell: "Campana", sparkle: "Destello", ping: "Ping", soft: "Suave", gong: "Gong", horn: "Cuerno", harp: "Arpa", alarm: "Alarma" } },
-  pt: { closed: "Com o AION2 fechado", settings: "Configurações", server: "Servidor", showIn: "Mostrar horários em", systemTime: (z) => `Hora deste computador (${z})`, serverTime: "Hora do servidor", enable: "Alerta",
+  pt: { closed: "Se o AION2 estiver fechado", settings: "Configurações", server: "Servidor", showIn: "Mostrar horários em", systemTime: (z) => `Hora deste computador (${z})`, serverTime: "Hora do servidor", enable: "Alerta",
         timers: "Timers", alerts: "Alertas", sound: "Som", play: "Tocar", none: "Nenhum", pop: "Ocultar esta janela até um alerta tocar",
         off: "Desligado", atStart: "Ao começar", before: (n) => `${n} min antes`, soon: (name, n) => `${name} em ${n} min`, now: (name) => `${name} está começando`,
         sounds: { chime: "Carrilhão", bell: "Sino", sparkle: "Brilho", ping: "Ping", soft: "Suave", gong: "Gongo", horn: "Trompa", harp: "Harpa", alarm: "Alarme" } },
-  ru: { closed: "Когда AION2 закрыт", settings: "Настройки", server: "Сервер", showIn: "Показывать время", systemTime: (z) => `Время этого компьютера (${z})`, serverTime: "Время сервера", enable: "Оповещать",
+  ru: { closed: "Если AION2 закрыт", settings: "Настройки", server: "Сервер", showIn: "Показывать время", systemTime: (z) => `Время этого компьютера (${z})`, serverTime: "Время сервера", enable: "Оповещать",
         timers: "Таймеры", alerts: "Оповещения", sound: "Звук", play: "Прослушать", none: "Нет", pop: "Скрывать это окно до оповещения",
         off: "Выкл.", atStart: "При начале", before: (n) => `за ${n} мин`, soon: (name, n) => `${name} через ${n} мин`, now: (name) => `${name} начинается`,
         sounds: { chime: "Перезвон", bell: "Колокол", sparkle: "Искры", ping: "Пинг", soft: "Мягкий", gong: "Гонг", horn: "Рог", harp: "Арфа", alarm: "Тревога" } },
-  "zh-Hant": { closed: "AION2 關閉時", settings: "設定", server: "伺服器", showIn: "時間顯示", systemTime: (z) => `本機時間（${z}）`, serverTime: "伺服器時間", enable: "提醒",
+  "zh-Hant": { closed: "若 AION2 未開啟", settings: "設定", server: "伺服器", showIn: "時間顯示", systemTime: (z) => `本機時間（${z}）`, serverTime: "伺服器時間", enable: "提醒",
         timers: "計時器", alerts: "提醒", sound: "音效", play: "播放", none: "無", pop: "在提醒前隱藏此視窗",
         off: "關閉", atStart: "開始時", before: (n) => `${n} 分鐘前`, soon: (name, n) => `${name} ${n} 分鐘後開始`, now: (name) => `${name} 開始`,
         sounds: { chime: "鐘聲", bell: "鈴聲", sparkle: "閃爍", ping: "叮", soft: "柔和", gong: "銅鑼", horn: "號角", harp: "豎琴", alarm: "警報" } },
-  "zh-Hans": { closed: "AION2 关闭时", settings: "设置", server: "服务器", showIn: "时间显示", systemTime: (z) => `本机时间（${z}）`, serverTime: "服务器时间", enable: "提醒",
+  "zh-Hans": { closed: "若 AION2 未开启", settings: "设置", server: "服务器", showIn: "时间显示", systemTime: (z) => `本机时间（${z}）`, serverTime: "服务器时间", enable: "提醒",
         timers: "计时器", alerts: "提醒", sound: "音效", play: "播放", none: "无", pop: "在提醒前隐藏此窗口",
         off: "关闭", atStart: "开始时", before: (n) => `${n} 分钟前`, soon: (name, n) => `${name} ${n} 分钟后开始`, now: (name) => `${name} 开始`,
         sounds: { chime: "钟声", bell: "铃声", sparkle: "闪烁", ping: "叮", soft: "柔和", gong: "铜锣", horn: "号角", harp: "竖琴", alarm: "警报" } },
@@ -221,7 +231,7 @@ const ALERT_UI = {
 const MORE_UI = {
   en: { groupUp: "Up", groupWindow: "In window", groupUpcoming: "Upcoming", groupUnknown: "No report yet", ago: (t) => `${t} ago`, hpLeft: (n) => `HP ${n}%`,
         openFull: "Open Event Timers", alertOptions: "Config", testAlert: "Test Alert", alertColor: "Alert colour", colors: {"orange": "Orange", "gold": "Gold", "red": "Red", "pink": "Pink", "purple": "Purple", "blue": "Blue", "green": "Green"},
-        whileOpen: "While AION2 is open", allOn: "All on", allOff: "All off", defaultLead: "Alert time", defaultClosed: "Alert time while AION2 is closed", applyAll: "Apply to current alerts", applyAsk: (n, lead, closed) => `Set the ${n} alerts that are on to ${lead}, and ${closed} while AION2 is closed?`, apply: "Apply", cancel: "Cancel", defaultsNote: "Default times for new alerts",
+        whileOpen: "Remind me", allOn: "All on", allOff: "All off", defaultLead: "Alert time", defaultClosed: "Alert time while AION2 is closed", applyAll: "Apply to current alerts", applyAsk: (n, lead, closed) => `Set the ${n} alerts that are on to ${lead}, and ${closed} while AION2 is closed?`, apply: "Apply", cancel: "Cancel", defaultsNote: "Default times for new alerts",
         textSize: "Text size", popNote: "The window hides after 30 seconds without use, and comes back on its own when an alert goes off. To open it before then: Settings → Plugins → Open.", events: "Events", bosses: "Bosses", region: "Region", daily: "Daily reset", weekly: "Weekly reset",
         scheduled: "Scheduled bosses", field: "Field bosses", fieldNote: "Shared by players' meters as they open their map.",
         noFeed: "Field boss timers need meter 2.0.65 or later.", feedFailed: "Couldn't read the field boss timers.",
@@ -231,7 +241,7 @@ const MORE_UI = {
         bossSoon: (name, n) => `${name} back in ${n} min`, bossNow: (name) => `${name} is back` },
   ko: { groupUp: "출현 중", groupWindow: "출현 시간 지남", groupUpcoming: "예정", groupUnknown: "아직 정보 없음", ago: (t) => `${t} 전`, hpLeft: (n) => `HP ${n}%`,
         openFull: "Event Timers 열기", alertOptions: "구성", testAlert: "알림 테스트", alertColor: "알림 색상", colors: {"orange": "주황", "gold": "금색", "red": "빨강", "pink": "분홍", "purple": "보라", "blue": "파랑", "green": "초록"},
-        whileOpen: "AION2가 켜져 있을 때", allOn: "모두 켜기", allOff: "모두 끄기", defaultLead: "알림 시간", defaultClosed: "AION2가 꺼져 있을 때 알림 시간", applyAll: "현재 알림에 적용", applyAsk: (n, lead, closed) => `켜져 있는 알림 ${n}개를 ${lead}, AION2가 꺼져 있을 때는 ${closed}(으)로 바꿀까요?`, apply: "적용", cancel: "취소", defaultsNote: "새 알림의 기본 시간",
+        whileOpen: "알림 시간", allOn: "모두 켜기", allOff: "모두 끄기", defaultLead: "알림 시간", defaultClosed: "AION2가 꺼져 있을 때 알림 시간", applyAll: "현재 알림에 적용", applyAsk: (n, lead, closed) => `켜져 있는 알림 ${n}개를 ${lead}, AION2가 꺼져 있을 때는 ${closed}(으)로 바꿀까요?`, apply: "적용", cancel: "취소", defaultsNote: "새 알림의 기본 시간",
         textSize: "글자 크기", popNote: "30초 동안 사용하지 않으면 창이 숨겨지고, 알림이 울리면 다시 나타납니다. 그 전에 열려면: 설정 → 플러그인 → 열기.", events: "이벤트", bosses: "보스", region: "지역", daily: "일일 초기화", weekly: "주간 초기화",
         scheduled: "정기 보스", field: "필드 보스", fieldNote: "플레이어들이 지도를 열 때 미터가 공유한 정보입니다.",
         noFeed: "필드 보스 타이머는 미터 2.0.65 이상이 필요합니다.", feedFailed: "필드 보스 타이머를 읽지 못했습니다.",
@@ -241,7 +251,7 @@ const MORE_UI = {
         bossSoon: (name, n) => `${name} ${n}분 후 출현`, bossNow: (name) => `${name} 출현` },
   ja: { groupUp: "出現中", groupWindow: "出現時刻経過", groupUpcoming: "予定", groupUnknown: "情報なし", ago: (t) => `${t}前`, hpLeft: (n) => `HP ${n}%`,
         openFull: "Event Timers を開く", alertOptions: "構成", testAlert: "通知をテスト", alertColor: "通知の色", colors: {"orange": "オレンジ", "gold": "ゴールド", "red": "赤", "pink": "ピンク", "purple": "紫", "blue": "青", "green": "緑"},
-        whileOpen: "AION2を起動しているとき", allOn: "すべてオン", allOff: "すべてオフ", defaultLead: "通知のタイミング", defaultClosed: "AION2を閉じているときの通知タイミング", applyAll: "現在の通知に適用", applyAsk: (n, lead, closed) => `オンの通知${n}件を${lead}、AION2を閉じているときは${closed}に変更しますか？`, apply: "適用", cancel: "キャンセル", defaultsNote: "新しい通知の既定のタイミング",
+        whileOpen: "通知するタイミング", allOn: "すべてオン", allOff: "すべてオフ", defaultLead: "通知のタイミング", defaultClosed: "AION2を閉じているときの通知タイミング", applyAll: "現在の通知に適用", applyAsk: (n, lead, closed) => `オンの通知${n}件を${lead}、AION2を閉じているときは${closed}に変更しますか？`, apply: "適用", cancel: "キャンセル", defaultsNote: "新しい通知の既定のタイミング",
         textSize: "文字の大きさ", popNote: "30秒操作がないとウィンドウは隠れ、通知が鳴ると自動で再表示されます。それまでに開くには：設定 → プラグイン → 開く。", events: "イベント", bosses: "ボス", region: "地域", daily: "デイリーリセット", weekly: "ウィークリーリセット",
         scheduled: "定時ボス", field: "フィールドボス", fieldNote: "プレイヤーがマップを開いたときにメーターが共有した情報です。",
         noFeed: "フィールドボスのタイマーにはメーター 2.0.65 以降が必要です。", feedFailed: "フィールドボスのタイマーを読み込めませんでした。",
@@ -251,7 +261,7 @@ const MORE_UI = {
         bossSoon: (name, n) => `${name}まであと${n}分`, bossNow: (name) => `${name}出現` },
   de: { groupUp: "Da", groupWindow: "Im Zeitfenster", groupUpcoming: "Demnächst", groupUnknown: "Noch keine Meldung", ago: (t) => `vor ${t}`, hpLeft: (n) => `HP ${n} %`,
         openFull: "Event Timers öffnen", alertOptions: "Konfig", testAlert: "Testalarm", alertColor: "Alarmfarbe", colors: {"orange": "Orange", "gold": "Gold", "red": "Rot", "pink": "Pink", "purple": "Lila", "blue": "Blau", "green": "Grün"},
-        whileOpen: "Wenn AION2 offen ist", allOn: "Alle an", allOff: "Alle aus", defaultLead: "Alarmzeit", defaultClosed: "Alarmzeit, wenn AION2 geschlossen ist", applyAll: "Auf aktuelle Alarme anwenden", applyAsk: (n, lead, closed) => `Die ${n} aktiven Alarme auf ${lead} setzen, und auf ${closed}, wenn AION2 geschlossen ist?`, apply: "Anwenden", cancel: "Abbrechen", defaultsNote: "Standardzeiten für neue Alarme",
+        whileOpen: "Erinnern", allOn: "Alle an", allOff: "Alle aus", defaultLead: "Alarmzeit", defaultClosed: "Alarmzeit, wenn AION2 geschlossen ist", applyAll: "Auf aktuelle Alarme anwenden", applyAsk: (n, lead, closed) => `Die ${n} aktiven Alarme auf ${lead} setzen, und auf ${closed}, wenn AION2 geschlossen ist?`, apply: "Anwenden", cancel: "Abbrechen", defaultsNote: "Standardzeiten für neue Alarme",
         textSize: "Textgröße", popNote: "Das Fenster verschwindet nach 30 Sekunden ohne Nutzung und kommt bei einem Alarm von selbst zurück. Um es vorher zu öffnen: Einstellungen → Plugins → Öffnen.", events: "Events", bosses: "Bosse", region: "Region", daily: "Täglicher Reset", weekly: "Wöchentlicher Reset",
         scheduled: "Geplante Bosse", field: "Feldbosse", fieldNote: "Von den Metern der Spieler geteilt, wenn sie ihre Karte öffnen.",
         noFeed: "Feldboss-Timer brauchen Meter 2.0.65 oder neuer.", feedFailed: "Die Feldboss-Timer konnten nicht gelesen werden.",
@@ -261,7 +271,7 @@ const MORE_UI = {
         bossSoon: (name, n) => `${name} in ${n} Min. zurück`, bossNow: (name) => `${name} ist zurück` },
   fr: { groupUp: "Présents", groupWindow: "Dans la fenêtre", groupUpcoming: "À venir", groupUnknown: "Pas encore signalés", ago: (t) => `il y a ${t}`, hpLeft: (n) => `PV ${n} %`,
         openFull: "Ouvrir Event Timers", alertOptions: "Config", testAlert: "Tester l'alerte", alertColor: "Couleur des alertes", colors: {"orange": "Orange", "gold": "Or", "red": "Rouge", "pink": "Rose", "purple": "Violet", "blue": "Bleu", "green": "Vert"},
-        whileOpen: "Quand AION2 est ouvert", allOn: "Tout activer", allOff: "Tout désactiver", defaultLead: "Moment de l'alerte", defaultClosed: "Moment de l'alerte quand AION2 est fermé", applyAll: "Appliquer aux alertes actuelles", applyAsk: (n, lead, closed) => `Régler les ${n} alertes actives sur ${lead}, et ${closed} quand AION2 est fermé ?`, apply: "Appliquer", cancel: "Annuler", defaultsNote: "Moments par défaut des nouvelles alertes",
+        whileOpen: "Me rappeler", allOn: "Tout activer", allOff: "Tout désactiver", defaultLead: "Moment de l'alerte", defaultClosed: "Moment de l'alerte quand AION2 est fermé", applyAll: "Appliquer aux alertes actuelles", applyAsk: (n, lead, closed) => `Régler les ${n} alertes actives sur ${lead}, et ${closed} quand AION2 est fermé ?`, apply: "Appliquer", cancel: "Annuler", defaultsNote: "Moments par défaut des nouvelles alertes",
         textSize: "Taille du texte", popNote: "La fenêtre se masque après 30 secondes sans utilisation et revient d'elle-même lors d'une alerte. Pour l'ouvrir avant : Réglages → Plugins → Ouvrir.", events: "Événements", bosses: "Boss", region: "Région", daily: "Réinitialisation quotidienne", weekly: "Réinitialisation hebdomadaire",
         scheduled: "Boss programmés", field: "Boss de terrain", fieldNote: "Partagés par les meters des joueurs quand ils ouvrent leur carte.",
         noFeed: "Les minuteurs des boss de terrain demandent le meter 2.0.65 ou plus récent.", feedFailed: "Impossible de lire les minuteurs des boss de terrain.",
@@ -271,7 +281,7 @@ const MORE_UI = {
         bossSoon: (name, n) => `${name} de retour dans ${n} min`, bossNow: (name) => `${name} est de retour` },
   es: { groupUp: "Activos", groupWindow: "En ventana", groupUpcoming: "Próximos", groupUnknown: "Sin informes", ago: (t) => `hace ${t}`, hpLeft: (n) => `PV ${n} %`,
         openFull: "Abrir Event Timers", alertOptions: "Config", testAlert: "Probar alerta", alertColor: "Color de las alertas", colors: {"orange": "Naranja", "gold": "Dorado", "red": "Rojo", "pink": "Rosa", "purple": "Morado", "blue": "Azul", "green": "Verde"},
-        whileOpen: "Con AION2 abierto", allOn: "Activar todo", allOff: "Desactivar todo", defaultLead: "Momento de la alerta", defaultClosed: "Momento de la alerta con AION2 cerrado", applyAll: "Aplicar a las alertas actuales", applyAsk: (n, lead, closed) => `¿Poner las ${n} alertas activas en ${lead}, y ${closed} con AION2 cerrado?`, apply: "Aplicar", cancel: "Cancelar", defaultsNote: "Momentos predeterminados de las alertas nuevas",
+        whileOpen: "Avisarme", allOn: "Activar todo", allOff: "Desactivar todo", defaultLead: "Momento de la alerta", defaultClosed: "Momento de la alerta con AION2 cerrado", applyAll: "Aplicar a las alertas actuales", applyAsk: (n, lead, closed) => `¿Poner las ${n} alertas activas en ${lead}, y ${closed} con AION2 cerrado?`, apply: "Aplicar", cancel: "Cancelar", defaultsNote: "Momentos predeterminados de las alertas nuevas",
         textSize: "Tamaño del texto", popNote: "La ventana se oculta tras 30 segundos sin uso y vuelve sola cuando suena una alerta. Para abrirla antes: Ajustes → Plugins → Abrir.", events: "Eventos", bosses: "Jefes", region: "Región", daily: "Reinicio diario", weekly: "Reinicio semanal",
         scheduled: "Jefes programados", field: "Jefes de campo", fieldNote: "Compartidos por los medidores de los jugadores al abrir su mapa.",
         noFeed: "Los temporizadores de jefes de campo necesitan el medidor 2.0.65 o posterior.", feedFailed: "No se pudieron leer los temporizadores de jefes de campo.",
@@ -281,7 +291,7 @@ const MORE_UI = {
         bossSoon: (name, n) => `${name} vuelve en ${n} min`, bossNow: (name) => `${name} ha vuelto` },
   pt: { groupUp: "Ativos", groupWindow: "Na janela", groupUpcoming: "Próximos", groupUnknown: "Sem relatos ainda", ago: (t) => `há ${t}`, hpLeft: (n) => `PV ${n}%`,
         openFull: "Abrir Event Timers", alertOptions: "Config", testAlert: "Testar alerta", alertColor: "Cor dos alertas", colors: {"orange": "Laranja", "gold": "Dourado", "red": "Vermelho", "pink": "Rosa", "purple": "Roxo", "blue": "Azul", "green": "Verde"},
-        whileOpen: "Com o AION2 aberto", allOn: "Ativar todos", allOff: "Desativar todos", defaultLead: "Momento do alerta", defaultClosed: "Momento do alerta com o AION2 fechado", applyAll: "Aplicar aos alertas atuais", applyAsk: (n, lead, closed) => `Ajustar os ${n} alertas ativos para ${lead}, e ${closed} com o AION2 fechado?`, apply: "Aplicar", cancel: "Cancelar", defaultsNote: "Momentos padrão dos novos alertas",
+        whileOpen: "Avisar-me", allOn: "Ativar todos", allOff: "Desativar todos", defaultLead: "Momento do alerta", defaultClosed: "Momento do alerta com o AION2 fechado", applyAll: "Aplicar aos alertas atuais", applyAsk: (n, lead, closed) => `Ajustar os ${n} alertas ativos para ${lead}, e ${closed} com o AION2 fechado?`, apply: "Aplicar", cancel: "Cancelar", defaultsNote: "Momentos padrão dos novos alertas",
         textSize: "Tamanho do texto", popNote: "A janela some após 30 segundos sem uso e volta sozinha quando um alerta toca. Para abri-la antes: Configurações → Plugins → Abrir.", events: "Eventos", bosses: "Chefes", region: "Região", daily: "Reinício diário", weekly: "Reinício semanal",
         scheduled: "Chefes agendados", field: "Chefes de campo", fieldNote: "Compartilhados pelos medidores dos jogadores ao abrir o mapa.",
         noFeed: "Os timers de chefes de campo precisam do medidor 2.0.65 ou mais novo.", feedFailed: "Não foi possível ler os timers de chefes de campo.",
@@ -291,7 +301,7 @@ const MORE_UI = {
         bossSoon: (name, n) => `${name} volta em ${n} min`, bossNow: (name) => `${name} voltou` },
   ru: { groupUp: "На месте", groupWindow: "В окне появления", groupUpcoming: "Скоро", groupUnknown: "Пока нет данных", ago: (t) => `${t} назад`, hpLeft: (n) => `HP ${n}%`,
         openFull: "Открыть Event Timers", alertOptions: "Конфиг", testAlert: "Проверить", alertColor: "Цвет оповещений", colors: {"orange": "Оранжевый", "gold": "Золотой", "red": "Красный", "pink": "Розовый", "purple": "Фиолетовый", "blue": "Синий", "green": "Зелёный"},
-        whileOpen: "Когда AION2 открыт", allOn: "Включить все", allOff: "Выключить все", defaultLead: "Время оповещения", defaultClosed: "Время оповещения, когда AION2 закрыт", applyAll: "Применить к текущим оповещениям", applyAsk: (n, lead, closed) => `Установить ${n} включённых оповещений на «${lead}», а когда AION2 закрыт — «${closed}»?`, apply: "Применить", cancel: "Отмена", defaultsNote: "Время по умолчанию для новых оповещений",
+        whileOpen: "Напомнить", allOn: "Включить все", allOff: "Выключить все", defaultLead: "Время оповещения", defaultClosed: "Время оповещения, когда AION2 закрыт", applyAll: "Применить к текущим оповещениям", applyAsk: (n, lead, closed) => `Установить ${n} включённых оповещений на «${lead}», а когда AION2 закрыт — «${closed}»?`, apply: "Применить", cancel: "Отмена", defaultsNote: "Время по умолчанию для новых оповещений",
         textSize: "Размер текста", popNote: "Окно скрывается после 30 секунд без действий и само появляется при оповещении. Чтобы открыть его раньше: Настройки → Плагины → Открыть.", events: "События", bosses: "Боссы", region: "Регион", daily: "Ежедневный сброс", weekly: "Еженедельный сброс",
         scheduled: "Боссы по расписанию", field: "Полевые боссы", fieldNote: "Делятся метры игроков, когда те открывают карту.",
         noFeed: "Для таймеров полевых боссов нужен метр 2.0.65 или новее.", feedFailed: "Не удалось прочитать таймеры полевых боссов.",
@@ -301,7 +311,7 @@ const MORE_UI = {
         bossSoon: (name, n) => `${name} через ${n} мин`, bossNow: (name) => `${name} появился` },
   "zh-Hant": { groupUp: "已出現", groupWindow: "出現時段中", groupUpcoming: "即將出現", groupUnknown: "尚無回報", ago: (t) => `${t} 前`, hpLeft: (n) => `HP ${n}%`,
         openFull: "開啟 Event Timers", alertOptions: "配置", testAlert: "測試提醒", alertColor: "提醒顏色", colors: {"orange": "橘色", "gold": "金色", "red": "紅色", "pink": "粉紅", "purple": "紫色", "blue": "藍色", "green": "綠色"},
-        whileOpen: "AION2 開啟時", allOn: "全部開啟", allOff: "全部關閉", defaultLead: "提醒時間", defaultClosed: "AION2 關閉時的提醒時間", applyAll: "套用到目前的提醒", applyAsk: (n, lead, closed) => `將已開啟的 ${n} 個提醒設為「${lead}」，AION2 關閉時設為「${closed}」？`, apply: "套用", cancel: "取消", defaultsNote: "新提醒的預設時間",
+        whileOpen: "提醒時間", allOn: "全部開啟", allOff: "全部關閉", defaultLead: "提醒時間", defaultClosed: "AION2 關閉時的提醒時間", applyAll: "套用到目前的提醒", applyAsk: (n, lead, closed) => `將已開啟的 ${n} 個提醒設為「${lead}」，AION2 關閉時設為「${closed}」？`, apply: "套用", cancel: "取消", defaultsNote: "新提醒的預設時間",
         textSize: "文字大小", popNote: "30 秒未使用後視窗會隱藏，提醒響起時會自動再出現。若要先開啟：設定 → 外掛 → 開啟。", events: "活動", bosses: "首領", region: "地區", daily: "每日重置", weekly: "每週重置",
         scheduled: "定時首領", field: "野外首領", fieldNote: "由玩家開啟地圖時其計量器分享。",
         noFeed: "野外首領計時需要計量器 2.0.65 以上。", feedFailed: "無法讀取野外首領計時。",
@@ -311,7 +321,7 @@ const MORE_UI = {
         bossSoon: (name, n) => `${name} ${n} 分鐘後出現`, bossNow: (name) => `${name} 已出現` },
   "zh-Hans": { groupUp: "已出现", groupWindow: "出现时段中", groupUpcoming: "即将出现", groupUnknown: "尚无回报", ago: (t) => `${t} 前`, hpLeft: (n) => `HP ${n}%`,
         openFull: "打开 Event Timers", alertOptions: "配置", testAlert: "测试提醒", alertColor: "提醒颜色", colors: {"orange": "橙色", "gold": "金色", "red": "红色", "pink": "粉红", "purple": "紫色", "blue": "蓝色", "green": "绿色"},
-        whileOpen: "AION2 开启时", allOn: "全部开启", allOff: "全部关闭", defaultLead: "提醒时间", defaultClosed: "AION2 关闭时的提醒时间", applyAll: "应用到当前的提醒", applyAsk: (n, lead, closed) => `将已开启的 ${n} 个提醒设为“${lead}”，AION2 关闭时设为“${closed}”？`, apply: "应用", cancel: "取消", defaultsNote: "新提醒的默认时间",
+        whileOpen: "提醒时间", allOn: "全部开启", allOff: "全部关闭", defaultLead: "提醒时间", defaultClosed: "AION2 关闭时的提醒时间", applyAll: "应用到当前的提醒", applyAsk: (n, lead, closed) => `将已开启的 ${n} 个提醒设为“${lead}”，AION2 关闭时设为“${closed}”？`, apply: "应用", cancel: "取消", defaultsNote: "新提醒的默认时间",
         textSize: "文字大小", popNote: "30 秒未使用后窗口会隐藏，提醒响起时会自动再出现。若要先打开：设置 → 插件 → 打开。", events: "活动", bosses: "首领", region: "地区", daily: "每日重置", weekly: "每周重置",
         scheduled: "定时首领", field: "野外首领", fieldNote: "由玩家打开地图时其计量器分享。",
         noFeed: "野外首领计时需要计量器 2.0.65 以上。", feedFailed: "无法读取野外首领计时。",
@@ -410,10 +420,13 @@ const wallToMs = (tz, y, m, d, minutes) => {
   return guess - offsetAt(tz, first);
 };
 
-// An event's current or next showing: { start, end } in ms.
+// An event's current or next showing: { start, end } in ms. One that can only
+// be entered for a while after it starts (the Shugo Festa and the Dimensional
+// Invasion: 3 minutes, then the game closes the entrance) counts as running
+// for that while only, so the next one shows once it can no longer be joined.
 const nextOf = (ev, tz, now) => {
   const zone = ev.utc ? "UTC" : tz;
-  const runMs = (ev.minutes || 0) * 60_000;
+  const runMs = ev.enter ? ev.enter * 1000 : (ev.minutes || 0) * 60_000;
   let best = null;
   for (let back = -1; back <= 8; back++) {
     const p = partsIn(zone, now + back * 86_400_000);
@@ -539,6 +552,7 @@ function renderStatic() {
   els.pop.checked = !!prefs.pop;
   renderTabs();
   renderAlerts();
+  if (typeof renderPinLock === "function") renderPinLock();
 }
 
 // zoom, not a font size: the styles are in pixels, and everything should grow
@@ -647,7 +661,7 @@ function renderSchedule(list, events, now, { hideable }) {
     return row({
       id: ev.id, name: eventName(ev), where: ev.where.map(text).join(", "), running, hide,
       soon: next.start - now <= SOON_MS,
-      countdown: running ? `${words.now} · ${words.left(span(next.end - now))}` : words.in(span(next.start - now)),
+      countdown: running ? `${ev.enter ? enterWord() : words.now} · ${words.left(span(next.end - now))}` : words.in(span(next.start - now)),
       at: fmt.format(new Date(next.start)),
     });
   }));
@@ -779,6 +793,13 @@ function renderAlerts() {
     const leads = document.createElement("div");
     leads.className = "leads";
     leads.append(timeRow(words.whileOpen, lead), timeRow(a.closed, closed));
+    // A field boss: also, or only ("Don't remind"), when it is being fought
+    // (pins.js).
+    if (id.startsWith("field:") && typeof fightControl === "function") {
+      lead.prepend(option(-1, pinUi().noRemind));
+      lead.value = String(prefs.alerts[id] ?? prefs.leads[id] ?? defaultLead());
+      leads.append(fightControl(id));
+    }
     const show = () => {
       leads.hidden = !on.checked;
       li.classList.toggle("on", on.checked);
@@ -804,6 +825,8 @@ function renderAlerts() {
     const head = document.createElement("label");
     head.className = "alertHead";
     head.append(on, name);
+    // Its own sound, repeats and icon, under its times (pins.js).
+    if (typeof pinControls === "function") leads.append(pinControls(id));
     li.append(head, leads);
     return li;
   };
@@ -854,15 +877,18 @@ function stopSound() {
   repeatTimer = 0;
   els.mute.hidden = true;
 }
-function soundAlert() {
+// An alert's sound: its own (`key`'s, pins.js) if it has one, else the
+// default's.
+function soundAlert(key) {
   stopSound();
-  if (prefs.sound === "off") return;
-  const times = Number(prefs.repeat);
-  const gap = (soundLength(prefs.sound) + 0.7) * 1000;
+  const own = typeof alertSound === "function" ? alertSound(key) : { sound: prefs.sound, repeat: Number(prefs.repeat) };
+  if (own.sound === "off") return;
+  const times = Number(own.repeat);
+  const gap = (soundLength(own.sound) + 0.7) * 1000;
   let left = times === 0 ? Infinity : Math.max(1, times);
   repeatUntil = Date.now() + UNTIL_MUTED_MS;
   const play = () => {
-    playSound(prefs.sound);
+    playSound(own.sound);
     left -= 1;
     // The last play: Mute stays live until it has finished.
     repeatTimer = setTimeout(left > 0 && Date.now() < repeatUntil ? play : stopSound, gap);
@@ -955,7 +981,7 @@ function renderLines() {
   }));
 }
 
-function alertBanner(message, { preview = false } = {}) {
+function alertBanner(message, { preview = false, key = null } = {}) {
   lines.push(message);
   while (lines.length > 5) lines.shift();
   renderLines();
@@ -968,7 +994,7 @@ function alertBanner(message, { preview = false } = {}) {
   els.banner.classList.remove("pulse");
   void els.banner.offsetWidth;
   els.banner.classList.add("pulse");
-  soundAlert();
+  soundAlert(key);
   clearTimeout(bannerTimer);
   bannerTimer = setTimeout(clearBanner, BANNER_MS);
   updateWindow();
@@ -985,6 +1011,14 @@ els.dismiss.addEventListener("click", clearBanner);
 let lastCheck = Date.now();
 const fired = new Set();
 function checkAlerts(now) {
+  // An alert pinned to come with its icon alone sounds, and leaves the
+  // window as it is (pins.js).
+  // As its icon (pins.js): the sound, and the icon shakes or glows; or as a
+  // banner in this window. `key` is the alert whose settings apply.
+  const announce = (id, message, key = id) => {
+    if (typeof pinnedIconOnly === "function" && pinnedIconOnly(id)) soundAlert(key);
+    else alertBanner(message, { key });
+  };
   const tz = timeZone();
   const a = aui();
   const words = ui();
@@ -1010,7 +1044,7 @@ function checkAlerts(now) {
     const next = nextOf(ev, tz || "UTC", lastCheck + minutes * 60_000 - 1);
     if (next && due(ev.id, next.start, minutes)) {
       const name = text(ev.name);
-      alertBanner(minutes ? a.soon(name, minutes) : a.now(name));
+      announce(ev.id, minutes ? a.soon(name, minutes) : a.now(name));
     }
   }
   for (const b of fieldBosses()) {
@@ -1023,9 +1057,11 @@ function checkAlerts(now) {
     if (minutes === null) continue;
     if (due(id, t.nextSpawn * 1000, minutes)) {
       const name = text(b.name);
-      alertBanner(minutes ? words.bossSoon(name, minutes) : words.bossNow(name));
+      announce(id, minutes ? words.bossSoon(name, minutes) : words.bossNow(name), own ? id : ALL_FIELD);
     }
   }
+  // Field bosses being fought, for those who want to join (pins.js).
+  if (typeof checkFights === "function") checkFights(now, announce);
   lastCheck = now;
 }
 
@@ -1052,21 +1088,30 @@ function feedBusy(now) {
   });
 }
 
+let feedReading = false;
 async function readFeed() {
+  if (feedReading) return;
   clearTimeout(feedTimer);
   feedTimer = setTimeout(readFeed, FEED_EVERY_MS);
   const server = serverId();
   if (!server || typeof a2.bossTimers !== "function") return;
+  feedReading = true;
   try {
     const data = await a2.bossTimers(server);
     feed = { server, bosses: mergeOwn(data?.bosses || {}), at: Date.now() };
   } catch {
-    feed = { server, bosses: mergeOwn(feed?.server === server ? feed.bosses || {} : {}), error: true };
+    feed = { server, bosses: mergeOwn(feed?.server === server ? feed.bosses || {} : {}), error: true, at: Date.now() };
+  } finally {
+    feedReading = false;
   }
-  // Sooner while it changes fast.
-  if (feedBusy(Date.now())) {
+  // Sooner while it changes fast, and every few seconds while a pinned boss
+  // is being waited for or fought.
+  const pinned = typeof pinnedBossLive === "function" ? pinnedBossLive(Date.now()) : "";
+  if (pinned || feedBusy(Date.now())) {
     clearTimeout(feedTimer);
-    feedTimer = setTimeout(readFeed, FEED_BUSY_MS);
+    // Pushed live (pins.js): the feed only as a fallback.
+    const live = typeof liveUp !== "undefined" && liveUp;
+    feedTimer = setTimeout(readFeed, live && pinned ? 30_000 : pinned === "up" ? FEED_PINNED_UP_MS : pinned ? FEED_PINNED_MS : FEED_BUSY_MS);
   }
   render();
 }
@@ -1085,6 +1130,11 @@ els.sound.addEventListener("change", () => {
 });
 // A sample alert, as a real one would come: banner, flash, sound and repeats.
 const testAlert = () => {
+  // Alerts as icons: a sample icon, as a real one comes (pins.js).
+  if (typeof testIcon === "function" && typeof pinnedIconOnly === "function" && pinnedIconOnly()) {
+    testIcon();
+    return;
+  }
   // The banner is at the top of the window: bring it into view.
   window.scrollTo({ top: 0 });
   const ev = scheduled("event")[0];
@@ -1223,6 +1273,7 @@ a2.on("compact", (on) => document.body.classList.toggle("compact", !!on));
     const now = Date.now();
     checkAlerts(now);
     render();
+    if (typeof updatePins === "function") updatePins(now);
   }, 1000);
   if (!windowApi()) {
     els.pop.disabled = true;

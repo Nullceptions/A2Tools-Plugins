@@ -150,9 +150,12 @@ def main():
                 kind = "invasion" if key.endswith("_Invasion") else "festival"
                 field = 1010 if side == "elyos" else 1110
                 window = max((x["ReadyDuration"] + x["ProgressTime"]) for x in rows) // 60 if rows else 0
+                # How long after the start it can be entered (ReadyDuration,
+                # seconds): the game closes the entrance then.
+                enter = min(x["ReadyDuration"] for x in rows) if rows else 0
                 ev = {"id": f"{kind}-{side}", "kind": "event", "name": tk(TITLE_KEYS[kind]),
                       "where": [map_text(field)], "side": side, "days": days_of(r),
-                      "starts": starts, "minutes": window}
+                      "starts": starts, "minutes": window, "enter": enter}
                 # Eleven festival groups share one schedule (the game picks one
                 # game an hour): keep one entry per side.
                 if not any(x["id"] == ev["id"] for x in events):

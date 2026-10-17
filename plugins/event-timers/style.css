@@ -635,3 +635,14 @@ body.alertOnly .openFull:hover {
   background: linear-gradient(90deg, rgba(126, 224, 160, 0.14) var(--hp, 0%), transparent var(--hp, 0%)) no-repeat
     left bottom / 100% 2px;
 }
+
+/* An alert's "More options" (pins.js): its own sound, repeats and icon. */
+.pinMore { margin: 6px 0 2px; }
+.pinMore > summary { cursor: pointer; opacity: 0.8; font-size: 0.95em; }
+.pinMore > summary:hover { opacity: 1; }
+.pinMore.changed > summary { opacity: 1; font-weight: 600; }
+.pinMore[open] > summary { margin-bottom: 4px; }
+.pinLockNote { margin-top: -4px; }
+
+/* A row hidden for the other alert style (pins.js): over .setting's flex. */
+.view.settings [hidden] { display: none !important; }

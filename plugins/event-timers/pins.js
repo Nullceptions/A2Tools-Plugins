@@ -628,7 +628,7 @@ function renderPinLock() {
   // with icons, an alert doesn't bring the window back.
   const colorRow = view.querySelector(".colorRow");
   if (colorRow) colorRow.hidden = iconStyle();
-  const popRow = view.querySelector(".popRow");
+  const popRow = view.querySelector(".popRow:not(.alsoAtStartRow)");
   if (popRow) popRow.hidden = false;
   const popLabel = view.querySelector(".popLabel");
   if (popLabel) popLabel.textContent = iconStyle() ? p.hideIdle : aui().pop;

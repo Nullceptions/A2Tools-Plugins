@@ -637,7 +637,13 @@ body.alertOnly .openFull:hover {
 }
 
 /* An alert's "More options" (pins.js): its own sound, repeats and icon. */
-.pinMore { margin: 6px 0 2px; }
+.pinMore { grid-column: 1 / -1; margin: 6px 0 2px; }
+.pinRows {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 4px 10px;
+}
 .pinMore > summary { cursor: pointer; opacity: 0.8; font-size: 0.95em; }
 .pinMore > summary:hover { opacity: 1; }
 .pinMore.changed > summary { opacity: 1; font-weight: 600; }

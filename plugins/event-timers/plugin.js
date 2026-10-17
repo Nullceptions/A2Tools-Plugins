@@ -1073,7 +1073,14 @@ function mergeOwn(bosses) {
   const out = { ...bosses };
   if (ownMap.server !== serverId()) return out;
   for (const [id, mine] of Object.entries(ownMap.bosses)) {
-    if (!out[id] || (Number(out[id].reportedAt) || 0) <= (Number(mine.reportedAt) || 0)) out[id] = mine;
+    const known = out[id];
+    if (known && (Number(known.reportedAt) || 0) > (Number(mine.reportedAt) || 0)) continue;
+    // The map says nothing of HP: opening it mid-fight replaced the boss
+    // with an entry without its HP, which came back only at the next HP
+    // report. The same life still up keeps the HP it had.
+    const sameLife = known && known.state === "up" && mine.state === "up"
+      && (!known.upSince || !mine.upSince || Number(known.upSince) === Number(mine.upSince));
+    out[id] = sameLife && known.hp != null ? { ...mine, hp: known.hp, hpAt: known.hpAt } : mine;
   }
   return out;
 }

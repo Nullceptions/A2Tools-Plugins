@@ -182,7 +182,8 @@ const pinIcon = (id, kind) => {
   return "";
 };
 // An icon's window: room for its countdown, and its name, on two lines each.
-const pinSize = (showName) => ({ width: 104, height: showName ? 134 : 104 });
+// Tight around the badge and its two lines, so icons can sit close together.
+const pinSize = (showName) => ({ width: 80, height: showName ? 118 : 84 });
 
 // What a timer is doing now: its name, kind, the next start (ms) or null,
 // whether it is running (an event under way, a field boss up), and a field

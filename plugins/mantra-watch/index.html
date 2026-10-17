@@ -6,29 +6,30 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="banner" hidden></div>
+    <button type="button" class="banner" hidden></button>
     <ul class="mantras"></ul>
     <div class="foot">
       <span class="fight"></span>
-      <button type="button" class="gear" title="Settings">⚙</button>
+      <button type="button" class="gear">⚙</button>
     </div>
     <div class="settings" hidden>
-      <label>Alert when one drops
+      <label><span data-t="alertWhen"></span>
         <select class="alert">
-          <option value="fight">In a fight</option>
-          <option value="always">Always</option>
-          <option value="off">Never</option>
+          <option value="fight" data-t="inFight"></option>
+          <option value="always" data-t="always"></option>
+          <option value="off" data-t="never"></option>
         </select>
       </label>
-      <label>Sound
+      <label><span data-t="sound"></span>
         <span>
           <select class="sound">
-            <option value="alarm">Alarm</option><option value="chime">Chime</option><option value="ping">Ping</option>
-            <option value="">None</option>
+            <option value="alarm" data-t="alarm"></option><option value="chime" data-t="chime"></option><option value="ping" data-t="ping"></option>
+            <option value="" data-t="none"></option>
           </select>
-          <button type="button" class="test">Test</button>
+          <button type="button" class="test" data-t="test"></button>
         </span>
       </label>
+      <div class="watch"></div>
     </div>
     <script src="/_sdk/a2.js"></script>
     <script src="logic.js"></script>

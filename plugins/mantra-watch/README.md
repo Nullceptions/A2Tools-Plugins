@@ -5,13 +5,17 @@ Mantra): a green dot while one runs, and how many party members it reaches
 (+3). The moment one stops in a fight, a red banner and a sound, and the
 window comes up on top without taking focus; it goes again on its own when
 the mantra is back. The same alert comes at the first hit of a fight if a
-mantra you ran in the last 10 minutes is off.
+mantra you ran in the minute before it is off; one you switched off earlier
+is your choice, and gives none. A click on the banner dismisses it until
+that mantra is on again.
 
 Below: the current fight's length and each mantra's uptime, and after it the
-last fight's, with the average of the last 10. A fight runs from your first
-hit to 8 s after your last; fights under 10 s aren't kept.
+last fight's, with the average of the last 10 (per character). A fight runs
+from your first hit to 8 s after your last; fights under 10 s aren't kept,
+and a heal or buff on someone your mantras reach starts none.
 
-⚙: when to alert (in a fight, always, never) and the sound.
+⚙: when to alert (in a fight, always, never), the sound, and which mantras
+to watch. Everything is in the meter's 10 languages.
 
 Switching character starts over (with `events:character`, meter 2.0.65 on):
 a mantra from the last character is not "off" on this one. On a character
@@ -21,7 +25,8 @@ the meter knows isn't a Chanter there is no alert at all.
 
 - `2B 38`, a mantra ticking (`self: caster`): a mantra ticks once a second
   on everyone it reaches, carrying who it is on and who keeps it up. Only
-  yours reach the plugin. Kind `13`, `q` 2, skills 1816xxxx and 1819xxxx.
+  yours reach the plugin. A kind with bit 2 (the skill is there; `13` in the
+  captures), `q` 2, skills 1816xxxx and 1819xxxx.
   A missed tick (2.2 s without one) is a drop.
 - `04 38`, a hit (`self: actor`): the start of the record (target, flags,
   a value, who hit, the skill), only your own hits. A hit on something else

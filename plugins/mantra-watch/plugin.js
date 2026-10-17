@@ -1,6 +1,7 @@
 // Mantra Watch: your mantras on or off, how many party members each reaches,
 // an alert the moment one drops in a fight, and each fight's uptime.
-const { MANTRAS, tickOf, isFightHit, Fight, TICK_MS, DROP_MS, FIGHT_IDLE_MS, MIN_FIGHT_MS, LANDED_QUIET_MS, LOAD_QUIET_MS } = globalThis.MantraLogic;
+const { MANTRAS, tickOf, isFightHit, Fight, TICK_MS, DROP_MS, FIGHT_IDLE_MS, MIN_FIGHT_MS, LANDED_QUIET_MS, LOAD_QUIET_MS, BEFORE_FIGHT_MS } =
+  globalThis.MantraLogic;
 const $ = (sel, root = document) => root.querySelector(sel);
 
 // The mantras' names in the meter's languages, from its skill list.
@@ -19,6 +20,62 @@ const NAMES = {
 let lang = "en";
 const nameOf = (m) => (NAMES[lang] || NAMES.en)[m];
 
+// Everything else the page says, in the same languages (the class name as
+// the meter has it).
+const UI = {
+  en: { alertWhen: "Alert when one drops", inFight: "In a fight", always: "Always", never: "Never", sound: "Sound",
+    alarm: "Alarm", chime: "Chime", ping: "Ping", none: "None", test: "Test", settings: "Settings", watch: "Watch",
+    reaches: "Party members it reaches", notChanter: "Not a Chanter: no alerts", fighting: "Fighting",
+    noFight: "No fight yet", lastFight: "Last fight", lastN: (n) => `last ${n}`, off: (name) => `${name} is off!`,
+    dismiss: "Click to dismiss until it is back on" },
+  ko: { alertWhen: "꺼지면 알림", inFight: "전투 중", always: "항상", never: "안 함", sound: "소리",
+    alarm: "경보", chime: "차임", ping: "핑", none: "없음", test: "테스트", settings: "설정", watch: "감시",
+    reaches: "닿는 파티원 수", notChanter: "호법성이 아님: 알림 없음", fighting: "전투 중",
+    noFight: "아직 전투 없음", lastFight: "지난 전투", lastN: (n) => `최근 ${n}회`, off: (name) => `${name} 꺼짐!`,
+    dismiss: "클릭하면 다시 켜질 때까지 숨깁니다" },
+  ja: { alertWhen: "切れたら通知", inFight: "戦闘中", always: "常に", never: "しない", sound: "サウンド",
+    alarm: "アラーム", chime: "チャイム", ping: "ピン", none: "なし", test: "テスト", settings: "設定", watch: "監視",
+    reaches: "届いているパーティーメンバー", notChanter: "チャンターではありません: 通知なし", fighting: "戦闘中",
+    noFight: "まだ戦闘なし", lastFight: "前回の戦闘", lastN: (n) => `直近${n}回`, off: (name) => `${name}が切れています！`,
+    dismiss: "クリックすると、再び有効になるまで隠します" },
+  de: { alertWhen: "Alarm, wenn eine ausfällt", inFight: "Im Kampf", always: "Immer", never: "Nie", sound: "Ton",
+    alarm: "Alarm", chime: "Glocke", ping: "Ping", none: "Keiner", test: "Test", settings: "Einstellungen", watch: "Beobachten",
+    reaches: "Gruppenmitglieder in Reichweite", notChanter: "Kein Kantor: keine Alarme", fighting: "Im Kampf",
+    noFight: "Noch kein Kampf", lastFight: "Letzter Kampf", lastN: (n) => `letzte ${n}`, off: (name) => `${name} ist aus!`,
+    dismiss: "Klicken: ausblenden, bis sie wieder an ist" },
+  fr: { alertWhen: "Alerter quand un tombe", inFight: "En combat", always: "Toujours", never: "Jamais", sound: "Son",
+    alarm: "Alarme", chime: "Carillon", ping: "Ping", none: "Aucun", test: "Tester", settings: "Réglages", watch: "Surveiller",
+    reaches: "Membres du groupe touchés", notChanter: "Pas un Aède : aucune alerte", fighting: "En combat",
+    noFight: "Pas encore de combat", lastFight: "Dernier combat", lastN: (n) => `${n} derniers`, off: (name) => `${name} est coupé !`,
+    dismiss: "Cliquer : masquer jusqu'à son retour" },
+  es: { alertWhen: "Avisar si uno se corta", inFight: "En combate", always: "Siempre", never: "Nunca", sound: "Sonido",
+    alarm: "Alarma", chime: "Campana", ping: "Ping", none: "Ninguno", test: "Probar", settings: "Ajustes", watch: "Vigilar",
+    reaches: "Miembros del grupo alcanzados", notChanter: "No eres Conjurador: sin avisos", fighting: "En combate",
+    noFight: "Aún sin combate", lastFight: "Último combate", lastN: (n) => `últimos ${n}`, off: (name) => `¡${name} está apagado!`,
+    dismiss: "Clic: ocultar hasta que vuelva" },
+  pt: { alertWhen: "Avisar quando um cair", inFight: "Em combate", always: "Sempre", never: "Nunca", sound: "Som",
+    alarm: "Alarme", chime: "Sino", ping: "Ping", none: "Nenhum", test: "Testar", settings: "Configurações", watch: "Vigiar",
+    reaches: "Membros do grupo alcançados", notChanter: "Não é Encantador: sem avisos", fighting: "Em combate",
+    noFight: "Nenhum combate ainda", lastFight: "Último combate", lastN: (n) => `últimos ${n}`, off: (name) => `${name} está desligado!`,
+    dismiss: "Clique: ocultar até voltar" },
+  ru: { alertWhen: "Оповещать, если спадёт", inFight: "В бою", always: "Всегда", never: "Никогда", sound: "Звук",
+    alarm: "Тревога", chime: "Звон", ping: "Пинг", none: "Нет", test: "Проверить", settings: "Настройки", watch: "Следить",
+    reaches: "Сколько участников группы затронуто", notChanter: "Не Чародей: без оповещений", fighting: "Бой",
+    noFight: "Боёв ещё не было", lastFight: "Последний бой", lastN: (n) => `последние ${n}`, off: (name) => `${name} не действует!`,
+    dismiss: "Нажмите, чтобы скрыть до включения" },
+  "zh-Hans": { alertWhen: "中断时提醒", inFight: "战斗中", always: "总是", never: "从不", sound: "声音",
+    alarm: "警报", chime: "钟声", ping: "提示音", none: "无", test: "试听", settings: "设置", watch: "监视",
+    reaches: "覆盖的队友数", notChanter: "不是护法圣：不提醒", fighting: "战斗中",
+    noFight: "还没有战斗", lastFight: "上次战斗", lastN: (n) => `最近 ${n} 场`, off: (name) => `${name} 已中断！`,
+    dismiss: "点击隐藏，直到它重新开启" },
+  "zh-Hant": { alertWhen: "中斷時提醒", inFight: "戰鬥中", always: "總是", never: "從不", sound: "音效",
+    alarm: "警報", chime: "鐘聲", ping: "提示音", none: "無", test: "試聽", settings: "設定", watch: "監視",
+    reaches: "涵蓋的隊友數", notChanter: "不是護法聖：不提醒", fighting: "戰鬥中",
+    noFight: "還沒有戰鬥", lastFight: "上次戰鬥", lastN: (n) => `最近 ${n} 場`, off: (name) => `${name} 已中斷！`,
+    dismiss: "點擊隱藏，直到它重新開啟" },
+};
+const ui = () => UI[lang] || UI.en;
+
 // ── State ──────────────────────────────────────────────────────────────────
 // Events older than this are the meter's replay of what came before the
 // window opened: no use for what is on now.
@@ -28,8 +85,9 @@ const reach = {}; // mantra -> Map(entity -> last tick on them)
 let fight = null;
 let lastHit = 0;
 let quietUntil = 0; // no alert before this: a teleport is loading
-const prefs = { alert: "fight", sound: "alarm" };
-let fights = []; // the last fights: { at, length, uptime: { mantra: 0..1 } }
+// watch: mantra -> false for one the player doesn't want alerts for.
+const prefs = { alert: "fight", sound: "alarm", watch: {} };
+let fights = []; // the last fights: { at, length, uptime: { mantra: 0..1 }, who }
 
 const isOn = (m, now) => now - (lastTick[m] || 0) < DROP_MS;
 const inFight = (now) => fight && now - lastHit < FIGHT_IDLE_MS;
@@ -47,9 +105,12 @@ a2.on("decoded:mantra-tick", (d, meta) => {
   }
   update();
 });
+// Someone your mantras reached in the last minute: a party member, whom a
+// heal or a buff is no fight with.
+const isAlly = (id) => MANTRAS.some((m) => Date.now() - (reach[m]?.get(id) || 0) < 60_000);
 a2.on("decoded:my-hit", (d, meta) => {
   const at = meta.at || Date.now();
-  if (!isFightHit(d) || Date.now() - at > STALE_MS) return;
+  if (!isFightHit(d, isAlly) || Date.now() - at > STALE_MS) return;
   if (!inFight(at)) {
     endFight();
     fight = new Fight(at);
@@ -106,7 +167,7 @@ function endFight() {
   const uptime = Object.fromEntries(MANTRAS.map((m) => [m, f.uptime(m)]));
   // A fight with no mantra at all is likely not a Chanter's: not kept.
   if (!MANTRAS.some((m) => uptime[m] > 0)) return;
-  fights = [{ at: f.start, length, uptime }, ...fights].slice(0, 20);
+  fights = [{ at: f.start, length, uptime, who }, ...fights].slice(0, 40);
   a2.storage.set("fights", fights).catch(() => {});
 }
 
@@ -137,26 +198,41 @@ function update() {
     $(".name", li).textContent = nameOf(m);
     const n = [...(reach[m] || new Map()).values()].filter((at) => now - at < DROP_MS).length;
     $(".reach", li).textContent = on && n ? `+${n}` : "";
-    $(".reach", li).title = "Party members it reaches";
+    $(".reach", li).title = ui().reaches;
   }
-  $(".fight").textContent = chanter === false ? "Not a Chanter: no alerts" : fight ?`Fighting ${mmss(fight.last - fight.start)} · ${MANTRAS.map((m) => pct(fight.uptime(m))).join(" · ")}` : lastFightText();
+  $(".fight").textContent = chanter === false ? ui().notChanter
+    : fight ? `${ui().fighting} ${mmss(fight.last - fight.start)} · ${MANTRAS.map((m) => pct(fight.uptime(m))).join(" · ")}`
+      : lastFightText();
   checkDrops(now);
 }
 
+// This character's last fight, and its average over the last 10 (fights from
+// before characters were told apart count for whoever plays).
 function lastFightText() {
-  if (!fights.length) return "No fight yet";
-  const f = fights[0];
-  const recent = fights.slice(0, 10);
+  const mine = fights.filter((f) => !f.who || !who || f.who === who);
+  if (!mine.length) return ui().noFight;
+  const f = mine[0];
+  const recent = mine.slice(0, 10);
   const avg = MANTRAS.map((m) => pct(recent.reduce((s, x) => s + (x.uptime[m] || 0), 0) / recent.length));
-  return `Last fight ${mmss(f.length)} · ${MANTRAS.map((m) => pct(f.uptime[m] || 0)).join(" · ")}` + (recent.length > 1 ? ` (last ${recent.length}: ${avg.join(" · ")})` : "");
+  return `${ui().lastFight} ${mmss(f.length)} · ${MANTRAS.map((m) => pct(f.uptime[m] || 0)).join(" · ")}`
+    + (recent.length > 1 ? ` (${ui().lastN(recent.length)}: ${avg.join(" · ")})` : "");
 }
 
 // A mantra that was up and stopped ticking: in a fight (or always, or never,
-// as chosen). The alert goes when it is back, or the fight is over.
+// as chosen). The alert goes when it is back, or the fight is over. In a
+// fight, only a mantra that was on in it or just before it: one switched off
+// well before the fight is the player's choice. A click on the banner
+// dismisses it until that mantra is on again (switched off on purpose
+// mid-fight); a mantra not watched never alerts.
+const dismissed = new Set();
 function checkDrops(now) {
+  for (const m of MANTRAS) if (isOn(m, now)) dismissed.delete(m);
   const watching = chanter !== false && now >= quietUntil && (prefs.alert === "always" || (prefs.alert === "fight" && inFight(now)));
+  const since = prefs.alert === "fight" && fight ? fight.start - BEFORE_FIGHT_MS : now - 60_000 * 10;
   const nowDropped = new Set(
-    watching ? MANTRAS.filter((m) => lastTick[m] && !isOn(m, now) && now - lastTick[m] < 60_000 * 10) : [],
+    watching
+      ? MANTRAS.filter((m) => prefs.watch[m] !== false && !dismissed.has(m) && lastTick[m] && !isOn(m, now) && lastTick[m] >= since)
+      : [],
   );
   const fresh = [...nowDropped].filter((m) => !dropped.has(m));
   if (fresh.length) {
@@ -166,7 +242,8 @@ function checkDrops(now) {
   }
   dropped = nowDropped;
   $(".banner").hidden = !dropped.size;
-  $(".banner").textContent = [...dropped].map((m) => `${nameOf(m)} is off!`).join(" ");
+  $(".banner").textContent = [...dropped].map((m) => ui().off(nameOf(m))).join(" ");
+  $(".banner").title = ui().dismiss;
   for (const m of MANTRAS) rows[m].classList.toggle("dropped", dropped.has(m));
   if (!dropped.size && hideAfterAlert && !fresh.length) {
     hideAfterAlert = false;
@@ -214,6 +291,36 @@ function playSound(name) {
 $(".gear").addEventListener("click", () => {
   $(".settings").hidden = !$(".settings").hidden;
 });
+$(".banner").addEventListener("click", () => {
+  for (const m of dropped) dismissed.add(m);
+  update();
+});
+// Which mantras to alert for: one per mantra, on unless turned off.
+const watchBoxes = {};
+for (const m of MANTRAS) {
+  const label = document.createElement("label");
+  const box = document.createElement("input");
+  box.type = "checkbox";
+  box.addEventListener("change", () => {
+    if (box.checked) delete prefs.watch[m];
+    else prefs.watch[m] = false;
+    a2.storage.set("prefs", prefs).catch(() => {});
+    update();
+  });
+  label.append(box, document.createElement("span"));
+  $(".watch").append(label);
+  watchBoxes[m] = label;
+}
+// The page's words in the meter's language.
+function applyTexts() {
+  document.documentElement.lang = lang;
+  for (const el of document.querySelectorAll("[data-t]")) el.textContent = ui()[el.dataset.t];
+  $(".gear").title = ui().settings;
+  for (const m of MANTRAS) {
+    $("span", watchBoxes[m]).textContent = `${ui().watch}: ${nameOf(m)}`;
+    $("input", watchBoxes[m]).checked = prefs.watch[m] !== false;
+  }
+}
 for (const key of ["alert", "sound"]) {
   $(`.${key}`).addEventListener("change", (e) => {
     prefs[key] = e.target.value;
@@ -224,6 +331,7 @@ for (const key of ["alert", "sound"]) {
 $(".test").addEventListener("click", () => playSound(prefs.sound));
 a2.on("language", (code) => {
   lang = code in NAMES ? code : "en";
+  applyTexts();
   update();
 });
 a2.on("compact", (on) => document.body.classList.toggle("compact", !!on));
@@ -231,7 +339,9 @@ a2.on("compact", (on) => document.body.classList.toggle("compact", !!on));
 (async () => {
   const [savedPrefs, savedFights] = await Promise.all([a2.storage.get("prefs").catch(() => null), a2.storage.get("fights").catch(() => null)]);
   Object.assign(prefs, savedPrefs || {});
+  prefs.watch ||= {};
   if (Array.isArray(savedFights)) fights = savedFights;
+  applyTexts();
   $(".alert").value = prefs.alert;
   $(".sound").value = prefs.sound;
   update();

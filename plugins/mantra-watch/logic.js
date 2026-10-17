@@ -3,21 +3,26 @@
 // plugin.js uses them; a test can load this file alone.
 (() => {
   // A mantra ticks once a second on everyone it reaches: `on` is who it is
-  // on, `caster` who keeps it up (the decoder passes only yours). Kind 13,
-  // and `q` 2: it goes with you (0 is an effect left where it landed).
+  // on, `caster` who keeps it up (the decoder passes only yours). The kind's
+  // bit 2 says the record carries its skill (13 in the captures; a renewal
+  // with another bit set is still a tick), and `q` 2 that it is re-applied
+  // (0 is an effect left where it landed).
   // Mantras are skills 1816xxxx (Sprint) and 1819xxxx (Undefeated); the last
   // digits are the skill's level.
   const MANTRAS = [1816, 1819];
   const mantraOf = (skill) => (MANTRAS.includes(Math.floor(skill / 10_000)) ? Math.floor(skill / 10_000) : null);
   function tickOf(d) {
-    if (!d || d.kind !== 0x13 || d.q !== 2) return null;
+    if (!d || !(d.kind & 0x02) || d.q !== 2) return null;
     const mantra = mantraOf(d.skill);
     return mantra ? { mantra, onMe: d.on === d.caster, on: d.on } : null;
   }
 
-  // A hit of yours that means a fight: on something else, with a skill that
-  // isn't a mantra (mantras show up as your own records too).
-  const isFightHit = (d) => !!d && d.target !== d.actor && !mantraOf(d.skill) && d.skill > 0;
+  // A hit of yours that means a fight: on something else that isn't an ally
+  // (`allies(id)`: someone your mantras reach, so a heal or a buff on them is
+  // no fight), with a skill that isn't a mantra (mantras show up as your own
+  // records too).
+  const isFightHit = (d, allies = () => false) =>
+    !!d && d.target !== d.actor && !allies(d.target) && !mantraOf(d.skill) && d.skill > 0;
 
   // A tick keeps its mantra up for this long; one missing tick (1 s apart)
   // is a drop. A little over two, for records that arrive in bunches.
@@ -33,6 +38,9 @@
   // the load if the landing is missed.
   const LANDED_QUIET_MS = 5_000;
   const LOAD_QUIET_MS = 30_000;
+  // In a fight, a mantra counts as dropped only if it was on in the fight or
+  // this long before it started: one switched off well before is a choice.
+  const BEFORE_FIGHT_MS = 60_000;
 
   // One fight: from its first hit to its last, and each mantra's ticks on
   // you in it, as covered time.
@@ -64,5 +72,5 @@
     }
   }
 
-  globalThis.MantraLogic = { MANTRAS, mantraOf, tickOf, isFightHit, Fight, TICK_MS, DROP_MS, FIGHT_IDLE_MS, MIN_FIGHT_MS, LANDED_QUIET_MS, LOAD_QUIET_MS };
+  globalThis.MantraLogic = { MANTRAS, mantraOf, tickOf, isFightHit, Fight, TICK_MS, DROP_MS, FIGHT_IDLE_MS, MIN_FIGHT_MS, LANDED_QUIET_MS, LOAD_QUIET_MS, BEFORE_FIGHT_MS };
 })();

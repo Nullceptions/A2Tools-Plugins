@@ -17,7 +17,7 @@ Each row shows how long until it starts and the start time (in this computer's t
 
 ## Alerts
 
-Under **Alerts**, switch on the events and bosses you want an alert for, and pick how long before each one (as it starts, or 1, 2, 3, 4, 5, 10, 15, 20, 30, 45 or 60 minutes before; 5 unless you change it). An alert plays a sound and shows a message in the window, once per showing; tick **Show this window when an alert goes off** to bring the window up too. The sounds are Hidden Cube Alert's (Chime, Bell, Sparkle, Ping, Soft) and four more (Gong, Horn, Harp, Alarm), made in the plugin, with no sound files. A timer with an alert set shows a 🔔.
+Under **Alerts**, switch on the events and bosses you want an alert for, and pick how long before each one (as it starts, or 1, 2, 3, 4, 5, 10, 15, 20, 30, 45 or 60 minutes before; 5 unless you change it). An alert plays a sound and shows a message in the window, once per showing; tick **Show this window when an alert goes off** to bring the window up too. The sounds are Hidden Cube Alert's (Chime, Bell, Sparkle, Ping, Soft) and four more (Gong, Horn, Harp, Alarm), made in the plugin, with no sound files. A timer with an alert set shows a 🔔. With **Also alert as it starts** on (under Settings), an alert set for some minutes before goes off again as the event starts, or as the field boss is due.
 
 ## Server time
 

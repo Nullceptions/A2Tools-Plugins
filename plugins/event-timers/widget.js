@@ -46,6 +46,37 @@ a2.on("widget", (d) => {
   nameEl.textContent = d.showName ? d.name : "";
   pin.className = `pin ${d.kind || "event"}${d.running ? " running" : ""}${d.due ? " due" : ""} ${d.effect || "shake"}`;
   document.title = d.name || "Event Timers";
+  reportArea();
+});
+
+// The icon's drawn parts: only they take the mouse, so icons set close
+// together don't catch each other's drags (meter 2.0.70 on, Linux; elsewhere
+// a press beside them just does nothing).
+const SHOWN = ".badge, .time, .sub, .name";
+let lastArea = "";
+function reportArea() {
+  if (typeof a2.widget.area !== "function") return;
+  let left = Infinity, top = Infinity, right = -Infinity, bottom = -Infinity;
+  for (const el of document.querySelectorAll(SHOWN)) {
+    const r = el.getBoundingClientRect();
+    if (!r.width || !r.height) continue;
+    // The badge's ring and glow reach a little past it.
+    const pad = el === badge ? 4 : 0;
+    left = Math.min(left, r.left - pad);
+    top = Math.min(top, r.top - pad);
+    right = Math.max(right, r.right + pad);
+    bottom = Math.max(bottom, r.bottom + pad);
+  }
+  if (!(right > left && bottom > top)) return;
+  const area = { x: Math.max(0, Math.floor(left)), y: Math.max(0, Math.floor(top)), width: Math.ceil(right - left), height: Math.ceil(bottom - top) };
+  const key = JSON.stringify(area);
+  if (key === lastArea) return;
+  lastArea = key;
+  a2.widget.area(area).catch(() => {});
+}
+addEventListener("resize", () => {
+  lastArea = "";
+  reportArea();
 });
 a2.on("locked", (on) => {
   locked = !!on;
@@ -53,7 +84,7 @@ a2.on("locked", (on) => {
 });
 
 document.addEventListener("mousedown", (e) => {
-  if (e.button !== 0 || locked) return;
+  if (e.button !== 0 || locked || !(e.target instanceof Element) || !e.target.closest(SHOWN)) return;
   e.preventDefault();
   a2.widget.drag().catch(() => {});
 });

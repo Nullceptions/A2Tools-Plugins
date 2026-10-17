@@ -1,0 +1,108 @@
+{
+  "id": "mantra-watch",
+  "name": "Mantra Watch",
+  "version": "0.1.0",
+  "apiVersion": 2,
+  "author": "Nullception",
+  "description": "For Chanters: your mantras on or off, how many party members they reach, an alert the moment one drops in a fight, and each fight's uptime.",
+  "permissions": [
+    "storage",
+    "events:character",
+    "window",
+    "decoder:mantra-tick",
+    "decoder:my-hit",
+    "decoder:map-load",
+    "decoder:landed"
+  ],
+  "decoders": [
+    {
+      "name": "mantra-tick",
+      "opcode": "2B 38",
+      "self": "caster",
+      "fields": [
+        {
+          "name": "on",
+          "type": "varint"
+        },
+        {
+          "name": "kind",
+          "type": "u8"
+        },
+        {
+          "name": "seq",
+          "type": "varint"
+        },
+        {
+          "name": "effect",
+          "type": "u32"
+        },
+        {
+          "type": "skip:16"
+        },
+        {
+          "name": "caster",
+          "type": "varint"
+        },
+        {
+          "name": "p",
+          "type": "u8"
+        },
+        {
+          "name": "skill",
+          "type": "u32"
+        },
+        {
+          "name": "q",
+          "type": "u8"
+        }
+      ],
+      "immediate": true
+    },
+    {
+      "name": "my-hit",
+      "opcode": "04 38",
+      "self": "actor",
+      "fields": [
+        {
+          "name": "target",
+          "type": "varint"
+        },
+        {
+          "name": "flags",
+          "type": "varint"
+        },
+        {
+          "name": "x",
+          "type": "varint"
+        },
+        {
+          "name": "actor",
+          "type": "varint"
+        },
+        {
+          "name": "skill",
+          "type": "u32"
+        }
+      ],
+      "immediate": true
+    },
+    {
+      "name": "map-load",
+      "opcode": "21 36",
+      "immediate": true,
+      "fields": []
+    },
+    {
+      "name": "landed",
+      "opcode": "23 36",
+      "immediate": true,
+      "fields": []
+    }
+  ],
+  "ui": {
+    "panel": {
+      "width": 270,
+      "height": 150
+    }
+  }
+}

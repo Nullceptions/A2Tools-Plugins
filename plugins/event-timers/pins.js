@@ -534,6 +534,8 @@ async function updatePins(now) {
         await a2.widgets.close(name).catch(() => {});
       }
     }
+    // Anchor mode: new icons open at their place in the grid.
+    if (typeof anchorPrePlace === "function") await anchorPrePlace(wanted, openPins);
     for (const [name, { id, data }] of wanted) {
       // Opened, or opened again at its new size (its name turned on or off).
       const size = pinSize(data.showName);

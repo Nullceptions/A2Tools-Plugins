@@ -201,22 +201,7 @@ async function anchorLayout(names, showName) {
     a2.widgets.send(ANCHOR, { kind: "anchor", name: anchorUi().anchor }).catch(() => {});
     const at = await a2.widgets.where(ANCHOR).catch(() => null);
     if (!at) return;
-    const scale = at.width / ANCHOR_SIZE.width || 1;
-    const cols = gridSize(prefs.anchorCols, 4);
-    const dir = DIRECTIONS.includes(prefs.anchorExpand) ? prefs.anchorExpand : "left-down";
-    const left = dir.startsWith("left");
-    const up = dir.endsWith("up");
-    const sizes = names.map((name) => pinSize(name === MORE ? false : !!showName.get(name)));
-    const cellW = Math.round((Math.max(...sizes.map((s) => s.width), 1) + GAP_PX) * scale);
-    const cellH = Math.round((Math.max(...sizes.map((s) => s.height), 1) + GAP_PX) * scale);
-    const gap = Math.round(GAP_PX * scale);
-    for (const [i, name] of names.entries()) {
-      const col = i % cols;
-      const row = Math.floor(i / cols);
-      const w = Math.round(sizes[i].width * scale);
-      const h = Math.round(sizes[i].height * scale);
-      const x = left ? at.x - gap - col * cellW - w : at.x + at.width + gap + col * cellW;
-      const y = up ? at.y + at.height - row * cellH - h : at.y + row * cellH;
+    for (const [name, { x, y }] of gridSpots(names, showName, at)) {
       const key = `${x},${y}`;
       if (placed.get(name) === key) continue;
       placed.set(name, key);
@@ -231,6 +216,48 @@ async function anchorLayout(names, showName) {
     }
   }
 }
+// Each icon's place in the grid, physical pixels: beside the anchor (at),
+// row by row away from it.
+function gridSpots(names, showName, at) {
+  const scale = at.width / ANCHOR_SIZE.width || 1;
+  const cols = gridSize(prefs.anchorCols, 4);
+  const dir = DIRECTIONS.includes(prefs.anchorExpand) ? prefs.anchorExpand : "left-down";
+  const left = dir.startsWith("left");
+  const up = dir.endsWith("up");
+  const sizes = names.map((name) => pinSize(name === MORE ? false : !!showName.get(name)));
+  const cellW = Math.round((Math.max(...sizes.map((s) => s.width), 1) + GAP_PX) * scale);
+  const cellH = Math.round((Math.max(...sizes.map((s) => s.height), 1) + GAP_PX) * scale);
+  const gap = Math.round(GAP_PX * scale);
+  const spots = new Map();
+  for (const [i, name] of names.entries()) {
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+    const w = Math.round(sizes[i].width * scale);
+    const h = Math.round(sizes[i].height * scale);
+    const x = left ? at.x - gap - col * cellW - w : at.x + at.width + gap + col * cellW;
+    const y = up ? at.y + at.height - row * cellH - h : at.y + row * cellH;
+    spots.set(name, { x, y });
+  }
+  return spots;
+}
+
+// Before new icons open: each is given its place in the grid, so it opens
+// there. On KDE Wayland a window can be placed only as it appears; one
+// moved after stayed where KWin put it, mid-screen.
+async function anchorPrePlace(wanted, open) {
+  if (!anchorOn() || !anchorOpen) return;
+  const fresh = [...wanted.keys()].filter((name) => !open.has(name));
+  if (!fresh.length) return;
+  const at = await a2.widgets.where(ANCHOR).catch(() => null);
+  if (!at) return;
+  const showName = new Map([...wanted].map(([name, e]) => [name, !!e.data.showName]));
+  for (const [name, { x, y }] of gridSpots([...wanted.keys()], showName, at)) {
+    if (!fresh.includes(name)) continue;
+    placed.set(name, `${x},${y}`);
+    await a2.widgets.place(name, { x, y }).catch(() => placed.delete(name));
+  }
+}
+
 let lastShowName = new Map();
 function anchorArrange(wanted) {
   lastShowName = new Map([...wanted].map(([name, e]) => [name, !!e.data.showName]));

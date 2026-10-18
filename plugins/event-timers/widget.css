@@ -13,23 +13,45 @@ html, body {
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  padding-top: 4px;
+  /* Room for the glow above the badge (13 px past its ring). */
+  padding-top: 14px;
   cursor: grab;
 }
 body.locked .pin { cursor: default; }
-/* Anchor mode's anchor (anchor.js): a small dashed handle the grid of icons
+/* Anchor mode's frame (anchor.js, widget.js renderGrid): every icon in one
+   window, each in its place, and the anchor's grip in the corner the grid
    grows from, hidden while the icons are locked. */
-.pin.anchor { padding-top: 3px; cursor: move; }
-.pin.anchor .badge {
-  width: 24px;
-  height: 24px;
-  background: rgba(12, 16, 26, 0.75);
-  box-shadow: none;
+.pin[hidden] { display: none; }
+.grid { position: relative; }
+/* In the grid each row is as tall as its tallest icon (widget.js); the
+   room for the glow is the grid's own, above its first row. */
+.grid .pin { position: absolute; width: 80px; margin: 0; padding-top: 0; }
+.grip {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  margin: 2px;
+  box-sizing: border-box;
+  display: none;
+  place-items: center;
   border: 2px dashed #ffd54a;
+  border-radius: 50%;
+  background: rgba(12, 16, 26, 0.85);
+  font-size: 20px;
+  cursor: move;
+  z-index: 2;
 }
-.pin.anchor .glyph { font-size: 13px; }
-.pin.anchor .time, .pin.anchor .sub, .pin.anchor .name { display: none; }
-body.locked .pin.anchor { visibility: hidden; }
+.grid.setup .grip { display: grid; }
+/* While placing the grid: each place an icon can take. */
+.ghost {
+  position: absolute;
+  box-sizing: border-box;
+  border: 1px dashed rgba(255, 255, 255, 0.35);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.28);
+  pointer-events: none;
+}
+.ghost[hidden] { display: none; }
 /* "+N": the icons past the grid's room, named in its tooltip. */
 .pin.more .badge { --ring: #9aa4b2; }
 .pin.more .glyph { font-size: 16px; }
@@ -98,7 +120,7 @@ body.locked .pin.anchor { visibility: hidden; }
 }
 @keyframes glow {
   0%, 100% { box-shadow: 0 0 0 2px var(--ring), 0 0 4px 1px var(--ring); }
-  50% { box-shadow: 0 0 0 3px var(--ring), 0 0 16px 6px var(--ring); }
+  50% { box-shadow: 0 0 0 3px var(--ring), 0 0 10px 3px var(--ring); }
 }
 @media (prefers-reduced-motion: reduce) {
   .pin.due.shake .badge { animation: glow 1.1s ease-in-out infinite; }

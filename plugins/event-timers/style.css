@@ -779,3 +779,287 @@ body.alertOnly .openFull:hover {
   color: #fff;
 }
 .siegeCore.dead { color: #ff8a80; }
+
+/* Settings, "On screen" (anchor.js renderAnchorSettings). */
+.iconSettings .onScreenHead { margin-top: 0; }
+/* Show alerts as: two choices side by side. */
+.seg {
+  display: inline-flex;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 5px;
+  overflow: hidden;
+}
+.segBtn {
+  font: inherit;
+  font-size: 12px;
+  padding: 3px 10px;
+  color: rgba(255, 255, 255, 0.6);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+.segBtn + .segBtn { border-left: 1px solid rgba(255, 255, 255, 0.14); }
+.segBtn[aria-checked="true"] {
+  color: #0a0e16;
+  background: #8fc2ff;
+  font-weight: 600;
+}
+.segBtn:focus-visible { outline: 2px solid rgba(143, 194, 255, 0.6); outline-offset: -2px; }
+.segBtn:disabled { opacity: 0.45; cursor: default; }
+
+/* The Placement card: anchor mode, the one card in Settings, in the gold of
+   the anchor players see in game. */
+.placement {
+  margin: 2px 0 12px;
+  padding: 9px 10px 4px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.025);
+}
+.placement[hidden] { display: none; }
+.placement.on {
+  border-color: rgba(255, 213, 74, 0.45);
+  background: rgba(255, 213, 74, 0.05);
+}
+.placementHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+}
+.placementTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+}
+.placement.on .anchorMode:checked { background: #ffd54a; border-color: #ffd54a; }
+.placementNote { margin: 3px 0 8px; }
+.placement .note[hidden], .placement .setting[hidden] { display: none; }
+
+/* The miniature of the grid, and Across / Down beside it. */
+.stage {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.mini {
+  --cols: 4;
+  --rows: 3;
+  position: relative;
+  flex: none;
+  padding: 18px;
+}
+.cells {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), 13px);
+  grid-auto-rows: 15px;
+  gap: 3px;
+}
+.cell {
+  border: 1px dashed rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.25);
+}
+.placement:not(.on) .mini { opacity: 0.4; }
+/* A corner: where the anchor can sit. The chosen one is the anchor itself;
+   the others are small targets. */
+.corner {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  margin: 4px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  line-height: 1;
+  color: #ffd54a;
+  background: transparent;
+  border: 1px dashed rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+  cursor: pointer;
+}
+.corner.tl { top: 0; left: 0; }
+.corner.tr { top: 0; right: 0; }
+.corner.bl { bottom: 0; left: 0; }
+.corner.br { bottom: 0; right: 0; }
+.corner[aria-pressed="true"] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  background: rgba(12, 16, 26, 0.9);
+  border: 2px dashed #ffd54a;
+}
+.corner:hover:not(:disabled), .corner:focus-visible { border-color: #ffd54a; outline: none; }
+.corner:disabled { cursor: default; }
+/* The steppers share one set of columns, sized to the longest label. */
+.steps {
+  display: grid;
+  grid-template-columns: max-content 20px 20px 20px;
+  align-items: center;
+  gap: 6px 4px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+.step { display: contents; }
+.stepLabel { white-space: nowrap; padding-right: 2px; }
+.stepBtn {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 4px;
+  cursor: pointer;
+}
+.stepBtn:hover:not(:disabled) { background: rgba(255, 255, 255, 0.12); }
+.stepBtn:focus-visible { outline: 2px solid rgba(143, 194, 255, 0.6); outline-offset: 1px; }
+.stepBtn:disabled { opacity: 0.35; cursor: default; }
+.stepValue { text-align: center; font-weight: 600; color: rgba(255, 255, 255, 0.92); }
+.cornerNote { margin: 0 0 8px; }
+.displayHead { margin-top: 14px; }
+
+/* The Alerts tab (plugin.js renderAlerts): quick picks, Your alerts, Add. */
+.alertList > li { padding: 0; border-bottom: 0; }
+.alertList .group { margin-top: 12px; }
+.alertList > li:first-child .group { margin-top: 0; }
+.pickChips { margin: 6px 0 0; gap: 5px; }
+.pickChips .chip {
+  padding: 3px 10px;
+  font: inherit;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.pickChips .chip:hover, .pickChips .chip:focus-visible { color: #fff; border-color: rgba(143, 194, 255, 0.6); outline: none; }
+.pickChips .chip.on {
+  color: #0a0e16;
+  background: #8fc2ff;
+  border-color: #8fc2ff;
+  font-weight: 600;
+}
+.yoursHead { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.yoursHead .linkBtn { font-weight: 400; }
+.defaultsInline {
+  margin: 6px 0 4px;
+  padding: 7px 9px 5px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.03);
+  display: grid;
+  justify-items: stretch;
+}
+.defaultsInline .setting { margin-bottom: 6px; }
+.defaultsInline .linkBtn { justify-self: end; }
+.emptyNote { margin: 8px 0; }
+.mine { list-style: none; margin: 4px 0 0; padding: 0; }
+.mineRow { border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
+.mineRow.flash { animation: flash 1.2s ease-out; }
+.mineLine { display: flex; align-items: center; gap: 6px; }
+.bell {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  font-size: 13px;
+  line-height: 1;
+  background: none;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.bell:hover, .bell:focus-visible { background: rgba(255, 255, 255, 0.08); outline: none; }
+.mineToggle {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 2px;
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  color: rgba(255, 255, 255, 0.92);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.mineToggle:hover .mineName, .mineToggle:focus-visible .mineName { color: #fff; }
+.mineToggle:focus-visible { outline: 2px solid rgba(143, 194, 255, 0.6); outline-offset: -2px; border-radius: 4px; }
+.mineText { display: grid; min-width: 0; }
+.mineName, .mineWhen { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mineWhen { font-size: 11px; color: rgba(255, 255, 255, 0.5); }
+.chev { color: rgba(255, 255, 255, 0.45); transition: transform 0.15s; }
+.mineToggle[aria-expanded="true"] .chev { transform: rotate(90deg); }
+/* One alert's settings, open under its line. */
+.mineRow .editor { padding: 0 0 8px 30px; border: 0; }
+.mineRow .editor .alertHead { display: none; }
+.mineRow .editor .leads { margin-left: 0; }
+.alertSearch {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 6px 0 4px;
+  padding: 4px 8px;
+  font: inherit;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 5px;
+  outline: none;
+  color-scheme: dark;
+}
+.alertSearch:focus { border-color: rgba(143, 194, 255, 0.6); }
+.addHead { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 4px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
+.addFold {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 2px 0;
+  font: inherit;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  background: none;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+}
+.addFold:focus-visible { outline: 2px solid rgba(143, 194, 255, 0.6); outline-offset: 1px; border-radius: 3px; }
+.addList { list-style: none; margin: 0; padding: 0 0 4px 16px; }
+.addRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 0;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.75);
+}
+.addName { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.addSub { font-size: 11px; color: rgba(255, 255, 255, 0.42); white-space: nowrap; }
+.addBtn {
+  min-width: 52px;
+  padding: 1px 7px;
+  font: inherit;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.addBtn:hover, .addBtn:focus-visible { border-color: rgba(143, 194, 255, 0.6); outline: none; }
+.addBtn.on { color: #8fc2ff; border-color: rgba(143, 194, 255, 0.45); }
+@media (prefers-reduced-motion: reduce) { .chev { transition: none; } }
+.alertOptionsBtn[hidden] { display: none; }

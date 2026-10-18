@@ -196,7 +196,8 @@ const pinIcon = (id, kind) => {
 };
 // An icon's window: room for its countdown, and its name, on two lines each.
 // Tight around the badge and its two lines, so icons can sit close together.
-const pinSize = (showName) => ({ width: 80, height: showName ? 118 : 84 });
+// With room above the badge for its glow.
+const pinSize = (showName) => ({ width: 80, height: showName ? 128 : 94 });
 
 // What a timer is doing now: its name, kind, the next start (ms) or null,
 // whether it is running (an event under way, a world boss up), and a field
@@ -526,16 +527,16 @@ async function updatePins(now) {
           running: state.running, due: due && !state.killed, effect: pin.effect, kind: state.kind, icon: pinIcon(id, state.kind) },
       });
     }
-    // Anchor mode: in its order, with what doesn't fit folded into "+N".
+    // Anchor mode: in its order, with what doesn't fit folded into "+N",
+    // all in the anchor's frame: no icon windows of their own (anchor.js).
     if (typeof anchorPlan === "function") wanted = anchorPlan(wanted);
+    if (typeof anchorShow === "function" && await anchorShow(wanted)) wanted = new Map();
     for (const name of [...openPins.keys()]) {
       if (!wanted.has(name)) {
         openPins.delete(name);
         await a2.widgets.close(name).catch(() => {});
       }
     }
-    // Anchor mode: new icons open at their place in the grid.
-    if (typeof anchorPrePlace === "function") await anchorPrePlace(wanted, openPins);
     for (const [name, { id, data }] of wanted) {
       // Opened, or opened again at its new size (its name turned on or off).
       const size = pinSize(data.showName);
@@ -546,8 +547,6 @@ async function updatePins(now) {
       }
       a2.widgets.send(name, data).catch(() => {});
     }
-    // Anchor mode lines them up beside the anchor (and closes it when off).
-    if (typeof anchorArrange === "function") anchorArrange(wanted);
   } finally {
     pinsBusy = false;
   }
@@ -604,8 +603,10 @@ function renderPinLock() {
     note.className = "note pinLockNote";
     box.append(row("styleRow", style), row("keepRow", keep), row("effectRow", effect), row("nameRow", name), row("lockRow", lock), note);
     // First under the Alerts heading.
+    // First in Settings, under its own "On screen" heading (anchor.js),
+    // ahead of the Alerts heading.
     const heading = view.querySelector(".alertDefaults");
-    if (heading) heading.after(box);
+    if (heading) heading.before(box);
     else view.prepend(box);
     style.addEventListener("change", () => {
       prefs.alertStyle = style.value;

@@ -10,75 +10,79 @@
 // boss sees the next one coming. Among those up and not being fought, the
 // rarest (longest to respawn) come first.
 //
-// Needs meter 2.0.72 or newer (a2.widgets.where and place). Loaded after
-// pins.js: updatePins() asks anchorPlan() which icons to show, in what
-// order, and anchorLayout() where to put them.
+// The grid is one widget, the anchor's frame: the anchor (⚓) a grip in its
+// corner, the icons drawn inside it by widget.js. One window per icon, as
+// outside anchor mode, made a grid that could not be packed (Windows widens
+// every window to 136 px), nor moved together, nor placed at all on KDE
+// Wayland, and opened a new window, and its focus trouble, at each alert.
+// Loaded after pins.js: updatePins() asks anchorPlan() which icons to show,
+// in what order, and anchorShow() shows them in the frame.
 
 const ANCHOR_UI = {
-  en: { anchor: "Anchor mode", anchorNote: "Icons line up beside an anchor (⚓) you place. Unlock the icons to move the anchor; locked, it's hidden.",
+  en: { anchor: "Anchor mode", anchorNote: "Icons line up in a grid beside an anchor (⚓). The anchor and the grid's places show while this Settings tab is open: unlock the icons and drag the anchor to place the grid.",
         expand: "Expand direction", dirs: { "left-down": "Left, then down", "right-down": "Right, then down", "left-up": "Left, then up", "right-up": "Right, then up" },
         maxWidth: "Max width (icons across)", maxHeight: "Max height (icons down)", sortBy: "Sort by",
         sorts: { urgent: "Most urgent first", rarest: "Rarest first", soonest: "Soonest first" },
         sortNotes: { urgent: "Being fought (lowest HP first), then up now (rarest first), then the soonest.", rarest: "Up now, the longest to respawn first, then the soonest.", soonest: "Up now, then in the order they start." },
         train: "World Boss Train", trainNote: "Every world boss that is up, or spawns within 5 minutes, joins the grid, with an alert or not.",
         needsMeter: "Anchor mode needs meter 2.0.72 or newer.", more: (n) => `${n} more` },
-  ko: { anchor: "앵커 모드", anchorNote: "아이콘이 직접 놓은 앵커(⚓) 옆에 정렬됩니다. 앵커를 옮기려면 아이콘 잠금을 푸세요. 잠그면 앵커가 숨겨집니다.",
+  ko: { anchor: "앵커 모드", anchorNote: "아이콘이 앵커(⚓) 옆에 격자로 정렬됩니다. 이 설정 탭이 열려 있는 동안 앵커와 격자 자리가 표시됩니다. 아이콘 잠금을 풀고 앵커를 끌어 격자를 배치하세요.",
         expand: "확장 방향", dirs: { "left-down": "왼쪽, 그다음 아래", "right-down": "오른쪽, 그다음 아래", "left-up": "왼쪽, 그다음 위", "right-up": "오른쪽, 그다음 위" },
         maxWidth: "최대 너비 (가로 아이콘 수)", maxHeight: "최대 높이 (세로 아이콘 수)", sortBy: "정렬",
         sorts: { urgent: "급한 순", rarest: "희귀한 순", soonest: "빠른 순" },
         sortNotes: { urgent: "전투 중(HP 낮은 순), 출현 중(희귀한 순), 그다음 곧 출현할 순서입니다.", rarest: "출현 중인 보스를 재출현이 긴 순으로, 그다음 곧 출현할 순서입니다.", soonest: "출현 중, 그다음 시작하는 순서입니다." },
         train: "월드 보스 트레인", trainNote: "출현 중이거나 5분 안에 출현하는 월드 보스를 알림과 상관없이 모두 표시합니다.",
         needsMeter: "앵커 모드는 미터 2.0.72 이상이 필요합니다.", more: (n) => `${n}개 더` },
-  ja: { anchor: "アンカーモード", anchorNote: "アイコンが、置いたアンカー（⚓）の横に並びます。アンカーを動かすにはアイコンのロックを外します。ロック中は隠れます。",
+  ja: { anchor: "アンカーモード", anchorNote: "アイコンはアンカー（⚓）の横に格子状に並びます。この設定タブを開いている間、アンカーと格子の位置が表示されます。アイコンのロックを外し、アンカーをドラッグして配置してください。",
         expand: "広がる方向", dirs: { "left-down": "左、次に下", "right-down": "右、次に下", "left-up": "左、次に上", "right-up": "右、次に上" },
         maxWidth: "最大幅（横のアイコン数）", maxHeight: "最大高さ（縦のアイコン数）", sortBy: "並び順",
         sorts: { urgent: "急ぎの順", rarest: "レアな順", soonest: "早い順" },
         sortNotes: { urgent: "戦闘中（HPの低い順）、出現中（レアな順）、次に出現の早い順。", rarest: "出現中を再出現の長い順に、次に出現の早い順。", soonest: "出現中、次に始まる順。" },
         train: "ワールドボストレイン", trainNote: "出現中か5分以内に出現するワールドボスを、通知の有無にかかわらずすべて並べます。",
         needsMeter: "アンカーモードにはメーター2.0.72以降が必要です。", more: (n) => `ほか${n}件` },
-  de: { anchor: "Ankermodus", anchorNote: "Die Symbole reihen sich neben einem Anker (⚓) auf, den du platzierst. Zum Verschieben des Ankers die Symbole entsperren; gesperrt ist er ausgeblendet.",
+  de: { anchor: "Ankermodus", anchorNote: "Die Symbole reihen sich in einem Raster neben einem Anker (⚓) auf. Anker und Rasterplätze sind sichtbar, solange dieser Einstellungs-Tab offen ist: Symbole entsperren und den Anker ziehen, um das Raster zu platzieren.",
         expand: "Wachstumsrichtung", dirs: { "left-down": "Links, dann nach unten", "right-down": "Rechts, dann nach unten", "left-up": "Links, dann nach oben", "right-up": "Rechts, dann nach oben" },
         maxWidth: "Max. Breite (Symbole nebeneinander)", maxHeight: "Max. Höhe (Symbole untereinander)", sortBy: "Sortieren nach",
         sorts: { urgent: "Dringendste zuerst", rarest: "Seltenste zuerst", soonest: "Nächste zuerst" },
         sortNotes: { urgent: "Im Kampf (niedrigste HP zuerst), dann jetzt da (seltenste zuerst), dann die nächsten.", rarest: "Jetzt da, längste Respawnzeit zuerst, dann die nächsten.", soonest: "Jetzt da, dann in der Reihenfolge ihres Starts." },
         train: "Weltboss-Train", trainNote: "Jeder Weltboss, der da ist oder in 5 Minuten erscheint, kommt ins Raster, mit oder ohne Alarm.",
         needsMeter: "Der Ankermodus braucht Meter 2.0.72 oder neuer.", more: (n) => `${n} weitere` },
-  fr: { anchor: "Mode ancre", anchorNote: "Les icônes s'alignent à côté d'une ancre (⚓) que vous placez. Déverrouillez les icônes pour déplacer l'ancre ; verrouillée, elle est masquée.",
+  fr: { anchor: "Mode ancre", anchorNote: "Les icônes s'alignent en grille à côté d'une ancre (⚓). L'ancre et les places de la grille s'affichent tant que cet onglet Réglages est ouvert : déverrouillez les icônes et faites glisser l'ancre pour placer la grille.",
         expand: "Sens d'extension", dirs: { "left-down": "Gauche, puis bas", "right-down": "Droite, puis bas", "left-up": "Gauche, puis haut", "right-up": "Droite, puis haut" },
         maxWidth: "Largeur max (icônes en ligne)", maxHeight: "Hauteur max (icônes en colonne)", sortBy: "Trier par",
         sorts: { urgent: "Les plus urgents d'abord", rarest: "Les plus rares d'abord", soonest: "Les plus proches d'abord" },
         sortNotes: { urgent: "Attaqués (PV les plus bas d'abord), puis présents (les plus rares d'abord), puis les plus proches.", rarest: "Présents, la plus longue réapparition d'abord, puis les plus proches.", soonest: "Présents, puis dans l'ordre où ils commencent." },
         train: "Train de boss mondiaux", trainNote: "Chaque boss mondial présent, ou qui apparaît dans 5 minutes, rejoint la grille, avec ou sans alerte.",
         needsMeter: "Le mode ancre nécessite le compteur 2.0.72 ou plus récent.", more: (n) => `${n} de plus` },
-  es: { anchor: "Modo ancla", anchorNote: "Los iconos se alinean junto a un ancla (⚓) que colocas tú. Desbloquea los iconos para mover el ancla; bloqueada, se oculta.",
+  es: { anchor: "Modo ancla", anchorNote: "Los iconos se alinean en una cuadrícula junto a un ancla (⚓). El ancla y los huecos de la cuadrícula se ven mientras esta pestaña de Ajustes está abierta: desbloquea los iconos y arrastra el ancla para colocar la cuadrícula.",
         expand: "Dirección de expansión", dirs: { "left-down": "Izquierda, luego abajo", "right-down": "Derecha, luego abajo", "left-up": "Izquierda, luego arriba", "right-up": "Derecha, luego arriba" },
         maxWidth: "Ancho máx. (iconos en fila)", maxHeight: "Alto máx. (iconos en columna)", sortBy: "Ordenar por",
         sorts: { urgent: "Más urgentes primero", rarest: "Más raros primero", soonest: "Más próximos primero" },
         sortNotes: { urgent: "En combate (menos PV primero), luego activos (más raros primero), luego los más próximos.", rarest: "Activos, el que más tarda en reaparecer primero, luego los más próximos.", soonest: "Activos, luego en el orden en que empiezan." },
         train: "Tren de jefes mundiales", trainNote: "Todo jefe mundial activo, o que aparezca en 5 minutos, se une a la cuadrícula, con alerta o sin ella.",
         needsMeter: "El modo ancla necesita el medidor 2.0.72 o posterior.", more: (n) => `${n} más` },
-  pt: { anchor: "Modo âncora", anchorNote: "Os ícones se alinham ao lado de uma âncora (⚓) que você posiciona. Destrave os ícones para mover a âncora; travada, ela fica oculta.",
+  pt: { anchor: "Modo âncora", anchorNote: "Os ícones se alinham em uma grade ao lado de uma âncora (⚓). A âncora e os espaços da grade aparecem enquanto esta aba de Configurações está aberta: destrave os ícones e arraste a âncora para posicionar a grade.",
         expand: "Direção de expansão", dirs: { "left-down": "Esquerda, depois para baixo", "right-down": "Direita, depois para baixo", "left-up": "Esquerda, depois para cima", "right-up": "Direita, depois para cima" },
         maxWidth: "Largura máx. (ícones na linha)", maxHeight: "Altura máx. (ícones na coluna)", sortBy: "Ordenar por",
         sorts: { urgent: "Mais urgentes primeiro", rarest: "Mais raros primeiro", soonest: "Mais próximos primeiro" },
         sortNotes: { urgent: "Em combate (menos PV primeiro), depois ativos (mais raros primeiro), depois os mais próximos.", rarest: "Ativos, o que mais demora a renascer primeiro, depois os mais próximos.", soonest: "Ativos, depois na ordem em que começam." },
         train: "Trem de chefes mundiais", trainNote: "Todo chefe mundial ativo, ou que surja em 5 minutos, entra na grade, com alerta ou não.",
         needsMeter: "O modo âncora precisa do medidor 2.0.72 ou mais recente.", more: (n) => `mais ${n}` },
-  ru: { anchor: "Режим якоря", anchorNote: "Значки выстраиваются рядом с якорем (⚓), который вы ставите сами. Чтобы двигать якорь, снимите фиксацию значков; при фиксации он скрыт.",
+  ru: { anchor: "Режим якоря", anchorNote: "Значки выстраиваются сеткой рядом с якорем (⚓). Якорь и места сетки видны, пока открыта эта вкладка настроек: снимите фиксацию значков и перетащите якорь, чтобы разместить сетку.",
         expand: "Направление роста", dirs: { "left-down": "Влево, затем вниз", "right-down": "Вправо, затем вниз", "left-up": "Влево, затем вверх", "right-up": "Вправо, затем вверх" },
         maxWidth: "Макс. ширина (значков в ряд)", maxHeight: "Макс. высота (значков в столбец)", sortBy: "Сортировка",
         sorts: { urgent: "Сначала срочные", rarest: "Сначала редкие", soonest: "Сначала ближайшие" },
         sortNotes: { urgent: "В бою (меньше HP — раньше), затем появившиеся (сначала редкие), затем ближайшие.", rarest: "Появившиеся, с самым долгим возрождением первыми, затем ближайшие.", soonest: "Появившиеся, затем в порядке начала." },
         train: "Трейн мировых боссов", trainNote: "Каждый мировой босс, который на месте или появится в течение 5 минут, попадает в сетку, с оповещением или без.",
         needsMeter: "Для режима якоря нужен счётчик 2.0.72 или новее.", more: (n) => `ещё ${n}` },
-  "zh-Hant": { anchor: "錨點模式", anchorNote: "圖示會排在你放置的錨點（⚓）旁。解除圖示鎖定即可移動錨點；鎖定時錨點會隱藏。",
+  "zh-Hant": { anchor: "錨點模式", anchorNote: "圖示會以網格排在錨點（⚓）旁。開啟此設定分頁時會顯示錨點和網格位置：解除圖示鎖定並拖曳錨點即可放置網格。",
         expand: "延伸方向", dirs: { "left-down": "向左，再向下", "right-down": "向右，再向下", "left-up": "向左，再向上", "right-up": "向右，再向上" },
         maxWidth: "最大寬度（橫向圖示數）", maxHeight: "最大高度（縱向圖示數）", sortBy: "排序",
         sorts: { urgent: "最緊急優先", rarest: "最稀有優先", soonest: "最快優先" },
         sortNotes: { urgent: "戰鬥中（HP 最低優先），再來是已出現（最稀有優先），然後是最快出現的。", rarest: "已出現的依重生最久優先，然後是最快出現的。", soonest: "已出現，然後依開始順序。" },
         train: "世界首領車隊", trainNote: "已出現或 5 分鐘內出現的世界首領都會加入網格，無論是否設定提醒。",
         needsMeter: "錨點模式需要計量器 2.0.72 以上。", more: (n) => `還有 ${n} 個` },
-  "zh-Hans": { anchor: "锚点模式", anchorNote: "图标会排在你放置的锚点（⚓）旁。解除图标锁定即可移动锚点；锁定时锚点会隐藏。",
+  "zh-Hans": { anchor: "锚点模式", anchorNote: "图标会以网格排在锚点（⚓）旁。打开此设置标签页时会显示锚点和网格位置：解除图标锁定并拖动锚点即可放置网格。",
         expand: "延伸方向", dirs: { "left-down": "向左，再向下", "right-down": "向右，再向下", "left-up": "向左，再向上", "right-up": "向右，再向上" },
         maxWidth: "最大宽度（横向图标数）", maxHeight: "最大高度（纵向图标数）", sortBy: "排序",
         sorts: { urgent: "最紧急优先", rarest: "最稀有优先", soonest: "最快优先" },
@@ -102,21 +106,45 @@ const respawnOf = (id) => (id.startsWith("field:") ? RESPAWN_MIN[id.slice(6)] ||
 
 const ANCHOR = "anchor";
 const MORE = "more";
-const ANCHOR_SIZE = { width: 32, height: 32 };
 const DIRECTIONS = ["left-down", "right-down", "left-up", "right-up"];
 const SORTS = ["urgent", "rarest", "soonest"];
 const GRID_MAX = 8;
-// The meter opens at most 16 widgets per plugin: the anchor, "+N" and the
-// test icon take three.
-const MOST_ICONS = 13;
-const GAP_PX = 4;
-// A world boss joins the train this long before it spawns.
-const TRAIN_LEAD_MS = 5 * 60_000;
+// Rows are fewer: the meter makes a widget at most 800 px tall.
+const ROWS_MAX = 6;
+// A place in the grid, CSS px: an icon (pinSize) and the gaps the player
+// set between columns and rows (4 unless changed; less than 0 packs the
+// icons closer, an icon's window being wider than its badge).
+const ICON_W = 80;
+const GAPS = [-8, -4, 0, 2, 4, 6, 8, 12, 16, 24, 32];
+const gapOf = (v) => (GAPS.includes(Number(v)) ? Number(v) : 4);
+// In the grid a name and a countdown take one line each (the whole name is
+// in the icon's tooltip): an icon is 80 px tall with its name, 64 without,
+// and the HP line adds 16.
+const CELL_H_NAMED = 86;
+const CELL_H = 70;
+// The tallest an icon can be (a name on two lines, and HP): the frame has
+// room for rows this tall; each row is drawn only as tall as its icons.
+const MAX_H_NAMED = 114;
+const MAX_H = 82;
+// Room above the first row for the glow.
+const TOP = 14;
+// The anchor's grip, in the frame's corner the grid grows from: shown only
+// while placing the grid (this window's Settings tab open), with the grid's
+// every place outlined.
+const GRIP = 40;
+// How long before it spawns a world boss joins the train (minutes): the
+// player's choice, 5 unless changed.
+const TRAIN_LEADS = [1, 2, 3, 5, 10, 15, 30];
+const trainLead = () => (TRAIN_LEADS.includes(Number(prefs.anchorTrainLead)) ? Number(prefs.anchorTrainLead) : 5);
 
-const canPlace = () => canPin() && typeof a2.widgets.place === "function" && typeof a2.widgets.where === "function";
+// The frame is a widget; keeping its grip still while it resizes needs
+// a2.widgets.where and place (meter 2.0.72), and is skipped without them.
+const canPlace = () => canPin();
+const canMove = () => canPin() && typeof a2.widgets.place === "function" && typeof a2.widgets.where === "function";
 const anchorOn = () => canPlace() && iconStyle() && !!prefs.anchorMode;
 const trainOn = () => anchorOn() && !!prefs.anchorTrain;
 const gridSize = (v, d) => Math.max(1, Math.min(GRID_MAX, Number(v) || d));
+const gridRows = () => Math.max(1, Math.min(ROWS_MAX, Number(prefs.anchorRows) || 3));
 
 // The train's bosses, for iconPins(): each world boss without an alert of
 // its own, shown while up or within TRAIN_LEAD_MS of spawning (pinVisible).
@@ -130,7 +158,29 @@ function trainPins(out, cfg) {
   }
 }
 const trainVisible = (pin, state, until) =>
-  !!pin.train && !state.killed && (state.running || (until != null && until <= TRAIN_LEAD_MS));
+  !!pin.train && !state.killed && (state.running || (until != null && until <= trainLead() * 60_000));
+
+// Which comes first, for Sort by. `o` is each icon's { id, fight, running,
+// hp, until, killed }.
+function anchorCompare(a, b) {
+  const sort = SORTS.includes(prefs.anchorSort) ? prefs.anchorSort : "urgent";
+  const group = (o) => {
+    if (o.killed) return 3;
+    if (sort === "urgent" && o.fight) return 0;
+    if (o.running) return 1;
+    if (o.until != null) return 2;
+    return 4;
+  };
+  const ga = group(a.order), gb = group(b.order);
+  if (ga !== gb) return ga - gb;
+  if (ga === 0) return (a.order.hp ?? 100) - (b.order.hp ?? 100);
+  if (ga === 1 && sort !== "soonest") {
+    const r = respawnOf(b.order.id) - respawnOf(a.order.id);
+    if (r) return r;
+  }
+  if (ga === 1 || ga === 2) return (a.order.until ?? 0) - (b.order.until ?? 0);
+  return 0;
+}
 
 // Which comes first, for Sort by. `o` is each icon's { id, fight, running,
 // hp, until, killed }.
@@ -159,7 +209,7 @@ function anchorCompare(a, b) {
 function anchorPlan(wanted) {
   if (!anchorOn()) return wanted;
   const entries = [...wanted.entries()].sort((a, b) => anchorCompare(a[1], b[1]));
-  const room = Math.min(MOST_ICONS, gridSize(prefs.anchorCols, 4) * gridSize(prefs.anchorRows, 3));
+  const room = gridSize(prefs.anchorCols, 4) * gridRows();
   if (entries.length <= room) return new Map(entries);
   const shown = entries.slice(0, room - 1);
   const rest = entries.slice(room - 1);
@@ -170,221 +220,264 @@ function anchorPlan(wanted) {
   return new Map(shown);
 }
 
-// Where each icon goes, beside the anchor. Asked of the meter in physical
-// pixels; the icons' sizes are logical (pinSize), scaled by the anchor's.
-const placed = new Map();
-let anchorOpen = false;
-let layoutBusy = false;
-let layoutAgain = false;
-let gridNames = [];
+// The frame: its size (CSS px) for the grid as set, and where in it the
+// grip sits, which is the corner the grid grows from.
+function frameLayout(named) {
+  const cols = gridSize(prefs.anchorCols, 4);
+  const rows = gridRows();
+  const dir = DIRECTIONS.includes(prefs.anchorExpand) ? prefs.anchorExpand : "left-down";
+  const gapX = gapOf(prefs.anchorGapX);
+  const gapY = gapOf(prefs.anchorGapY);
+  const cellW = ICON_W + gapX;
+  const cellH = (named ? CELL_H_NAMED : CELL_H) + gapY;
+  const width = cols * cellW + GRIP;
+  const height = Math.max(rows * ((named ? MAX_H_NAMED : MAX_H) + Math.max(gapY, 0)) + TOP, GRIP + TOP);
+  const grip = { x: dir.startsWith("left") ? width - GRIP : 0, y: dir.endsWith("up") ? height - GRIP : TOP };
+  return { cols, rows, dir, cellW, cellH, gapX, gapY, width, height, grip, gripSize: GRIP, top: TOP };
+}
 
-async function anchorLayout(names, showName) {
-  gridNames = names;
+// Placing the grid: this window shown, on its Settings tab.
+const placing = () => document.visibilityState === "visible"
+  && document.querySelector(".view.settings")?.hidden === false;
+// Into Settings or out of it: the anchor shows or goes at once, not at the
+// next second's update.
+document.addEventListener("click", (e) => {
+  if (e.target instanceof Element && e.target.closest(".tab")) setTimeout(() => updatePins(Date.now()), 0);
+});
+document.addEventListener("visibilitychange", () => updatePins(Date.now()));
+
+let frameOpen = false;
+let frameSize = null;
+let frameBusy = false;
+
+// Show `wanted` (anchorPlan's order) in the frame, or close it when anchor
+// mode is off. True when anchor mode showed them, so pins.js opens no icon
+// windows of their own.
+async function anchorShow(wanted) {
   if (!anchorOn()) {
-    if (anchorOpen) {
-      anchorOpen = false;
-      placed.clear();
+    if (frameOpen) {
+      frameOpen = false;
+      frameSize = null;
       await a2.widgets.close(ANCHOR).catch(() => {});
     }
-    return;
+    return false;
   }
-  if (layoutBusy) {
-    layoutAgain = true;
-    return;
-  }
-  layoutBusy = true;
+  if (frameBusy) return true;
+  frameBusy = true;
   try {
-    if (!anchorOpen) {
-      anchorOpen = await a2.widgets.open(ANCHOR, ANCHOR_SIZE).then(() => true, () => false);
-      if (!anchorOpen) return;
+    const cells = [...wanted.values()].map((e) => e.data);
+    const layout = frameLayout(cells.some((c) => c.showName));
+    const size = { width: layout.width, height: layout.height };
+    const same = frameSize && frameSize.width === size.width && frameSize.height === size.height
+      && frameSize.grip.x === layout.grip.x && frameSize.grip.y === layout.grip.y;
+    if (!frameOpen || !same) {
+      // The grip stays where the player left it while the frame resizes
+      // around it (it moves within the frame with the grid's direction).
+      const before = frameOpen && frameSize && canMove() ? await a2.widgets.where(ANCHOR).catch(() => null) : null;
+      frameOpen = await a2.widgets.open(ANCHOR, size).then(() => true, () => false);
+      if (!frameOpen) return true;
+      if (before && frameSize.grip) {
+        const scale = (typeof devicePixelRatio === "number" && devicePixelRatio > 0) ? devicePixelRatio : 1;
+        const x = Math.round(before.x + (frameSize.grip.x - layout.grip.x) * scale);
+        const y = Math.round(before.y + (frameSize.grip.y - layout.grip.y) * scale);
+        if (x !== before.x || y !== before.y) await a2.widgets.place(ANCHOR, { x, y }).catch(() => {});
+      }
+      frameSize = { ...size, grip: layout.grip };
     }
-    a2.widgets.send(ANCHOR, { kind: "anchor", name: anchorUi().anchor }).catch(() => {});
-    const at = await a2.widgets.where(ANCHOR).catch(() => null);
-    if (!at) return;
-    // Each open icon's real size (Windows makes a window at least 136 px
-    // wide, whatever it asked for), asked once per icon and size.
-    for (const name of names) {
-      const want = `${name}:${!!showName.get(name)}`;
-      if (sizeOf.get(name)?.want === want) continue;
-      const w = await a2.widgets.where(name).catch(() => null);
-      if (w) sizeOf.set(name, { want, width: w.width, height: w.height });
-    }
-    for (const [name, { x, y }] of gridSpots(names, showName, at)) {
-      const key = `${x},${y}`;
-      if (placed.get(name) === key) continue;
-      placed.set(name, key);
-      await a2.widgets.place(name, { x, y }).catch(() => placed.delete(name));
-    }
-    for (const name of [...placed.keys()]) if (!names.includes(name)) placed.delete(name);
-    for (const name of [...sizeOf.keys()]) if (!names.includes(name)) sizeOf.delete(name);
+    a2.widgets.send(ANCHOR, { kind: "grid", label: anchorUi().anchor, ...layout, cells, setup: placing() }).catch(() => {});
+    return true;
   } finally {
-    layoutBusy = false;
-    if (layoutAgain) {
-      layoutAgain = false;
-      anchorLayout(gridNames, lastShowName);
-    }
-  }
-}
-// The icons' real window sizes (physical px), by name, as the meter gave
-// them, with the name-shown state they were read for.
-const sizeOf = new Map();
-
-// Each icon's place in the grid, physical pixels: beside the anchor (at),
-// row by row away from it. The screen's scale is this page's own: the
-// anchor's width says nothing of it, Windows having widened its window to
-// 136 px (2.0.72: the icons went 4x too far apart). An icon not open yet is
-// as wide as the anchor's window when Windows widened that, and its own
-// size otherwise.
-function gridSpots(names, showName, at) {
-  const scale = (typeof devicePixelRatio === "number" && devicePixelRatio > 0) ? devicePixelRatio : 1;
-  const widened = at.width > Math.round(ANCHOR_SIZE.width * scale) + 2 ? at.width : 0;
-  const cols = gridSize(prefs.anchorCols, 4);
-  const dir = DIRECTIONS.includes(prefs.anchorExpand) ? prefs.anchorExpand : "left-down";
-  const left = dir.startsWith("left");
-  const up = dir.endsWith("up");
-  const sizes = names.map((name) => {
-    const show = name === MORE ? false : !!showName.get(name);
-    const real = sizeOf.get(name);
-    if (real && real.want === `${name}:${show}`) return { width: real.width, height: real.height };
-    const s = pinSize(show);
-    return { width: Math.max(Math.round(s.width * scale), widened), height: Math.round(s.height * scale) };
-  });
-  const gap = Math.round(GAP_PX * scale);
-  const cellW = Math.max(...sizes.map((s) => s.width), 1) + gap;
-  const cellH = Math.max(...sizes.map((s) => s.height), 1) + gap;
-  const spots = new Map();
-  for (const [i, name] of names.entries()) {
-    const col = i % cols;
-    const row = Math.floor(i / cols);
-    const w = sizes[i].width;
-    const h = sizes[i].height;
-    const x = left ? at.x - gap - col * cellW - w : at.x + at.width + gap + col * cellW;
-    const y = up ? at.y + at.height - row * cellH - h : at.y + row * cellH;
-    spots.set(name, { x, y });
-  }
-  return spots;
-}
-
-// Before new icons open: each is given its place in the grid, so it opens
-// there. On KDE Wayland a window can be placed only as it appears; one
-// moved after stayed where KWin put it, mid-screen.
-async function anchorPrePlace(wanted, open) {
-  if (!anchorOn() || !anchorOpen) return;
-  const fresh = [...wanted.keys()].filter((name) => !open.has(name));
-  if (!fresh.length) return;
-  const at = await a2.widgets.where(ANCHOR).catch(() => null);
-  if (!at) return;
-  const showName = new Map([...wanted].map(([name, e]) => [name, !!e.data.showName]));
-  for (const [name, { x, y }] of gridSpots([...wanted.keys()], showName, at)) {
-    if (!fresh.includes(name)) continue;
-    placed.set(name, `${x},${y}`);
-    await a2.widgets.place(name, { x, y }).catch(() => placed.delete(name));
+    frameBusy = false;
   }
 }
 
-let lastShowName = new Map();
-function anchorArrange(wanted) {
-  lastShowName = new Map([...wanted].map(([name, e]) => [name, !!e.data.showName]));
-  anchorLayout([...wanted.keys()], lastShowName);
-}
+// Settings, "On screen": how alerts show (icons or this window), then, for
+// icons, the Placement card: anchor mode, with a live miniature of the grid
+// (the anchor in its corner, Max width x Max height places) whose corners
+// set the expand direction and whose steppers set its size, as the grid
+// shows in game while this tab is open. Anchor mode is the setup most
+// players want, so it leads.
+const SETUP_UI = {
+  en: { onScreen: "On screen", display: "Time and display", across: "Across", down: "Down", fewer: "Fewer", more: "More", trainLead: "Spawning within", mins: n => `${n} min`, trainNote: n => `Every world boss that is up, or spawns within ${n} min, joins the grid, with an alert or not.`, gapX: "Column gap", gapY: "Row gap",
+        corner: "Click a corner to set where the anchor sits.", pitch: "Line the icons up in a grid beside an anchor you place." },
+  ko: { onScreen: "화면 표시", display: "시간과 표시", across: "가로", down: "세로", fewer: "줄이기", more: "늘리기", trainLead: "출현까지 남은 시간", mins: n => `${n}분`, trainNote: n => `출현 중이거나 ${n}분 안에 출현하는 월드 보스를 알림과 상관없이 모두 표시합니다.`, gapX: "열 간격", gapY: "행 간격",
+        corner: "모서리를 눌러 앵커 위치를 정하세요.", pitch: "직접 놓은 앵커 옆에 아이콘을 격자로 정렬합니다." },
+  ja: { onScreen: "画面表示", display: "時刻と表示", across: "横", down: "縦", fewer: "減らす", more: "増やす", trainLead: "出現までの時間", mins: n => `${n}分`, trainNote: n => `出現中か${n}分以内に出現するワールドボスを、通知の有無にかかわらずすべて並べます。`, gapX: "列の間隔", gapY: "行の間隔",
+        corner: "角をクリックしてアンカーの位置を決めます。", pitch: "置いたアンカーの横にアイコンを格子状に並べます。" },
+  de: { onScreen: "Auf dem Bildschirm", display: "Zeit und Anzeige", across: "Breite", down: "Höhe", fewer: "Weniger", more: "Mehr", trainLead: "Erscheint innerhalb von", mins: n => `${n} Min.`, trainNote: n => `Jeder Weltboss, der da ist oder in ${n} Min. erscheint, kommt ins Raster, mit oder ohne Alarm.`, gapX: "Spaltenabstand", gapY: "Zeilenabstand",
+        corner: "Eine Ecke anklicken, um den Platz des Ankers zu wählen.", pitch: "Die Symbole in einem Raster neben einem Anker aufreihen, den du platzierst." },
+  fr: { onScreen: "À l'écran", display: "Heure et affichage", across: "Largeur", down: "Hauteur", fewer: "Moins", more: "Plus", trainLead: "Apparition dans", mins: n => `${n} min`, trainNote: n => `Chaque boss mondial présent, ou qui apparaît dans ${n} min, rejoint la grille, avec ou sans alerte.`, gapX: "Écart des colonnes", gapY: "Écart des lignes",
+        corner: "Cliquez sur un coin pour placer l'ancre.", pitch: "Aligner les icônes en grille à côté d'une ancre que vous placez." },
+  es: { onScreen: "En pantalla", display: "Hora y vista", across: "Ancho", down: "Alto", fewer: "Menos", more: "Más", trainLead: "Aparece en", mins: n => `${n} min`, trainNote: n => `Todo jefe mundial activo, o que aparezca en ${n} min, se une a la cuadrícula, con alerta o sin ella.`, gapX: "Espacio entre columnas", gapY: "Espacio entre filas",
+        corner: "Haz clic en una esquina para situar el ancla.", pitch: "Alinea los iconos en una cuadrícula junto a un ancla que colocas tú." },
+  pt: { onScreen: "Na tela", display: "Hora e exibição", across: "Largura", down: "Altura", fewer: "Menos", more: "Mais", trainLead: "Surge em até", mins: n => `${n} min`, trainNote: n => `Todo chefe mundial ativo, ou que surja em até ${n} min, entra na grade, com alerta ou não.`, gapX: "Espaço entre colunas", gapY: "Espaço entre linhas",
+        corner: "Clique num canto para posicionar a âncora.", pitch: "Alinhe os ícones em uma grade ao lado de uma âncora que você posiciona." },
+  ru: { onScreen: "На экране", display: "Время и вид", across: "В ширину", down: "В высоту", fewer: "Меньше", more: "Больше", trainLead: "Появится в течение", mins: n => `${n} мин`, trainNote: n => `Каждый мировой босс, который на месте или появится в течение ${n} мин, попадает в сетку, с оповещением или без.`, gapX: "Между столбцами", gapY: "Между рядами",
+        corner: "Щёлкните угол, чтобы выбрать место якоря.", pitch: "Выстроить значки сеткой рядом с якорем, который вы ставите сами." },
+  "zh-Hant": { onScreen: "畫面顯示", display: "時間與顯示", across: "橫向", down: "縱向", fewer: "減少", more: "增加", trainLead: "出現前", mins: n => `${n} 分鐘`, trainNote: n => `已出現或 ${n} 分鐘內出現的世界首領都會加入網格，無論是否設定提醒。`, gapX: "欄距", gapY: "列距",
+        corner: "點擊角落以設定錨點位置。", pitch: "將圖示以網格排在你放置的錨點旁。" },
+  "zh-Hans": { onScreen: "画面显示", display: "时间与显示", across: "横向", down: "纵向", fewer: "减少", more: "增加", trainLead: "出现前", mins: n => `${n} 分钟`, trainNote: n => `已出现或 ${n} 分钟内出现的世界首领都会加入网格，无论是否设置提醒。`, gapX: "列距", gapY: "行距",
+        corner: "点击角落以设置锚点位置。", pitch: "将图标以网格排在你放置的锚点旁。" },
+};
+const setupUi = () => SETUP_UI[language] || SETUP_UI.en;
+// The corner the anchor sits in, for each direction the grid grows.
+const CORNERS = { "left-down": "tr", "right-down": "tl", "left-up": "br", "right-up": "bl" };
 
-// The anchor moved: the grid follows it. An icon dragged off its place goes
-// back to it.
-if (typeof a2.on === "function") {
-  a2.on("widget-moved", (m) => {
-    if (!anchorOn() || !m?.name) return;
-    if (m.name === ANCHOR) placed.clear();
-    else if (placed.get(m.name) === `${m.x},${m.y}`) return;
-    else placed.delete(m.name);
-    anchorLayout(gridNames, lastShowName);
-  });
-}
-
-// Settings, under the icons' settings: anchor mode and its options.
 function renderAnchorSettings(box) {
   const u = anchorUi();
-  let rows = box.querySelector(".anchorSettings");
-  if (!rows) {
-    rows = document.createElement("div");
-    rows.className = "anchorSettings";
-    const row = (cls, control) => {
-      const r = document.createElement("label");
-      r.className = `setting ${cls}`;
-      const s = document.createElement("span");
-      s.className = "iconSettingLabel";
-      r.append(s, control);
-      return r;
-    };
-    const switchBox = (cls) => {
-      const c = document.createElement("input");
-      c.type = "checkbox";
-      c.className = `${cls} switch`;
-      c.setAttribute("role", "switch");
-      return c;
-    };
-    const select = (cls) => {
-      const s = document.createElement("select");
-      s.className = cls;
-      return s;
-    };
-    const note = (cls) => {
-      const p = document.createElement("p");
-      p.className = `note ${cls}`;
-      return p;
-    };
-    rows.append(
-      row("anchorRow", switchBox("anchorMode")), note("anchorNote"),
-      row("expandRow", select("anchorExpand")),
-      row("colsRow", select("anchorCols")),
-      row("rowsRow", select("anchorRows")),
-      row("sortRow", select("anchorSort")), note("sortNote"),
-      row("trainRow", switchBox("anchorTrain")), note("trainNote"),
-    );
-    box.append(rows);
-    const save = (apply) => (e) => {
-      apply(e.target);
-      savePrefs();
-      placed.clear();
-      renderAnchorSettings(box);
-      updatePins(Date.now());
-    };
-    rows.querySelector(".anchorMode").addEventListener("change", save((t) => { prefs.anchorMode = t.checked; }));
-    rows.querySelector(".anchorExpand").addEventListener("change", save((t) => { prefs.anchorExpand = t.value; }));
-    rows.querySelector(".anchorCols").addEventListener("change", save((t) => { prefs.anchorCols = Number(t.value); }));
-    rows.querySelector(".anchorRows").addEventListener("change", save((t) => { prefs.anchorRows = Number(t.value); }));
-    rows.querySelector(".anchorSort").addEventListener("change", save((t) => { prefs.anchorSort = t.value; }));
-    rows.querySelector(".anchorTrain").addEventListener("change", save((t) => { prefs.anchorTrain = t.checked; }));
+  const s = setupUi();
+  const view = box.closest(".view.settings");
+  const el = (tag, cls, text) => {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  };
+  const save = () => {
+    savePrefs();
+    renderAnchorSettings(box);
+    updatePins(Date.now());
+  };
+
+  // Headings: "On screen" over this box, "Time and display" over the rest.
+  let head = box.querySelector(".onScreenHead");
+  if (!head) {
+    head = el("h2", "group onScreenHead");
+    box.prepend(head);
   }
-  const label = (cls, text) => { rows.querySelector(`.${cls} .iconSettingLabel`).textContent = text; };
-  label("anchorRow", u.anchor);
-  label("expandRow", u.expand);
-  label("colsRow", u.maxWidth);
-  label("rowsRow", u.maxHeight);
-  label("sortRow", u.sortBy);
-  label("trainRow", u.train);
-  const mode = rows.querySelector(".anchorMode");
+  head.textContent = s.onScreen;
+  const displayHead = view?.querySelector(".displayHead");
+  if (displayHead) displayHead.textContent = s.display;
+
+  // Show alerts as: two buttons for the two choices (driving the select,
+  // hidden, which keeps its saving).
+  const style = box.querySelector(".alertStyle");
+  const styleRow = box.querySelector(".styleRow");
+  let seg = box.querySelector(".styleSeg");
+  if (style && styleRow && !seg) {
+    seg = el("div", "seg styleSeg");
+    seg.setAttribute("role", "radiogroup");
+    styleRow.append(seg);
+    style.hidden = true;
+  }
+  if (seg && style) {
+    seg.replaceChildren(...[...style.options].map((o) => {
+      const b = el("button", "segBtn", o.textContent);
+      b.type = "button";
+      b.setAttribute("role", "radio");
+      b.setAttribute("aria-checked", String(o.value === style.value));
+      b.disabled = style.disabled;
+      b.addEventListener("click", () => {
+        if (style.value === o.value) return;
+        style.value = o.value;
+        style.dispatchEvent(new Event("change"));
+      });
+      return b;
+    }));
+  }
+
+  // The Placement card, right under it.
+  let card = box.querySelector(".placement");
+  if (!card) {
+    card = el("section", "placement");
+    const top = el("label", "placementHead");
+    const mode = el("input", "anchorMode switch");
+    mode.type = "checkbox";
+    mode.setAttribute("role", "switch");
+    top.append(el("span", "placementTitle"), mode);
+    const stage = el("div", "stage");
+    const mini = el("div", "mini");
+    const steps = el("div", "steps");
+    stage.append(mini, steps);
+    const sortRow = el("label", "setting sortRow");
+    sortRow.append(el("span", "iconSettingLabel"), el("select", "anchorSort"));
+    const trainRow = el("label", "setting trainRow");
+    const train = el("input", "anchorTrain switch");
+    train.type = "checkbox";
+    train.setAttribute("role", "switch");
+    trainRow.append(el("span", "iconSettingLabel"), train);
+    const leadRow = el("label", "setting trainLeadRow");
+    leadRow.append(el("span", "iconSettingLabel"), el("select", "anchorTrainLead"));
+    card.append(top, el("p", "note placementNote"), stage, el("p", "note cornerNote"),
+      sortRow, el("p", "note sortNote"), trainRow, leadRow, el("p", "note trainNote"));
+    card.querySelector(".anchorTrainLead").addEventListener("change", (e) => { prefs.anchorTrainLead = Number(e.target.value); save(); });
+    (styleRow || box.firstChild).after(card);
+    mode.addEventListener("change", () => { prefs.anchorMode = mode.checked; save(); });
+    card.querySelector(".anchorSort").addEventListener("change", (e) => { prefs.anchorSort = e.target.value; save(); });
+    train.addEventListener("change", () => { prefs.anchorTrain = train.checked; save(); });
+  }
+  card.hidden = !iconStyle();
+  const on = anchorOn();
+  card.classList.toggle("on", on);
+  card.querySelector(".placementTitle").textContent = u.anchor;
+  const mode = card.querySelector(".anchorMode");
   mode.checked = !!prefs.anchorMode && canPlace();
   mode.disabled = !canPlace();
-  rows.querySelector(".anchorNote").textContent = canPlace() ? u.anchorNote : u.needsMeter;
-  const expand = rows.querySelector(".anchorExpand");
-  expand.replaceChildren(...DIRECTIONS.map((d) => option(d, u.dirs[d])));
-  expand.value = DIRECTIONS.includes(prefs.anchorExpand) ? prefs.anchorExpand : "left-down";
-  const counts = Array.from({ length: GRID_MAX }, (_, i) => i + 1);
-  const cols = rows.querySelector(".anchorCols");
-  cols.replaceChildren(...counts.map((n) => option(n, String(n))));
-  cols.value = String(gridSize(prefs.anchorCols, 4));
-  const down = rows.querySelector(".anchorRows");
-  down.replaceChildren(...counts.map((n) => option(n, String(n))));
-  down.value = String(gridSize(prefs.anchorRows, 3));
-  const sort = rows.querySelector(".anchorSort");
-  sort.replaceChildren(...SORTS.map((s) => option(s, u.sorts[s])));
+  card.querySelector(".placementNote").textContent = !canPlace() ? u.needsMeter : on ? u.anchorNote : s.pitch;
+
+  // The miniature: the grid as set, the anchor in its corner. A corner
+  // picks the direction; it is drawn even off, dimmed, to show what it does.
+  const cols = gridSize(prefs.anchorCols, 4);
+  const rows = gridRows();
+  const dir = DIRECTIONS.includes(prefs.anchorExpand) ? prefs.anchorExpand : "left-down";
+  const mini = card.querySelector(".mini");
+  mini.style.setProperty("--cols", cols);
+  mini.style.setProperty("--rows", rows);
+  mini.dataset.corner = CORNERS[dir];
+  const cells = el("div", "cells");
+  for (let i = 0; i < cols * rows; i++) cells.append(el("span", "cell"));
+  const corners = Object.entries(CORNERS).map(([d, c]) => {
+    const b = el("button", `corner ${c}`, d === dir ? "⚓" : "");
+    b.type = "button";
+    b.disabled = !on;
+    b.title = u.dirs[d];
+    b.setAttribute("aria-label", u.dirs[d]);
+    b.setAttribute("aria-pressed", String(d === dir));
+    b.addEventListener("click", () => { prefs.anchorExpand = d; save(); });
+    return b;
+  });
+  mini.replaceChildren(cells, ...corners);
+
+  // Across and Down, and the gaps, with steppers over their values.
+  const stepper = (label, value, values, set, shown = String) => {
+    const row = el("div", "step");
+    const less = el("button", "stepBtn", "−");
+    const more = el("button", "stepBtn", "+");
+    less.type = more.type = "button";
+    less.setAttribute("aria-label", `${label}: ${s.fewer}`);
+    more.setAttribute("aria-label", `${label}: ${s.more}`);
+    const at = values.indexOf(value);
+    less.disabled = !on || at <= 0;
+    more.disabled = !on || at >= values.length - 1;
+    less.addEventListener("click", () => { set(values[at - 1]); save(); });
+    more.addEventListener("click", () => { set(values[at + 1]); save(); });
+    row.append(el("span", "stepLabel", label), less, el("output", "stepValue", shown(value)), more);
+    return row;
+  };
+  const counts = (max) => Array.from({ length: max }, (_, i) => i + 1);
+  card.querySelector(".steps").replaceChildren(
+    stepper(s.across, cols, counts(GRID_MAX), (v) => { prefs.anchorCols = v; }),
+    stepper(s.down, rows, counts(ROWS_MAX), (v) => { prefs.anchorRows = v; }),
+    stepper(s.gapX, gapOf(prefs.anchorGapX), GAPS, (v) => { prefs.anchorGapX = v; }, (v) => `${v}`),
+    stepper(s.gapY, gapOf(prefs.anchorGapY), GAPS, (v) => { prefs.anchorGapY = v; }, (v) => `${v}`),
+  );
+  card.querySelector(".cornerNote").textContent = s.corner;
+
+  const sort = card.querySelector(".anchorSort");
+  sort.replaceChildren(...SORTS.map((x) => option(x, u.sorts[x])));
   sort.value = SORTS.includes(prefs.anchorSort) ? prefs.anchorSort : "urgent";
-  rows.querySelector(".sortNote").textContent = u.sortNotes[sort.value];
-  rows.querySelector(".anchorTrain").checked = !!prefs.anchorTrain;
-  rows.querySelector(".trainNote").textContent = u.trainNote;
-  rows.hidden = !iconStyle();
-  const on = anchorOn();
-  for (const cls of ["expandRow", "colsRow", "rowsRow", "sortRow", "sortNote", "trainRow", "trainNote"]) {
-    rows.querySelector(`.${cls}`).hidden = !on;
+  card.querySelector(".sortRow .iconSettingLabel").textContent = u.sortBy;
+  card.querySelector(".sortNote").textContent = u.sortNotes[sort.value];
+  card.querySelector(".trainRow .iconSettingLabel").textContent = u.train;
+  card.querySelector(".anchorTrain").checked = !!prefs.anchorTrain;
+  card.querySelector(".trainNote").textContent = s.trainNote(trainLead());
+  const lead = card.querySelector(".anchorTrainLead");
+  lead.replaceChildren(...TRAIN_LEADS.map((n) => option(n, s.mins(n))));
+  lead.value = String(trainLead());
+  card.querySelector(".trainLeadRow .iconSettingLabel").textContent = s.trainLead;
+  for (const cls of ["cornerNote", "sortRow", "sortNote", "trainRow", "trainNote"]) {
+    card.querySelector(`.${cls}`).hidden = !on;
   }
+  // The lookahead only with the train on.
+  card.querySelector(".trainLeadRow").hidden = !on || !prefs.anchorTrain;
 }

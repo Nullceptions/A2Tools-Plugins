@@ -1,14 +1,13 @@
 // A pinned timer's icon (pins.js sends it what to show every second). It
 // follows the pointer when dragged, unless the pins are locked; a
 // double-click opens the plugin's window.
-const pin = document.querySelector(".pin");
-const glyph = document.querySelector(".glyph");
-const art = document.querySelector(".art");
-const time = document.querySelector(".time");
-const nameEl = document.querySelector(".name");
-const sub = document.querySelector(".sub");
-const badge = document.querySelector(".badge");
+//
+// In anchor mode the anchor's widget is the whole grid (anchor.js sends it
+// { kind: "grid", cells, ... }): the anchor's grip in the corner the grid
+// grows from, and each icon drawn in its place, the same way as a single one.
+const single = document.querySelector(".pin");
 let locked = false;
+let gridBox = null;
 
 // Two letters for the badge: the first of each of the first two words, or the
 // first two of one word ("Shugo" is "SH", "Kaira the Watcher" is "KT").
@@ -19,8 +18,21 @@ const initials = (name) => {
   return letters.toUpperCase();
 };
 
-a2.on("widget", (d) => {
-  if (!d) return;
+// An icon's parts, made like widget.html's own.
+function makePin() {
+  const pin = document.createElement("div");
+  pin.className = "pin";
+  pin.innerHTML = '<div class="badge"><img class="art" alt="" hidden /><span class="glyph"></span></div>'
+    + '<div class="time"></div><div class="sub"></div><div class="name"></div>';
+  return pin;
+}
+
+// Draw timer `d` in icon element `pin`.
+function renderPin(pin, d) {
+  const glyph = pin.querySelector(".glyph");
+  const art = pin.querySelector(".art");
+  const badge = pin.querySelector(".badge");
+  const sub = pin.querySelector(".sub");
   // The game's icon when there is one, else the initials. Taken from the
   // page's own copy (widget.html), which on Linux is the image itself.
   const src = (d.icon && document.querySelector(`.icons img[data-icon="${d.icon}"]`)?.getAttribute("src")) || "";
@@ -30,10 +42,8 @@ a2.on("widget", (d) => {
   }
   art.hidden = !src;
   glyph.hidden = !!src;
-  // Anchor mode's anchor, and its "+N" for the icons that don't fit.
-  glyph.textContent = d.kind === "anchor" ? "⚓" : d.glyph || initials(d.name);
-  pin.title = d.tip || "";
-  time.textContent = d.countdown || "";
+  glyph.textContent = d.glyph || initials(d.name);
+  pin.querySelector(".time").textContent = d.countdown || "";
   sub.textContent = d.sub || "";
   // A world boss's HP: the ring drains from the top as it falls.
   const hasHp = typeof d.hp === "number";
@@ -45,16 +55,119 @@ a2.on("widget", (d) => {
   }
   // The HP in the ring's colour; "Enter" keeps its own.
   sub.style.color = hpColor;
-  nameEl.textContent = d.showName ? d.name : "";
+  pin.querySelector(".name").textContent = d.showName ? d.name : "";
   pin.className = `pin ${d.kind || "event"}${d.running ? " running" : ""}${d.due ? " due" : ""} ${d.effect || "shake"}`;
-  document.title = d.name || "Event Timers";
+  pin.title = d.tip || (pin.closest(".grid") && d.name) || "";
+}
+
+// The grid: the frame's size, the grip in its corner, and each icon in its
+// place, filling from the grip's side.
+function renderGrid(g) {
+  single.hidden = true;
+  if (!gridBox) {
+    gridBox = document.createElement("div");
+    gridBox.className = "grid";
+    const grip = document.createElement("div");
+    grip.className = "grip";
+    grip.textContent = "⚓";
+    gridBox.append(grip);
+    document.body.append(gridBox);
+  }
+  gridBox.style.width = `${g.width}px`;
+  gridBox.style.height = `${g.height}px`;
+  const gripSize = Number(g.gripSize) || 40;
+  const grip = gridBox.querySelector(".grip");
+  grip.style.left = `${g.grip.x}px`;
+  grip.style.top = `${g.grip.y}px`;
+  grip.style.width = grip.style.height = `${gripSize - 4}px`;
+  grip.title = g.label || "";
+  // Placing it (the plugin's Settings open): the anchor, and every place
+  // the grid can fill, outlined.
+  gridBox.classList.toggle("setup", !!g.setup);
+  const left = String(g.dir).startsWith("left");
+  const up = String(g.dir).endsWith("up");
+  const top = Number(g.top) || 0;
+  const gapX = Number(g.gapX) || 0;
+  const gapY = Number.isFinite(Number(g.gapY)) ? Number(g.gapY) : 4;
+  // A place's left edge; the icon sits in it with half the column gap on
+  // each side.
+  const colX = (i) => {
+    const col = i % g.cols;
+    return left ? g.width - gripSize - (col + 1) * g.cellW : gripSize + col * g.cellW;
+  };
+  const cells = Array.isArray(g.cells) ? g.cells : [];
+  const pins = [...gridBox.querySelectorAll(".pin")];
+  while (pins.length < cells.length) {
+    const pin = makePin();
+    gridBox.append(pin);
+    pins.push(pin);
+  }
+  for (const [i, pin] of pins.entries()) {
+    const d = cells[i];
+    pin.hidden = !d;
+    if (d) renderPin(pin, d);
+  }
+  // Each row as tall as its tallest icon (a row with none, while placing,
+  // as tall as a typical one), packed from the anchor's side, so a short
+  // row leaves no gap. The outlines follow the same rows.
+  const rows = g.setup ? g.rows : Math.ceil(cells.length / g.cols);
+  const heights = Array.from({ length: rows }, () => 0);
+  for (const [i, pin] of pins.entries()) {
+    if (pin.hidden) continue;
+    const row = Math.floor(i / g.cols);
+    heights[row] = Math.max(heights[row], pin.offsetHeight + gapY);
+  }
+  const rowTop = [];
+  let y = up ? g.height : top;
+  for (let row = 0; row < rows; row++) {
+    const h = heights[row] || g.cellH;
+    heights[row] = h;
+    if (up) y -= h;
+    rowTop[row] = y;
+    if (!up) y += h;
+  }
+  for (const [i, pin] of pins.entries()) {
+    if (pin.hidden) continue;
+    const row = Math.floor(i / g.cols);
+    pin.style.left = `${colX(i) + gapX / 2}px`;
+    pin.style.top = `${up ? rowTop[row] + heights[row] - gapY - pin.offsetHeight : rowTop[row]}px`;
+  }
+  // While placing: every place outlined.
+  const places = g.setup ? g.cols * g.rows : 0;
+  const ghosts = [...gridBox.querySelectorAll(".ghost")];
+  while (ghosts.length < places) {
+    const ghost = document.createElement("div");
+    ghost.className = "ghost";
+    gridBox.prepend(ghost);
+    ghosts.push(ghost);
+  }
+  for (const [i, ghost] of ghosts.entries()) {
+    ghost.hidden = i >= places;
+    if (ghost.hidden) continue;
+    const row = Math.floor(i / g.cols);
+    // Each outline is the icon's own place, the gaps left between them.
+    ghost.style.left = `${colX(i) + gapX / 2}px`;
+    ghost.style.top = `${rowTop[row] + (up ? gapY : 0)}px`;
+    ghost.style.width = `${g.cellW - gapX}px`;
+    ghost.style.height = `${Math.max(heights[row] - gapY, 8)}px`;
+  }
+  document.title = g.label || "Event Timers";
+}
+
+a2.on("widget", (d) => {
+  if (!d) return;
+  if (d.kind === "grid") renderGrid(d);
+  else {
+    renderPin(single, d);
+    document.title = d.name || "Event Timers";
+  }
   reportArea();
 });
 
-// The icon's drawn parts: only they take the mouse, so icons set close
-// together don't catch each other's drags (meter 2.0.70 on, Linux; elsewhere
-// a press beside them just does nothing).
-const SHOWN = ".badge, .time, .sub, .name";
+// The drawn parts: only they take the mouse, so icons set close together
+// don't catch each other's drags (meter 2.0.70 on, Linux; elsewhere a press
+// beside them just does nothing). In the grid, the grip and the icons shown.
+const SHOWN = ".setup > .grip, .pin:not([hidden]) .badge, .pin:not([hidden]) .time, .pin:not([hidden]) .sub, .pin:not([hidden]) .name";
 let lastArea = "";
 function reportArea() {
   if (typeof a2.widget.area !== "function") return;
@@ -63,13 +176,17 @@ function reportArea() {
     const r = el.getBoundingClientRect();
     if (!r.width || !r.height) continue;
     // The badge's ring and glow reach a little past it.
-    const pad = el === badge ? 4 : 0;
+    const pad = el.classList.contains("badge") ? 4 : 0;
     left = Math.min(left, r.left - pad);
     top = Math.min(top, r.top - pad);
     right = Math.max(right, r.right + pad);
     bottom = Math.max(bottom, r.bottom + pad);
   }
-  if (!(right > left && bottom > top)) return;
+  // Nothing drawn (an empty grid, its anchor hidden): a point, so the frame's
+  // empty space doesn't keep clicks from the game.
+  if (!(right > left && bottom > top)) {
+    left = 0; top = 0; right = 1; bottom = 1;
+  }
   const area = { x: Math.max(0, Math.floor(left)), y: Math.max(0, Math.floor(top)), width: Math.ceil(right - left), height: Math.ceil(bottom - top) };
   const key = JSON.stringify(area);
   if (key === lastArea) return;

@@ -690,19 +690,6 @@ function toggleBossAlert(id) {
   render();
 }
 
-// The Alerts tab, scrolled to an alert's entry, which flashes.
-function openAlert(key) {
-  prefs.tab = "alerts";
-  savePrefs();
-  renderTabs();
-  const li = [...els.alertList.children].find((x) => x.dataset.alert === key);
-  if (!li) return;
-  li.scrollIntoView({ block: "center" });
-  li.classList.remove("flash");
-  void li.offsetWidth;
-  li.classList.add("flash");
-  li.querySelector(".alertOn")?.focus({ preventScroll: true });
-}
 
 // The Bosses tab's buttons, on the lists (their rows are drawn anew every
 // second). A click is taken here and goes no further than its button.
@@ -920,13 +907,12 @@ function render() {
   }
 }
 
-// The alert list: every event, the scheduled bosses, all world bosses at once,
-// then each world boss. A second lead, for while AION2 is closed, shows once
-// the alert is on.
-function renderAlerts() {
+// One alert's settings: on or off, its two times, when fought (world
+// bosses), and its own sound, repeats and icon (pins.js). Opened in place
+// under its line in Your alerts.
+function alertEditor(id, label) {
   const words = ui();
   const a = aui();
-  const item = (id, label) => {
     const li = document.createElement("li");
     li.dataset.alert = id;
     const name = document.createElement("span");
@@ -983,6 +969,7 @@ function renderAlerts() {
       show();
       savePrefs();
       render();
+      renderAlerts();
     };
     on.addEventListener("change", apply);
     lead.addEventListener("change", apply);
@@ -994,42 +981,312 @@ function renderAlerts() {
     if (typeof pinControls === "function") leads.append(pinControls(id));
     li.append(head, leads);
     return li;
+}
+
+// The Alerts tab (0.6): the alerts that are on first, one line each, whose
+// settings open in place one at a time; quick picks for the common sets; and
+// everything else to add from, searchable, world bosses grouped by map with
+// how often each comes back. A list of every timer with its settings opening
+// under each, as before, grew with every alert turned on.
+const LIST_UI = {
+  en: { yours: "Your alerts", picks: "Quick picks", add: "Add alerts", search: "Search", none: "No alerts yet. Pick a set above, or add one below.",
+        deflt: (t) => `Default: ${t}`, every: (m) => (m >= 60 ? `every ${m / 60} h` : `every ${m} min`), fought: "when fought",
+        edit: "Settings", remove: "Turn off", addOne: "Add", added: "On", all: "All", noMatch: "Nothing matches.",
+        pickEvents: "Shugo & Invasion", pickRare: "Rare world bosses", pickAll: "All world bosses", pickSiege: "Artifact Siege",
+        rareNote: "World bosses that take 3 h or more to come back." },
+  ko: { yours: "내 알림", picks: "빠른 선택", add: "알림 추가", search: "검색", none: "아직 알림이 없습니다. 위에서 묶음을 고르거나 아래에서 추가하세요.",
+        deflt: (t) => `기본값: ${t}`, every: (m) => (m >= 60 ? `${m / 60}시간마다` : `${m}분마다`), fought: "전투 시",
+        edit: "설정", remove: "끄기", addOne: "추가", added: "켜짐", all: "모두", noMatch: "일치하는 항목이 없습니다.",
+        pickEvents: "슈고 & 침공", pickRare: "희귀 월드 보스", pickAll: "모든 월드 보스", pickSiege: "아티팩트 공성전",
+        rareNote: "다시 나오기까지 3시간 이상 걸리는 월드 보스." },
+  ja: { yours: "設定中の通知", picks: "まとめて選ぶ", add: "通知を追加", search: "検索", none: "まだ通知はありません。上でまとめて選ぶか、下から追加してください。",
+        deflt: (t) => `既定: ${t}`, every: (m) => (m >= 60 ? `${m / 60}時間ごと` : `${m}分ごと`), fought: "戦闘時",
+        edit: "設定", remove: "オフ", addOne: "追加", added: "オン", all: "すべて", noMatch: "一致するものがありません。",
+        pickEvents: "シュゴ & 侵攻", pickRare: "レアなワールドボス", pickAll: "すべてのワールドボス", pickSiege: "アーティファクト攻城戦",
+        rareNote: "再出現まで3時間以上かかるワールドボス。" },
+  de: { yours: "Deine Alarme", picks: "Schnellauswahl", add: "Alarme hinzufügen", search: "Suchen", none: "Noch keine Alarme. Wähle oben eine Gruppe oder füge unten einen hinzu.",
+        deflt: (t) => `Standard: ${t}`, every: (m) => (m >= 60 ? `alle ${m / 60} Std.` : `alle ${m} Min.`), fought: "im Kampf",
+        edit: "Einstellungen", remove: "Ausschalten", addOne: "Hinzufügen", added: "An", all: "Alle", noMatch: "Nichts gefunden.",
+        pickEvents: "Shugo & Invasion", pickRare: "Seltene Weltbosse", pickAll: "Alle Weltbosse", pickSiege: "Artefakt-Belagerung",
+        rareNote: "Weltbosse, die 3 Std. oder länger zum Wiedererscheinen brauchen." },
+  fr: { yours: "Vos alertes", picks: "Choix rapides", add: "Ajouter des alertes", search: "Rechercher", none: "Aucune alerte. Choisissez un ensemble ci-dessus ou ajoutez-en une ci-dessous.",
+        deflt: (t) => `Par défaut : ${t}`, every: (m) => (m >= 60 ? `toutes les ${m / 60} h` : `toutes les ${m} min`), fought: "en combat",
+        edit: "Réglages", remove: "Désactiver", addOne: "Ajouter", added: "Activée", all: "Tout", noMatch: "Aucun résultat.",
+        pickEvents: "Shugo et Invasion", pickRare: "Boss mondiaux rares", pickAll: "Tous les boss mondiaux", pickSiege: "Siège des artefacts",
+        rareNote: "Boss mondiaux qui mettent 3 h ou plus à revenir." },
+  es: { yours: "Tus alertas", picks: "Selección rápida", add: "Añadir alertas", search: "Buscar", none: "Aún no hay alertas. Elige un grupo arriba o añade una abajo.",
+        deflt: (t) => `Predeterminado: ${t}`, every: (m) => (m >= 60 ? `cada ${m / 60} h` : `cada ${m} min`), fought: "en combate",
+        edit: "Ajustes", remove: "Desactivar", addOne: "Añadir", added: "Activa", all: "Todos", noMatch: "Sin resultados.",
+        pickEvents: "Shugo e Invasión", pickRare: "Jefes mundiales raros", pickAll: "Todos los jefes mundiales", pickSiege: "Asedio de artefactos",
+        rareNote: "Jefes mundiales que tardan 3 h o más en volver." },
+  pt: { yours: "Seus alertas", picks: "Escolhas rápidas", add: "Adicionar alertas", search: "Buscar", none: "Nenhum alerta ainda. Escolha um grupo acima ou adicione um abaixo.",
+        deflt: (t) => `Padrão: ${t}`, every: (m) => (m >= 60 ? `a cada ${m / 60} h` : `a cada ${m} min`), fought: "em combate",
+        edit: "Configurações", remove: "Desligar", addOne: "Adicionar", added: "Ligado", all: "Todos", noMatch: "Nada encontrado.",
+        pickEvents: "Shugo e Invasão", pickRare: "Chefes mundiais raros", pickAll: "Todos os chefes mundiais", pickSiege: "Cerco de Artefatos",
+        rareNote: "Chefes mundiais que levam 3 h ou mais para voltar." },
+  ru: { yours: "Ваши оповещения", picks: "Быстрый выбор", add: "Добавить оповещения", search: "Поиск", none: "Оповещений пока нет. Выберите набор выше или добавьте ниже.",
+        deflt: (t) => `По умолчанию: ${t}`, every: (m) => (m >= 60 ? `каждые ${m / 60} ч` : `каждые ${m} мин`), fought: "в бою",
+        edit: "Настройки", remove: "Выключить", addOne: "Добавить", added: "Вкл.", all: "Все", noMatch: "Ничего не найдено.",
+        pickEvents: "Шуго и Вторжение", pickRare: "Редкие мировые боссы", pickAll: "Все мировые боссы", pickSiege: "Осада артефактов",
+        rareNote: "Мировые боссы, которые возрождаются 3 ч и дольше." },
+  "zh-Hant": { yours: "我的提醒", picks: "快速選擇", add: "新增提醒", search: "搜尋", none: "尚無提醒。從上方選一組，或在下方新增。",
+        deflt: (t) => `預設：${t}`, every: (m) => (m >= 60 ? `每 ${m / 60} 小時` : `每 ${m} 分鐘`), fought: "戰鬥時",
+        edit: "設定", remove: "關閉", addOne: "新增", added: "已開啟", all: "全部", noMatch: "沒有符合的項目。",
+        pickEvents: "修果與入侵", pickRare: "稀有世界首領", pickAll: "所有世界首領", pickSiege: "神器攻城戰",
+        rareNote: "重生需要 3 小時以上的世界首領。" },
+  "zh-Hans": { yours: "我的提醒", picks: "快速选择", add: "添加提醒", search: "搜索", none: "还没有提醒。从上方选一组，或在下方添加。",
+        deflt: (t) => `默认：${t}`, every: (m) => (m >= 60 ? `每 ${m / 60} 小时` : `每 ${m} 分钟`), fought: "战斗时",
+        edit: "设置", remove: "关闭", addOne: "添加", added: "已开启", all: "全部", noMatch: "没有匹配的项目。",
+        pickEvents: "修果与入侵", pickRare: "稀有世界首领", pickAll: "所有世界首领", pickSiege: "神器攻城战",
+        rareNote: "重生需要 3 小时以上的世界首领。" },
+};
+const lui = () => LIST_UI[language] || LIST_UI.en;
+// The Alerts tab's state: the alert whose settings are open, the search, the
+// groups opened (kept), and whether the defaults are open.
+const alertView = { open: null, search: "", defaults: false };
+const RARE_MIN = 180;
+
+function renderAlerts() {
+  const words = ui();
+  const a = aui();
+  const l = lui();
+  prefs.alertGroups ||= [];
+  const el = (tag, cls, text) => {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
   };
-  // A group's heading, with a button turning every alert in it on or off
-  // (on: each with its own last lead, else the default).
-  const heading = (label, ids) => {
-    const li = document.createElement("li");
-    li.className = "group";
-    const name = document.createElement("span");
-    name.textContent = label;
-    const allOn = ids.every((id) => id in prefs.alerts);
-    const toggle = document.createElement("button");
-    toggle.type = "button";
-    toggle.className = "groupToggle";
-    toggle.textContent = allOn ? words.allOff : words.allOn;
-    toggle.addEventListener("click", () => {
-      for (const id of ids) {
-        if (allOn) delete prefs.alerts[id];
-        else if (!(id in prefs.alerts)) prefs.alerts[id] = prefs.leads[id] ?? defaultLead();
-      }
-      savePrefs();
-      renderAlerts();
-      render();
-    });
-    li.append(name, toggle);
-    return li;
+  const changed = () => {
+    savePrefs();
+    renderAlerts();
+    render();
   };
-  const field = fieldBosses().sort((x, y) => text(x.where).localeCompare(text(y.where)) || text(x.name).localeCompare(text(y.name)));
+  const turnOn = (id) => {
+    if (!(id in prefs.alerts)) prefs.alerts[id] = prefs.leads[id] ?? defaultLead();
+  };
+  const field = fieldBosses().sort((x, y) => text(x.name).localeCompare(text(y.name)));
   const events = scheduled("event");
   const bosses = scheduled("boss");
-  els.alertList.replaceChildren(
-    heading(words.events, events.map((ev) => ev.id)), ...events.map((ev) => item(ev.id, eventName(ev))),
-    heading(words.scheduled, bosses.map((ev) => ev.id)), ...bosses.map((ev) => item(ev.id, eventName(ev))),
-    // The world bosses' button covers each boss, not "All world bosses",
-    // which stands for bosses with no alert of their own.
-    heading(words.field, field.map((b) => `field:${b.id}`)), item(ALL_FIELD, words.allField),
-    ...field.map((b) => item(`field:${b.id}`, `${text(b.name)} · ${text(b.where)}`)),
-  );
+  const respawn = (b) => (typeof RESPAWN_MIN === "object" ? RESPAWN_MIN[b.id] || 0 : 0);
+  // An alert's name, and where it is (a world boss's map), apart: the name
+  // gets the line, the map goes under it with the timing.
+  const nameOf = (id) => {
+    if (id === ALL_FIELD) return words.allField;
+    if (id.startsWith("field:")) return text(FIELD_BOSSES[id.slice(6)]?.name ?? id);
+    const ev = EVENTS.find((e) => e.id === id);
+    return ev ? eventName(ev) : id;
+  };
+  const whereOf = (id) => (id.startsWith("field:") && id !== ALL_FIELD ? text(FIELD_BOSSES[id.slice(6)]?.where ?? "") : "");
+  // An alert in one line: when it goes, and whether also when fought.
+  const summary = (id) => {
+    const n = Number(prefs.alerts[id]);
+    const when = n < 0 ? pinUi().noRemind : leadText(n);
+    return prefs.fought?.[id] ? `${when} · ${l.fought}` : when;
+  };
+
+  const parts = [];
+
+  // Quick picks: a set turned on or off at once.
+  const picks = [
+    [l.pickEvents, events.filter((ev) => /^(festival|invasion)/.test(ev.id)).map((ev) => ev.id)],
+    [l.pickRare, field.filter((b) => respawn(b) >= RARE_MIN).map((b) => `field:${b.id}`), l.rareNote],
+    [l.pickAll, [ALL_FIELD]],
+    [l.pickSiege, events.filter((ev) => ev.id === "artifact").map((ev) => ev.id)],
+  ].filter(([, ids]) => ids.length);
+  const pickBox = el("li", "picks");
+  pickBox.append(el("h2", "group", l.picks));
+  const chips = el("div", "chips pickChips");
+  for (const [label, ids, note] of picks) {
+    const on = ids.every((id) => id in prefs.alerts);
+    const chip = el("button", `chip${on ? " on" : ""}`, label);
+    chip.type = "button";
+    chip.setAttribute("aria-pressed", String(on));
+    if (note) chip.title = note;
+    chip.addEventListener("click", () => {
+      for (const id of ids) {
+        if (on) delete prefs.alerts[id];
+        else turnOn(id);
+      }
+      changed();
+    });
+    chips.append(chip);
+  }
+  pickBox.append(chips);
+  parts.push(pickBox);
+
+  // Your alerts: those on, one line each.
+  const mine = Object.keys(prefs.alerts).sort((x, y) => nameOf(x).localeCompare(nameOf(y)));
+  const yours = el("li", "yours");
+  const head = el("h2", "group yoursHead");
+  head.append(el("span", null, `${l.yours} (${mine.length})`));
+  const defBtn = el("button", "linkBtn", l.deflt(leadText(defaultLead())));
+  defBtn.type = "button";
+  defBtn.setAttribute("aria-expanded", String(alertView.defaults));
+  defBtn.addEventListener("click", () => { alertView.defaults = !alertView.defaults; renderAlerts(); });
+  head.append(defBtn);
+  yours.append(head);
+  if (alertView.defaults) {
+    // The default times, in place: the same controls as Settings has.
+    const box = el("div", "defaultsInline");
+    const pick = (label, value, values, set) => {
+      const row = el("label", "setting");
+      const s = el("select");
+      s.append(...values.map((n) => option(n, leadText(n))));
+      s.value = String(value);
+      s.addEventListener("change", () => { set(Number(s.value)); savePrefs(); renderStatic(); renderAlerts(); });
+      row.append(el("span", null, label), s);
+      return row;
+    };
+    box.append(
+      pick(words.whileOpen, defaultLead(), LEADS, (v) => { prefs.defaultLead = v; }),
+      pick(a.closed, defaultClosed(), [-1, ...LEADS], (v) => { prefs.defaultClosedLead = v; }),
+    );
+    const apply = el("button", "linkBtn", words.applyAll);
+    apply.type = "button";
+    apply.addEventListener("click", () => els.applyAll.click());
+    box.append(apply);
+    yours.append(box);
+  }
+  if (!mine.length) yours.append(el("p", "note emptyNote", l.none));
+  const list = el("ol", "mine");
+  for (const id of mine) {
+    const li = el("li", "mineRow");
+    li.dataset.alert = id;
+    const row = el("div", "mineLine");
+    const bell = el("button", "bell on", "🔔");
+    bell.type = "button";
+    bell.title = l.remove;
+    bell.setAttribute("aria-label", `${l.remove}: ${nameOf(id)}`);
+    bell.addEventListener("click", () => {
+      delete prefs.alerts[id];
+      if (alertView.open === id) alertView.open = null;
+      changed();
+    });
+    const open = alertView.open === id;
+    const toggle = el("button", "mineToggle");
+    toggle.type = "button";
+    toggle.setAttribute("aria-expanded", String(open));
+    const words2 = el("span", "mineText");
+    words2.append(el("span", "mineName", nameOf(id)), el("span", "mineWhen", [whereOf(id), summary(id)].filter(Boolean).join(" · ")));
+    toggle.title = [nameOf(id), whereOf(id)].filter(Boolean).join(" · ");
+    toggle.append(words2, el("span", "chev", "›"));
+    toggle.addEventListener("click", () => { alertView.open = open ? null : id; renderAlerts(); });
+    row.append(bell, toggle);
+    li.append(row);
+    if (open) {
+      // Its settings: the same controls as before, under its line.
+      const editor = alertEditor(id, nameOf(id));
+      editor.classList.add("editor");
+      li.append(editor);
+    }
+    list.append(li);
+  }
+  yours.append(list);
+  parts.push(yours);
+
+  // Add alerts: search, then each group, folded.
+  const add = el("li", "addBox");
+  add.append(el("h2", "group", l.add));
+  const search = el("input", "alertSearch");
+  search.type = "search";
+  search.placeholder = l.search;
+  search.setAttribute("aria-label", l.search);
+  search.value = alertView.search;
+  search.addEventListener("input", () => {
+    alertView.search = search.value;
+    renderAlerts();
+    const again = els.alertList.querySelector(".alertSearch");
+    again?.focus();
+    again?.setSelectionRange(again.value.length, again.value.length);
+  });
+  add.append(search);
+  const q = alertView.search.trim().toLowerCase();
+  const groups = [
+    ["events", words.events, events.map((ev) => ({ id: ev.id, label: eventName(ev) }))],
+    ["scheduled", words.scheduled, bosses.map((ev) => ({ id: ev.id, label: eventName(ev) }))],
+  ];
+  const maps = new Map();
+  for (const b of field) {
+    const where = text(b.where);
+    if (!maps.has(where)) maps.set(where, []);
+    maps.get(where).push({ id: `field:${b.id}`, label: text(b.name), sub: respawn(b) ? l.every(respawn(b)) : "" });
+  }
+  for (const [where, items] of [...maps].sort((x, y) => x[0].localeCompare(y[0]))) {
+    groups.push([`map:${where}`, where, items]);
+  }
+  let shown = 0;
+  for (const [key, label, items] of groups) {
+    const hits = q ? items.filter((it) => `${it.label} ${label}`.toLowerCase().includes(q)) : items;
+    if (!hits.length) continue;
+    shown += hits.length;
+    const open = !!q || prefs.alertGroups.includes(key);
+    const group = el("div", "addGroup");
+    const gh = el("div", "addHead");
+    const fold = el("button", "foldBtn addFold");
+    fold.type = "button";
+    fold.setAttribute("aria-expanded", String(open));
+    fold.append(el("span", "chev", open ? "▾" : "▸"), el("span", null, `${label} (${items.length})`));
+    fold.addEventListener("click", () => {
+      prefs.alertGroups = open ? prefs.alertGroups.filter((k) => k !== key) : [...prefs.alertGroups, key];
+      savePrefs();
+      renderAlerts();
+    });
+    const allOn = items.every((it) => it.id in prefs.alerts);
+    const all = el("button", "groupToggle", allOn ? words.allOff : l.all);
+    all.type = "button";
+    all.addEventListener("click", () => {
+      for (const it of items) {
+        if (allOn) delete prefs.alerts[it.id];
+        else turnOn(it.id);
+      }
+      changed();
+    });
+    gh.append(fold, all);
+    group.append(gh);
+    if (open) {
+      const rows = el("ol", "addList");
+      for (const it of hits) {
+        const on = it.id in prefs.alerts;
+        const li = el("li", `addRow${on ? " on" : ""}`);
+        const name = el("span", "addName", it.label);
+        const btn = el("button", `addBtn${on ? " on" : ""}`, on ? `✓ ${l.added}` : `+ ${l.addOne}`);
+        btn.type = "button";
+        btn.setAttribute("aria-pressed", String(on));
+        btn.setAttribute("aria-label", `${on ? l.remove : l.addOne}: ${it.label}`);
+        btn.addEventListener("click", () => {
+          if (on) delete prefs.alerts[it.id];
+          else turnOn(it.id);
+          changed();
+        });
+        li.append(name);
+        if (it.sub) li.append(el("span", "addSub", it.sub));
+        li.append(btn);
+        rows.append(li);
+      }
+      group.append(rows);
+    }
+    add.append(group);
+  }
+  if (q && !shown) add.append(el("p", "note", l.noMatch));
+  parts.push(add);
+  els.alertList.replaceChildren(...parts);
+}
+
+// The Alerts tab, opened at an alert's settings (the Bosses tab's gear),
+// which flashes.
+function openAlert(key) {
+  prefs.tab = "alerts";
+  savePrefs();
+  renderTabs();
+  if (key in prefs.alerts) alertView.open = key;
+  renderAlerts();
+  const li = [...els.alertList.querySelectorAll("[data-alert]")].find((x) => x.dataset.alert === key);
+  if (!li) return;
+  li.scrollIntoView({ block: "center" });
+  li.classList.remove("flash");
+  void li.offsetWidth;
+  li.classList.add("flash");
 }
 
 // The alert's banner, with the sound repeating until it has played as often

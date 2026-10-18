@@ -16,7 +16,7 @@ A pet levels up as soon as its souls reach what its level needs, and its count s
 
 ## Where souls drop
 
-Click a pet to see where its souls come from: the monsters that drop them (level, drop chance, zone and map, number of spawns, nearest Kibelisk) and the chests that hold them. Click it again to close.
+Click a pet to see where its souls come from: the monsters that drop them (level, drop chance, zone and map, number of spawns, nearest Kibelisk), the one with the most spawns first, and the chests that hold them. Click it again to close.
 
 - The nearest Kibelisk shows its number as the in-game map lists it ("nearest teleport #18 Odar's Shade"), and how far it is from the middle of the spawns. In the Abyss, where each side has Kibelisks of its own, it is the nearest one your side can use.
 - The region chips (Altgard, Verteron, Lower and Middle Reshanta) choose which regions you farm in: the list shows only the pets whose souls drop in a region that is on (a pinned pet always shows, and so does one no monster is known to drop), and a pet's sources show only those regions' spawns. Until you change them, the other side's maps are off: Verteron for an Asmodian, Altgard for an Elyos, from the server number (1xxx Elyos, 2xxx Asmodian). A pet that also drops in a turned-off region says so. Turn on one region to list what you can farm there.
@@ -25,7 +25,7 @@ Click a pet to see where its souls come from: the monsters that drop them (level
 
 The data is the game's own: the soul items, which monsters drop them and how often, the chests and where they come from, and every spawn point and Kibelisk on each map, read from the game client's tables and map data. The plugin has no network access, so the data ships in `sources.js` and changes only with a new version. To rebuild it after a game patch, extract the client's `AION2/Content/Data/Table`, `Data/Map` and `Data/MapDataHierarchy` to JSON, then run `python tools/game-souls/gamesouls.py --tables <Output>/AION2/Content/Data/Table --tw-l10n <TW Output>/AION2/Content/Data/Table/L10N --compare plugins/pet-souls/sources.js` (the report lists what changed in English).
 
-Each monster in a pet's sources has a link to the [Aion 2 Timers](https://www.aion2timers.com/map/) map, opened in your browser: every spawn of that monster on its map, and the nearest teleport, measured from the same spawn as here so the distance matches. In the Abyss it uses your side's Kibelisk, as the list does. The map opens in the meter's language where it has it.
+Each monster in a pet's sources has a **Map** link to the [Aion 2 Timers](https://www.aion2timers.com/map/) map, opened in your browser: every spawn of that monster on its map, and the nearest teleport, measured from the same spawn as here so the distance matches. In the Abyss it uses your side's Kibelisk, as the list does. The map opens in the meter's language where it has it.
 
 Every name in a pet's sources (monsters, zones, maps, Kibelisks, chests) shows in the meter's language, in the game's own words: the Global client's eight languages, Traditional Chinese from the Taiwan client's strings (`--tw-l10n`, the `Data/Table/L10N` of its extract), and Simplified Chinese converted from it with OpenCC. A name the game spells the same as in English is kept once, in English.
 

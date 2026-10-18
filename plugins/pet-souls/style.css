@@ -252,3 +252,15 @@ body.compact .foot {
   margin-left: 6px; padding: 0 5px; border-radius: 999px; font-size: 10px;
   color: #0a0e16; background: #6ee07a; vertical-align: 1px;
 }
+
+/* The Map link's folded-map icon. */
+.mapIcon {
+  width: 12px;
+  height: 12px;
+  margin-right: 3px;
+  vertical-align: -1px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linejoin: round;
+}

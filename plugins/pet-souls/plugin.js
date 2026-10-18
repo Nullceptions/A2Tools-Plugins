@@ -77,43 +77,43 @@ const SOURCE_UI = {
   en: { textSize: "Text size", noSource: "No source known.", noDrops: "No drops or chests listed.", spawns: (n) => `${n} spawn${n === 1 ? "" : "s"}`,
         teleport: (n, name) => `nearest teleport #${n} ${name}`, near: (name) => `near Kibelisk ${name}`,
         perOpening: (p) => `${p} per opening`, boxFrom: (x) => `The box comes from ${x}`, also: (x) => `Also drops in ${x} (hidden)`,
-        map: "Map on Aion 2 Timers" },
+        map: "Map" },
   ko: { textSize: "글자 크기", noSource: "알려진 출처가 없습니다.", noDrops: "드롭이나 상자 정보가 없습니다.", spawns: (n) => `${n}곳 출현`,
         teleport: (n, name) => `가까운 텔레포트 #${n} ${name}`, near: (name) => `${name} 근처`,
         perOpening: (p) => `개봉당 ${p}`, boxFrom: (x) => `상자 획득처: ${x}`, also: (x) => `${x}에서도 드롭 (숨김)`,
-        map: "Aion 2 Timers 지도" },
+        map: "지도" },
   ja: { textSize: "文字の大きさ", noSource: "入手先は不明です。", noDrops: "ドロップや箱の情報はありません。", spawns: (n) => `出現 ${n}か所`,
         teleport: (n, name) => `最寄りのテレポート #${n} ${name}`, near: (name) => `${name}付近`,
         perOpening: (p) => `開封ごとに ${p}`, boxFrom: (x) => `箱の入手先: ${x}`, also: (x) => `${x}でもドロップ（非表示）`,
-        map: "Aion 2 Timersの地図" },
+        map: "地図" },
   de: { textSize: "Textgröße", noSource: "Keine Quelle bekannt.", noDrops: "Keine Drops oder Truhen bekannt.", spawns: (n) => `${n} Spawn${n === 1 ? "" : "s"}`,
         teleport: (n, name) => `nächster Teleport #${n} ${name}`, near: (name) => `nahe ${name}`,
         perOpening: (p) => `${p} pro Öffnung`, boxFrom: (x) => `Die Truhe gibt es über: ${x}`, also: (x) => `Droppt auch in ${x} (ausgeblendet)`,
-        map: "Karte auf Aion 2 Timers" },
+        map: "Karte" },
   fr: { textSize: "Taille du texte", noSource: "Aucune source connue.", noDrops: "Aucun butin ni coffre répertorié.", spawns: (n) => `${n} apparition${n === 1 ? "" : "s"}`,
         teleport: (n, name) => `téléporteur le plus proche n° ${n} ${name}`, near: (name) => `près de ${name}`,
         perOpening: (p) => `${p} par ouverture`, boxFrom: (x) => `Le coffre s'obtient via : ${x}`, also: (x) => `Tombe aussi à ${x} (masqué)`,
-        map: "Carte sur Aion 2 Timers" },
+        map: "Carte" },
   es: { textSize: "Tamaño del texto", noSource: "No se conoce ninguna fuente.", noDrops: "No hay botín ni cofres.", spawns: (n) => `${n} aparici${n === 1 ? "ón" : "ones"}`,
         teleport: (n, name) => `teletransporte más cercano n.º ${n} ${name}`, near: (name) => `cerca de ${name}`,
         perOpening: (p) => `${p} por apertura`, boxFrom: (x) => `El cofre se obtiene en: ${x}`, also: (x) => `También cae en ${x} (oculto)`,
-        map: "Mapa en Aion 2 Timers" },
+        map: "Mapa" },
   pt: { textSize: "Tamanho do texto", noSource: "Nenhuma fonte conhecida.", noDrops: "Nenhum drop ou baú listado.", spawns: (n) => `${n} apari${n === 1 ? "ção" : "ções"}`,
         teleport: (n, name) => `teleporte mais próximo nº ${n} ${name}`, near: (name) => `perto de ${name}`,
         perOpening: (p) => `${p} por abertura`, boxFrom: (x) => `O baú vem de: ${x}`, also: (x) => `Também dropa em ${x} (oculto)`,
-        map: "Mapa no Aion 2 Timers" },
+        map: "Mapa" },
   ru: { textSize: "Размер текста", noSource: "Источник неизвестен.", noDrops: "Нет данных о добыче и сундуках.", spawns: (n) => `мест появления: ${n}`,
         teleport: (n, name) => `ближайший телепорт №${n} ${name}`, near: (name) => `рядом: ${name}`,
         perOpening: (p) => `${p} за открытие`, boxFrom: (x) => `Сундук можно получить: ${x}`, also: (x) => `Также выпадает: ${x} (скрыто)`,
-        map: "Карта на Aion 2 Timers" },
+        map: "Карта" },
   "zh-Hant": { textSize: "文字大小", noSource: "來源不明。", noDrops: "沒有掉落或寶箱資料。", spawns: (n) => `${n} 個出現點`,
         teleport: (n, name) => `最近的傳送點 #${n} ${name}`, near: (name) => `${name}附近`,
         perOpening: (p) => `每次開啟 ${p}`, boxFrom: (x) => `寶箱來源：${x}`, also: (x) => `${x}也會掉落（已隱藏）`,
-        map: "Aion 2 Timers 地圖" },
+        map: "地圖" },
   "zh-Hans": { textSize: "文字大小", noSource: "来源不明。", noDrops: "没有掉落或宝箱资料。", spawns: (n) => `${n} 个出现点`,
         teleport: (n, name) => `最近的传送点 #${n} ${name}`, near: (name) => `${name}附近`,
         perOpening: (p) => `每次开启 ${p}`, boxFrom: (x) => `宝箱来源：${x}`, also: (x) => `${x}也会掉落（已隐藏）`,
-        map: "Aion 2 Timers 地图" },
+        map: "地图" },
 };
 const ui = () => SOURCE_UI[language] || SOURCE_UI.en;
 // "A, B and C" as the meter's language writes it.
@@ -309,7 +309,10 @@ function whereOf(id) {
   };
   const hidden = new Set(hiddenRegions());
   const elsewhere = new Set();
-  for (const d of src.drops) {
+  // The monsters with the most spawns first: the easiest to find (a
+  // player's request, 2026-10-19); the game data's order otherwise.
+  const drops = [...src.drops].sort((x, y) => (y.spawns || 0) - (x.spawns || 0));
+  for (const d of drops) {
     if (hidden.has(regionOf(d))) {
       elsewhere.add(regionOf(d));
       continue;
@@ -326,7 +329,17 @@ function whereOf(id) {
     if (href) {
       const link = document.createElement("a");
       link.href = href;
-      link.textContent = words.map;
+      // A folded map before the word.
+      const NS = "http://www.w3.org/2000/svg";
+      const icon = document.createElementNS(NS, "svg");
+      icon.setAttribute("class", "mapIcon");
+      icon.setAttribute("viewBox", "0 0 24 24");
+      icon.setAttribute("aria-hidden", "true");
+      const path = document.createElementNS(NS, "path");
+      path.setAttribute("d", "M9 4 3 6.5v13.5l6-2.5 6 2.5 6-2.5V4l-6 2.5L9 4Zm0 0v13.5m6-11v13.5");
+      icon.append(path);
+      link.append(icon, words.map);
+      // Aion 2 Timers' map, which the address shows.
       link.title = href;
       at.append(" · ", link);
     }

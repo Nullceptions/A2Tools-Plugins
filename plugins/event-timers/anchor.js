@@ -19,70 +19,70 @@
 // in what order, and anchorShow() shows them in the frame.
 
 const ANCHOR_UI = {
-  en: { anchor: "Anchor mode", anchorNote: "Icons line up in a grid beside an anchor (⚓). The anchor and the grid's places show while this Settings tab is open: unlock the icons and drag the anchor to place the grid.",
+  en: { anchor: "Anchor mode", anchorNote: "Shown on screen while this tab is open. Unlock the icons to drag the anchor.",
         expand: "Expand direction", dirs: { "left-down": "Left, then down", "right-down": "Right, then down", "left-up": "Left, then up", "right-up": "Right, then up" },
         maxWidth: "Max width (icons across)", maxHeight: "Max height (icons down)", sortBy: "Sort by",
         sorts: { urgent: "Most urgent first", rarest: "Rarest first", soonest: "Soonest first" },
         sortNotes: { urgent: "Being fought (lowest HP first), then up now (rarest first), then the soonest.", rarest: "Up now, the longest to respawn first, then the soonest.", soonest: "Up now, then in the order they start." },
         train: "World Boss Train", trainNote: "Every world boss that is up, or spawns within 5 minutes, joins the grid, with an alert or not.",
         needsMeter: "Anchor mode needs meter 2.0.72 or newer.", more: (n) => `${n} more` },
-  ko: { anchor: "앵커 모드", anchorNote: "아이콘이 앵커(⚓) 옆에 격자로 정렬됩니다. 이 설정 탭이 열려 있는 동안 앵커와 격자 자리가 표시됩니다. 아이콘 잠금을 풀고 앵커를 끌어 격자를 배치하세요.",
+  ko: { anchor: "앵커 모드", anchorNote: "이 탭이 열려 있는 동안 화면에 표시됩니다. 아이콘 잠금을 풀고 앵커를 끄세요.",
         expand: "확장 방향", dirs: { "left-down": "왼쪽, 그다음 아래", "right-down": "오른쪽, 그다음 아래", "left-up": "왼쪽, 그다음 위", "right-up": "오른쪽, 그다음 위" },
         maxWidth: "최대 너비 (가로 아이콘 수)", maxHeight: "최대 높이 (세로 아이콘 수)", sortBy: "정렬",
         sorts: { urgent: "급한 순", rarest: "희귀한 순", soonest: "빠른 순" },
         sortNotes: { urgent: "전투 중(HP 낮은 순), 출현 중(희귀한 순), 그다음 곧 출현할 순서입니다.", rarest: "출현 중인 보스를 재출현이 긴 순으로, 그다음 곧 출현할 순서입니다.", soonest: "출현 중, 그다음 시작하는 순서입니다." },
         train: "월드 보스 트레인", trainNote: "출현 중이거나 5분 안에 출현하는 월드 보스를 알림과 상관없이 모두 표시합니다.",
         needsMeter: "앵커 모드는 미터 2.0.72 이상이 필요합니다.", more: (n) => `${n}개 더` },
-  ja: { anchor: "アンカーモード", anchorNote: "アイコンはアンカー（⚓）の横に格子状に並びます。この設定タブを開いている間、アンカーと格子の位置が表示されます。アイコンのロックを外し、アンカーをドラッグして配置してください。",
+  ja: { anchor: "アンカーモード", anchorNote: "このタブを開いている間、画面に表示されます。ロックを外してアンカーをドラッグします。",
         expand: "広がる方向", dirs: { "left-down": "左、次に下", "right-down": "右、次に下", "left-up": "左、次に上", "right-up": "右、次に上" },
         maxWidth: "最大幅（横のアイコン数）", maxHeight: "最大高さ（縦のアイコン数）", sortBy: "並び順",
         sorts: { urgent: "急ぎの順", rarest: "レアな順", soonest: "早い順" },
         sortNotes: { urgent: "戦闘中（HPの低い順）、出現中（レアな順）、次に出現の早い順。", rarest: "出現中を再出現の長い順に、次に出現の早い順。", soonest: "出現中、次に始まる順。" },
         train: "ワールドボストレイン", trainNote: "出現中か5分以内に出現するワールドボスを、通知の有無にかかわらずすべて並べます。",
         needsMeter: "アンカーモードにはメーター2.0.72以降が必要です。", more: (n) => `ほか${n}件` },
-  de: { anchor: "Ankermodus", anchorNote: "Die Symbole reihen sich in einem Raster neben einem Anker (⚓) auf. Anker und Rasterplätze sind sichtbar, solange dieser Einstellungs-Tab offen ist: Symbole entsperren und den Anker ziehen, um das Raster zu platzieren.",
+  de: { anchor: "Ankermodus", anchorNote: "Sichtbar, solange dieser Tab offen ist. Symbole entsperren, um den Anker zu ziehen.",
         expand: "Wachstumsrichtung", dirs: { "left-down": "Links, dann nach unten", "right-down": "Rechts, dann nach unten", "left-up": "Links, dann nach oben", "right-up": "Rechts, dann nach oben" },
         maxWidth: "Max. Breite (Symbole nebeneinander)", maxHeight: "Max. Höhe (Symbole untereinander)", sortBy: "Sortieren nach",
         sorts: { urgent: "Dringendste zuerst", rarest: "Seltenste zuerst", soonest: "Nächste zuerst" },
         sortNotes: { urgent: "Im Kampf (niedrigste HP zuerst), dann jetzt da (seltenste zuerst), dann die nächsten.", rarest: "Jetzt da, längste Respawnzeit zuerst, dann die nächsten.", soonest: "Jetzt da, dann in der Reihenfolge ihres Starts." },
         train: "Weltboss-Train", trainNote: "Jeder Weltboss, der da ist oder in 5 Minuten erscheint, kommt ins Raster, mit oder ohne Alarm.",
         needsMeter: "Der Ankermodus braucht Meter 2.0.72 oder neuer.", more: (n) => `${n} weitere` },
-  fr: { anchor: "Mode ancre", anchorNote: "Les icônes s'alignent en grille à côté d'une ancre (⚓). L'ancre et les places de la grille s'affichent tant que cet onglet Réglages est ouvert : déverrouillez les icônes et faites glisser l'ancre pour placer la grille.",
+  fr: { anchor: "Mode ancre", anchorNote: "Visible tant que cet onglet est ouvert. Déverrouillez les icônes pour déplacer l'ancre.",
         expand: "Sens d'extension", dirs: { "left-down": "Gauche, puis bas", "right-down": "Droite, puis bas", "left-up": "Gauche, puis haut", "right-up": "Droite, puis haut" },
         maxWidth: "Largeur max (icônes en ligne)", maxHeight: "Hauteur max (icônes en colonne)", sortBy: "Trier par",
         sorts: { urgent: "Les plus urgents d'abord", rarest: "Les plus rares d'abord", soonest: "Les plus proches d'abord" },
         sortNotes: { urgent: "Attaqués (PV les plus bas d'abord), puis présents (les plus rares d'abord), puis les plus proches.", rarest: "Présents, la plus longue réapparition d'abord, puis les plus proches.", soonest: "Présents, puis dans l'ordre où ils commencent." },
         train: "Train de boss mondiaux", trainNote: "Chaque boss mondial présent, ou qui apparaît dans 5 minutes, rejoint la grille, avec ou sans alerte.",
         needsMeter: "Le mode ancre nécessite le compteur 2.0.72 ou plus récent.", more: (n) => `${n} de plus` },
-  es: { anchor: "Modo ancla", anchorNote: "Los iconos se alinean en una cuadrícula junto a un ancla (⚓). El ancla y los huecos de la cuadrícula se ven mientras esta pestaña de Ajustes está abierta: desbloquea los iconos y arrastra el ancla para colocar la cuadrícula.",
+  es: { anchor: "Modo ancla", anchorNote: "Visible mientras esta pestaña está abierta. Desbloquea los iconos para arrastrar el ancla.",
         expand: "Dirección de expansión", dirs: { "left-down": "Izquierda, luego abajo", "right-down": "Derecha, luego abajo", "left-up": "Izquierda, luego arriba", "right-up": "Derecha, luego arriba" },
         maxWidth: "Ancho máx. (iconos en fila)", maxHeight: "Alto máx. (iconos en columna)", sortBy: "Ordenar por",
         sorts: { urgent: "Más urgentes primero", rarest: "Más raros primero", soonest: "Más próximos primero" },
         sortNotes: { urgent: "En combate (menos PV primero), luego activos (más raros primero), luego los más próximos.", rarest: "Activos, el que más tarda en reaparecer primero, luego los más próximos.", soonest: "Activos, luego en el orden en que empiezan." },
         train: "Tren de jefes mundiales", trainNote: "Todo jefe mundial activo, o que aparezca en 5 minutos, se une a la cuadrícula, con alerta o sin ella.",
         needsMeter: "El modo ancla necesita el medidor 2.0.72 o posterior.", more: (n) => `${n} más` },
-  pt: { anchor: "Modo âncora", anchorNote: "Os ícones se alinham em uma grade ao lado de uma âncora (⚓). A âncora e os espaços da grade aparecem enquanto esta aba de Configurações está aberta: destrave os ícones e arraste a âncora para posicionar a grade.",
+  pt: { anchor: "Modo âncora", anchorNote: "Visível enquanto esta aba está aberta. Destrave os ícones para arrastar a âncora.",
         expand: "Direção de expansão", dirs: { "left-down": "Esquerda, depois para baixo", "right-down": "Direita, depois para baixo", "left-up": "Esquerda, depois para cima", "right-up": "Direita, depois para cima" },
         maxWidth: "Largura máx. (ícones na linha)", maxHeight: "Altura máx. (ícones na coluna)", sortBy: "Ordenar por",
         sorts: { urgent: "Mais urgentes primeiro", rarest: "Mais raros primeiro", soonest: "Mais próximos primeiro" },
         sortNotes: { urgent: "Em combate (menos PV primeiro), depois ativos (mais raros primeiro), depois os mais próximos.", rarest: "Ativos, o que mais demora a renascer primeiro, depois os mais próximos.", soonest: "Ativos, depois na ordem em que começam." },
         train: "Trem de chefes mundiais", trainNote: "Todo chefe mundial ativo, ou que surja em 5 minutos, entra na grade, com alerta ou não.",
         needsMeter: "O modo âncora precisa do medidor 2.0.72 ou mais recente.", more: (n) => `mais ${n}` },
-  ru: { anchor: "Режим якоря", anchorNote: "Значки выстраиваются сеткой рядом с якорем (⚓). Якорь и места сетки видны, пока открыта эта вкладка настроек: снимите фиксацию значков и перетащите якорь, чтобы разместить сетку.",
+  ru: { anchor: "Режим якоря", anchorNote: "Видно, пока открыта эта вкладка. Снимите фиксацию, чтобы перетащить якорь.",
         expand: "Направление роста", dirs: { "left-down": "Влево, затем вниз", "right-down": "Вправо, затем вниз", "left-up": "Влево, затем вверх", "right-up": "Вправо, затем вверх" },
         maxWidth: "Макс. ширина (значков в ряд)", maxHeight: "Макс. высота (значков в столбец)", sortBy: "Сортировка",
         sorts: { urgent: "Сначала срочные", rarest: "Сначала редкие", soonest: "Сначала ближайшие" },
         sortNotes: { urgent: "В бою (меньше HP — раньше), затем появившиеся (сначала редкие), затем ближайшие.", rarest: "Появившиеся, с самым долгим возрождением первыми, затем ближайшие.", soonest: "Появившиеся, затем в порядке начала." },
         train: "Трейн мировых боссов", trainNote: "Каждый мировой босс, который на месте или появится в течение 5 минут, попадает в сетку, с оповещением или без.",
         needsMeter: "Для режима якоря нужен счётчик 2.0.72 или новее.", more: (n) => `ещё ${n}` },
-  "zh-Hant": { anchor: "錨點模式", anchorNote: "圖示會以網格排在錨點（⚓）旁。開啟此設定分頁時會顯示錨點和網格位置：解除圖示鎖定並拖曳錨點即可放置網格。",
+  "zh-Hant": { anchor: "錨點模式", anchorNote: "開啟此分頁時顯示於畫面上。解除圖示鎖定即可拖曳錨點。",
         expand: "延伸方向", dirs: { "left-down": "向左，再向下", "right-down": "向右，再向下", "left-up": "向左，再向上", "right-up": "向右，再向上" },
         maxWidth: "最大寬度（橫向圖示數）", maxHeight: "最大高度（縱向圖示數）", sortBy: "排序",
         sorts: { urgent: "最緊急優先", rarest: "最稀有優先", soonest: "最快優先" },
         sortNotes: { urgent: "戰鬥中（HP 最低優先），再來是已出現（最稀有優先），然後是最快出現的。", rarest: "已出現的依重生最久優先，然後是最快出現的。", soonest: "已出現，然後依開始順序。" },
         train: "世界首領車隊", trainNote: "已出現或 5 分鐘內出現的世界首領都會加入網格，無論是否設定提醒。",
         needsMeter: "錨點模式需要計量器 2.0.72 以上。", more: (n) => `還有 ${n} 個` },
-  "zh-Hans": { anchor: "锚点模式", anchorNote: "图标会以网格排在锚点（⚓）旁。打开此设置标签页时会显示锚点和网格位置：解除图标锁定并拖动锚点即可放置网格。",
+  "zh-Hans": { anchor: "锚点模式", anchorNote: "打开此标签页时显示在画面上。解除图标锁定即可拖动锚点。",
         expand: "延伸方向", dirs: { "left-down": "向左，再向下", "right-down": "向右，再向下", "left-up": "向左，再向上", "right-up": "向右，再向上" },
         maxWidth: "最大宽度（横向图标数）", maxHeight: "最大高度（纵向图标数）", sortBy: "排序",
         sorts: { urgent: "最紧急优先", rarest: "最稀有优先", soonest: "最快优先" },
@@ -298,25 +298,25 @@ async function anchorShow(wanted) {
 // shows in game while this tab is open. Anchor mode is the setup most
 // players want, so it leads.
 const SETUP_UI = {
-  en: { onScreen: "On screen", display: "Time and display", across: "Across", down: "Down", fewer: "Fewer", more: "More", trainLead: "Spawning within", mins: n => `${n} min`, trainNote: n => `Every world boss that is up, or spawns within ${n} min, joins the grid, with an alert or not.`, gapX: "Column gap", gapY: "Row gap",
+  en: { onScreen: "On screen", display: "Time and display", across: "Across", down: "Down", fewer: "Fewer", more: "More", trainLead: "Spawning within", mins: n => `${n} min`, trainNote: n => `Every world boss up, or spawning within ${n} min, alert or not.`, gapX: "Column gap", gapY: "Row gap",
         corner: "Click a corner to set where the anchor sits.", pitch: "Line the icons up in a grid beside an anchor you place." },
-  ko: { onScreen: "화면 표시", display: "시간과 표시", across: "가로", down: "세로", fewer: "줄이기", more: "늘리기", trainLead: "출현까지 남은 시간", mins: n => `${n}분`, trainNote: n => `출현 중이거나 ${n}분 안에 출현하는 월드 보스를 알림과 상관없이 모두 표시합니다.`, gapX: "열 간격", gapY: "행 간격",
+  ko: { onScreen: "화면 표시", display: "시간과 표시", across: "가로", down: "세로", fewer: "줄이기", more: "늘리기", trainLead: "출현까지 남은 시간", mins: n => `${n}분`, trainNote: n => `출현 중이거나 ${n}분 안에 출현하는 모든 월드 보스.`, gapX: "열 간격", gapY: "행 간격",
         corner: "모서리를 눌러 앵커 위치를 정하세요.", pitch: "직접 놓은 앵커 옆에 아이콘을 격자로 정렬합니다." },
-  ja: { onScreen: "画面表示", display: "時刻と表示", across: "横", down: "縦", fewer: "減らす", more: "増やす", trainLead: "出現までの時間", mins: n => `${n}分`, trainNote: n => `出現中か${n}分以内に出現するワールドボスを、通知の有無にかかわらずすべて並べます。`, gapX: "列の間隔", gapY: "行の間隔",
+  ja: { onScreen: "画面表示", display: "時刻と表示", across: "横", down: "縦", fewer: "減らす", more: "増やす", trainLead: "出現までの時間", mins: n => `${n}分`, trainNote: n => `出現中か${n}分以内に出現するすべてのワールドボス。`, gapX: "列の間隔", gapY: "行の間隔",
         corner: "角をクリックしてアンカーの位置を決めます。", pitch: "置いたアンカーの横にアイコンを格子状に並べます。" },
-  de: { onScreen: "Auf dem Bildschirm", display: "Zeit und Anzeige", across: "Breite", down: "Höhe", fewer: "Weniger", more: "Mehr", trainLead: "Erscheint innerhalb von", mins: n => `${n} Min.`, trainNote: n => `Jeder Weltboss, der da ist oder in ${n} Min. erscheint, kommt ins Raster, mit oder ohne Alarm.`, gapX: "Spaltenabstand", gapY: "Zeilenabstand",
+  de: { onScreen: "Auf dem Bildschirm", display: "Zeit und Anzeige", across: "Breite", down: "Höhe", fewer: "Weniger", more: "Mehr", trainLead: "Erscheint innerhalb von", mins: n => `${n} Min.`, trainNote: n => `Jeder Weltboss, der da ist oder in ${n} Min. erscheint.`, gapX: "Spaltenabstand", gapY: "Zeilenabstand",
         corner: "Eine Ecke anklicken, um den Platz des Ankers zu wählen.", pitch: "Die Symbole in einem Raster neben einem Anker aufreihen, den du platzierst." },
-  fr: { onScreen: "À l'écran", display: "Heure et affichage", across: "Largeur", down: "Hauteur", fewer: "Moins", more: "Plus", trainLead: "Apparition dans", mins: n => `${n} min`, trainNote: n => `Chaque boss mondial présent, ou qui apparaît dans ${n} min, rejoint la grille, avec ou sans alerte.`, gapX: "Écart des colonnes", gapY: "Écart des lignes",
+  fr: { onScreen: "À l'écran", display: "Heure et affichage", across: "Largeur", down: "Hauteur", fewer: "Moins", more: "Plus", trainLead: "Apparition dans", mins: n => `${n} min`, trainNote: n => `Chaque boss mondial présent, ou qui apparaît dans ${n} min.`, gapX: "Écart des colonnes", gapY: "Écart des lignes",
         corner: "Cliquez sur un coin pour placer l'ancre.", pitch: "Aligner les icônes en grille à côté d'une ancre que vous placez." },
-  es: { onScreen: "En pantalla", display: "Hora y vista", across: "Ancho", down: "Alto", fewer: "Menos", more: "Más", trainLead: "Aparece en", mins: n => `${n} min`, trainNote: n => `Todo jefe mundial activo, o que aparezca en ${n} min, se une a la cuadrícula, con alerta o sin ella.`, gapX: "Espacio entre columnas", gapY: "Espacio entre filas",
+  es: { onScreen: "En pantalla", display: "Hora y vista", across: "Ancho", down: "Alto", fewer: "Menos", more: "Más", trainLead: "Aparece en", mins: n => `${n} min`, trainNote: n => `Todo jefe mundial activo, o que aparezca en ${n} min.`, gapX: "Espacio entre columnas", gapY: "Espacio entre filas",
         corner: "Haz clic en una esquina para situar el ancla.", pitch: "Alinea los iconos en una cuadrícula junto a un ancla que colocas tú." },
-  pt: { onScreen: "Na tela", display: "Hora e exibição", across: "Largura", down: "Altura", fewer: "Menos", more: "Mais", trainLead: "Surge em até", mins: n => `${n} min`, trainNote: n => `Todo chefe mundial ativo, ou que surja em até ${n} min, entra na grade, com alerta ou não.`, gapX: "Espaço entre colunas", gapY: "Espaço entre linhas",
+  pt: { onScreen: "Na tela", display: "Hora e exibição", across: "Largura", down: "Altura", fewer: "Menos", more: "Mais", trainLead: "Surge em até", mins: n => `${n} min`, trainNote: n => `Todo chefe mundial ativo, ou que surja em até ${n} min.`, gapX: "Espaço entre colunas", gapY: "Espaço entre linhas",
         corner: "Clique num canto para posicionar a âncora.", pitch: "Alinhe os ícones em uma grade ao lado de uma âncora que você posiciona." },
-  ru: { onScreen: "На экране", display: "Время и вид", across: "В ширину", down: "В высоту", fewer: "Меньше", more: "Больше", trainLead: "Появится в течение", mins: n => `${n} мин`, trainNote: n => `Каждый мировой босс, который на месте или появится в течение ${n} мин, попадает в сетку, с оповещением или без.`, gapX: "Между столбцами", gapY: "Между рядами",
+  ru: { onScreen: "На экране", display: "Время и вид", across: "В ширину", down: "В высоту", fewer: "Меньше", more: "Больше", trainLead: "Появится в течение", mins: n => `${n} мин`, trainNote: n => `Каждый мировой босс на месте или в течение ${n} мин.`, gapX: "Между столбцами", gapY: "Между рядами",
         corner: "Щёлкните угол, чтобы выбрать место якоря.", pitch: "Выстроить значки сеткой рядом с якорем, который вы ставите сами." },
-  "zh-Hant": { onScreen: "畫面顯示", display: "時間與顯示", across: "橫向", down: "縱向", fewer: "減少", more: "增加", trainLead: "出現前", mins: n => `${n} 分鐘`, trainNote: n => `已出現或 ${n} 分鐘內出現的世界首領都會加入網格，無論是否設定提醒。`, gapX: "欄距", gapY: "列距",
+  "zh-Hant": { onScreen: "畫面顯示", display: "時間與顯示", across: "橫向", down: "縱向", fewer: "減少", more: "增加", trainLead: "出現前", mins: n => `${n} 分鐘`, trainNote: n => `已出現或 ${n} 分鐘內出現的所有世界首領。`, gapX: "欄距", gapY: "列距",
         corner: "點擊角落以設定錨點位置。", pitch: "將圖示以網格排在你放置的錨點旁。" },
-  "zh-Hans": { onScreen: "画面显示", display: "时间与显示", across: "横向", down: "纵向", fewer: "减少", more: "增加", trainLead: "出现前", mins: n => `${n} 分钟`, trainNote: n => `已出现或 ${n} 分钟内出现的世界首领都会加入网格，无论是否设置提醒。`, gapX: "列距", gapY: "行距",
+  "zh-Hans": { onScreen: "画面显示", display: "时间与显示", across: "横向", down: "纵向", fewer: "减少", more: "增加", trainLead: "出现前", mins: n => `${n} 分钟`, trainNote: n => `已出现或 ${n} 分钟内出现的所有世界首领。`, gapX: "列距", gapY: "行距",
         corner: "点击角落以设置锚点位置。", pitch: "将图标以网格排在你放置的锚点旁。" },
 };
 const setupUi = () => SETUP_UI[language] || SETUP_UI.en;
@@ -406,6 +406,15 @@ function renderAnchorSettings(box) {
     card.querySelector(".anchorSort").addEventListener("change", (e) => { prefs.anchorSort = e.target.value; save(); });
     train.addEventListener("change", () => { prefs.anchorTrain = train.checked; save(); });
   }
+  // The icons' lock lives here, with what it locks; it works with anchor
+  // mode off too (icons placed one by one).
+  const lockRow = box.querySelector(".lockRow");
+  const lockNote = box.querySelector(".pinLockNote");
+  const cornerNote = card.querySelector(".cornerNote");
+  if (lockRow && lockRow.parentElement !== card) {
+    cornerNote.after(lockRow);
+    if (lockNote) lockRow.after(lockNote);
+  }
   card.hidden = !iconStyle();
   const on = anchorOn();
   card.classList.toggle("on", on);
@@ -467,7 +476,7 @@ function renderAnchorSettings(box) {
   sort.replaceChildren(...SORTS.map((x) => option(x, u.sorts[x])));
   sort.value = SORTS.includes(prefs.anchorSort) ? prefs.anchorSort : "urgent";
   card.querySelector(".sortRow .iconSettingLabel").textContent = u.sortBy;
-  card.querySelector(".sortNote").textContent = u.sortNotes[sort.value];
+  card.querySelector(".sortNote").textContent = "";
   card.querySelector(".trainRow .iconSettingLabel").textContent = u.train;
   card.querySelector(".anchorTrain").checked = !!prefs.anchorTrain;
   card.querySelector(".trainNote").textContent = s.trainNote(trainLead());
@@ -475,9 +484,10 @@ function renderAnchorSettings(box) {
   lead.replaceChildren(...TRAIN_LEADS.map((n) => option(n, s.mins(n))));
   lead.value = String(trainLead());
   card.querySelector(".trainLeadRow .iconSettingLabel").textContent = s.trainLead;
-  for (const cls of ["cornerNote", "sortRow", "sortNote", "trainRow", "trainNote"]) {
+  for (const cls of ["cornerNote", "sortRow", "trainRow", "trainNote"]) {
     card.querySelector(`.${cls}`).hidden = !on;
   }
+  card.querySelector(".sortNote").hidden = true;
   // The lookahead only with the train on.
   card.querySelector(".trainLeadRow").hidden = !on || !prefs.anchorTrain;
 }

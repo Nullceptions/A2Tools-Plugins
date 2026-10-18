@@ -201,6 +201,14 @@ async function anchorLayout(names, showName) {
     a2.widgets.send(ANCHOR, { kind: "anchor", name: anchorUi().anchor }).catch(() => {});
     const at = await a2.widgets.where(ANCHOR).catch(() => null);
     if (!at) return;
+    // Each open icon's real size (Windows makes a window at least 136 px
+    // wide, whatever it asked for), asked once per icon and size.
+    for (const name of names) {
+      const want = `${name}:${!!showName.get(name)}`;
+      if (sizeOf.get(name)?.want === want) continue;
+      const w = await a2.widgets.where(name).catch(() => null);
+      if (w) sizeOf.set(name, { want, width: w.width, height: w.height });
+    }
     for (const [name, { x, y }] of gridSpots(names, showName, at)) {
       const key = `${x},${y}`;
       if (placed.get(name) === key) continue;
@@ -208,6 +216,7 @@ async function anchorLayout(names, showName) {
       await a2.widgets.place(name, { x, y }).catch(() => placed.delete(name));
     }
     for (const name of [...placed.keys()]) if (!names.includes(name)) placed.delete(name);
+    for (const name of [...sizeOf.keys()]) if (!names.includes(name)) sizeOf.delete(name);
   } finally {
     layoutBusy = false;
     if (layoutAgain) {
@@ -216,24 +225,39 @@ async function anchorLayout(names, showName) {
     }
   }
 }
+// The icons' real window sizes (physical px), by name, as the meter gave
+// them, with the name-shown state they were read for.
+const sizeOf = new Map();
+
 // Each icon's place in the grid, physical pixels: beside the anchor (at),
-// row by row away from it.
+// row by row away from it. The screen's scale is this page's own: the
+// anchor's width says nothing of it, Windows having widened its window to
+// 136 px (2.0.72: the icons went 4x too far apart). An icon not open yet is
+// as wide as the anchor's window when Windows widened that, and its own
+// size otherwise.
 function gridSpots(names, showName, at) {
-  const scale = at.width / ANCHOR_SIZE.width || 1;
+  const scale = (typeof devicePixelRatio === "number" && devicePixelRatio > 0) ? devicePixelRatio : 1;
+  const widened = at.width > Math.round(ANCHOR_SIZE.width * scale) + 2 ? at.width : 0;
   const cols = gridSize(prefs.anchorCols, 4);
   const dir = DIRECTIONS.includes(prefs.anchorExpand) ? prefs.anchorExpand : "left-down";
   const left = dir.startsWith("left");
   const up = dir.endsWith("up");
-  const sizes = names.map((name) => pinSize(name === MORE ? false : !!showName.get(name)));
-  const cellW = Math.round((Math.max(...sizes.map((s) => s.width), 1) + GAP_PX) * scale);
-  const cellH = Math.round((Math.max(...sizes.map((s) => s.height), 1) + GAP_PX) * scale);
+  const sizes = names.map((name) => {
+    const show = name === MORE ? false : !!showName.get(name);
+    const real = sizeOf.get(name);
+    if (real && real.want === `${name}:${show}`) return { width: real.width, height: real.height };
+    const s = pinSize(show);
+    return { width: Math.max(Math.round(s.width * scale), widened), height: Math.round(s.height * scale) };
+  });
   const gap = Math.round(GAP_PX * scale);
+  const cellW = Math.max(...sizes.map((s) => s.width), 1) + gap;
+  const cellH = Math.max(...sizes.map((s) => s.height), 1) + gap;
   const spots = new Map();
   for (const [i, name] of names.entries()) {
     const col = i % cols;
     const row = Math.floor(i / cols);
-    const w = Math.round(sizes[i].width * scale);
-    const h = Math.round(sizes[i].height * scale);
+    const w = sizes[i].width;
+    const h = sizes[i].height;
     const x = left ? at.x - gap - col * cellW - w : at.x + at.width + gap + col * cellW;
     const y = up ? at.y + at.height - row * cellH - h : at.y + row * cellH;
     spots.set(name, { x, y });

@@ -18,13 +18,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -10505,
+      9810
+     ],
      "m": 106,
      "name": "EnvObjData_E_L1_VerteronFotress_TeleportArtifact_001_desc",
-     "teleport": 19
+     "teleport": 19,
+     "to": [
+      -9160,
+      -675
+     ]
     },
     "level": 21,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_VF_KrallReg_01_body",
+    "npcId": 2100075,
     "region": "Verteron",
     "spawns": 27,
     "zones": [
@@ -34,13 +44,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      15344,
+      -16271
+     ],
      "m": 85,
      "name": "EnvObjData_E_L1_VerteronFotress_TeleportArtifact_002_desc",
-     "teleport": 21
+     "teleport": 21,
+     "to": [
+      14107,
+      -7895
+     ]
     },
     "level": 21,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_VF_KrallWar_13_body",
+    "npcId": 2100480,
     "region": "Verteron",
     "spawns": 19,
     "zones": [
@@ -50,13 +70,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      107488,
+      -119573
+     ],
      "m": 326,
      "name": "EnvObjData_E_L1_TeleportArtifact_Verteron_Nahid_1_desc",
-     "teleport": 57
+     "teleport": 57,
+     "to": [
+      137580,
+      -132080
+     ]
     },
     "level": 41,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_KrallRegressed_01_body",
+    "npcId": 2100914,
     "region": "Verteron",
     "spawns": 11,
     "zones": [
@@ -80,13 +110,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      87246,
+      72870
+     ],
      "m": 120,
      "name": "EnvObjData_E_L1_AltamiCanyon_TeleportArtifact_001_desc",
-     "teleport": 38
+     "teleport": 38,
+     "to": [
+      78802,
+      64403
+     ]
     },
     "level": 33,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AC_A_ForestWisp_01_body",
+    "npcId": 2100601,
     "region": "Verteron",
     "spawns": 23,
     "zones": [
@@ -96,13 +136,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      93984,
+      163395
+     ],
      "m": 205,
      "name": "EnvObjData_E_L1_GardenOfMiraju_TeleportArtifact_002_desc",
-     "teleport": 59
+     "teleport": 59,
+     "to": [
+      92631,
+      183848
+     ]
     },
     "level": 44,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_RI_BF_ForestWisp_01_body",
+    "npcId": 2100662,
     "region": "Verteron",
     "spawns": 23,
     "zones": [
@@ -126,13 +176,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -89957,
+      59941
+     ],
      "m": 131,
      "name": "EnvObjData_E_L1_TolbasForest_TeleportArtifact_006_desc",
-     "teleport": 30
+     "teleport": 30,
+     "to": [
+      -102319,
+      64299
+     ]
     },
     "level": 25,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_TF_Fossa_01_001_body",
+    "npcId": 2100163,
     "region": "Verteron",
     "spawns": 18,
     "zones": [
@@ -142,13 +202,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      36532,
+      -17169
+     ],
      "m": 173,
      "name": "EnvObjData_E_D1_MinushanSite_TeleportArtifact_001_desc",
-     "teleport": 26
+     "teleport": 26,
+     "to": [
+      28780,
+      -1694
+     ]
     },
     "level": 24,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_SH_AltKnifeDog_01_001_body",
+    "npcId": 2400254,
     "region": "Altgard",
     "spawns": 9,
     "zones": [
@@ -158,13 +228,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      138875,
+      -109560
+     ],
      "m": 151,
      "name": "EnvObjData_E_D1_StealerCamp_TeleportArtifact_001_desc",
-     "teleport": 40
+     "teleport": 40,
+     "to": [
+      140766,
+      -94614
+     ]
     },
     "level": 34,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_BR_Fossa_01_01_body",
+    "npcId": 2400414,
     "region": "Altgard",
     "spawns": 35,
     "zones": [
@@ -188,13 +268,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      19686,
+      -1570
+     ],
      "m": 84,
      "name": "EnvObjData_E_L1_VerteronFotress_TeleportArtifact_002_desc",
-     "teleport": 21
+     "teleport": 21,
+     "to": [
+      14107,
+      -7895
+     ]
     },
     "level": 19,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_VF_Neuth_01_body",
+    "npcId": 2100078,
     "region": "Verteron",
     "spawns": 28,
     "zones": [
@@ -204,25 +294,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       -40118,
+       -19395
+      ],
       "m": 1026,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       -40118,
+       -19395
+      ],
       "m": 727,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -40118,
+      -19395
+     ],
      "m": 727,
      "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      -52708,
+      52165
+     ]
     },
     "level": 46,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_STI_NEUTH_01_001_body",
+    "npcId": 2600029,
     "region": "Chaotic Lower Reshanta",
     "spawns": 50,
     "zones": [
@@ -248,13 +364,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -23491,
+      -16274
+     ],
      "m": 185,
      "name": "EnvObjData_E_L1_EllunRiverMidstream_TeleportArtifact_001_desc",
-     "teleport": 14
+     "teleport": 14,
+     "to": [
+      -41963,
+      -15773
+     ]
     },
     "level": 18,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_VF_Sparky_01_body",
+    "npcId": 2100273,
     "region": "Verteron",
     "spawns": 10,
     "zones": [
@@ -264,13 +390,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -31633,
+      -51825
+     ],
      "m": 153,
      "name": "EnvObjData_E_L1_EllunRiverMidstream_TeleportArtifact_004_desc",
-     "teleport": 13
+     "teleport": 13,
+     "to": [
+      -18740,
+      -43632
+     ]
     },
     "level": 18,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_EllunRiverSparky_02_body",
+    "npcId": 2100305,
     "region": "Verteron",
     "spawns": 75,
     "zones": [
@@ -281,13 +417,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      36478,
+      125887
+     ],
      "m": 132,
      "name": "EnvObjData_E_L1_SouthernAlamiaHighland_TeleportArtifact_001_desc",
-     "teleport": 45
+     "teleport": 45,
+     "to": [
+      46964,
+      117879
+     ]
     },
     "level": 33,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_AH_SparkyOd_01_001_body",
+    "npcId": 2100753,
     "region": "Verteron",
     "spawns": 74,
     "zones": [
@@ -297,13 +443,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      42895,
+      43199
+     ],
      "m": 179,
      "name": "EnvObjData_E_L1_AlamiaHighland_TeleportArtifact_001_desc",
-     "teleport": 37
+     "teleport": 37,
+     "to": [
+      36134,
+      59735
+     ]
     },
     "level": 32,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_AH_SparkyOd_01_001_body",
+    "npcId": 2100795,
     "region": "Verteron",
     "spawns": 72,
     "zones": [
@@ -313,13 +469,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -40619,
+      111077
+     ],
      "m": 60,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_001_desc",
-     "teleport": 32
+     "teleport": 32,
+     "to": [
+      -42374,
+      116861
+     ]
     },
     "level": 27,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_OV_BF_SparkyOd_01_body",
+    "npcId": 2100986,
     "region": "Verteron",
     "spawns": 38,
     "zones": [
@@ -330,13 +496,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -70377,
+      161245
+     ],
      "m": 56,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_002_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      -64997,
+      159811
+     ]
     },
     "level": 30,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_OV_BF_SparkyOd_03_body",
+    "npcId": 2100992,
     "region": "Verteron",
     "spawns": 28,
     "zones": [
@@ -360,13 +536,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -4694,
+      -103664
+     ],
      "m": 28,
      "name": "EnvObjData_E_L1_EllunRiverMarsh_TeleportArtifact_003_desc",
-     "teleport": 10
+     "teleport": 10,
+     "to": [
+      -4631,
+      -106483
+     ]
     },
     "level": 14,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_ER_Crab_01_001_body",
+    "npcId": 2100032,
     "region": "Verteron",
     "spawns": 36,
     "zones": [
@@ -378,13 +564,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      72406,
+      74412
+     ],
      "m": 119,
      "name": "EnvObjData_E_L1_AltamiCanyon_TeleportArtifact_001_desc",
-     "teleport": 38
+     "teleport": 38,
+     "to": [
+      78802,
+      64403
+     ]
     },
     "level": 33,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AC_Crab_01_body",
+    "npcId": 2100610,
     "region": "Verteron",
     "spawns": 14,
     "zones": [
@@ -394,13 +590,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -221251,
+      263818
+     ],
      "m": 1877,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_002_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      -64997,
+      159811
+     ]
     },
     "level": 49,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_FE_IoE_Crab_01_001_body",
+    "npcId": 2101098,
     "region": "Verteron",
     "spawns": 30,
     "zones": [
@@ -410,13 +616,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      28659,
+      -168524
+     ],
      "m": 442,
      "name": "EnvObjData_E_D1_HiddenCave_TeleportArtifact_001_desc",
-     "teleport": 36
+     "teleport": 36,
+     "to": [
+      61407,
+      -198187
+     ]
     },
     "level": 32,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_DR_Crab_01_body",
+    "npcId": 2400363,
     "region": "Altgard",
     "spawns": 26,
     "zones": [
@@ -426,13 +642,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      237948,
+      -200072
+     ],
      "m": 161,
      "name": "EnvObjData_E_D1_IslandOfSpirit_TeleportArtifact_001_desc",
-     "teleport": 61
+     "teleport": 61,
+     "to": [
+      232197,
+      -215117
+     ]
     },
     "level": 46,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IOS_Crab_01_01_body",
+    "npcId": 2400755,
     "region": "Altgard",
     "spawns": 4,
     "zones": [
@@ -442,13 +668,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -199040,
+      247150
+     ],
      "m": 1700,
      "name": "EnvObjData_E_D1_TeleportArtifact_006_desc",
-     "teleport": 15
+     "teleport": 15,
+     "to": [
+      -211694,
+      77640
+     ]
     },
     "level": 49,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IoI_Crab_01_body",
+    "npcId": 2400812,
     "region": "Altgard",
     "spawns": 26,
     "zones": [
@@ -472,13 +708,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      18707,
+      -108058
+     ],
      "m": 143,
      "name": "EnvObjData_E_L1_EllunRiverMarsh_TeleportArtifact_004_desc",
-     "teleport": 11
+     "teleport": 11,
+     "to": [
+      32451,
+      -104105
+     ]
     },
     "level": 16,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_ER_OdSpider_body",
+    "npcId": 2100034,
     "region": "Verteron",
     "spawns": 8,
     "zones": [
@@ -516,13 +762,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      78998,
+      -210262
+     ],
      "m": 241,
      "name": "EnvObjData_E_L1_IslandofCrimson_TeleportArtifact_001_desc",
-     "teleport": 61
+     "teleport": 61,
+     "to": [
+      91401,
+      -189647
+     ]
     },
     "level": 48,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_IoC_DranaManduriWarrior_01_body",
+    "npcId": 2110506,
     "region": "Verteron",
     "spawns": 24,
     "zones": [
@@ -532,13 +788,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      66095,
+      155058
+     ],
      "m": 166,
      "name": "EnvObjData_E_D1_KumricaCellar_TeleportArtifact_001_desc",
-     "teleport": 57
+     "teleport": 57,
+     "to": [
+      82530,
+      152562
+     ]
     },
     "level": 42,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_BCV_DranaManduriWarrior_01_01_body",
+    "npcId": 2400617,
     "region": "Altgard",
     "spawns": 38,
     "zones": [
@@ -562,13 +828,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      35993,
+      -102792
+     ],
      "m": 38,
      "name": "EnvObjData_E_L1_EllunRiverMarsh_TeleportArtifact_004_desc",
-     "teleport": 11
+     "teleport": 11,
+     "to": [
+      32451,
+      -104105
+     ]
     },
     "level": 16,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_Skyray_01_body",
+    "npcId": 2100047,
     "region": "Verteron",
     "spawns": 11,
     "zones": [
@@ -578,13 +854,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -39649,
+      44340
+     ],
      "m": 136,
      "name": "EnvObjData_E_L1_TolbasForest_TeleportArtifact_005_desc",
-     "teleport": 28
+     "teleport": 28,
+     "to": [
+      -34703,
+      56996
+     ]
     },
     "level": 18,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_Skyray_02_body",
+    "npcId": 2100048,
     "region": "Verteron",
     "spawns": 11,
     "zones": [
@@ -594,13 +880,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -12382,
+      77148
+     ],
      "m": 118,
      "name": "EnvObjData_E_L1_TolbasForest_TeleportArtifact_003_desc",
-     "teleport": 29
+     "teleport": 29,
+     "to": [
+      -23687,
+      73651
+     ]
     },
     "level": 25,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_TF_WaterSkyray_01_body",
+    "npcId": 2100182,
     "region": "Verteron",
     "spawns": 18,
     "zones": [
@@ -610,13 +906,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      8197,
+      43962
+     ],
      "m": 321,
      "name": "EnvObjData_E_L1_AlamiaHighland_TeleportArtifact_001_desc",
-     "teleport": 37
+     "teleport": 37,
+     "to": [
+      36134,
+      59735
+     ]
     },
     "level": 27,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_PilgrimsRidge_Skyray_01_body",
+    "npcId": 2100556,
     "region": "Verteron",
     "spawns": 20,
     "zones": [
@@ -626,13 +932,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      70139,
+      80724
+     ],
      "m": 185,
      "name": "EnvObjData_E_L1_AltamiCanyon_TeleportArtifact_001_desc",
-     "teleport": 38
+     "teleport": 38,
+     "to": [
+      78802,
+      64403
+     ]
     },
     "level": 33,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AC_Skyray_01_body",
+    "npcId": 2100607,
     "region": "Verteron",
     "spawns": 5,
     "zones": [
@@ -642,13 +958,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      71858,
+      99310
+     ],
      "m": 146,
      "name": "EnvObjData_E_L1_AltamiCanyon_TeleportArtifact_003_desc",
-     "teleport": 40
+     "teleport": 40,
+     "to": [
+      71791,
+      113956
+     ]
     },
     "level": 33,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AC_Skyray_02_body",
+    "npcId": 2100613,
     "region": "Verteron",
     "spawns": 8,
     "zones": [
@@ -658,13 +984,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      98350,
+      -26880
+     ],
      "m": 235,
      "name": "EnvObjData_E_L1_DranaPlantation_TeleportArtifact_001_desc",
-     "teleport": 52
+     "teleport": 52,
+     "to": [
+      113348,
+      -45014
+     ]
     },
     "level": 39,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_KFP_Skyray_01_body",
+    "npcId": 2100832,
     "region": "Verteron",
     "spawns": 17,
     "zones": [
@@ -674,13 +1010,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -49989,
+      -19629
+     ],
      "m": 89,
      "name": "EnvObjData_E_L1_EllunRiverMidstream_TeleportArtifact_001_desc",
-     "teleport": 14
+     "teleport": 14,
+     "to": [
+      -41963,
+      -15773
+     ]
     },
     "level": 18,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_ER_WaterSkyray_01_body",
+    "npcId": 2101123,
     "region": "Verteron",
     "spawns": 7,
     "zones": [
@@ -690,13 +1036,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -82361,
+      -55483
+     ],
      "m": 198,
      "name": "EnvObjData_E_L1_CantasValley_TeleportArtifact_002_desc",
-     "teleport": 5
+     "teleport": 5,
+     "to": [
+      -71372,
+      -71987
+     ]
     },
     "level": 10,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_CV_WaterSkyray_01_body",
+    "npcId": 2101124,
     "region": "Verteron",
     "spawns": 14,
     "zones": [
@@ -706,13 +1062,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      66335,
+      127040
+     ],
      "m": 142,
      "name": "EnvObjData_E_L1_AltamiCanyon_TeleportArtifact_003_desc",
-     "teleport": 40
+     "teleport": 40,
+     "to": [
+      71791,
+      113956
+     ]
     },
     "level": 33,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_D1_Com_Skyray_01_01_body",
+    "npcId": 2101132,
     "region": "Verteron",
     "spawns": 13,
     "zones": [
@@ -722,13 +1088,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -120001,
+      -24759
+     ],
      "m": 195,
      "name": "EnvObjData_E_D1_Watcherstent_TeleportArtifact_001_desc",
-     "teleport": 16
+     "teleport": 16,
+     "to": [
+      -104603,
+      -36713
+     ]
     },
     "level": 20,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_SH_Skyray_01_01_body",
+    "npcId": 2400163,
     "region": "Altgard",
     "spawns": 13,
     "zones": [
@@ -738,13 +1114,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      158577,
+      94947
+     ],
      "m": 140,
      "name": "EnvObjData_E_D1_TeleportArtifact_016_desc",
-     "teleport": 52
+     "teleport": 52,
+     "to": [
+      171524,
+      89545
+     ]
     },
     "level": 40,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Skyray_01_01_body",
+    "npcId": 2400945,
     "region": "Altgard",
     "spawns": 13,
     "zones": [
@@ -768,13 +1154,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -77148,
+      -66636
+     ],
      "m": 79,
      "name": "EnvObjData_E_L1_CantasValley_TeleportArtifact_002_desc",
-     "teleport": 5
+     "teleport": 5,
+     "to": [
+      -71372,
+      -71987
+     ]
     },
     "level": 12,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_ValleyFungy_01_body",
+    "npcId": 2100041,
     "region": "Verteron",
     "spawns": 32,
     "zones": [
@@ -798,13 +1194,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -69661,
+      -44868
+     ],
      "m": 80,
      "name": "EnvObjData_E_D1_MudCamp_TeleportArtifact_001_desc",
-     "teleport": 9
+     "teleport": 9,
+     "to": [
+      -76891,
+      -41361
+     ]
     },
     "level": 11,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_UC_DranaSwarm_01_body",
+    "npcId": 2400080,
     "region": "Altgard",
     "spawns": 8,
     "zones": [
@@ -814,13 +1220,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      143502,
+      61272
+     ],
      "m": 232,
      "name": "EnvObjData_E_D1_SteelHammerCamp_TeleportArtifact_001_desc",
-     "teleport": 48
+     "teleport": 48,
+     "to": [
+      124592,
+      47767
+     ]
     },
     "level": 35,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_FD_AbyssSwarm_01_01_body",
+    "npcId": 2400456,
     "region": "Altgard",
     "spawns": 115,
     "zones": [
@@ -830,25 +1246,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       -22598,
+       23639
+      ],
       "m": 1112,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       -22598,
+       23639
+      ],
       "m": 415,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -22598,
+      23639
+     ],
      "m": 415,
      "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      -52708,
+      52165
+     ]
     },
     "level": 45,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_DD_ABYSSSWARM_01_001_body",
+    "npcId": 2600001,
     "region": "Chaotic Lower Reshanta",
     "spawns": 63,
     "zones": [
@@ -860,25 +1302,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       28208,
+       -27265
+      ],
       "m": 393,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       28208,
+       -27265
+      ],
       "m": 1134,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      28208,
+      -27265
+     ],
      "m": 393,
      "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      56200,
+      -54866
+     ]
     },
     "level": 45,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_BSZ_ABYSSSWARM_01_001_body",
+    "npcId": 2600011,
     "region": "Chaotic Lower Reshanta",
     "spawns": 63,
     "zones": [
@@ -890,25 +1358,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       -29693,
+       -28240
+      ],
       "m": 899,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       -29693,
+       -28240
+      ],
       "m": 836,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -29693,
+      -28240
+     ],
      "m": 836,
      "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      -52708,
+      52165
+     ]
     },
     "level": 46,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_STI_ABYSSSWARM_01_001_body",
+    "npcId": 2600021,
     "region": "Chaotic Lower Reshanta",
     "spawns": 83,
     "zones": [
@@ -934,13 +1428,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      137478,
+      -118169
+     ],
      "m": 139,
      "name": "EnvObjData_E_L1_TeleportArtifact_Verteron_Nahid_1_desc",
-     "teleport": 57
+     "teleport": 57,
+     "to": [
+      137580,
+      -132080
+     ]
     },
     "level": 43,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_Nahid_A_BeritraC_03_001_body",
+    "npcId": 2101002,
     "region": "Verteron",
     "spawns": 20,
     "zones": [
@@ -950,13 +1454,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      150448,
+      -104637
+     ],
      "m": 303,
      "name": "EnvObjData_E_L1_TeleportArtifact_Verteron_Nahid_1_desc",
-     "teleport": 57
+     "teleport": 57,
+     "to": [
+      137580,
+      -132080
+     ]
     },
     "level": 45,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_Nahid_A_BeritraC_03_002_body",
+    "npcId": 2101009,
     "region": "Verteron",
     "spawns": 16,
     "zones": [
@@ -966,13 +1480,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      63256,
+      -182157
+     ],
      "m": 161,
      "name": "EnvObjData_E_D1_HiddenCave_TeleportArtifact_001_desc",
-     "teleport": 36
+     "teleport": 36,
+     "to": [
+      61407,
+      -198187
+     ]
     },
     "level": 32,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_L1_Nahid_A_BeritraC_03_001_body",
+    "npcId": 2400359,
     "region": "Altgard",
     "spawns": 6,
     "zones": [
@@ -982,13 +1506,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      187271,
+      74120
+     ],
      "m": 178,
      "name": "EnvObjData_E_D1_AmuntasHideout_TeleportArtifact_001_desc",
-     "teleport": 50
+     "teleport": 50,
+     "to": [
+      173701,
+      62577
+     ]
     },
     "level": 40,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_EGC_BeritraC_03_01_body",
+    "npcId": 2400587,
     "region": "Altgard",
     "spawns": 14,
     "zones": [
@@ -998,13 +1532,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -4408,
+      179693
+     ],
      "m": 911,
      "name": "EnvObjData_E_D1_KumricaCellar_TeleportArtifact_001_desc",
-     "teleport": 57
+     "teleport": 57,
+     "to": [
+      82530,
+      152562
+     ]
     },
     "level": 43,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_LF_BeritraC_03_01_body",
+    "npcId": 2400655,
     "region": "Altgard",
     "spawns": 9,
     "zones": [
@@ -1014,25 +1558,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       19322,
+       36451
+      ],
       "m": 985,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       19322,
+       36451
+      ],
       "m": 737,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      19322,
+      36451
+     ],
      "m": 737,
      "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      -52708,
+      52165
+     ]
     },
     "level": 47,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_WSA_BERITRAC_03_001_body",
+    "npcId": 2600052,
     "region": "Chaotic Lower Reshanta",
     "spawns": 44,
     "zones": [
@@ -1056,13 +1626,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -51411,
+      -11297
+     ],
      "m": 105,
      "name": "EnvObjData_E_L1_EllunRiverMidstream_TeleportArtifact_001_desc",
-     "teleport": 14
+     "teleport": 14,
+     "to": [
+      -41963,
+      -15773
+     ]
     },
     "level": 18,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_EllunRiverKailin_01_body",
+    "npcId": 2101021,
     "region": "Verteron",
     "spawns": 62,
     "zones": [
@@ -1072,13 +1652,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      213602,
+      -208979
+     ],
      "m": 196,
      "name": "EnvObjData_E_D1_IslandOfSpirit_TeleportArtifact_001_desc",
-     "teleport": 61
+     "teleport": 61,
+     "to": [
+      232197,
+      -215117
+     ]
     },
     "level": 46,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IOS_Kailin_01_01_body",
+    "npcId": 2400736,
     "region": "Altgard",
     "spawns": 16,
     "zones": [
@@ -1088,13 +1678,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -116080,
+      -24160
+     ],
      "m": 170,
      "name": "EnvObjData_E_D1_Watcherstent_TeleportArtifact_001_desc",
-     "teleport": 16
+     "teleport": 16,
+     "to": [
+      -104603,
+      -36713
+     ]
     },
     "level": 20,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Kailin_01_01_body",
+    "npcId": 2400905,
     "region": "Altgard",
     "spawns": 96,
     "zones": [
@@ -1106,13 +1706,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      76502,
+      -122601
+     ],
      "m": 312,
      "name": "EnvObjData_E_D1_ColdwindShelter_TeleportArtifact_001_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      45697,
+      -117802
+     ]
     },
     "level": 32,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Kailin_01_01_body",
+    "npcId": 2400934,
     "region": "Altgard",
     "spawns": 56,
     "zones": [
@@ -1137,13 +1747,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -88533,
+      70439
+     ],
      "m": 151,
      "name": "EnvObjData_E_L1_TolbasForest_TeleportArtifact_006_desc",
-     "teleport": 30
+     "teleport": 30,
+     "to": [
+      -102319,
+      64299
+     ]
     },
     "level": 25,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_TF_BF_Lepisma_01_001_body",
+    "npcId": 2100165,
     "region": "Verteron",
     "spawns": 44,
     "zones": [
@@ -1153,13 +1773,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -54858,
+      -7597
+     ],
      "m": 120,
      "name": "EnvObjData_E_L1_EllunRiverMidstream_TeleportArtifact_003_desc",
-     "teleport": 16
+     "teleport": 16,
+     "to": [
+      -65435,
+      -1934
+     ]
     },
     "level": 18,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_EllunRiverLepisma_01_body",
+    "npcId": 2100188,
     "region": "Verteron",
     "spawns": 54,
     "zones": [
@@ -1169,13 +1799,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -222428,
+      217564
+     ],
      "m": 1677,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_002_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      -64997,
+      159811
+     ]
     },
     "level": 49,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_FE_IoE_Lepisma_01_V01_001_body",
+    "npcId": 2101097,
     "region": "Verteron",
     "spawns": 24,
     "zones": [
@@ -1185,13 +1825,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      91935,
+      99634
+     ],
      "m": 268,
      "name": "EnvObjData_E_D1_AbandonedCampsite_TeleportArtifact_001_desc",
-     "teleport": 49
+     "teleport": 49,
+     "to": [
+      105761,
+      76629
+     ]
     },
     "level": 37,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IoI_Lepisma_01_V01_001_body",
+    "npcId": 2400520,
     "region": "Altgard",
     "spawns": 19,
     "zones": [
@@ -1201,13 +1851,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -201402,
+      201349
+     ],
      "m": 1241,
      "name": "EnvObjData_E_D1_TeleportArtifact_006_desc",
-     "teleport": 15
+     "teleport": 15,
+     "to": [
+      -211694,
+      77640
+     ]
     },
     "level": 49,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IoI_Lepisma_01_V01_001_body",
+    "npcId": 2400819,
     "region": "Altgard",
     "spawns": 26,
     "zones": [
@@ -1217,13 +1877,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -119724,
+      -21513
+     ],
      "m": 214,
      "name": "EnvObjData_E_D1_Watcherstent_TeleportArtifact_001_desc",
-     "teleport": 16
+     "teleport": 16,
+     "to": [
+      -104603,
+      -36713
+     ]
     },
     "level": 20,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Lepisma_01_01_body",
+    "npcId": 2400909,
     "region": "Altgard",
     "spawns": 21,
     "zones": [
@@ -1234,13 +1904,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      152595,
+      89785
+     ],
      "m": 146,
      "name": "EnvObjData_E_D1_IdunsLake_TeleportArtifact_001_desc",
-     "teleport": 54
+     "teleport": 54,
+     "to": [
+      140354,
+      97696
+     ]
     },
     "level": 40,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Lepisma_01_01_body",
+    "npcId": 2400943,
     "region": "Altgard",
     "spawns": 18,
     "zones": [
@@ -1251,25 +1931,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       25979,
+       32022
+      ],
       "m": 920,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       25979,
+       32022
+      ],
       "m": 812,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      25979,
+      32022
+     ],
      "m": 812,
      "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      -52708,
+      52165
+     ]
     },
     "level": 47,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_WSA_LEPISMA_01_body",
+    "npcId": 2600048,
     "region": "Chaotic Lower Reshanta",
     "spawns": 38,
     "zones": [
@@ -1294,13 +2000,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -20364,
+      -7164
+     ],
      "m": 129,
      "name": "EnvObjData_E_L1_VerteronFotress_TeleportArtifact_001_desc",
-     "teleport": 19
+     "teleport": 19,
+     "to": [
+      -9160,
+      -675
+     ]
     },
     "level": 21,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_VF_KrallPrst_01_body",
+    "npcId": 2100074,
     "region": "Verteron",
     "spawns": 10,
     "zones": [
@@ -1311,13 +2027,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      125991,
+      -79518
+     ],
      "m": 173,
      "name": "EnvObjData_E_L1_DranaPlantation_TeleportArtifact_003_desc",
-     "teleport": 54
+     "teleport": 54,
+     "to": [
+      123452,
+      -62387
+     ]
     },
     "level": 41,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_DP_KrallPrst_01_001_body",
+    "npcId": 2100855,
     "region": "Verteron",
     "spawns": 32,
     "zones": [
@@ -1341,13 +2067,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      68482,
+      -184414
+     ],
      "m": 155,
      "name": "EnvObjData_E_D1_HiddenCave_TeleportArtifact_001_desc",
-     "teleport": 36
+     "teleport": 36,
+     "to": [
+      61407,
+      -198187
+     ]
     },
     "level": 32,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_AR2_Varg_03_001_body",
+    "npcId": 2400385,
     "region": "Altgard",
     "spawns": 21,
     "zones": [
@@ -1357,13 +2093,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      68050,
+      154311
+     ],
      "m": 146,
      "name": "EnvObjData_E_D1_KumricaCellar_TeleportArtifact_001_desc",
-     "teleport": 57
+     "teleport": 57,
+     "to": [
+      82530,
+      152562
+     ]
     },
     "level": 42,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_BCV_KrallWar_01_V01_01_body",
+    "npcId": 2400609,
     "region": "Altgard",
     "spawns": 26,
     "zones": [
@@ -1400,13 +2146,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -41137,
+      42864
+     ],
      "m": 155,
      "name": "EnvObjData_E_L1_TolbasForest_TeleportArtifact_005_desc",
-     "teleport": 28
+     "teleport": 28,
+     "to": [
+      -34703,
+      56996
+     ]
     },
     "level": 18,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_EllunRiverPhaini_02_body",
+    "npcId": 2100215,
     "region": "Verteron",
     "spawns": 15,
     "zones": [
@@ -1416,13 +2172,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      70616,
+      77682
+     ],
      "m": 156,
      "name": "EnvObjData_E_L1_AltamiCanyon_TeleportArtifact_001_desc",
-     "teleport": 38
+     "teleport": 38,
+     "to": [
+      78802,
+      64403
+     ]
     },
     "level": 33,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AC_Phaini_01_body",
+    "npcId": 2100608,
     "region": "Verteron",
     "spawns": 5,
     "zones": [
@@ -1432,13 +2198,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -224926,
+      217804
+     ],
      "m": 1701,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_002_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      -64997,
+      159811
+     ]
     },
     "level": 49,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_FE_IoE_Phaini_01_001_body",
+    "npcId": 2101083,
     "region": "Verteron",
     "spawns": 26,
     "zones": [
@@ -1448,13 +2224,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      21092,
+      -76166
+     ],
      "m": 185,
      "name": "EnvObjData_E_D1_RecoverySpring_TeleportArtifact_001_desc",
-     "teleport": 32
+     "teleport": 32,
+     "to": [
+      18271,
+      -57878
+     ]
     },
     "level": 29,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_PF_Phaini_01_01_body",
+    "npcId": 2400327,
     "region": "Altgard",
     "spawns": 25,
     "zones": [
@@ -1464,13 +2250,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -206145,
+      201550
+     ],
      "m": 1240,
      "name": "EnvObjData_E_D1_TeleportArtifact_006_desc",
-     "teleport": 15
+     "teleport": 15,
+     "to": [
+      -211694,
+      77640
+     ]
     },
     "level": 49,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IoI_Phaini_01_001_body",
+    "npcId": 2400809,
     "region": "Altgard",
     "spawns": 17,
     "zones": [
@@ -1494,13 +2290,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      5380,
+      -69967
+     ],
      "m": 127,
      "name": "EnvObjData_E_L1_KrakaFootPath_TeleportArtifact_039_desc",
-     "teleport": 50
+     "teleport": 50,
+     "to": [
+      18023,
+      -70679
+     ]
     },
     "level": 15,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_ER_OdSpider_04_V01_001_body",
+    "npcId": 2100030,
     "region": "Verteron",
     "spawns": 34,
     "zones": [
@@ -1510,13 +2316,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      79196,
+      152627
+     ],
      "m": 49,
      "name": "EnvObjData_E_L1_GardenOfMiraju_TeleportArtifact_001_desc",
-     "teleport": 58
+     "teleport": 58,
+     "to": [
+      79220,
+      147737
+     ]
     },
     "level": 44,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_RI_BF_OdSpider_04_V01_001_body",
+    "npcId": 2100663,
     "region": "Verteron",
     "spawns": 9,
     "zones": [
@@ -1527,13 +2343,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      146984,
+      98552
+     ],
      "m": 421,
      "name": "EnvObjData_E_L1_AltamiCanyon_TeleportArtifact_002_desc",
-     "teleport": 39
+     "teleport": 39,
+     "to": [
+      105100,
+      102948
+     ]
     },
     "level": 35,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AH_BF_OdSpider_04_V01_001_body",
+    "npcId": 2100745,
     "region": "Verteron",
     "spawns": 10,
     "zones": [
@@ -1543,13 +2369,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      243042,
+      -231389
+     ],
      "m": 196,
      "name": "EnvObjData_E_D1_IslandOfSpirit_TeleportArtifact_001_desc",
-     "teleport": 61
+     "teleport": 61,
+     "to": [
+      232197,
+      -215117
+     ]
     },
     "level": 48,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IOS_OdSpider_Spike_02_01_body",
+    "npcId": 2400744,
     "region": "Altgard",
     "spawns": 32,
     "zones": [
@@ -1573,13 +2409,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -18631,
+      -7811
+     ],
      "m": 119,
      "name": "EnvObjData_E_L1_VerteronFotress_TeleportArtifact_001_desc",
-     "teleport": 19
+     "teleport": 19,
+     "to": [
+      -9160,
+      -675
+     ]
     },
     "level": 21,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_VF_KrallWar_05_1_body",
+    "npcId": 2100073,
     "region": "Verteron",
     "spawns": 12,
     "zones": [
@@ -1590,13 +2436,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      106216,
+      -118429
+     ],
      "m": 312,
      "name": "EnvObjData_E_L1_RedForest_TeleportArtifact_001_desc",
-     "teleport": 55
+     "teleport": 55,
+     "to": [
+      77480,
+      -106248
+     ]
     },
     "level": 41,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_KrallReinforcedWarrior_01_body",
+    "npcId": 2100910,
     "region": "Verteron",
     "spawns": 22,
     "zones": [
@@ -1606,13 +2462,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      160668,
+      -133065
+     ],
      "m": 231,
      "name": "EnvObjData_E_L1_TeleportArtifact_Verteron_Nahid_1_desc",
-     "teleport": 57
+     "teleport": 57,
+     "to": [
+      137580,
+      -132080
+     ]
     },
     "level": 43,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_Nahid_C_BeritraB_01_001_body",
+    "npcId": 2101005,
     "region": "Verteron",
     "spawns": 18,
     "zones": [
@@ -1636,13 +2502,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      76382,
+      109115
+     ],
      "m": 67,
      "name": "EnvObjData_E_L1_AltamiCanyon_TeleportArtifact_003_desc",
-     "teleport": 40
+     "teleport": 40,
+     "to": [
+      71791,
+      113956
+     ]
     },
     "level": 33,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AC_Agrint_02_body",
+    "npcId": 2100612,
     "region": "Verteron",
     "spawns": 6,
     "zones": [
@@ -1652,13 +2528,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      91253,
+      152365
+     ],
      "m": 129,
      "name": "EnvObjData_E_L1_GardenOfMiraju_TeleportArtifact_001_desc",
-     "teleport": 58
+     "teleport": 58,
+     "to": [
+      79220,
+      147737
+     ]
     },
     "level": 44,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_RI_A_Agrint_02_001_body",
+    "npcId": 2100652,
     "region": "Verteron",
     "spawns": 30,
     "zones": [
@@ -1668,25 +2554,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       -18632,
+       -35622
+      ],
       "m": 773,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       -18632,
+       -35622
+      ],
       "m": 942,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -18632,
+      -35622
+     ],
      "m": 773,
      "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      56200,
+      -54866
+     ]
     },
     "level": 46,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_STI_AGRINT_02_001_body",
+    "npcId": 2600026,
     "region": "Chaotic Lower Reshanta",
     "spawns": 27,
     "zones": [
@@ -1724,13 +2636,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      41234,
+      -72520
+     ],
      "m": 262,
      "name": "EnvObjData_E_D1_FadedStump_TeleportArtifact_001_desc",
-     "teleport": 31
+     "teleport": 31,
+     "to": [
+      61685,
+      -88863
+     ]
     },
     "level": 30,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_PF_Neuth_02_01_body",
+    "npcId": 2400313,
     "region": "Altgard",
     "spawns": 36,
     "zones": [
@@ -1740,25 +2662,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       -24460,
+       19964
+      ],
       "m": 1100,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       -24460,
+       19964
+      ],
       "m": 428,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -24460,
+      19964
+     ],
      "m": 428,
      "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      -52708,
+      52165
+     ]
     },
     "level": 45,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_DD_NEUTH_02_001_body",
+    "npcId": 2600002,
     "region": "Chaotic Lower Reshanta",
     "spawns": 28,
     "zones": [
@@ -1769,25 +2717,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       26635,
+       -22037
+      ],
       "m": 442,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       26635,
+       -22037
+      ],
       "m": 1086,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      26635,
+      -22037
+     ],
      "m": 442,
      "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      56200,
+      -54866
+     ]
     },
     "level": 45,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_BSZ_NEUTH_02_001_body",
+    "npcId": 2600012,
     "region": "Chaotic Lower Reshanta",
     "spawns": 28,
     "zones": [
@@ -1812,25 +2786,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       -33790,
+       -41110
+      ],
       "m": 910,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       -33790,
+       -41110
+      ],
       "m": 952,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -33790,
+      -41110
+     ],
      "m": 910,
      "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      56200,
+      -54866
+     ]
     },
     "level": 48,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_STI_NAGAELITE_04_001_body",
+    "npcId": 2600036,
     "region": "Chaotic Lower Reshanta",
     "spawns": 9,
     "zones": [
@@ -1840,25 +2840,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       -58809,
+       -19607
+      ],
       "m": 1203,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       -58809,
+       -19607
+      ],
       "m": 720,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -58809,
+      -19607
+     ],
      "m": 720,
      "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      -52708,
+      52165
+     ]
     },
     "level": 48,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_STI_NAGAELITE_04_002_body",
+    "npcId": 2600041,
     "region": "Chaotic Lower Reshanta",
     "spawns": 5,
     "zones": [
@@ -1882,13 +2908,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -53402,
+      51676
+     ],
      "m": 185,
      "name": "EnvObjData_E_L1_TolbasForest_TeleportArtifact_004_desc",
-     "teleport": 26
+     "teleport": 26,
+     "to": [
+      -70520,
+      58714
+     ]
     },
     "level": 24,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_TF_Conuti_02_001_body",
+    "npcId": 2100157,
     "region": "Verteron",
     "spawns": 30,
     "zones": [
@@ -1925,13 +2961,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -8711,
+      34270
+     ],
      "m": 188,
      "name": "EnvObjData_E_L1_EllunRiverMidstream_TeleportArtifact_002_desc",
-     "teleport": 22
+     "teleport": 22,
+     "to": [
+      -24106,
+      45001
+     ]
     },
     "level": 27,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_PilgrimsRidge_ManDuriWar_01_V01_001_body",
+    "npcId": 2100557,
     "region": "Verteron",
     "spawns": 27,
     "zones": [
@@ -1941,13 +2987,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -6998,
+      38119
+     ],
      "m": 184,
      "name": "EnvObjData_E_L1_EllunRiverMidstream_TeleportArtifact_002_desc",
-     "teleport": 22
+     "teleport": 22,
+     "to": [
+      -24106,
+      45001
+     ]
     },
     "level": 27,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_PilgrimsRidge_ManDuriWar_01_V01_001_body",
+    "npcId": 2100569,
     "region": "Verteron",
     "spawns": 11,
     "zones": [
@@ -1957,13 +3013,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      103519,
+      147523
+     ],
      "m": 161,
      "name": "EnvObjData_E_D1_SecretRendezvousPoint_TeleportArtifact_001_desc",
-     "teleport": 56
+     "teleport": 56,
+     "to": [
+      87560,
+      145662
+     ]
     },
     "level": 41,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_BCV_BlackClaw_05_01_body",
+    "npcId": 2400605,
     "region": "Altgard",
     "spawns": 37,
     "zones": [
@@ -1987,13 +3053,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -62477,
+      -49170
+     ],
      "m": 166,
      "name": "EnvObjData_E_L1_CantasValley_TeleportArtifact_006_desc",
-     "teleport": 7
+     "teleport": 7,
+     "to": [
+      -49672,
+      -59697
+     ]
     },
     "level": 13,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_Spakle_01_body",
+    "npcId": 2100015,
     "region": "Verteron",
     "spawns": 70,
     "zones": [
@@ -2003,13 +3079,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      45806,
+      125597
+     ],
      "m": 78,
      "name": "EnvObjData_E_L1_SouthernAlamiaHighland_TeleportArtifact_001_desc",
-     "teleport": 45
+     "teleport": 45,
+     "to": [
+      46964,
+      117879
+     ]
     },
     "level": 33,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_AH_SparkyOd_02_001_body",
+    "npcId": 2100796,
     "region": "Verteron",
     "spawns": 22,
     "zones": [
@@ -2019,13 +3105,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -38925,
+      110567
+     ],
      "m": 72,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_001_desc",
-     "teleport": 32
+     "teleport": 32,
+     "to": [
+      -42374,
+      116861
+     ]
     },
     "level": 27,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_OV_BF_SparkyOd_02_body",
+    "npcId": 2100987,
     "region": "Verteron",
     "spawns": 82,
     "zones": [
@@ -2036,13 +3132,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -69000,
+      162305
+     ],
      "m": 47,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_002_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      -64997,
+      159811
+     ]
     },
     "level": 30,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_OV_BF_SparkyOd_04_body",
+    "npcId": 2100993,
     "region": "Verteron",
     "spawns": 18,
     "zones": [
@@ -2052,13 +3158,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      62398,
+      -99927
+     ],
      "m": 111,
      "name": "EnvObjData_E_D1_FadedStump_TeleportArtifact_001_desc",
-     "teleport": 31
+     "teleport": 31,
+     "to": [
+      61685,
+      -88863
+     ]
     },
     "level": 30,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_PF_SparkyOd_02_02_body",
+    "npcId": 2400341,
     "region": "Altgard",
     "spawns": 32,
     "zones": [
@@ -2068,13 +3184,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      106549,
+      37780
+     ],
      "m": 206,
      "name": "EnvObjData_E_D1_SteelHammerCamp_TeleportArtifact_001_desc",
-     "teleport": 48
+     "teleport": 48,
+     "to": [
+      124592,
+      47767
+     ]
     },
     "level": 35,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_FD_SparkyOd_02_01_body",
+    "npcId": 2400466,
     "region": "Altgard",
     "spawns": 22,
     "zones": [
@@ -2098,13 +3224,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      7637,
+      -91289
+     ],
      "m": 195,
      "name": "EnvObjData_E_L1_EllunRiverMarsh_TeleportArtifact_003_desc",
-     "teleport": 10
+     "teleport": 10,
+     "to": [
+      -4631,
+      -106483
+     ]
     },
     "level": 14,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_SwampFish_01_body",
+    "npcId": 2100031,
     "region": "Verteron",
     "spawns": 25,
     "zones": [
@@ -2114,13 +3250,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -33960,
+      -37200
+     ],
      "m": 165,
      "name": "EnvObjData_E_L1_EllunRiverMidstream_TeleportArtifact_004_desc",
-     "teleport": 13
+     "teleport": 13,
+     "to": [
+      -18740,
+      -43632
+     ]
     },
     "level": 18,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_EllunRiverFish_01_body",
+    "npcId": 2100376,
     "region": "Verteron",
     "spawns": 16,
     "zones": [
@@ -2130,13 +3276,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      77206,
+      -76834
+     ],
      "m": 238,
      "name": "EnvObjData_E_L1_RedForest_TeleportArtifact_002_desc",
-     "teleport": 56
+     "teleport": 56,
+     "to": [
+      53406,
+      -76494
+     ]
     },
     "level": 41,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_RF_Fish_01_body",
+    "npcId": 2100907,
     "region": "Verteron",
     "spawns": 8,
     "zones": [
@@ -2160,13 +3316,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      147613,
+      2455
+     ],
      "m": 195,
      "name": "EnvObjData_E_L1_AlamiaHighland_TeleportArtifact_004_desc",
-     "teleport": 43
+     "teleport": 43,
+     "to": [
+      141439,
+      20932
+     ]
     },
     "level": 34,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AH_BF_Lufilini_02_001_body",
+    "npcId": 2100746,
     "region": "Verteron",
     "spawns": 31,
     "zones": [
@@ -2191,13 +3357,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -53657,
+      -30451
+     ],
      "m": 138,
      "name": "EnvObjData_E_L1_EllunRiverMidstream_TeleportArtifact_040_desc",
-     "teleport": 15
+     "teleport": 15,
+     "to": [
+      -65098,
+      -22723
+     ]
     },
     "level": 18,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_EllunRiverCrestlich_02_body",
+    "npcId": 2100151,
     "region": "Verteron",
     "spawns": 18,
     "zones": [
@@ -2207,13 +3383,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      53386,
+      153958
+     ],
      "m": 107,
      "name": "EnvObjData_E_L1_CanyonEndCamp_TeleportArtifact_001_desc",
-     "teleport": 46
+     "teleport": 46,
+     "to": [
+      59940,
+      162474
+     ]
     },
     "level": 33,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_AH_Crestlich_02_001_body",
+    "npcId": 2100750,
     "region": "Verteron",
     "spawns": 11,
     "zones": [
@@ -2237,13 +3423,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -97098,
+      2128
+     ],
      "m": 68,
      "name": "EnvObjData_E_L1_EllunRiverMidstream_TeleportArtifact_043_desc",
-     "teleport": 18
+     "teleport": 18,
+     "to": [
+      -97492,
+      8923
+     ]
     },
     "level": 18,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_EllunRiverAiron_01_body",
+    "npcId": 2100144,
     "region": "Verteron",
     "spawns": 4,
     "zones": [
@@ -2253,13 +3449,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -42799,
+      41421
+     ],
      "m": 176,
      "name": "EnvObjData_E_L1_TolbasForest_TeleportArtifact_005_desc",
-     "teleport": 28
+     "teleport": 28,
+     "to": [
+      -34703,
+      56996
+     ]
     },
     "level": 18,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_EllunRiverAiron_02_body",
+    "npcId": 2100216,
     "region": "Verteron",
     "spawns": 14,
     "zones": [
@@ -2269,13 +3475,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      70955,
+      73364
+     ],
      "m": 119,
      "name": "EnvObjData_E_L1_AltamiCanyon_TeleportArtifact_001_desc",
-     "teleport": 38
+     "teleport": 38,
+     "to": [
+      78802,
+      64403
+     ]
     },
     "level": 33,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AC_Airon_01_body",
+    "npcId": 2100609,
     "region": "Verteron",
     "spawns": 6,
     "zones": [
@@ -2285,13 +3501,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      55311,
+      42768
+     ],
      "m": 256,
      "name": "EnvObjData_E_L1_AlamiaHighland_TeleportArtifact_001_desc",
-     "teleport": 37
+     "teleport": 37,
+     "to": [
+      36134,
+      59735
+     ]
     },
     "level": 34,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AH_BF_Airon_01_001_body",
+    "npcId": 2100741,
     "region": "Verteron",
     "spawns": 7,
     "zones": [
@@ -2301,13 +3527,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      152893,
+      23181
+     ],
      "m": 191,
      "name": "EnvObjData_E_D1_TeleportArtifact_012_desc",
-     "teleport": 47
+     "teleport": 47,
+     "to": [
+      136255,
+      13712
+     ]
     },
     "level": 40,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_EGC_Airon_01_01_body",
+    "npcId": 2400567,
     "region": "Altgard",
     "spawns": 19,
     "zones": [
@@ -2318,13 +3554,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      170032,
+      38615
+     ],
      "m": 242,
      "name": "EnvObjData_E_D1_AmuntasHideout_TeleportArtifact_001_desc",
-     "teleport": 50
+     "teleport": 50,
+     "to": [
+      173701,
+      62577
+     ]
     },
     "level": 40,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_EGC_Airon_01_02_body",
+    "npcId": 2400568,
     "region": "Altgard",
     "spawns": 35,
     "zones": [
@@ -2349,13 +3595,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -86085,
+      -33002
+     ],
      "m": 86,
      "name": "EnvObjData_E_L1_CantasValley_TeleportArtifact_004_desc",
-     "teleport": 4
+     "teleport": 4,
+     "to": [
+      -94647,
+      -33157
+     ]
     },
     "level": 11,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_Crestlich_01_body",
+    "npcId": 2100037,
     "region": "Verteron",
     "spawns": 53,
     "zones": [
@@ -2365,13 +3621,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -48967,
+      -30744
+     ],
      "m": 165,
      "name": "EnvObjData_E_L1_EllunRiverMidstream_TeleportArtifact_001_desc",
-     "teleport": 14
+     "teleport": 14,
+     "to": [
+      -41963,
+      -15773
+     ]
     },
     "level": 18,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_EllunRiverCrestlich_01_body",
+    "npcId": 2100150,
     "region": "Verteron",
     "spawns": 35,
     "zones": [
@@ -2381,13 +3647,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      58775,
+      148901
+     ],
      "m": 136,
      "name": "EnvObjData_E_L1_CanyonEndCamp_TeleportArtifact_001_desc",
-     "teleport": 46
+     "teleport": 46,
+     "to": [
+      59940,
+      162474
+     ]
     },
     "level": 33,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_AH_Crestlich_01_001_body",
+    "npcId": 2100799,
     "region": "Verteron",
     "spawns": 41,
     "zones": [
@@ -2411,13 +3687,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -43199,
+      87291
+     ],
      "m": 213,
      "name": "EnvObjData_E_L1_TolbasForest_TeleportArtifact_002_desc",
-     "teleport": 27
+     "teleport": 27,
+     "to": [
+      -64489,
+      86321
+     ]
     },
     "level": 27,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_OV_OwlMag_01_01_body",
+    "npcId": 2100950,
     "region": "Verteron",
     "spawns": 15,
     "zones": [
@@ -2441,13 +3727,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      92421,
+      -107840
+     ],
      "m": 150,
      "name": "EnvObjData_E_L1_RedForest_TeleportArtifact_001_desc",
-     "teleport": 55
+     "teleport": 55,
+     "to": [
+      77480,
+      -106248
+     ]
     },
     "level": 41,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_RF_CaveBat_01_body",
+    "npcId": 2100911,
     "region": "Verteron",
     "spawns": 11,
     "zones": [
@@ -2471,13 +3767,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -62450,
+      73111
+     ],
      "m": 134,
      "name": "EnvObjData_E_L1_TolbasForest_TeleportArtifact_002_desc",
-     "teleport": 27
+     "teleport": 27,
+     "to": [
+      -64489,
+      86321
+     ]
     },
     "level": 25,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_TF_Ursuss_01_001_body",
+    "npcId": 2100172,
     "region": "Verteron",
     "spawns": 52,
     "zones": [
@@ -2487,13 +3793,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      14494,
+      16709
+     ],
      "m": 233,
      "name": "EnvObjData_E_L1_PillgrimsRidgePath_TeleportArtifact_001_desc",
-     "teleport": 24
+     "teleport": 24,
+     "to": [
+      37566,
+      19981
+     ]
     },
     "level": 27,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_PilgrimsRidge_Ursuss_01_body",
+    "npcId": 2100552,
     "region": "Verteron",
     "spawns": 12,
     "zones": [
@@ -2503,13 +3819,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      14186,
+      14098
+     ],
      "m": 220,
      "name": "EnvObjData_E_L1_VerteronFotress_TeleportArtifact_002_desc",
-     "teleport": 21
+     "teleport": 21,
+     "to": [
+      14107,
+      -7895
+     ]
     },
     "level": 27,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_PilgrimsRidge_Ursuss_02_body",
+    "npcId": 2100560,
     "region": "Verteron",
     "spawns": 10,
     "zones": [
@@ -2519,13 +3845,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      97749,
+      143127
+     ],
      "m": 191,
      "name": "EnvObjData_E_L1_GardenOfMiraju_TeleportArtifact_001_desc",
-     "teleport": 58
+     "teleport": 58,
+     "to": [
+      79220,
+      147737
+     ]
     },
     "level": 45,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_RI_Ursuss_01_body",
+    "npcId": 2100655,
     "region": "Verteron",
     "spawns": 20,
     "zones": [
@@ -2535,13 +3871,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      43226,
+      -16407
+     ],
      "m": 201,
      "name": "EnvObjData_E_L1_KrakaFootPath_TeleportArtifact_002_desc",
-     "teleport": 49
+     "teleport": 49,
+     "to": [
+      35148,
+      -34782
+     ]
     },
     "level": 39,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_KFP_BF_Ursuss_01_body",
+    "npcId": 2100817,
     "region": "Verteron",
     "spawns": 50,
     "zones": [
@@ -2551,13 +3897,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      63750,
+      -118192
+     ],
      "m": 181,
      "name": "EnvObjData_E_D1_ColdwindShelter_TeleportArtifact_001_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      45697,
+      -117802
+     ]
     },
     "level": 32,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_DR_Ursuss_01_01_body",
+    "npcId": 2400376,
     "region": "Altgard",
     "spawns": 12,
     "zones": [
@@ -2567,13 +3923,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -151780,
+      -65940
+     ],
      "m": 114,
      "name": "EnvObjData_E_D1_GraveKeeperTent_TeleportArtifact_001_desc",
-     "teleport": 7
+     "teleport": 7,
+     "to": [
+      -151858,
+      -77322
+     ]
     },
     "level": 17,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_DR_Ursuss_01_01_body",
+    "npcId": 2400916,
     "region": "Altgard",
     "spawns": 24,
     "zones": [
@@ -2623,13 +3989,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -154754,
+      -63414
+     ],
      "m": 57,
      "name": "EnvObjData_E_L1_CantasValley_TeleportArtifact_005_desc",
-     "teleport": 8
+     "teleport": 8,
+     "to": [
+      -155331,
+      -57711
+     ]
     },
     "level": 13,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_CV_Muta_01_body",
+    "npcId": 2100004,
     "region": "Verteron",
     "spawns": 9,
     "zones": [
@@ -2639,13 +4015,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -3698,
+      -66613
+     ],
      "m": 192,
      "name": "EnvObjData_E_L1_EllunRiverMarsh_TeleportArtifact_002_desc",
-     "teleport": 9
+     "teleport": 9,
+     "to": [
+      -22695,
+      -69567
+     ]
     },
     "level": 14,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_EllunRiverMuta_01_body",
+    "npcId": 2100023,
     "region": "Verteron",
     "spawns": 10,
     "zones": [
@@ -2656,13 +4042,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -36564,
+      -8255
+     ],
      "m": 93,
      "name": "EnvObjData_E_L1_EllunRiverMidstream_TeleportArtifact_001_desc",
-     "teleport": 14
+     "teleport": 14,
+     "to": [
+      -41963,
+      -15773
+     ]
     },
     "level": 18,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_EllunRiverMuta_01_body",
+    "npcId": 2100219,
     "region": "Verteron",
     "spawns": 71,
     "zones": [
@@ -2673,13 +4069,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -27407,
+      63319
+     ],
      "m": 97,
      "name": "EnvObjData_E_L1_TolbasForest_TeleportArtifact_005_desc",
-     "teleport": 28
+     "teleport": 28,
+     "to": [
+      -34703,
+      56996
+     ]
     },
     "level": 26,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_TF_Muta_02_body",
+    "npcId": 2100472,
     "region": "Verteron",
     "spawns": 14,
     "zones": [
@@ -2689,13 +4095,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -8537,
+      36540
+     ],
      "m": 177,
      "name": "EnvObjData_E_L1_EllunRiverMidstream_TeleportArtifact_002_desc",
-     "teleport": 22
+     "teleport": 22,
+     "to": [
+      -24106,
+      45001
+     ]
     },
     "level": 27,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_PilgrimsRidge_Muta_01_body",
+    "npcId": 2100565,
     "region": "Verteron",
     "spawns": 28,
     "zones": [
@@ -2706,13 +4122,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      90424,
+      27815
+     ],
      "m": 307,
      "name": "EnvObjData_E_L1_ZuminVillage_TeleportArtifact_001_desc",
-     "teleport": 36
+     "teleport": 36,
+     "to": [
+      61552,
+      17249
+     ]
     },
     "level": 32,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AH_BF_Muta_01_001_body",
+    "npcId": 2100743,
     "region": "Verteron",
     "spawns": 92,
     "zones": [
@@ -2723,13 +4149,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      82462,
+      -127843
+     ],
      "m": 260,
      "name": "EnvObjData_E_D1_TeleportArtifact_013_desc",
-     "teleport": 38
+     "teleport": 38,
+     "to": [
+      97460,
+      -149042
+     ]
     },
     "level": 32,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_DR_Muta_01_body",
+    "npcId": 2400362,
     "region": "Altgard",
     "spawns": 39,
     "zones": [
@@ -2753,13 +4189,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -79279,
+      -82914
+     ],
      "m": 183,
      "name": "EnvObjData_E_D1_TemporaryBase_TeleportArtifact_001_desc",
-     "teleport": 4
+     "teleport": 4,
+     "to": [
+      -60969,
+      -82396
+     ]
     },
     "level": 10,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_DC_DranaMole_01_body",
+    "npcId": 2400002,
     "region": "Altgard",
     "spawns": 132,
     "zones": [
@@ -2769,13 +4215,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -90869,
+      44408
+     ],
      "m": 337,
      "name": "EnvObjData_E_D1_TeleportArtifact_010_desc",
-     "teleport": 23
+     "teleport": 23,
+     "to": [
+      -92067,
+      10700
+     ]
     },
     "level": 21,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_MF_DranaMole_01_body",
+    "npcId": 2400249,
     "region": "Altgard",
     "spawns": 17,
     "zones": [
@@ -2799,13 +4255,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -59661,
+      -82617
+     ],
      "m": 117,
      "name": "EnvObjData_E_L1_CantasValley_TeleportArtifact_041_desc",
-     "teleport": 6
+     "teleport": 6,
+     "to": [
+      -54959,
+      -93288
+     ]
     },
     "level": 12,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_CV_BlueDranaMole_01_body",
+    "npcId": 2100453,
     "region": "Verteron",
     "spawns": 62,
     "zones": [
@@ -2815,13 +4281,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      41046,
+      119140
+     ],
      "m": 61,
      "name": "EnvObjData_E_L1_SouthernAlamiaHighland_TeleportArtifact_001_desc",
-     "teleport": 45
+     "teleport": 45,
+     "to": [
+      46964,
+      117879
+     ]
     },
     "level": 33,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_AH_Mole_01_V01_001_body",
+    "npcId": 2100751,
     "region": "Verteron",
     "spawns": 38,
     "zones": [
@@ -2845,13 +4321,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -12639,
+      -89313
+     ],
      "m": 189,
      "name": "EnvObjData_E_L1_EllunRiverMarsh_TeleportArtifact_003_desc",
-     "teleport": 10
+     "teleport": 10,
+     "to": [
+      -4631,
+      -106483
+     ]
     },
     "level": 13,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_TreeBranch_01_body",
+    "npcId": 2100022,
     "region": "Verteron",
     "spawns": 25,
     "zones": [
@@ -2861,13 +4347,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -45895,
+      14877
+     ],
      "m": 236,
      "name": "EnvObjData_E_L1_VerteronFotress_TeleportArtifact_042_desc",
-     "teleport": 20
+     "teleport": 20,
+     "to": [
+      -22943,
+      9582
+     ]
     },
     "level": 18,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_EllunRiverForestSpirit_01_body",
+    "npcId": 2100142,
     "region": "Verteron",
     "spawns": 20,
     "zones": [
@@ -2877,13 +4373,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -130,
+      26684
+     ],
      "m": 285,
      "name": "EnvObjData_E_L1_VerteronFotress_TeleportArtifact_042_desc",
-     "teleport": 20
+     "teleport": 20,
+     "to": [
+      -22943,
+      9582
+     ]
     },
     "level": 27,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_PilgrimsRidge_ForestEle_01_body",
+    "npcId": 2100555,
     "region": "Verteron",
     "spawns": 14,
     "zones": [
@@ -2893,13 +4399,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      76336,
+      108744
+     ],
      "m": 69,
      "name": "EnvObjData_E_L1_AltamiCanyon_TeleportArtifact_003_desc",
-     "teleport": 40
+     "teleport": 40,
+     "to": [
+      71791,
+      113956
+     ]
     },
     "level": 33,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AC_ForestEle_01_body",
+    "npcId": 2100611,
     "region": "Verteron",
     "spawns": 15,
     "zones": [
@@ -2909,13 +4425,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      68815,
+      -51722
+     ],
      "m": 126,
      "name": "EnvObjData_E_D1_SpiritsRetreat_TeleportArtifact_001_desc",
-     "teleport": 30
+     "teleport": 30,
+     "to": [
+      67659,
+      -64239
+     ]
     },
     "level": 26,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_sub_N_Echo_body",
+    "npcId": 2400337,
     "region": "Altgard",
     "spawns": 26,
     "zones": [
@@ -2939,13 +4465,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      151269,
+      41659
+     ],
      "m": 111,
      "name": "EnvObjData_E_L1_AlamiaHighland_TeleportArtifact_003_desc",
-     "teleport": 42
+     "teleport": 42,
+     "to": [
+      162352,
+      42206
+     ]
     },
     "level": 36,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AH_C_ForestEle_01_V01_body",
+    "npcId": 2100711,
     "region": "Verteron",
     "spawns": 29,
     "zones": [
@@ -2955,13 +4491,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      155244,
+      18938
+     ],
      "m": 139,
      "name": "EnvObjData_E_L1_AlamiaHighland_TeleportArtifact_004_desc",
-     "teleport": 43
+     "teleport": 43,
+     "to": [
+      141439,
+      20932
+     ]
     },
     "level": 37,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AH_C_ForestEle_01_body",
+    "npcId": 2100715,
     "region": "Verteron",
     "spawns": 30,
     "zones": [
@@ -2971,13 +4517,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -161121,
+      -90865
+     ],
      "m": 108,
      "name": "EnvObjData_E_D1_OldSanctum_TeleportArtifact_001_desc",
-     "teleport": 8
+     "teleport": 8,
+     "to": [
+      -170779,
+      -95757
+     ]
     },
     "level": 14,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_UC_GraveSoul_01_001_body",
+    "npcId": 2400061,
     "region": "Altgard",
     "spawns": 25,
     "zones": [
@@ -3001,13 +4557,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      90940,
+      162663
+     ],
      "m": 190,
      "name": "EnvObjData_E_L1_GardenOfMiraju_TeleportArtifact_001_desc",
-     "teleport": 58
+     "teleport": 58,
+     "to": [
+      79220,
+      147737
+     ]
     },
     "level": 44,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_RI_A_Gravi_01_body",
+    "npcId": 2100650,
     "region": "Verteron",
     "spawns": 10,
     "zones": [
@@ -3017,13 +4583,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -65521,
+      36827
+     ],
      "m": 206,
      "name": "EnvObjData_E_L1_TolbasForest_TeleportArtifact_001_desc",
-     "teleport": 25
+     "teleport": 25,
+     "to": [
+      -85709,
+      40780
+     ]
     },
     "level": 24,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_TF_Gravi_01_001_body",
+    "npcId": 2101125,
     "region": "Verteron",
     "spawns": 16,
     "zones": [
@@ -3033,13 +4609,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      46206,
+      -95078
+     ],
      "m": 167,
      "name": "EnvObjData_E_D1_FadedStump_TeleportArtifact_001_desc",
-     "teleport": 31
+     "teleport": 31,
+     "to": [
+      61685,
+      -88863
+     ]
     },
     "level": 28,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_PF_Gravi_01_01_body",
+    "npcId": 2400307,
     "region": "Altgard",
     "spawns": 77,
     "zones": [
@@ -3063,13 +4649,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      93550,
+      164330
+     ],
      "m": 195,
      "name": "EnvObjData_E_L1_GardenOfMiraju_TeleportArtifact_002_desc",
-     "teleport": 59
+     "teleport": 59,
+     "to": [
+      92631,
+      183848
+     ]
     },
     "level": 44,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_RI_B_Gravi_01_body",
+    "npcId": 2100659,
     "region": "Verteron",
     "spawns": 10,
     "zones": [
@@ -3079,13 +4675,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -65854,
+      36695
+     ],
      "m": 203,
      "name": "EnvObjData_E_L1_TolbasForest_TeleportArtifact_001_desc",
-     "teleport": 25
+     "teleport": 25,
+     "to": [
+      -85709,
+      40780
+     ]
     },
     "level": 24,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_TF_Gravi_02_001_body",
+    "npcId": 2101126,
     "region": "Verteron",
     "spawns": 16,
     "zones": [
@@ -3095,13 +4701,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      29185,
+      -66892
+     ],
      "m": 142,
      "name": "EnvObjData_E_D1_RecoverySpring_TeleportArtifact_001_desc",
-     "teleport": 32
+     "teleport": 32,
+     "to": [
+      18271,
+      -57878
+     ]
     },
     "level": 29,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_PF_Gravi_02_body",
+    "npcId": 2400329,
     "region": "Altgard",
     "spawns": 95,
     "zones": [
@@ -3111,13 +4727,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      220463,
+      -208511
+     ],
      "m": 135,
      "name": "EnvObjData_E_D1_IslandOfSpirit_TeleportArtifact_001_desc",
-     "teleport": 61
+     "teleport": 61,
+     "to": [
+      232197,
+      -215117
+     ]
     },
     "level": 46,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IOS_Gravi_02_01_body",
+    "npcId": 2400731,
     "region": "Altgard",
     "spawns": 21,
     "zones": [
@@ -3141,13 +4767,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -49909,
+      -30086
+     ],
      "m": 164,
      "name": "EnvObjData_E_L1_EllunRiverMidstream_TeleportArtifact_001_desc",
-     "teleport": 14
+     "teleport": 14,
+     "to": [
+      -41963,
+      -15773
+     ]
     },
     "level": 18,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_EllunRiverGravi_03_001_body",
+    "npcId": 2100285,
     "region": "Verteron",
     "spawns": 18,
     "zones": [
@@ -3157,13 +4793,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      92488,
+      162881
+     ],
      "m": 201,
      "name": "EnvObjData_E_L1_GardenOfMiraju_TeleportArtifact_001_desc",
-     "teleport": 58
+     "teleport": 58,
+     "to": [
+      79220,
+      147737
+     ]
     },
     "level": 44,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_RI_A_Gravi_02_body",
+    "npcId": 2100651,
     "region": "Verteron",
     "spawns": 10,
     "zones": [
@@ -3173,13 +4819,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      38081,
+      -53866
+     ],
      "m": 202,
      "name": "EnvObjData_E_D1_RecoverySpring_TeleportArtifact_001_desc",
-     "teleport": 32
+     "teleport": 32,
+     "to": [
+      18271,
+      -57878
+     ]
     },
     "level": 30,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_PF_Gravi_03_02_body",
+    "npcId": 2400342,
     "region": "Altgard",
     "spawns": 30,
     "zones": [
@@ -3203,13 +4859,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      87689,
+      -87271
+     ],
      "m": 215,
      "name": "EnvObjData_E_L1_RedForest_TeleportArtifact_001_desc",
-     "teleport": 55
+     "teleport": 55,
+     "to": [
+      77480,
+      -106248
+     ]
     },
     "level": 41,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_RF_Crab_01_body",
+    "npcId": 2100908,
     "region": "Verteron",
     "spawns": 26,
     "zones": [
@@ -3219,13 +4885,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      89103,
+      -193391
+     ],
      "m": 44,
      "name": "EnvObjData_E_L1_IslandofCrimson_TeleportArtifact_001_desc",
-     "teleport": 61
+     "teleport": 61,
+     "to": [
+      91401,
+      -189647
+     ]
     },
     "level": 46,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_FE_Ioc_Crab_01_001_body",
+    "npcId": 2110512,
     "region": "Verteron",
     "spawns": 7,
     "zones": [
@@ -3249,13 +4925,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      69025,
+      -161958
+     ],
      "m": 312,
      "name": "EnvObjData_E_D1_TeleportArtifact_013_desc",
-     "teleport": 38
+     "teleport": 38,
+     "to": [
+      97460,
+      -149042
+     ]
     },
     "level": 32,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_DR_SkurvWar_01_001_body",
+    "npcId": 2400350,
     "region": "Altgard",
     "spawns": 61,
     "zones": [
@@ -3265,13 +4951,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      167686,
+      32906
+     ],
      "m": 273,
      "name": "EnvObjData_E_D1_SteelHammerTradersPost_TeleportArtifact_001_desc",
-     "teleport": 46
+     "teleport": 46,
+     "to": [
+      164977,
+      5719
+     ]
     },
     "level": 40,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_EGC_SkurvWar_01_01_body",
+    "npcId": 2400570,
     "region": "Altgard",
     "spawns": 22,
     "zones": [
@@ -3281,13 +4977,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      73258,
+      175903
+     ],
      "m": 251,
      "name": "EnvObjData_E_D1_KumricaCellar_TeleportArtifact_001_desc",
-     "teleport": 57
+     "teleport": 57,
+     "to": [
+      82530,
+      152562
+     ]
     },
     "level": 41,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_BCV_KrallWar_03_01_body",
+    "npcId": 2400606,
     "region": "Altgard",
     "spawns": 70,
     "zones": [
@@ -3324,13 +5030,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      125666,
+      -81190
+     ],
      "m": 189,
      "name": "EnvObjData_E_L1_DranaPlantation_TeleportArtifact_003_desc",
-     "teleport": 54
+     "teleport": 54,
+     "to": [
+      123452,
+      -62387
+     ]
     },
     "level": 41,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_DP_BeritraC_06_001_body",
+    "npcId": 2100866,
     "region": "Verteron",
     "spawns": 31,
     "zones": [
@@ -3340,13 +5056,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      164932,
+      -102996
+     ],
      "m": 399,
      "name": "EnvObjData_E_L1_TeleportArtifact_Verteron_Nahid_1_desc",
-     "teleport": 57
+     "teleport": 57,
+     "to": [
+      137580,
+      -132080
+     ]
     },
     "level": 45,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_Nahid_C_BeritraC_06_001_body",
+    "npcId": 2101014,
     "region": "Verteron",
     "spawns": 11,
     "zones": [
@@ -3356,13 +5082,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -165918,
+      -17349
+     ],
      "m": 145,
      "name": "EnvObjData_E_D1_DestroyedSite_TeleportArtifact_001_desc",
-     "teleport": 13
+     "teleport": 13,
+     "to": [
+      -152064,
+      -13202
+     ]
     },
     "level": 19,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_SW_BeritraC_06_01_body",
+    "npcId": 2400143,
     "region": "Altgard",
     "spawns": 26,
     "zones": [
@@ -3372,13 +5108,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -114925,
+      -24820
+     ],
      "m": 157,
      "name": "EnvObjData_E_D1_Watcherstent_TeleportArtifact_001_desc",
-     "teleport": 16
+     "teleport": 16,
+     "to": [
+      -104603,
+      -36713
+     ]
     },
     "level": 20,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_SH_BeritraC_06_01_body",
+    "npcId": 2400162,
     "region": "Altgard",
     "spawns": 24,
     "zones": [
@@ -3389,13 +5135,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      62950,
+      -155826
+     ],
      "m": 352,
      "name": "EnvObjData_E_D1_TeleportArtifact_013_desc",
-     "teleport": 38
+     "teleport": 38,
+     "to": [
+      97460,
+      -149042
+     ]
     },
     "level": 32,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_L1_DP_BeritraC_06_001_body",
+    "npcId": 2400382,
     "region": "Altgard",
     "spawns": 15,
     "zones": [
@@ -3405,13 +5161,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -8965,
+      150483
+     ],
      "m": 915,
      "name": "EnvObjData_E_D1_KumricaCellar_TeleportArtifact_001_desc",
-     "teleport": 57
+     "teleport": 57,
+     "to": [
+      82530,
+      152562
+     ]
     },
     "level": 43,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_LF_BeritraC_06_01_body",
+    "npcId": 2400658,
     "region": "Altgard",
     "spawns": 8,
     "zones": [
@@ -3449,7 +5215,9 @@ const PET_SOURCES = {
     "chance": "100%",
     "level": 63,
     "map": "String_STR_Map_Fire_Temple_body",
+    "mapId": 600022,
     "npc": "String_STR_M_PD_Fire_Temple_AshGuard_01_body",
+    "npcId": 2300312,
     "region": "Fire Temple",
     "spawns": 1,
     "zones": [
@@ -3460,7 +5228,9 @@ const PET_SOURCES = {
     "chance": "100%",
     "level": 37,
     "map": "String_STR_Map_Fire_Temple_body",
+    "mapId": 600021,
     "npc": "String_STR_M_PD_Fire_Temple_AshGuard_01_body",
+    "npcId": 2310312,
     "region": "Fire Temple",
     "spawns": 1,
     "zones": [
@@ -3471,7 +5241,9 @@ const PET_SOURCES = {
     "chance": "100%",
     "level": 74,
     "map": "String_STR_Map_Fire_Temple_body",
+    "mapId": 600023,
     "npc": "String_STR_M_PD_Fire_Temple_AshGuard_01_body",
+    "npcId": 2320312,
     "region": "Fire Temple",
     "spawns": 1,
     "zones": [
@@ -3495,13 +5267,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      14582,
+      18176
+     ],
      "m": 231,
      "name": "EnvObjData_E_L1_PillgrimsRidgePath_TeleportArtifact_001_desc",
-     "teleport": 24
+     "teleport": 24,
+     "to": [
+      37566,
+      19981
+     ]
     },
     "level": 27,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_PilgrimsRidge_Bee_01_01_body",
+    "npcId": 2100551,
     "region": "Verteron",
     "spawns": 14,
     "zones": [
@@ -3525,13 +5307,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -12401,
+      -100213
+     ],
      "m": 100,
      "name": "EnvObjData_E_L1_EllunRiverMarsh_TeleportArtifact_003_desc",
-     "teleport": 10
+     "teleport": 10,
+     "to": [
+      -4631,
+      -106483
+     ]
     },
     "level": 14,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_Turtle_01_body",
+    "npcId": 2100033,
     "region": "Verteron",
     "spawns": 29,
     "zones": [
@@ -3542,13 +5334,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      95008,
+      -20459
+     ],
      "m": 193,
      "name": "EnvObjData_E_L1_KrakaFootPath_TeleportArtifact_001_desc",
-     "teleport": 48
+     "teleport": 48,
+     "to": [
+      99890,
+      -1760
+     ]
     },
     "level": 39,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_KFP_BF_Starturtle_01_001_body",
+    "npcId": 2100808,
     "region": "Verteron",
     "spawns": 33,
     "zones": [
@@ -3558,13 +5360,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -227716,
+      263491
+     ],
      "m": 1929,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_002_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      -64997,
+      159811
+     ]
     },
     "level": 49,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_FE_IoE_Starturtle_01_001_body",
+    "npcId": 2101082,
     "region": "Verteron",
     "spawns": 28,
     "zones": [
@@ -3574,13 +5386,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      30048,
+      -168895
+     ],
      "m": 429,
      "name": "EnvObjData_E_D1_HiddenCave_TeleportArtifact_001_desc",
-     "teleport": 36
+     "teleport": 36,
+     "to": [
+      61407,
+      -198187
+     ]
     },
     "level": 32,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_DR_Starturtle_01_001_body",
+    "npcId": 2400374,
     "region": "Altgard",
     "spawns": 9,
     "zones": [
@@ -3590,13 +5412,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      94749,
+      97691
+     ],
      "m": 238,
      "name": "EnvObjData_E_D1_AbandonedCampsite_TeleportArtifact_001_desc",
-     "teleport": 49
+     "teleport": 49,
+     "to": [
+      105761,
+      76629
+     ]
     },
     "level": 37,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IoI_Starturtle_01_001_body",
+    "npcId": 2400519,
     "region": "Altgard",
     "spawns": 23,
     "zones": [
@@ -3606,13 +5438,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -201485,
+      246380
+     ],
      "m": 1690,
      "name": "EnvObjData_E_D1_TeleportArtifact_006_desc",
-     "teleport": 15
+     "teleport": 15,
+     "to": [
+      -211694,
+      77640
+     ]
     },
     "level": 49,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IoI_Starturtle_01_001_body",
+    "npcId": 2400808,
     "region": "Altgard",
     "spawns": 25,
     "zones": [
@@ -3636,13 +5478,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      21410,
+      -73965
+     ],
      "m": 164,
      "name": "EnvObjData_E_D1_RecoverySpring_TeleportArtifact_001_desc",
-     "teleport": 32
+     "teleport": 32,
+     "to": [
+      18271,
+      -57878
+     ]
     },
     "level": 29,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_PF_Slime_01_01_body",
+    "npcId": 2400320,
     "region": "Altgard",
     "spawns": 10,
     "zones": [
@@ -3666,13 +5518,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -19362,
+      -81573
+     ],
      "m": 125,
      "name": "EnvObjData_E_L1_EllunRiverMarsh_TeleportArtifact_002_desc",
-     "teleport": 9
+     "teleport": 9,
+     "to": [
+      -22695,
+      -69567
+     ]
     },
     "level": 13,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_SwampSlime_01_body",
+    "npcId": 2100025,
     "region": "Verteron",
     "spawns": 80,
     "zones": [
@@ -3682,13 +5544,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      148710,
+      34639
+     ],
      "m": 155,
      "name": "EnvObjData_E_L1_AlamiaHighland_TeleportArtifact_004_desc",
-     "teleport": 43
+     "teleport": 43,
+     "to": [
+      141439,
+      20932
+     ]
     },
     "level": 36,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AH_C_Slime_01_body",
+    "npcId": 2100717,
     "region": "Verteron",
     "spawns": 17,
     "zones": [
@@ -3698,25 +5570,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       -31731,
+       -28252
+      ],
       "m": 919,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       -31731,
+       -28252
+      ],
       "m": 831,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -31731,
+      -28252
+     ],
      "m": 831,
      "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      -52708,
+      52165
+     ]
     },
     "level": 46,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_STI_SLIME_02_001_body",
+    "npcId": 2600023,
     "region": "Chaotic Lower Reshanta",
     "spawns": 69,
     "zones": [
@@ -3742,13 +5640,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      50940,
+      -140740
+     ],
      "m": 235,
      "name": "EnvObjData_E_D1_ColdwindShelter_TeleportArtifact_001_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      45697,
+      -117802
+     ]
     },
     "level": 32,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_SW_Oculazen_01_01_body",
+    "npcId": 2400364,
     "region": "Altgard",
     "spawns": 19,
     "zones": [
@@ -3772,13 +5680,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      97305,
+      -69029
+     ],
      "m": 200,
      "name": "EnvObjData_E_L1_DranaPlantation_TeleportArtifact_002_desc",
-     "teleport": 53
+     "teleport": 53,
+     "to": [
+      84175,
+      -53967
+     ]
     },
     "level": 40,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_DP_Oculazen_02_001_body",
+    "npcId": 2100854,
     "region": "Verteron",
     "spawns": 47,
     "zones": [
@@ -3789,13 +5707,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      155891,
+      159653
+     ],
      "m": 213,
      "name": "EnvObjData_E_D1_CollapsedHallOfFame_TeleportArtifact_001_desc",
-     "teleport": 58
+     "teleport": 58,
+     "to": [
+      134794,
+      162297
+     ]
     },
     "level": 44,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IS_Oculazen_01_001_body",
+    "npcId": 2400711,
     "region": "Altgard",
     "spawns": 16,
     "zones": [
@@ -3819,13 +5747,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -36380,
+      68792
+     ],
      "m": 119,
      "name": "EnvObjData_E_L1_TolbasForest_TeleportArtifact_005_desc",
-     "teleport": 28
+     "teleport": 28,
+     "to": [
+      -34703,
+      56996
+     ]
     },
     "level": 26,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_D1_Com_VirotaWar_01_01_body",
+    "npcId": 2100183,
     "region": "Verteron",
     "spawns": 9,
     "zones": [
@@ -3835,13 +5773,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -164252,
+      -74054
+     ],
      "m": 128,
      "name": "EnvObjData_E_D1_GraveKeeperTent_TeleportArtifact_001_desc",
-     "teleport": 7
+     "teleport": 7,
+     "to": [
+      -151858,
+      -77322
+     ]
     },
     "level": 17,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_VirotaWar_01_01_body",
+    "npcId": 2400920,
     "region": "Altgard",
     "spawns": 4,
     "zones": [
@@ -3865,13 +5813,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -162162,
+      -54767
+     ],
      "m": 220,
      "name": "EnvObjData_E_D1_FangsHideout_TeleportArtifact_001_desc",
-     "teleport": 10
+     "teleport": 10,
+     "to": [
+      -140257,
+      -52357
+     ]
     },
     "level": 17,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Papis_01_01_body",
+    "npcId": 2000926,
     "region": "Altgard",
     "spawns": 41,
     "zones": [
@@ -3883,13 +5841,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -22820,
+      16660
+     ],
      "m": 113,
      "name": "EnvObjData_E_D1_ForestsHideout_TeleportArtifact_001_desc",
-     "teleport": 21
+     "teleport": 21,
+     "to": [
+      -11660,
+      15210
+     ]
     },
     "level": 21,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Papis_01_01_body",
+    "npcId": 2000927,
     "region": "Altgard",
     "spawns": 23,
     "zones": [
@@ -3899,13 +5867,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      52119,
+      -15597
+     ],
      "m": 133,
      "name": "EnvObjData_E_D1_TeleportArtifact_020_desc",
-     "teleport": 28
+     "teleport": 28,
+     "to": [
+      48913,
+      -2638
+     ]
     },
     "level": 24,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Papis_01_01_body",
+    "npcId": 2000928,
     "region": "Altgard",
     "spawns": 18,
     "zones": [
@@ -3915,13 +5893,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -125056,
+      -22977
+     ],
      "m": 246,
      "name": "EnvObjData_E_D1_Watcherstent_TeleportArtifact_001_desc",
-     "teleport": 16
+     "teleport": 16,
+     "to": [
+      -104603,
+      -36713
+     ]
     },
     "level": 19,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Papis_01_01_body",
+    "npcId": 2000929,
     "region": "Altgard",
     "spawns": 98,
     "zones": [
@@ -3934,13 +5922,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      112379,
+      -83976
+     ],
      "m": 42,
      "name": "EnvObjData_E_D1_TeleportArtifact_011_desc",
-     "teleport": 33
+     "teleport": 33,
+     "to": [
+      108433,
+      -82420
+     ]
     },
     "level": 33,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Papis_01_01_body",
+    "npcId": 2000951,
     "region": "Altgard",
     "spawns": 16,
     "zones": [
@@ -3951,13 +5949,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -91238,
+      -42143
+     ],
      "m": 96,
      "name": "EnvObjData_E_L1_CantasValley_TeleportArtifact_004_desc",
-     "teleport": 4
+     "teleport": 4,
+     "to": [
+      -94647,
+      -33157
+     ]
     },
     "level": 10,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_CV_BF_Papis_01_001_body",
+    "npcId": 2100009,
     "region": "Verteron",
     "spawns": 117,
     "zones": [
@@ -3968,13 +5976,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -66357,
+      -12874
+     ],
      "m": 99,
      "name": "EnvObjData_E_L1_EllunRiverMidstream_TeleportArtifact_040_desc",
-     "teleport": 15
+     "teleport": 15,
+     "to": [
+      -65098,
+      -22723
+     ]
     },
     "level": 18,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_EllunRiverPapis_01_body",
+    "npcId": 2100220,
     "region": "Verteron",
     "spawns": 86,
     "zones": [
@@ -3986,13 +6004,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      86147,
+      166004
+     ],
      "m": 190,
      "name": "EnvObjData_E_L1_GardenOfMiraju_TeleportArtifact_002_desc",
-     "teleport": 59
+     "teleport": 59,
+     "to": [
+      92631,
+      183848
+     ]
     },
     "level": 44,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_RI_Papis_01_body",
+    "npcId": 2100654,
     "region": "Verteron",
     "spawns": 28,
     "zones": [
@@ -4002,13 +6030,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      175418,
+      56632
+     ],
      "m": 62,
      "name": "EnvObjData_E_D1_AmuntasHideout_TeleportArtifact_001_desc",
-     "teleport": 50
+     "teleport": 50,
+     "to": [
+      173701,
+      62577
+     ]
     },
     "level": 40,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Papis_01_01_body",
+    "npcId": 2400594,
     "region": "Altgard",
     "spawns": 33,
     "zones": [
@@ -4018,13 +6056,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -85929,
+      -148972
+     ],
      "m": 253,
      "name": "EnvObjData_E_D1_FugitiveVillage_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      -89596,
+      -123913
+     ]
     },
     "level": 11,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Papis_01_01_body",
+    "npcId": 2400903,
     "region": "Altgard",
     "spawns": 74,
     "zones": [
@@ -4035,13 +6083,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -150080,
+      -40051
+     ],
      "m": 157,
      "name": "EnvObjData_E_D1_FangsHideout_TeleportArtifact_001_desc",
-     "teleport": 10
+     "teleport": 10,
+     "to": [
+      -140257,
+      -52357
+     ]
     },
     "level": 18,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Papis_01_01_body",
+    "npcId": 2400938,
     "region": "Altgard",
     "spawns": 13,
     "zones": [
@@ -4052,13 +6110,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      144922,
+      110064
+     ],
      "m": 132,
      "name": "EnvObjData_E_D1_IdunsLake_TeleportArtifact_001_desc",
-     "teleport": 54
+     "teleport": 54,
+     "to": [
+      140354,
+      97696
+     ]
     },
     "level": 40,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Papis_01_01_body",
+    "npcId": 2400940,
     "region": "Altgard",
     "spawns": 56,
     "zones": [
@@ -4069,13 +6137,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      138411,
+      2614
+     ],
      "m": 113,
      "name": "EnvObjData_E_D1_TeleportArtifact_012_desc",
-     "teleport": 47
+     "teleport": 47,
+     "to": [
+      136255,
+      13712
+     ]
     },
     "level": 34,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Papis_01_01_body",
+    "npcId": 2400947,
     "region": "Altgard",
     "spawns": 24,
     "zones": [
@@ -4100,13 +6178,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      147819,
+      42128
+     ],
      "m": 145,
      "name": "EnvObjData_E_L1_AlamiaHighland_TeleportArtifact_003_desc",
-     "teleport": 42
+     "teleport": 42,
+     "to": [
+      162352,
+      42206
+     ]
     },
     "level": 36,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AH_C_Scorpion_01_body",
+    "npcId": 2100709,
     "region": "Verteron",
     "spawns": 46,
     "zones": [
@@ -4116,13 +6204,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      140704,
+      32068
+     ],
      "m": 189,
      "name": "EnvObjData_E_D1_TeleportArtifact_012_desc",
-     "teleport": 47
+     "teleport": 47,
+     "to": [
+      136255,
+      13712
+     ]
     },
     "level": 35,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_FD_Scorpion_01_01_body",
+    "npcId": 2400470,
     "region": "Altgard",
     "spawns": 19,
     "zones": [
@@ -4159,13 +6257,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      164797,
+      -57860
+     ],
      "m": 289,
      "name": "EnvObjData_E_L1_KrakaFootPath_TeleportArtifact_003_desc",
-     "teleport": 51
+     "teleport": 51,
+     "to": [
+      178104,
+      -32231
+     ]
     },
     "level": 40,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_KFP_BF_EarthEleOd_01_001_body",
+    "npcId": 2100812,
     "region": "Verteron",
     "spawns": 38,
     "zones": [
@@ -4175,13 +6283,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      63783,
+      -48586
+     ],
      "m": 161,
      "name": "EnvObjData_E_D1_SpiritsRetreat_TeleportArtifact_001_desc",
-     "teleport": 30
+     "teleport": 30,
+     "to": [
+      67659,
+      -64239
+     ]
     },
     "level": 26,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_PF_EarthEleOd_01_01_body",
+    "npcId": 2400301,
     "region": "Altgard",
     "spawns": 5,
     "zones": [
@@ -4191,25 +6309,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       40404,
+       15116
+      ],
       "m": 717,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       40404,
+       15116
+      ],
       "m": 1002,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      40404,
+      15116
+     ],
      "m": 717,
      "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      56200,
+      -54866
+     ]
     },
     "level": 48,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_WSA_EARTHELEOD_01_001_body",
+    "npcId": 2600056,
     "region": "Chaotic Lower Reshanta",
     "spawns": 10,
     "zones": [
@@ -4233,13 +6377,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -89267,
+      -62984
+     ],
      "m": 122,
      "name": "EnvObjData_E_D1_CreionCamp_TeleportArtifact_001_desc",
-     "teleport": 5
+     "teleport": 5,
+     "to": [
+      -97963,
+      -71538
+     ]
     },
     "level": 12,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_DC_CorpseBug_01_body",
+    "npcId": 2400018,
     "region": "Altgard",
     "spawns": 16,
     "zones": [
@@ -4263,13 +6417,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -176360,
+      -36564
+     ],
      "m": 244,
      "name": "EnvObjData_E_D1_TeleportArtifact_001_desc",
-     "teleport": 11
+     "teleport": 11,
+     "to": [
+      -188742,
+      -57564
+     ]
     },
     "level": 18,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Tog_01_01_body",
+    "npcId": 2400912,
     "region": "Altgard",
     "spawns": 30,
     "zones": [
@@ -4295,13 +6459,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -65128,
+      34595
+     ],
      "m": 215,
      "name": "EnvObjData_E_L1_TolbasForest_TeleportArtifact_001_desc",
-     "teleport": 25
+     "teleport": 25,
+     "to": [
+      -85709,
+      40780
+     ]
     },
     "level": 24,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_TF_BF_Rafflesia_01_001_body",
+    "npcId": 2100160,
     "region": "Verteron",
     "spawns": 18,
     "zones": [
@@ -4311,13 +6485,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      148066,
+      96086
+     ],
      "m": 435,
      "name": "EnvObjData_E_L1_AltamiCanyon_TeleportArtifact_002_desc",
-     "teleport": 39
+     "teleport": 39,
+     "to": [
+      105100,
+      102948
+     ]
     },
     "level": 35,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AH_BF_Rafflesia_01_001_body",
+    "npcId": 2100744,
     "region": "Verteron",
     "spawns": 5,
     "zones": [
@@ -4327,25 +6511,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       36204,
+       33587
+      ],
       "m": 907,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       36204,
+       33587
+      ],
       "m": 908,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      36204,
+      33587
+     ],
      "m": 907,
      "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      56200,
+      -54866
+     ]
     },
     "level": 46,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_WSA_RAFFLESIA_01_001_body",
+    "npcId": 2600049,
     "region": "Chaotic Lower Reshanta",
     "spawns": 67,
     "zones": [
@@ -4370,13 +6580,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -32168,
+      69464
+     ],
      "m": 95,
      "name": "EnvObjData_E_L1_TolbasForest_TeleportArtifact_003_desc",
-     "teleport": 29
+     "teleport": 29,
+     "to": [
+      -23687,
+      73651
+     ]
     },
     "level": 26,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_TF_Kuru_01_001_body",
+    "npcId": 2100180,
     "region": "Verteron",
     "spawns": 45,
     "zones": [
@@ -4386,13 +6606,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -57737,
+      114139
+     ],
      "m": 156,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_001_desc",
-     "teleport": 32
+     "teleport": 32,
+     "to": [
+      -42374,
+      116861
+     ]
     },
     "level": 28,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_OV_Kuru_01_01_body",
+    "npcId": 2100964,
     "region": "Verteron",
     "spawns": 18,
     "zones": [
@@ -4402,13 +6632,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -222484,
+      220220
+     ],
      "m": 1687,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_002_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      -64997,
+      159811
+     ]
     },
     "level": 50,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_FE_IoE_Kuru_01_body",
+    "npcId": 2101133,
     "region": "Verteron",
     "spawns": 20,
     "zones": [
@@ -4418,13 +6658,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -219500,
+      220556
+     ],
      "m": 1660,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_002_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      -64997,
+      159811
+     ]
     },
     "level": 50,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_FE_IoE_Kuru_01_body",
+    "npcId": 2101136,
     "region": "Verteron",
     "spawns": 93,
     "zones": [
@@ -4434,13 +6684,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -201414,
+      203977
+     ],
      "m": 1268,
      "name": "EnvObjData_E_D1_TeleportArtifact_006_desc",
-     "teleport": 15
+     "teleport": 15,
+     "to": [
+      -211694,
+      77640
+     ]
     },
     "level": 50,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IoI_Kuru_01_001_body",
+    "npcId": 2400831,
     "region": "Altgard",
     "spawns": 93,
     "zones": [
@@ -4464,13 +6724,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -33857,
+      69747
+     ],
      "m": 109,
      "name": "EnvObjData_E_L1_TolbasForest_TeleportArtifact_003_desc",
-     "teleport": 29
+     "teleport": 29,
+     "to": [
+      -23687,
+      73651
+     ]
     },
     "level": 26,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_TF_Kuru_02_001_body",
+    "npcId": 2100181,
     "region": "Verteron",
     "spawns": 40,
     "zones": [
@@ -4480,13 +6750,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -215052,
+      220828
+     ],
      "m": 1620,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_002_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      -64997,
+      159811
+     ]
     },
     "level": 50,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_FE_IoE_Kuru_02_body",
+    "npcId": 2101134,
     "region": "Verteron",
     "spawns": 23,
     "zones": [
@@ -4496,13 +6776,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -219500,
+      220556
+     ],
      "m": 1660,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_002_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      -64997,
+      159811
+     ]
     },
     "level": 50,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_FE_IoE_Kuru_02_body",
+    "npcId": 2101137,
     "region": "Verteron",
     "spawns": 93,
     "zones": [
@@ -4512,13 +6802,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -198620,
+      203125
+     ],
      "m": 1262,
      "name": "EnvObjData_E_D1_TeleportArtifact_006_desc",
-     "teleport": 15
+     "teleport": 15,
+     "to": [
+      -211694,
+      77640
+     ]
     },
     "level": 50,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IoI_Kuru_02_001_body",
+    "npcId": 2400832,
     "region": "Altgard",
     "spawns": 28,
     "zones": [
@@ -4543,7 +6843,9 @@ const PET_SOURCES = {
     "chance": "100%",
     "level": 45,
     "map": "String_STR_Map_Krao_Cave_body",
+    "mapId": 600001,
     "npc": "String_STR_M_L1_I2_KraoElite_03_body",
+    "npcId": 2300104,
     "region": "Krao Cave",
     "spawns": 1,
     "zones": [
@@ -4554,7 +6856,9 @@ const PET_SOURCES = {
     "chance": "100%",
     "level": 22,
     "map": "String_STR_Map_Krao_Cave_body",
+    "mapId": 600002,
     "npc": "String_STR_M_L1_I2_KraoElite_03_body",
+    "npcId": 2310104,
     "region": "Krao Cave",
     "spawns": 1,
     "zones": [
@@ -4565,7 +6869,9 @@ const PET_SOURCES = {
     "chance": "100%",
     "level": 70,
     "map": "String_STR_Map_Krao_Cave_body",
+    "mapId": 600004,
     "npc": "String_STR_M_L1_I2_KraoElite_03_body",
+    "npcId": 2320104,
     "region": "Krao Cave",
     "spawns": 1,
     "zones": [
@@ -4654,25 +6960,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       36132,
+       34396
+      ],
       "m": 915,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       36132,
+       34396
+      ],
       "m": 906,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      36132,
+      34396
+     ],
      "m": 906,
      "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      -52708,
+      52165
+     ]
     },
     "level": 46,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_WSA_SPIDER_01_001_body",
+    "npcId": 2600046,
     "region": "Chaotic Lower Reshanta",
     "spawns": 111,
     "zones": [
@@ -4697,13 +7029,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -99467,
+      -48406
+     ],
      "m": 114,
      "name": "EnvObjData_E_L1_CantasValley_TeleportArtifact_001_desc",
-     "teleport": 3
+     "teleport": 3,
+     "to": [
+      -110641,
+      -50756
+     ]
     },
     "level": 10,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_StoneElemental_01_body",
+    "npcId": 2100002,
     "region": "Verteron",
     "spawns": 84,
     "zones": [
@@ -4713,13 +7055,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      123161,
+      14839
+     ],
      "m": 193,
      "name": "EnvObjData_E_L1_AlamiaHighland_TeleportArtifact_004_desc",
-     "teleport": 43
+     "teleport": 43,
+     "to": [
+      141439,
+      20932
+     ]
     },
     "level": 34,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AH_B_Kalgolem_01_body",
+    "npcId": 2100700,
     "region": "Verteron",
     "spawns": 30,
     "zones": [
@@ -4729,13 +7081,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      44173,
+      -93978
+     ],
      "m": 182,
      "name": "EnvObjData_E_D1_FadedStump_TeleportArtifact_001_desc",
-     "teleport": 31
+     "teleport": 31,
+     "to": [
+      61685,
+      -88863
+     ]
     },
     "level": 29,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_PF_AshGuard_01_01_body",
+    "npcId": 2400328,
     "region": "Altgard",
     "spawns": 27,
     "zones": [
@@ -4745,25 +7107,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       -2059,
+       -7837
+      ],
       "m": 749,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       -2059,
+       -7837
+      ],
       "m": 785,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -2059,
+      -7837
+     ],
      "m": 749,
      "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      56200,
+      -54866
+     ]
     },
     "level": 48,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_RR_KALGOLEM_01_001_body",
+    "npcId": 2600070,
     "region": "Chaotic Lower Reshanta",
     "spawns": 9,
     "zones": [
@@ -4787,13 +7175,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -78612,
+      -69123
+     ],
      "m": 78,
      "name": "EnvObjData_E_L1_CantasValley_TeleportArtifact_002_desc",
-     "teleport": 5
+     "teleport": 5,
+     "to": [
+      -71372,
+      -71987
+     ]
     },
     "level": 12,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_CV_Fungus_01_body",
+    "npcId": 2100456,
     "region": "Verteron",
     "spawns": 56,
     "zones": [
@@ -4817,13 +7215,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -35960,
+      82785
+     ],
      "m": 153,
      "name": "EnvObjData_E_L1_TolbasForest_TeleportArtifact_003_desc",
-     "teleport": 29
+     "teleport": 29,
+     "to": [
+      -23687,
+      73651
+     ]
     },
     "level": 27,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_OV_Pino_01_01_body",
+    "npcId": 2100953,
     "region": "Verteron",
     "spawns": 6,
     "zones": [
@@ -4833,13 +7241,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -37487,
+      86096
+     ],
      "m": 186,
      "name": "EnvObjData_E_L1_TolbasForest_TeleportArtifact_003_desc",
-     "teleport": 29
+     "teleport": 29,
+     "to": [
+      -23687,
+      73651
+     ]
     },
     "level": 27,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_OV_Pino_01_02_body",
+    "npcId": 2100954,
     "region": "Verteron",
     "spawns": 6,
     "zones": [
@@ -4863,13 +7281,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -20304,
+      101651
+     ],
      "m": 267,
      "name": "EnvObjData_E_L1_PillgrimsRidgePath_TeleportArtifact_002_desc",
-     "teleport": 23
+     "teleport": 23,
+     "to": [
+      2864,
+      88304
+     ]
     },
     "level": 28,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_OV_Pino_02_01_body",
+    "npcId": 2100955,
     "region": "Verteron",
     "spawns": 22,
     "zones": [
@@ -4893,13 +7321,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      149460,
+      35500
+     ],
      "m": 145,
      "name": "EnvObjData_E_L1_AlamiaHighland_TeleportArtifact_003_desc",
-     "teleport": 42
+     "teleport": 42,
+     "to": [
+      162352,
+      42206
+     ]
     },
     "level": 36,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AH_C_Fish_01_V01_body",
+    "npcId": 2100710,
     "region": "Verteron",
     "spawns": 30,
     "zones": [
@@ -4909,25 +7347,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       -32304,
+       -22351
+      ],
       "m": 943,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       -32304,
+       -22351
+      ],
       "m": 773,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -32304,
+      -22351
+     ],
      "m": 773,
      "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      -52708,
+      52165
+     ]
     },
     "level": 46,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_STI_FISH_01_V01_001_body",
+    "npcId": 2600024,
     "region": "Chaotic Lower Reshanta",
     "spawns": 37,
     "zones": [
@@ -4966,7 +7430,9 @@ const PET_SOURCES = {
     "chance": "100%",
     "level": 63,
     "map": "String_STR_Map_Fire_Temple_body",
+    "mapId": 600022,
     "npc": "String_STR_M_PD_Fire_Temple_FireGuard_01_body",
+    "npcId": 2300311,
     "region": "Fire Temple",
     "spawns": 1,
     "zones": [
@@ -4977,7 +7443,9 @@ const PET_SOURCES = {
     "chance": "100%",
     "level": 37,
     "map": "String_STR_Map_Fire_Temple_body",
+    "mapId": 600021,
     "npc": "String_STR_M_PD_Fire_Temple_FireGuard_01_body",
+    "npcId": 2310311,
     "region": "Fire Temple",
     "spawns": 1,
     "zones": [
@@ -4988,7 +7456,9 @@ const PET_SOURCES = {
     "chance": "100%",
     "level": 74,
     "map": "String_STR_Map_Fire_Temple_body",
+    "mapId": 600023,
     "npc": "String_STR_M_PD_Fire_Temple_FireGuard_01_body",
+    "npcId": 2320311,
     "region": "Fire Temple",
     "spawns": 1,
     "zones": [
@@ -5012,13 +7482,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      70049,
+      55417
+     ],
      "m": 125,
      "name": "EnvObjData_E_L1_AltamiCanyon_TeleportArtifact_001_desc",
-     "teleport": 38
+     "teleport": 38,
+     "to": [
+      78802,
+      64403
+     ]
     },
     "level": 33,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AC_WindEle_01_body",
+    "npcId": 2100605,
     "region": "Verteron",
     "spawns": 6,
     "zones": [
@@ -5028,13 +7508,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -220055,
+      250963
+     ],
      "m": 1799,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_002_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      -64997,
+      159811
+     ]
     },
     "level": 51,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_FE_IoE_WindEle_01_body",
+    "npcId": 2101096,
     "region": "Verteron",
     "spawns": 10,
     "zones": [
@@ -5044,13 +7534,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      69688,
+      -52640
+     ],
      "m": 118,
      "name": "EnvObjData_E_D1_SpiritsRetreat_TeleportArtifact_001_desc",
-     "teleport": 30
+     "teleport": 30,
+     "to": [
+      67659,
+      -64239
+     ]
     },
     "level": 26,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_PF_WindEle_02_01_body",
+    "npcId": 2400324,
     "region": "Altgard",
     "spawns": 95,
     "zones": [
@@ -5075,7 +7575,9 @@ const PET_SOURCES = {
     "chance": "100%",
     "level": 45,
     "map": "String_STR_Map_Draupnir_body",
+    "mapId": 600032,
     "npc": "String_STR_M_PD_Draupnir_NagaElite_01_body",
+    "npcId": 2300401,
     "region": "Draupnir",
     "spawns": 1,
     "zones": [
@@ -5086,7 +7588,9 @@ const PET_SOURCES = {
     "chance": "100%",
     "level": 45,
     "map": "String_STR_Map_Draupnir_body",
+    "mapId": 600031,
     "npc": "String_STR_M_PD_Draupnir_NagaElite_01_body",
+    "npcId": 2310401,
     "region": "Draupnir",
     "spawns": 1,
     "zones": [
@@ -5097,7 +7601,9 @@ const PET_SOURCES = {
     "chance": "100%",
     "level": 70,
     "map": "String_STR_Map_Draupnir_body",
+    "mapId": 600033,
     "npc": "String_STR_M_PD_Draupnir_NagaElite_01_body",
+    "npcId": 2320401,
     "region": "Draupnir",
     "spawns": 1,
     "zones": [
@@ -5121,13 +7627,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      93927,
+      162988
+     ],
      "m": 209,
      "name": "EnvObjData_E_L1_GardenOfMiraju_TeleportArtifact_002_desc",
-     "teleport": 59
+     "teleport": 59,
+     "to": [
+      92631,
+      183848
+     ]
     },
     "level": 44,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_RI_B_WindEle_01_body",
+    "npcId": 2100658,
     "region": "Verteron",
     "spawns": 17,
     "zones": [
@@ -5137,13 +7653,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -219751,
+      251138
+     ],
      "m": 1797,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_002_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      -64997,
+      159811
+     ]
     },
     "level": 51,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_FE_IoE_WindEle_02_001_body",
+    "npcId": 2101103,
     "region": "Verteron",
     "spawns": 1,
     "zones": [
@@ -5153,13 +7679,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -199848,
+      232137
+     ],
      "m": 1550,
      "name": "EnvObjData_E_D1_TeleportArtifact_006_desc",
-     "teleport": 15
+     "teleport": 15,
+     "to": [
+      -211694,
+      77640
+     ]
     },
     "level": 51,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IoI_WindEle_02_body",
+    "npcId": 2400824,
     "region": "Altgard",
     "spawns": 10,
     "zones": [
@@ -5183,13 +7719,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      92344,
+      164496
+     ],
      "m": 194,
      "name": "EnvObjData_E_L1_GardenOfMiraju_TeleportArtifact_002_desc",
-     "teleport": 59
+     "teleport": 59,
+     "to": [
+      92631,
+      183848
+     ]
     },
     "level": 45,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_RI_WindEle_03_body",
+    "npcId": 2100666,
     "region": "Verteron",
     "spawns": 5,
     "zones": [
@@ -5199,13 +7745,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      69688,
+      -52640
+     ],
      "m": 118,
      "name": "EnvObjData_E_D1_SpiritsRetreat_TeleportArtifact_001_desc",
-     "teleport": 30
+     "teleport": 30,
+     "to": [
+      67659,
+      -64239
+     ]
     },
     "level": 26,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_PF_WindEle_01_01_body",
+    "npcId": 2400302,
     "region": "Altgard",
     "spawns": 87,
     "zones": [
@@ -5215,13 +7771,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -199082,
+      222881
+     ],
      "m": 1458,
      "name": "EnvObjData_E_D1_TeleportArtifact_006_desc",
-     "teleport": 15
+     "teleport": 15,
+     "to": [
+      -211694,
+      77640
+     ]
     },
     "level": 51,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IoI_WindEle_03_body",
+    "npcId": 2400818,
     "region": "Altgard",
     "spawns": 6,
     "zones": [
@@ -5245,13 +7811,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      108509,
+      145393
+     ],
      "m": 180,
      "name": "EnvObjData_E_L1_GardenOfMiraju_TeleportArtifact_003_desc",
-     "teleport": 60
+     "teleport": 60,
+     "to": [
+      126301,
+      142939
+     ]
     },
     "level": 45,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_RI_FireEle_03_001_body",
+    "npcId": 2100664,
     "region": "Verteron",
     "spawns": 5,
     "zones": [
@@ -5261,13 +7837,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      93186,
+      -76583
+     ],
      "m": 163,
      "name": "EnvObjData_E_D1_TeleportArtifact_011_desc",
-     "teleport": 33
+     "teleport": 33,
+     "to": [
+      108433,
+      -82420
+     ]
     },
     "level": 27,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_PF_FireEle_01_01_body",
+    "npcId": 2400303,
     "region": "Altgard",
     "spawns": 45,
     "zones": [
@@ -5277,13 +7863,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      242788,
+      -236672
+     ],
      "m": 240,
      "name": "EnvObjData_E_D1_IslandOfSpirit_TeleportArtifact_001_desc",
-     "teleport": 61
+     "teleport": 61,
+     "to": [
+      232197,
+      -215117
+     ]
     },
     "level": 48,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IOS_FireEle_03_01_body",
+    "npcId": 2400749,
     "region": "Altgard",
     "spawns": 16,
     "zones": [
@@ -5293,13 +7889,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -199708,
+      234043
+     ],
      "m": 1569,
      "name": "EnvObjData_E_D1_TeleportArtifact_006_desc",
-     "teleport": 15
+     "teleport": 15,
+     "to": [
+      -211694,
+      77640
+     ]
     },
     "level": 51,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IoI_FireEle_03_001_body",
+    "npcId": 2400815,
     "region": "Altgard",
     "spawns": 4,
     "zones": [
@@ -5323,13 +7929,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -62518,
+      74718
+     ],
      "m": 118,
      "name": "EnvObjData_E_L1_TolbasForest_TeleportArtifact_002_desc",
-     "teleport": 27
+     "teleport": 27,
+     "to": [
+      -64489,
+      86321
+     ]
     },
     "level": 25,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_TF_Kalnif_01_body",
+    "npcId": 2100174,
     "region": "Verteron",
     "spawns": 6,
     "zones": [
@@ -5339,13 +7955,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -64944,
+      35700
+     ],
      "m": 214,
      "name": "EnvObjData_E_L1_TolbasForest_TeleportArtifact_001_desc",
-     "teleport": 25
+     "teleport": 25,
+     "to": [
+      -85709,
+      40780
+     ]
     },
     "level": 24,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_TF_Kalnif_01_001_body",
+    "npcId": 2100348,
     "region": "Verteron",
     "spawns": 8,
     "zones": [
@@ -5355,13 +7981,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -51713,
+      48852
+     ],
      "m": 189,
      "name": "EnvObjData_E_L1_TolbasForest_TeleportArtifact_005_desc",
-     "teleport": 28
+     "teleport": 28,
+     "to": [
+      -34703,
+      56996
+     ]
     },
     "level": 24,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_TF_Kalnif_01_002_body",
+    "npcId": 2100349,
     "region": "Verteron",
     "spawns": 9,
     "zones": [
@@ -5371,13 +8007,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      43469,
+      73790
+     ],
      "m": 159,
      "name": "EnvObjData_E_L1_AlamiaHighland_TeleportArtifact_001_desc",
-     "teleport": 37
+     "teleport": 37,
+     "to": [
+      36134,
+      59735
+     ]
     },
     "level": 32,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AH_BF_Kalnif_01_001_body",
+    "npcId": 2100742,
     "region": "Verteron",
     "spawns": 64,
     "zones": [
@@ -5388,13 +8034,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      93533,
+      26947
+     ],
      "m": 293,
      "name": "EnvObjData_E_L1_AlamiaHighland_TeleportArtifact_002_desc",
-     "teleport": 41
+     "teleport": 41,
+     "to": [
+      121807,
+      34525
+     ]
     },
     "level": 34,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AH_BF_Kalnif_01_002_body",
+    "npcId": 2100752,
     "region": "Verteron",
     "spawns": 46,
     "zones": [
@@ -5404,13 +8060,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      117271,
+      -39821
+     ],
      "m": 65,
      "name": "EnvObjData_E_L1_DranaPlantation_TeleportArtifact_001_desc",
-     "teleport": 52
+     "teleport": 52,
+     "to": [
+      113348,
+      -45014
+     ]
     },
     "level": 40,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_KFP_BF_Kalnif_01_001_body",
+    "npcId": 2100802,
     "region": "Verteron",
     "spawns": 74,
     "zones": [
@@ -5420,13 +8086,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      74503,
+      -38069
+     ],
      "m": 186,
      "name": "EnvObjData_E_L1_DranaPlantation_TeleportArtifact_002_desc",
-     "teleport": 53
+     "teleport": 53,
+     "to": [
+      84175,
+      -53967
+     ]
     },
     "level": 40,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_KFP_BF_Kalnif_01_001_body",
+    "npcId": 2100805,
     "region": "Verteron",
     "spawns": 10,
     "zones": [
@@ -5450,13 +8126,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -33970,
+      15493
+     ],
      "m": 125,
      "name": "EnvObjData_E_L1_VerteronFotress_TeleportArtifact_042_desc",
-     "teleport": 20
+     "teleport": 20,
+     "to": [
+      -22943,
+      9582
+     ]
     },
     "level": 21,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_VF_Karnif_02_body",
+    "npcId": 2100070,
     "region": "Verteron",
     "spawns": 10,
     "zones": [
@@ -5466,13 +8152,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -16269,
+      -18823
+     ],
      "m": 195,
      "name": "EnvObjData_E_L1_VerteronFotress_TeleportArtifact_001_desc",
-     "teleport": 19
+     "teleport": 19,
+     "to": [
+      -9160,
+      -675
+     ]
     },
     "level": 19,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_VF_Karnif_A1_02_body",
+    "npcId": 2100096,
     "region": "Verteron",
     "spawns": 10,
     "zones": [
@@ -5482,13 +8178,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -2475,
+      -11659
+     ],
      "m": 129,
      "name": "EnvObjData_E_L1_VerteronFotress_TeleportArtifact_001_desc",
-     "teleport": 19
+     "teleport": 19,
+     "to": [
+      -9160,
+      -675
+     ]
     },
     "level": 20,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_VF_Karnif_A1_01_body",
+    "npcId": 2100130,
     "region": "Verteron",
     "spawns": 12,
     "zones": [
@@ -5498,13 +8204,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      16663,
+      -17194
+     ],
      "m": 96,
      "name": "EnvObjData_E_L1_VerteronFotress_TeleportArtifact_002_desc",
-     "teleport": 21
+     "teleport": 21,
+     "to": [
+      14107,
+      -7895
+     ]
     },
     "level": 21,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_VF_Karnif_R_01_body",
+    "npcId": 2100481,
     "region": "Verteron",
     "spawns": 6,
     "zones": [
@@ -5514,25 +8230,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       -27922,
+       22983
+      ],
       "m": 1146,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       -27922,
+       22983
+      ],
       "m": 383,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -27922,
+      22983
+     ],
      "m": 383,
      "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      -52708,
+      52165
+     ]
     },
     "level": 46,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_DD_KALNIF_02_001_body",
+    "npcId": 2600004,
     "region": "Chaotic Lower Reshanta",
     "spawns": 42,
     "zones": [
@@ -5544,25 +8286,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       32243,
+       -23578
+      ],
       "m": 394,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       32243,
+       -23578
+      ],
       "m": 1138,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      32243,
+      -23578
+     ],
      "m": 394,
      "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      56200,
+      -54866
+     ]
     },
     "level": 46,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_BSZ_KALNIF_02_001_body",
+    "npcId": 2600014,
     "region": "Chaotic Lower Reshanta",
     "spawns": 42,
     "zones": [
@@ -5615,13 +8383,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      97660,
+      151625
+     ],
      "m": 188,
      "name": "EnvObjData_E_L1_GardenOfMiraju_TeleportArtifact_001_desc",
-     "teleport": 58
+     "teleport": 58,
+     "to": [
+      79220,
+      147737
+     ]
     },
     "level": 45,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_RI_A_ForestArc_01_body",
+    "npcId": 2100660,
     "region": "Verteron",
     "spawns": 10,
     "zones": [
@@ -5672,13 +8450,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      44429,
+      -32270
+     ],
      "m": 96,
      "name": "EnvObjData_E_L1_KrakaFootPath_TeleportArtifact_002_desc",
-     "teleport": 49
+     "teleport": 49,
+     "to": [
+      35148,
+      -34782
+     ]
     },
     "level": 39,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_KFP_BF_Manduri_01_body",
+    "npcId": 2100816,
     "region": "Verteron",
     "spawns": 59,
     "zones": [
@@ -5689,13 +8477,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      78509,
+      -209730
+     ],
      "m": 239,
      "name": "EnvObjData_E_L1_IslandofCrimson_TeleportArtifact_001_desc",
-     "teleport": 61
+     "teleport": 61,
+     "to": [
+      91401,
+      -189647
+     ]
     },
     "level": 48,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_IoC_DranaManduriRanger_01_body",
+    "npcId": 2110507,
     "region": "Verteron",
     "spawns": 46,
     "zones": [
@@ -5705,13 +8503,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      64805,
+      152576
+     ],
      "m": 177,
      "name": "EnvObjData_E_D1_KumricaCellar_TeleportArtifact_001_desc",
-     "teleport": 57
+     "teleport": 57,
+     "to": [
+      82530,
+      152562
+     ]
     },
     "level": 41,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_BCV_DranaManduriRanger_01_01_body",
+    "npcId": 2400615,
     "region": "Altgard",
     "spawns": 83,
     "zones": [
@@ -5735,13 +8543,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -166919,
+      -71629
+     ],
      "m": 161,
      "name": "EnvObjData_E_D1_GraveKeeperTent_TeleportArtifact_001_desc",
-     "teleport": 7
+     "teleport": 7,
+     "to": [
+      -151858,
+      -77322
+     ]
     },
     "level": 17,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_VirotaRag_01_01_body",
+    "npcId": 2400919,
     "region": "Altgard",
     "spawns": 4,
     "zones": [
@@ -5765,13 +8583,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      176788,
+      43579
+     ],
      "m": 192,
      "name": "EnvObjData_E_D1_AmuntasHideout_TeleportArtifact_001_desc",
-     "teleport": 50
+     "teleport": 50,
+     "to": [
+      173701,
+      62577
+     ]
     },
     "level": 40,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_EGC_Tayga_01_01_body",
+    "npcId": 2400564,
     "region": "Altgard",
     "spawns": 26,
     "zones": [
@@ -5781,13 +8609,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      192704,
+      55904
+     ],
      "m": 201,
      "name": "EnvObjData_E_D1_AmuntasHideout_TeleportArtifact_001_desc",
-     "teleport": 50
+     "teleport": 50,
+     "to": [
+      173701,
+      62577
+     ]
     },
     "level": 40,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_EGC_Tayga_01_02_body",
+    "npcId": 2400583,
     "region": "Altgard",
     "spawns": 24,
     "zones": [
@@ -5797,13 +8635,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      75911,
+      174478
+     ],
      "m": 229,
      "name": "EnvObjData_E_D1_KumricaCellar_TeleportArtifact_001_desc",
-     "teleport": 57
+     "teleport": 57,
+     "to": [
+      82530,
+      152562
+     ]
     },
     "level": 41,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_DR_Fossa_01_001_body",
+    "npcId": 2400611,
     "region": "Altgard",
     "spawns": 65,
     "zones": [
@@ -5840,13 +8688,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -30647,
+      10613
+     ],
      "m": 78,
      "name": "EnvObjData_E_L1_VerteronFotress_TeleportArtifact_042_desc",
-     "teleport": 20
+     "teleport": 20,
+     "to": [
+      -22943,
+      9582
+     ]
     },
     "level": 22,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_VF_KrallWar_10_body",
+    "npcId": 2100097,
     "region": "Verteron",
     "spawns": 27,
     "zones": [
@@ -5870,13 +8728,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -29916,
+      8827
+     ],
      "m": 70,
      "name": "EnvObjData_E_L1_VerteronFotress_TeleportArtifact_042_desc",
-     "teleport": 20
+     "teleport": 20,
+     "to": [
+      -22943,
+      9582
+     ]
     },
     "level": 22,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_VF_KrallWar_03_1_body",
+    "npcId": 2100072,
     "region": "Verteron",
     "spawns": 22,
     "zones": [
@@ -5900,13 +8768,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -58696,
+      -80912
+     ],
      "m": 129,
      "name": "EnvObjData_E_L1_CantasValley_TeleportArtifact_041_desc",
-     "teleport": 6
+     "teleport": 6,
+     "to": [
+      -54959,
+      -93288
+     ]
     },
     "level": 12,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_CV_EarthElementalOd_01_body",
+    "npcId": 2100454,
     "region": "Verteron",
     "spawns": 54,
     "zones": [
@@ -5916,13 +8794,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      104212,
+      44792
+     ],
      "m": 206,
      "name": "EnvObjData_E_D1_SteelHammerCamp_TeleportArtifact_001_desc",
-     "teleport": 48
+     "teleport": 48,
+     "to": [
+      124592,
+      47767
+     ]
     },
     "level": 36,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_FD_Kalgolem_01_01_body",
+    "npcId": 2400471,
     "region": "Altgard",
     "spawns": 24,
     "zones": [
@@ -5932,25 +8820,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       41718,
+       23037
+      ],
       "m": 792,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       41718,
+       23037
+      ],
       "m": 988,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      41718,
+      23037
+     ],
      "m": 792,
      "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      56200,
+      -54866
+     ]
     },
     "level": 47,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_WSA_KALGOLEM_02_001_body",
+    "npcId": 2600051,
     "region": "Chaotic Lower Reshanta",
     "spawns": 79,
     "zones": [
@@ -5976,13 +8890,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -86738,
+      -9127
+     ],
      "m": 210,
      "name": "EnvObjData_E_L1_EllunRiverMidstream_TeleportArtifact_043_desc",
-     "teleport": 18
+     "teleport": 18,
+     "to": [
+      -97492,
+      8923
+     ]
     },
     "level": 18,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_EllunRiverOdSpider_02_body",
+    "npcId": 2100283,
     "region": "Verteron",
     "spawns": 14,
     "zones": [
@@ -5992,13 +8916,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -38368,
+      17065
+     ],
      "m": 120,
      "name": "EnvObjData_E_D1_TeleportArtifact_004_desc",
-     "teleport": 22
+     "teleport": 22,
+     "to": [
+      -40945,
+      28835
+     ]
     },
     "level": 21,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_MF_OdSpider_02_body",
+    "npcId": 2400230,
     "region": "Altgard",
     "spawns": 48,
     "zones": [
@@ -6022,13 +8956,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -217607,
+      219767
+     ],
      "m": 1640,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_002_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      -64997,
+      159811
+     ]
     },
     "level": 50,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_FE_IoE_Kuru_03_body",
+    "npcId": 2101139,
     "region": "Verteron",
     "spawns": 30,
     "zones": [
@@ -6038,13 +8982,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -203127,
+      202088
+     ],
      "m": 1247,
      "name": "EnvObjData_E_D1_TeleportArtifact_006_desc",
-     "teleport": 15
+     "teleport": 15,
+     "to": [
+      -211694,
+      77640
+     ]
     },
     "level": 50,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IoI_Kuru_03_001_body",
+    "npcId": 2400833,
     "region": "Altgard",
     "spawns": 12,
     "zones": [
@@ -6068,13 +9022,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -175923,
+      -108242
+     ],
      "m": 135,
      "name": "EnvObjData_E_D1_OldSanctum_TeleportArtifact_001_desc",
-     "teleport": 8
+     "teleport": 8,
+     "to": [
+      -170779,
+      -95757
+     ]
     },
     "level": 13,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_OdSpider_03_V01_01_body",
+    "npcId": 2000956,
     "region": "Altgard",
     "spawns": 69,
     "zones": [
@@ -6084,13 +9048,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -118086,
+      -109512
+     ],
      "m": 239,
      "name": "EnvObjData_E_D1_CheckpointofGarolik_TeleportArtifact_001_desc",
-     "teleport": 3
+     "teleport": 3,
+     "to": [
+      -95886,
+      -100576
+     ]
     },
     "level": 11,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_OdSpider_03_V01_01_body",
+    "npcId": 2000957,
     "region": "Altgard",
     "spawns": 44,
     "zones": [
@@ -6102,13 +9076,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -123131,
+      -62370
+     ],
      "m": 123,
      "name": "EnvObjData_E_D1_QuairerkCamp_TeleportArtifact_001_desc",
-     "teleport": 6
+     "teleport": 6,
+     "to": [
+      -111334,
+      -66012
+     ]
     },
     "level": 13,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_OdSpider_03_V01_01_body",
+    "npcId": 2400902,
     "region": "Altgard",
     "spawns": 41,
     "zones": [
@@ -6121,13 +9105,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      64455,
+      -97240
+     ],
      "m": 88,
      "name": "EnvObjData_E_D1_FadedStump_TeleportArtifact_001_desc",
-     "teleport": 31
+     "teleport": 31,
+     "to": [
+      61685,
+      -88863
+     ]
     },
     "level": 27,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_OdSpider_03_V01_01_body",
+    "npcId": 2400933,
     "region": "Altgard",
     "spawns": 53,
     "zones": [
@@ -6137,13 +9131,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      151828,
+      -89295
+     ],
      "m": 123,
      "name": "EnvObjData_E_D1_StealerCamp_TeleportArtifact_001_desc",
-     "teleport": 40
+     "teleport": 40,
+     "to": [
+      140766,
+      -94614
+     ]
     },
     "level": 33,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_OdSpider_03_V01_01_body",
+    "npcId": 2400939,
     "region": "Altgard",
     "spawns": 75,
     "zones": [
@@ -6154,13 +9158,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      138648,
+      -11755
+     ],
      "m": 55,
      "name": "EnvObjData_E_D1_MahindelRiverCliff_TeleportArtifact_001_desc",
-     "teleport": 45
+     "teleport": 45,
+     "to": [
+      140041,
+      -17101
+     ]
     },
     "level": 34,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_OdSpider_03_V01_01_body",
+    "npcId": 2400946,
     "region": "Altgard",
     "spawns": 9,
     "zones": [
@@ -6171,13 +9185,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      151634,
+      88899
+     ],
      "m": 143,
      "name": "EnvObjData_E_D1_IdunsLake_TeleportArtifact_001_desc",
-     "teleport": 54
+     "teleport": 54,
+     "to": [
+      140354,
+      97696
+     ]
     },
     "level": 40,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_OdSpider_03_V01_01_body",
+    "npcId": 2400948,
     "region": "Altgard",
     "spawns": 15,
     "zones": [
@@ -6202,13 +9226,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -57994,
+      139413
+     ],
      "m": 53,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_044_desc",
-     "teleport": 34
+     "teleport": 34,
+     "to": [
+      -63096,
+      140693
+     ]
     },
     "level": 30,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_OV_BF_Spier_01_V01_01_body",
+    "npcId": 2101023,
     "region": "Verteron",
     "spawns": 44,
     "zones": [
@@ -6218,13 +9252,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      92520,
+      -214228
+     ],
      "m": 246,
      "name": "EnvObjData_E_L1_IslandofCrimson_TeleportArtifact_001_desc",
-     "teleport": 61
+     "teleport": 61,
+     "to": [
+      91401,
+      -189647
+     ]
     },
     "level": 48,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_IoC_Spider_01_V01_001_body",
+    "npcId": 2110509,
     "region": "Verteron",
     "spawns": 33,
     "zones": [
@@ -6234,13 +9278,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      78148,
+      -80717
+     ],
      "m": 184,
      "name": "EnvObjData_E_D1_FadedStump_TeleportArtifact_001_desc",
-     "teleport": 31
+     "teleport": 31,
+     "to": [
+      61685,
+      -88863
+     ]
     },
     "level": 27,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_PF_Spider_01_V01_01_body",
+    "npcId": 2400319,
     "region": "Altgard",
     "spawns": 93,
     "zones": [
@@ -6250,13 +9304,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      220838,
+      -235634
+     ],
      "m": 235,
      "name": "EnvObjData_E_D1_IslandOfSpirit_TeleportArtifact_001_desc",
-     "teleport": 61
+     "teleport": 61,
+     "to": [
+      232197,
+      -215117
+     ]
     },
     "level": 47,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IOS_Spider_01_V01_01_body",
+    "npcId": 2400745,
     "region": "Altgard",
     "spawns": 24,
     "zones": [
@@ -6266,25 +9330,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       39671,
+       16706
+      ],
       "m": 735,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       39671,
+       16706
+      ],
       "m": 990,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      39671,
+      16706
+     ],
      "m": 735,
      "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      56200,
+      -54866
+     ]
     },
     "level": 46,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_WSA_SPIDER_01_V01_001_body",
+    "npcId": 2600045,
     "region": "Chaotic Lower Reshanta",
     "spawns": 22,
     "zones": [
@@ -6308,13 +9398,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      120754,
+      -72887
+     ],
      "m": 142,
      "name": "EnvObjData_E_D1_CampOfPurakin_TeleportArtifact_001_desc",
-     "teleport": 42
+     "teleport": 42,
+     "to": [
+      130632,
+      -62683
+     ]
     },
     "level": 33,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Bee_01_01_body",
+    "npcId": 2000955,
     "region": "Altgard",
     "spawns": 14,
     "zones": [
@@ -6324,13 +9424,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -68552,
+      -18924
+     ],
      "m": 51,
      "name": "EnvObjData_E_L1_EllunRiverMidstream_TeleportArtifact_040_desc",
-     "teleport": 15
+     "teleport": 15,
+     "to": [
+      -65098,
+      -22723
+     ]
     },
     "level": 18,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_EllunRiverBees_01_body",
+    "npcId": 2100286,
     "region": "Verteron",
     "spawns": 16,
     "zones": [
@@ -6341,13 +9451,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      11396,
+      15129
+     ],
      "m": 232,
      "name": "EnvObjData_E_L1_VerteronFotress_TeleportArtifact_002_desc",
-     "teleport": 21
+     "teleport": 21,
+     "to": [
+      14107,
+      -7895
+     ]
     },
     "level": 27,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_PilgrimsRidge_Bee_02_01_body",
+    "npcId": 2100550,
     "region": "Verteron",
     "spawns": 22,
     "zones": [
@@ -6357,13 +9477,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -166212,
+      -111765
+     ],
      "m": 166,
      "name": "EnvObjData_E_D1_OldSanctum_TeleportArtifact_001_desc",
-     "teleport": 8
+     "teleport": 8,
+     "to": [
+      -170779,
+      -95757
+     ]
     },
     "level": 13,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Bee_01_01_body",
+    "npcId": 2400900,
     "region": "Altgard",
     "spawns": 112,
     "zones": [
@@ -6377,13 +9507,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -160386,
+      -71454
+     ],
      "m": 104,
      "name": "EnvObjData_E_D1_GraveKeeperTent_TeleportArtifact_001_desc",
-     "teleport": 7
+     "teleport": 7,
+     "to": [
+      -151858,
+      -77322
+     ]
     },
     "level": 17,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Bee_01_01_body",
+    "npcId": 2400930,
     "region": "Altgard",
     "spawns": 34,
     "zones": [
@@ -6408,13 +9548,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      121219,
+      -83249
+     ],
      "m": 128,
      "name": "EnvObjData_E_D1_TeleportArtifact_011_desc",
-     "teleport": 33
+     "teleport": 33,
+     "to": [
+      108433,
+      -82420
+     ]
     },
     "level": 33,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Coradon_01_V01_01_body",
+    "npcId": 2000952,
     "region": "Altgard",
     "spawns": 12,
     "zones": [
@@ -6425,13 +9575,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      107570,
+      149151
+     ],
      "m": 197,
      "name": "EnvObjData_E_L1_GardenOfMiraju_TeleportArtifact_003_desc",
-     "teleport": 60
+     "teleport": 60,
+     "to": [
+      126301,
+      142939
+     ]
     },
     "level": 44,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_RI_BF_Coradon_01_01_body",
+    "npcId": 2100699,
     "region": "Verteron",
     "spawns": 16,
     "zones": [
@@ -6441,13 +9601,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      126279,
+      -30848
+     ],
      "m": 192,
      "name": "EnvObjData_E_L1_DranaPlantation_TeleportArtifact_001_desc",
-     "teleport": 52
+     "teleport": 52,
+     "to": [
+      113348,
+      -45014
+     ]
     },
     "level": 39,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_KFP_BF_Coradon_01_body",
+    "npcId": 2100821,
     "region": "Verteron",
     "spawns": 91,
     "zones": [
@@ -6458,13 +9628,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      71303,
+      -52044
+     ],
      "m": 130,
      "name": "EnvObjData_E_L1_DranaPlantation_TeleportArtifact_002_desc",
-     "teleport": 53
+     "teleport": 53,
+     "to": [
+      84175,
+      -53967
+     ]
     },
     "level": 39,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_KFP_BF_Coradon_01_body",
+    "npcId": 2100828,
     "region": "Verteron",
     "spawns": 34,
     "zones": [
@@ -6474,13 +9654,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -115693,
+      -15079
+     ],
      "m": 243,
      "name": "EnvObjData_E_D1_Watcherstent_TeleportArtifact_001_desc",
-     "teleport": 16
+     "teleport": 16,
+     "to": [
+      -104603,
+      -36713
+     ]
     },
     "level": 20,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Coradon_01_V01_01_body",
+    "npcId": 2400907,
     "region": "Altgard",
     "spawns": 9,
     "zones": [
@@ -6504,13 +9694,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -51411,
+      -11297
+     ],
      "m": 105,
      "name": "EnvObjData_E_L1_EllunRiverMidstream_TeleportArtifact_001_desc",
-     "teleport": 14
+     "teleport": 14,
+     "to": [
+      -41963,
+      -15773
+     ]
     },
     "level": 18,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_EllunRiverKailin_02_body",
+    "npcId": 2101022,
     "region": "Verteron",
     "spawns": 62,
     "zones": [
@@ -6520,13 +9720,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      213771,
+      -211716
+     ],
      "m": 187,
      "name": "EnvObjData_E_D1_IslandOfSpirit_TeleportArtifact_001_desc",
-     "teleport": 61
+     "teleport": 61,
+     "to": [
+      232197,
+      -215117
+     ]
     },
     "level": 46,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IOS_Kailin_01_V01_01_body",
+    "npcId": 2400737,
     "region": "Altgard",
     "spawns": 22,
     "zones": [
@@ -6536,13 +9746,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -116206,
+      -25450
+     ],
      "m": 162,
      "name": "EnvObjData_E_D1_Watcherstent_TeleportArtifact_001_desc",
-     "teleport": 16
+     "teleport": 16,
+     "to": [
+      -104603,
+      -36713
+     ]
     },
     "level": 20,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Kailin_01_02_body",
+    "npcId": 2400906,
     "region": "Altgard",
     "spawns": 108,
     "zones": [
@@ -6554,13 +9774,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      76502,
+      -122601
+     ],
      "m": 312,
      "name": "EnvObjData_E_D1_ColdwindShelter_TeleportArtifact_001_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      45697,
+      -117802
+     ]
     },
     "level": 32,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Kailin_01_02_body",
+    "npcId": 2400935,
     "region": "Altgard",
     "spawns": 56,
     "zones": [
@@ -6585,13 +9815,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -54858,
+      -7597
+     ],
      "m": 120,
      "name": "EnvObjData_E_L1_EllunRiverMidstream_TeleportArtifact_003_desc",
-     "teleport": 16
+     "teleport": 16,
+     "to": [
+      -65435,
+      -1934
+     ]
     },
     "level": 18,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_EllunRiverLepisma_03_body",
+    "npcId": 2100189,
     "region": "Verteron",
     "spawns": 52,
     "zones": [
@@ -6601,13 +9841,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -90236,
+      68534
+     ],
      "m": 128,
      "name": "EnvObjData_E_L1_TolbasForest_TeleportArtifact_006_desc",
-     "teleport": 30
+     "teleport": 30,
+     "to": [
+      -102319,
+      64299
+     ]
     },
     "level": 23,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_TF_BF_Lepisma_01_V01_body",
+    "npcId": 2100473,
     "region": "Verteron",
     "spawns": 24,
     "zones": [
@@ -6617,13 +9867,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -123170,
+      -26702
+     ],
      "m": 211,
      "name": "EnvObjData_E_D1_Watcherstent_TeleportArtifact_001_desc",
-     "teleport": 16
+     "teleport": 16,
+     "to": [
+      -104603,
+      -36713
+     ]
     },
     "level": 20,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Lepisma_01_02_body",
+    "npcId": 2400910,
     "region": "Altgard",
     "spawns": 12,
     "zones": [
@@ -6634,13 +9894,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      153747,
+      96657
+     ],
      "m": 134,
      "name": "EnvObjData_E_D1_IdunsLake_TeleportArtifact_001_desc",
-     "teleport": 54
+     "teleport": 54,
+     "to": [
+      140354,
+      97696
+     ]
     },
     "level": 40,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Lepisma_01_02_body",
+    "npcId": 2400950,
     "region": "Altgard",
     "spawns": 28,
     "zones": [
@@ -6651,25 +9921,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       12906,
+       42298
+      ],
       "m": 1064,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       12906,
+       42298
+      ],
       "m": 664,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      12906,
+      42298
+     ],
      "m": 664,
      "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      -52708,
+      52165
+     ]
     },
     "level": 46,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_WSA_LEPISMA_01_V01_body",
+    "npcId": 2600047,
     "region": "Chaotic Lower Reshanta",
     "spawns": 6,
     "zones": [
@@ -6707,13 +10003,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -61260,
+      72789
+     ],
      "m": 139,
      "name": "EnvObjData_E_L1_TolbasForest_TeleportArtifact_002_desc",
-     "teleport": 27
+     "teleport": 27,
+     "to": [
+      -64489,
+      86321
+     ]
     },
     "level": 25,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_TF_Ursuss_01_V01_001_body",
+    "npcId": 2100173,
     "region": "Verteron",
     "spawns": 22,
     "zones": [
@@ -6723,13 +10029,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      43226,
+      -16407
+     ],
      "m": 201,
      "name": "EnvObjData_E_L1_KrakaFootPath_TeleportArtifact_002_desc",
-     "teleport": 49
+     "teleport": 49,
+     "to": [
+      35148,
+      -34782
+     ]
     },
     "level": 39,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_KFP_BF_UrsussBaby_01_body",
+    "npcId": 2100818,
     "region": "Verteron",
     "spawns": 50,
     "zones": [
@@ -6739,13 +10055,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      63750,
+      -118192
+     ],
      "m": 181,
      "name": "EnvObjData_E_D1_ColdwindShelter_TeleportArtifact_001_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      45697,
+      -117802
+     ]
     },
     "level": 32,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_DR_Ursuss_01_02_body",
+    "npcId": 2400377,
     "region": "Altgard",
     "spawns": 12,
     "zones": [
@@ -6755,13 +10081,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -155516,
+      -64715
+     ],
      "m": 131,
      "name": "EnvObjData_E_D1_GraveKeeperTent_TeleportArtifact_001_desc",
-     "teleport": 7
+     "teleport": 7,
+     "to": [
+      -151858,
+      -77322
+     ]
     },
     "level": 17,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_DR_Ursuss_01_02_body",
+    "npcId": 2400917,
     "region": "Altgard",
     "spawns": 32,
     "zones": [
@@ -6785,13 +10121,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      39935,
+      95151
+     ],
      "m": 238,
      "name": "EnvObjData_E_L1_SouthernAlamiaHighland_TeleportArtifact_001_desc",
-     "teleport": 45
+     "teleport": 45,
+     "to": [
+      46964,
+      117879
+     ]
     },
     "level": 32,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AH_A_Zaif_01_body",
+    "npcId": 2100573,
     "region": "Verteron",
     "spawns": 8,
     "zones": [
@@ -6801,13 +10147,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      127445,
+      71562
+     ],
      "m": 202,
      "name": "EnvObjData_E_L1_AlamiaHighland_TeleportArtifact_005_desc",
-     "teleport": 44
+     "teleport": 44,
+     "to": [
+      108988,
+      63243
+     ]
     },
     "level": 35,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AH_BF_Zaif_01_001_body",
+    "npcId": 2100748,
     "region": "Verteron",
     "spawns": 42,
     "zones": [
@@ -6817,13 +10173,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      27245,
+      152540
+     ],
      "m": 261,
      "name": "EnvObjData_E_L1_SouthernAlamiaHighland_TeleportArtifact_002_desc",
-     "teleport": 47
+     "teleport": 47,
+     "to": [
+      44157,
+      172358
+     ]
     },
     "level": 33,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_AH__Zaif_01_001_body",
+    "npcId": 2100797,
     "region": "Verteron",
     "spawns": 77,
     "zones": [
@@ -6833,13 +10199,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      175997,
+      -55864
+     ],
      "m": 237,
      "name": "EnvObjData_E_L1_KrakaFootPath_TeleportArtifact_003_desc",
-     "teleport": 51
+     "teleport": 51,
+     "to": [
+      178104,
+      -32231
+     ]
     },
     "level": 40,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_KFP_BF_Fossa_01_001_body",
+    "npcId": 2100813,
     "region": "Verteron",
     "spawns": 60,
     "zones": [
@@ -6863,13 +10239,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      14931,
+      43274
+     ],
      "m": 268,
      "name": "EnvObjData_E_L1_AlamiaHighland_TeleportArtifact_001_desc",
-     "teleport": 37
+     "teleport": 37,
+     "to": [
+      36134,
+      59735
+     ]
     },
     "level": 27,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_PilgrimsRidge_Zaif_01_001_body",
+    "npcId": 2100558,
     "region": "Verteron",
     "spawns": 27,
     "zones": [
@@ -6879,13 +10265,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      161763,
+      27299
+     ],
      "m": 218,
      "name": "EnvObjData_E_D1_SteelHammerTradersPost_TeleportArtifact_001_desc",
-     "teleport": 46
+     "teleport": 46,
+     "to": [
+      164977,
+      5719
+     ]
     },
     "level": 40,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_EGC_Zaif_01_CV02_001_body",
+    "npcId": 2400578,
     "region": "Altgard",
     "spawns": 19,
     "zones": [
@@ -6909,13 +10305,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -62885,
+      -49441
+     ],
      "m": 167,
      "name": "EnvObjData_E_L1_CantasValley_TeleportArtifact_006_desc",
-     "teleport": 7
+     "teleport": 7,
+     "to": [
+      -49672,
+      -59697
+     ]
     },
     "level": 13,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_Tog_01_body",
+    "npcId": 2100006,
     "region": "Verteron",
     "spawns": 105,
     "zones": [
@@ -6925,13 +10331,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -67539,
+      -17533
+     ],
      "m": 57,
      "name": "EnvObjData_E_L1_EllunRiverMidstream_TeleportArtifact_040_desc",
-     "teleport": 15
+     "teleport": 15,
+     "to": [
+      -65098,
+      -22723
+     ]
     },
     "level": 18,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_EllunRiverTog_01_body",
+    "npcId": 2100145,
     "region": "Verteron",
     "spawns": 35,
     "zones": [
@@ -6942,13 +10358,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -22373,
+      -27467
+     ],
      "m": 166,
      "name": "EnvObjData_E_L1_EllunRiverMidstream_TeleportArtifact_004_desc",
-     "teleport": 13
+     "teleport": 13,
+     "to": [
+      -18740,
+      -43632
+     ]
     },
     "level": 18,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_EllunRiverTog_04_body",
+    "npcId": 2100288,
     "region": "Verteron",
     "spawns": 46,
     "zones": [
@@ -6958,13 +10384,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      21201,
+      121661
+     ],
      "m": 260,
      "name": "EnvObjData_E_L1_SouthernAlamiaHighland_TeleportArtifact_001_desc",
-     "teleport": 45
+     "teleport": 45,
+     "to": [
+      46964,
+      117879
+     ]
     },
     "level": 33,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_AH_Tog_01_CV01_001_body",
+    "npcId": 2100793,
     "region": "Verteron",
     "spawns": 47,
     "zones": [
@@ -6974,13 +10410,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      79457,
+      -26670
+     ],
      "m": 277,
      "name": "EnvObjData_E_L1_DranaPlantation_TeleportArtifact_002_desc",
-     "teleport": 53
+     "teleport": 53,
+     "to": [
+      84175,
+      -53967
+     ]
     },
     "level": 39,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_KFP_BF_Tog_01_body",
+    "npcId": 2100819,
     "region": "Verteron",
     "spawns": 144,
     "zones": [
@@ -6990,13 +10436,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      78848,
+      -125540
+     ],
      "m": 300,
      "name": "EnvObjData_E_D1_TeleportArtifact_013_desc",
-     "teleport": 38
+     "teleport": 38,
+     "to": [
+      97460,
+      -149042
+     ]
     },
     "level": 32,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Tog_01_03_body",
+    "npcId": 2400936,
     "region": "Altgard",
     "spawns": 69,
     "zones": [
@@ -7021,13 +10477,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      223687,
+      -209420
+     ],
      "m": 102,
      "name": "EnvObjData_E_D1_IslandOfSpirit_TeleportArtifact_001_desc",
-     "teleport": 61
+     "teleport": 61,
+     "to": [
+      232197,
+      -215117
+     ]
     },
     "level": 46,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IOS_EarthEleOd_01_CV01_01_body",
+    "npcId": 2400734,
     "region": "Altgard",
     "spawns": 10,
     "zones": [
@@ -7051,13 +10517,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -54542,
+      -66063
+     ],
      "m": 176,
      "name": "EnvObjData_E_D1_TemporaryBase_TeleportArtifact_001_desc",
-     "teleport": 4
+     "teleport": 4,
+     "to": [
+      -60969,
+      -82396
+     ]
     },
     "level": 11,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_CC_DranaMole_01_body",
+    "npcId": 2400015,
     "region": "Altgard",
     "spawns": 21,
     "zones": [
@@ -7081,13 +10557,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      100578,
+      -192731
+     ],
      "m": 97,
      "name": "EnvObjData_E_L1_IslandofCrimson_TeleportArtifact_001_desc",
-     "teleport": 61
+     "teleport": 61,
+     "to": [
+      91401,
+      -189647
+     ]
     },
     "level": 46,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_IoC_AbyssSwarm_01_CV01_001_body",
+    "npcId": 2110501,
     "region": "Verteron",
     "spawns": 30,
     "zones": [
@@ -7111,13 +10597,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -6555,
+      26090
+     ],
      "m": 233,
      "name": "EnvObjData_E_L1_VerteronFotress_TeleportArtifact_042_desc",
-     "teleport": 20
+     "teleport": 20,
+     "to": [
+      -22943,
+      9582
+     ]
     },
     "level": 27,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_PilgrimsRidge_Odspider_V02_body",
+    "npcId": 2100554,
     "region": "Verteron",
     "spawns": 35,
     "zones": [
@@ -7141,13 +10637,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      102497,
+      -215084
+     ],
      "m": 278,
      "name": "EnvObjData_E_L1_IslandofCrimson_TeleportArtifact_001_desc",
-     "teleport": 61
+     "teleport": 61,
+     "to": [
+      91401,
+      -189647
+     ]
     },
     "level": 47,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_IoC_ForestEle_01_CV01_001_body",
+    "npcId": 2110502,
     "region": "Verteron",
     "spawns": 60,
     "zones": [
@@ -7197,13 +10703,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      144542,
+      107457
+     ],
      "m": 106,
      "name": "EnvObjData_E_D1_IdunsLake_TeleportArtifact_001_desc",
-     "teleport": 54
+     "teleport": 54,
+     "to": [
+      140354,
+      97696
+     ]
     },
     "level": 40,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Coradon_01_V04_01_body",
+    "npcId": 2400941,
     "region": "Altgard",
     "spawns": 32,
     "zones": [
@@ -7213,25 +10729,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       62968,
+       20184
+      ],
       "m": 754,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       62968,
+       20184
+      ],
       "m": 1200,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      62968,
+      20184
+     ],
      "m": 754,
      "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      56200,
+      -54866
+     ]
     },
     "level": 48,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_WSA_CORADON_01_V04_001_body",
+    "npcId": 2600061,
     "region": "Chaotic Lower Reshanta",
     "spawns": 16,
     "zones": [
@@ -7255,13 +10797,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -69000,
+      33136
+     ],
      "m": 157,
      "name": "EnvObjData_E_D1_CollapsedGully_TeleportArtifact_001_desc",
-     "teleport": 19
+     "teleport": 19,
+     "to": [
+      -55995,
+      24270
+     ]
     },
     "level": 21,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_MF_Dionaea_01_V01_001_body",
+    "npcId": 2400248,
     "region": "Altgard",
     "spawns": 14,
     "zones": [
@@ -7285,13 +10837,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -177785,
+      21430
+     ],
      "m": 412,
      "name": "EnvObjData_E_D1_TeleportArtifact_002_desc",
-     "teleport": 14
+     "teleport": 14,
+     "to": [
+      -138592,
+      34043
+     ]
     },
     "level": 20,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_UC_Kalnif_01_001_body",
+    "npcId": 2000925,
     "region": "Altgard",
     "spawns": 23,
     "zones": [
@@ -7301,13 +10863,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      98731,
+      -213249
+     ],
      "m": 247,
      "name": "EnvObjData_E_L1_IslandofCrimson_TeleportArtifact_001_desc",
-     "teleport": 61
+     "teleport": 61,
+     "to": [
+      91401,
+      -189647
+     ]
     },
     "level": 47,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_IoC_Rafflesia_01_CV01_001_body",
+    "npcId": 2110513,
     "region": "Verteron",
     "spawns": 21,
     "zones": [
@@ -7317,13 +10889,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -141108,
+      -91861
+     ],
      "m": 181,
      "name": "EnvObjData_E_D1_GraveKeeperTent_TeleportArtifact_001_desc",
-     "teleport": 7
+     "teleport": 7,
+     "to": [
+      -151858,
+      -77322
+     ]
     },
     "level": 14,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_UC_Kalnif_01_001_body",
+    "npcId": 2400056,
     "region": "Altgard",
     "spawns": 36,
     "zones": [
@@ -7333,13 +10915,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      220241,
+      -209495
+     ],
      "m": 132,
      "name": "EnvObjData_E_D1_IslandOfSpirit_TeleportArtifact_001_desc",
-     "teleport": 61
+     "teleport": 61,
+     "to": [
+      232197,
+      -215117
+     ]
     },
     "level": 46,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IOS_Rafflesia_01_CV01_01_body",
+    "npcId": 2400735,
     "region": "Altgard",
     "spawns": 33,
     "zones": [
@@ -7349,13 +10941,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -192415,
+      220305
+     ],
      "m": 1440,
      "name": "EnvObjData_E_D1_TeleportArtifact_006_desc",
-     "teleport": 15
+     "teleport": 15,
+     "to": [
+      -211694,
+      77640
+     ]
     },
     "level": 49,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_UC_Kalnif_01_001_body",
+    "npcId": 2400813,
     "region": "Altgard",
     "spawns": 48,
     "zones": [
@@ -7365,13 +10967,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      148419,
+      111695
+     ],
      "m": 135,
      "name": "EnvObjData_E_D1_ShulackStreetStall_TeleportArtifact_001_desc",
-     "teleport": 51
+     "teleport": 51,
+     "to": [
+      161895,
+      110460
+     ]
     },
     "level": 40,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_UC_Kalnif_01_001_body",
+    "npcId": 2400949,
     "region": "Altgard",
     "spawns": 10,
     "zones": [
@@ -7395,13 +11007,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      51832,
+      -141308
+     ],
      "m": 243,
      "name": "EnvObjData_E_D1_ColdwindShelter_TeleportArtifact_001_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      45697,
+      -117802
+     ]
     },
     "level": 32,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_DR_SkurvWar_02_001_body",
+    "npcId": 2400351,
     "region": "Altgard",
     "spawns": 83,
     "zones": [
@@ -7411,13 +11033,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      72763,
+      -131958
+     ],
      "m": 300,
      "name": "EnvObjData_E_D1_TeleportArtifact_013_desc",
-     "teleport": 38
+     "teleport": 38,
+     "to": [
+      97460,
+      -149042
+     ]
     },
     "level": 33,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_DR_SkurvWar_02_002_body",
+    "npcId": 2400390,
     "region": "Altgard",
     "spawns": 33,
     "zones": [
@@ -7467,13 +11099,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -53657,
+      48627
+     ],
      "m": 196,
      "name": "EnvObjData_E_L1_TolbasForest_TeleportArtifact_004_desc",
-     "teleport": 26
+     "teleport": 26,
+     "to": [
+      -70520,
+      58714
+     ]
     },
     "level": 24,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_TF_BigMan_01_V02_body",
+    "npcId": 2100350,
     "region": "Verteron",
     "spawns": 19,
     "zones": [
@@ -7483,13 +11125,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -64634,
+      42895
+     ],
      "m": 205,
      "name": "EnvObjData_E_D1_CollapsedGully_TeleportArtifact_001_desc",
-     "teleport": 19
+     "teleport": 19,
+     "to": [
+      -55995,
+      24270
+     ]
     },
     "level": 21,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_MF_BigMan_01_002_body",
+    "npcId": 2400225,
     "region": "Altgard",
     "spawns": 12,
     "zones": [
@@ -7513,13 +11165,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -9269,
+      -86065
+     ],
      "m": 209,
      "name": "EnvObjData_E_L1_EllunRiverMarsh_TeleportArtifact_003_desc",
-     "teleport": 10
+     "teleport": 10,
+     "to": [
+      -4631,
+      -106483
+     ]
     },
     "level": 14,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BigMan_01_body",
+    "npcId": 2100021,
     "region": "Verteron",
     "spawns": 89,
     "zones": [
@@ -7544,13 +11206,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      39985,
+      -72881
+     ],
      "m": 264,
      "name": "EnvObjData_E_D1_RecoverySpring_TeleportArtifact_001_desc",
-     "teleport": 32
+     "teleport": 32,
+     "to": [
+      18271,
+      -57878
+     ]
     },
     "level": 30,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_PF_BigMan_01_01_body",
+    "npcId": 2400312,
     "region": "Altgard",
     "spawns": 20,
     "zones": [
@@ -7574,13 +11246,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -62285,
+      41943
+     ],
      "m": 188,
      "name": "EnvObjData_E_D1_CollapsedGully_TeleportArtifact_001_desc",
-     "teleport": 19
+     "teleport": 19,
+     "to": [
+      -55995,
+      24270
+     ]
     },
     "level": 21,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_MF_Ursuss_01_001_body",
+    "npcId": 2400217,
     "region": "Altgard",
     "spawns": 18,
     "zones": [
@@ -7604,13 +11286,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -14420,
+      38282
+     ],
      "m": 232,
      "name": "EnvObjData_E_D1_ForestsHideout_TeleportArtifact_001_desc",
-     "teleport": 21
+     "teleport": 21,
+     "to": [
+      -11660,
+      15210
+     ]
     },
     "level": 22,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_MF_ForestGuardianArcher_01_body",
+    "npcId": 2400214,
     "region": "Altgard",
     "spawns": 18,
     "zones": [
@@ -7620,13 +11312,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      244386,
+      -233255
+     ],
      "m": 219,
      "name": "EnvObjData_E_D1_IslandOfSpirit_TeleportArtifact_001_desc",
-     "teleport": 61
+     "teleport": 61,
+     "to": [
+      232197,
+      -215117
+     ]
     },
     "level": 48,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IOS_ForestArc_01_CV01_01_body",
+    "npcId": 2400751,
     "region": "Altgard",
     "spawns": 25,
     "zones": [
@@ -7676,13 +11378,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      63810,
+      -87909
+     ],
      "m": 154,
      "name": "EnvObjData_E_L1_RedForest_TeleportArtifact_002_desc",
-     "teleport": 56
+     "teleport": 56,
+     "to": [
+      53406,
+      -76494
+     ]
     },
     "level": 41,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_RF_Dratona_01_001_body",
+    "npcId": 2100901,
     "region": "Verteron",
     "spawns": 32,
     "zones": [
@@ -7692,13 +11404,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -165831,
+      -16288
+     ],
      "m": 141,
      "name": "EnvObjData_E_D1_DestroyedSite_TeleportArtifact_001_desc",
-     "teleport": 13
+     "teleport": 13,
+     "to": [
+      -152064,
+      -13202
+     ]
     },
     "level": 19,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_SW_Dratona_02_01_body",
+    "npcId": 2400116,
     "region": "Altgard",
     "spawns": 104,
     "zones": [
@@ -7708,13 +11430,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -114416,
+      -23538
+     ],
      "m": 164,
      "name": "EnvObjData_E_D1_Watcherstent_TeleportArtifact_001_desc",
-     "teleport": 16
+     "teleport": 16,
+     "to": [
+      -104603,
+      -36713
+     ]
     },
     "level": 20,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_SH_BeritraC_05_01_body",
+    "npcId": 2400161,
     "region": "Altgard",
     "spawns": 25,
     "zones": [
@@ -7725,13 +11457,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      66920,
+      -159406
+     ],
      "m": 323,
      "name": "EnvObjData_E_D1_TeleportArtifact_013_desc",
-     "teleport": 38
+     "teleport": 38,
+     "to": [
+      97460,
+      -149042
+     ]
     },
     "level": 32,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_SW_Dratona_01_01_body",
+    "npcId": 2400380,
     "region": "Altgard",
     "spawns": 38,
     "zones": [
@@ -7755,13 +11497,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -51332,
+      -66241
+     ],
      "m": 188,
      "name": "EnvObjData_E_D1_TemporaryBase_TeleportArtifact_001_desc",
-     "teleport": 4
+     "teleport": 4,
+     "to": [
+      -60969,
+      -82396
+     ]
     },
     "level": 11,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_CC_DranaWorm_01_body",
+    "npcId": 2400014,
     "region": "Altgard",
     "spawns": 13,
     "zones": [
@@ -7785,13 +11537,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -218962,
+      219466
+     ],
      "m": 1651,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_002_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      -64997,
+      159811
+     ]
     },
     "level": 50,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_FE_IoE_DranaVar_02_01_body",
+    "npcId": 2101135,
     "region": "Verteron",
     "spawns": 25,
     "zones": [
@@ -7801,13 +11563,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      99808,
+      -215652
+     ],
      "m": 273,
      "name": "EnvObjData_E_L1_IslandofCrimson_TeleportArtifact_001_desc",
-     "teleport": 61
+     "teleport": 61,
+     "to": [
+      91401,
+      -189647
+     ]
     },
     "level": 47,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_IoC_DranaVar_02_001_body",
+    "npcId": 2110503,
     "region": "Verteron",
     "spawns": 23,
     "zones": [
@@ -7817,13 +11589,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -201471,
+      202783
+     ],
      "m": 1256,
      "name": "EnvObjData_E_D1_TeleportArtifact_006_desc",
-     "teleport": 15
+     "teleport": 15,
+     "to": [
+      -211694,
+      77640
+     ]
     },
     "level": 50,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IoI_DranaVar_02_001_body",
+    "npcId": 2400834,
     "region": "Altgard",
     "spawns": 28,
     "zones": [
@@ -7847,13 +11629,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      104112,
+      60730
+     ],
      "m": 160,
      "name": "EnvObjData_E_D1_AbandonedCampsite_TeleportArtifact_001_desc",
-     "teleport": 49
+     "teleport": 49,
+     "to": [
+      105761,
+      76629
+     ]
     },
     "level": 35,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_FD_DranaVar_02_CV01_body",
+    "npcId": 2400476,
     "region": "Altgard",
     "spawns": 7,
     "zones": [
@@ -7877,13 +11669,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      94038,
+      150869
+     ],
      "m": 151,
      "name": "EnvObjData_E_L1_GardenOfMiraju_TeleportArtifact_001_desc",
-     "teleport": 58
+     "teleport": 58,
+     "to": [
+      79220,
+      147737
+     ]
     },
     "level": 45,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_RI_WaterEle_03_001_body",
+    "npcId": 2100665,
     "region": "Verteron",
     "spawns": 5,
     "zones": [
@@ -7893,13 +11695,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      21516,
+      -72290
+     ],
      "m": 148,
      "name": "EnvObjData_E_D1_RecoverySpring_TeleportArtifact_001_desc",
-     "teleport": 32
+     "teleport": 32,
+     "to": [
+      18271,
+      -57878
+     ]
     },
     "level": 29,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_PF_WaterEle_01_01_body",
+    "npcId": 2400306,
     "region": "Altgard",
     "spawns": 30,
     "zones": [
@@ -7909,13 +11721,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      212160,
+      -212224
+     ],
      "m": 202,
      "name": "EnvObjData_E_D1_IslandOfSpirit_TeleportArtifact_001_desc",
-     "teleport": 61
+     "teleport": 61,
+     "to": [
+      232197,
+      -215117
+     ]
     },
     "level": 46,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IOS_WaterEle_03_01_body",
+    "npcId": 2400739,
     "region": "Altgard",
     "spawns": 20,
     "zones": [
@@ -7925,13 +11747,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -205272,
+      225751
+     ],
      "m": 1482,
      "name": "EnvObjData_E_D1_TeleportArtifact_006_desc",
-     "teleport": 15
+     "teleport": 15,
+     "to": [
+      -211694,
+      77640
+     ]
     },
     "level": 51,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IoI_WaterEle_03_001_body",
+    "npcId": 2400816,
     "region": "Altgard",
     "spawns": 7,
     "zones": [
@@ -7955,13 +11787,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      18601,
+      -205
+     ],
      "m": 89,
      "name": "EnvObjData_E_L1_VerteronFotress_TeleportArtifact_002_desc",
-     "teleport": 21
+     "teleport": 21,
+     "to": [
+      14107,
+      -7895
+     ]
     },
     "level": 45,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_VF_Neuth_01_Named_01_body",
+    "npcId": 2100079,
     "region": "Verteron",
     "spawns": 1,
     "zones": [
@@ -7985,13 +11827,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      20816,
+      -36520
+     ],
      "m": 120,
      "name": "EnvObjData_E_D1_VictoryDaevasStatue_TeleportArtifact_001_desc",
-     "teleport": 27
+     "teleport": 27,
+     "to": [
+      11882,
+      -44465
+     ]
     },
     "level": 24,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_SH_Imp_01_01_body",
+    "npcId": 2400275,
     "region": "Altgard",
     "spawns": 17,
     "zones": [
@@ -8001,13 +11853,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      162920,
+      -105670
+     ],
      "m": 248,
      "name": "EnvObjData_E_D1_StealerCamp_TeleportArtifact_001_desc",
-     "teleport": 40
+     "teleport": 40,
+     "to": [
+      140766,
+      -94614
+     ]
     },
     "level": 34,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_BR_Imp_01_01_body",
+    "npcId": 2400412,
     "region": "Altgard",
     "spawns": 21,
     "zones": [
@@ -8017,13 +11879,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      158703,
+      -65382
+     ],
      "m": 217,
      "name": "EnvObjData_E_D1_TeleportArtifact_009_desc",
-     "teleport": 44
+     "teleport": 44,
+     "to": [
+      157687,
+      -43707
+     ]
     },
     "level": 34,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_BR_Imp_01_01_body",
+    "npcId": 2400418,
     "region": "Altgard",
     "spawns": 40,
     "zones": [
@@ -8060,13 +11932,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      144541,
+      61309
+     ],
      "m": 241,
      "name": "EnvObjData_E_D1_SteelHammerCamp_TeleportArtifact_001_desc",
-     "teleport": 48
+     "teleport": 48,
+     "to": [
+      124592,
+      47767
+     ]
     },
     "level": 36,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_FD_AbyssSwarm_02_01_body",
+    "npcId": 2400473,
     "region": "Altgard",
     "spawns": 11,
     "zones": [
@@ -8103,13 +11985,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      116102,
+      62542
+     ],
      "m": 170,
      "name": "EnvObjData_E_D1_SteelHammerCamp_TeleportArtifact_001_desc",
-     "teleport": 48
+     "teleport": 48,
+     "to": [
+      124592,
+      47767
+     ]
     },
     "level": 35,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_FD_DranaVar_04_CV01_body",
+    "npcId": 2400479,
     "region": "Altgard",
     "spawns": 20,
     "zones": [
@@ -8133,13 +12025,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -218398,
+      261755
+     ],
      "m": 1842,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_002_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      -64997,
+      159811
+     ]
     },
     "level": 49,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_FE_IoE_Cherubim_01_001_body",
+    "npcId": 2101075,
     "region": "Verteron",
     "spawns": 31,
     "zones": [
@@ -8149,13 +12051,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -223360,
+      262197
+     ],
      "m": 1886,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_002_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      -64997,
+      159811
+     ]
     },
     "level": 49,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_FE_IoE_Cherubim_01_001_body",
+    "npcId": 2101079,
     "region": "Verteron",
     "spawns": 111,
     "zones": [
@@ -8165,13 +12077,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -201243,
+      247183
+     ],
      "m": 1699,
      "name": "EnvObjData_E_D1_TeleportArtifact_006_desc",
-     "teleport": 15
+     "teleport": 15,
+     "to": [
+      -211694,
+      77640
+     ]
     },
     "level": 49,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IoI_Cherubim_01_001_body",
+    "npcId": 2400801,
     "region": "Altgard",
     "spawns": 94,
     "zones": [
@@ -8195,13 +12117,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -70795,
+      30832
+     ],
      "m": 162,
      "name": "EnvObjData_E_D1_CollapsedGully_TeleportArtifact_001_desc",
-     "teleport": 19
+     "teleport": 19,
+     "to": [
+      -55995,
+      24270
+     ]
     },
     "level": 21,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_MF_DranaMole_01_003_body",
+    "npcId": 2400240,
     "region": "Altgard",
     "spawns": 16,
     "zones": [
@@ -8225,13 +12157,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -214331,
+      241633
+     ],
      "m": 1703,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_002_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      -64997,
+      159811
+     ]
     },
     "level": 51,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_FE_IoE_EarthEle_01_001_body",
+    "npcId": 2101089,
     "region": "Verteron",
     "spawns": 13,
     "zones": [
@@ -8255,13 +12197,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      87351,
+      170105
+     ],
      "m": 147,
      "name": "EnvObjData_E_L1_GardenOfMiraju_TeleportArtifact_002_desc",
-     "teleport": 59
+     "teleport": 59,
+     "to": [
+      92631,
+      183848
+     ]
     },
     "level": 44,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_RI_A_EarthEle_01_body",
+    "npcId": 2100653,
     "region": "Verteron",
     "spawns": 15,
     "zones": [
@@ -8271,13 +12223,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -217388,
+      237165
+     ],
      "m": 1709,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_002_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      -64997,
+      159811
+     ]
     },
     "level": 51,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_FE_IoE_EarthEle_02_001_body",
+    "npcId": 2101102,
     "region": "Verteron",
     "spawns": 4,
     "zones": [
@@ -8287,13 +12249,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -197447,
+      232594
+     ],
      "m": 1556,
      "name": "EnvObjData_E_D1_TeleportArtifact_006_desc",
-     "teleport": 15
+     "teleport": 15,
+     "to": [
+      -211694,
+      77640
+     ]
     },
     "level": 51,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IoI_EarthEle_02_001_body",
+    "npcId": 2400823,
     "region": "Altgard",
     "spawns": 7,
     "zones": [
@@ -8317,13 +12289,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      100761,
+      177046
+     ],
      "m": 106,
      "name": "EnvObjData_E_L1_GardenOfMiraju_TeleportArtifact_002_desc",
-     "teleport": 59
+     "teleport": 59,
+     "to": [
+      92631,
+      183848
+     ]
     },
     "level": 45,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_RI_EarthEle_03_001_body",
+    "npcId": 2100667,
     "region": "Verteron",
     "spawns": 5,
     "zones": [
@@ -8333,13 +12315,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      45925,
+      -93545
+     ],
      "m": 164,
      "name": "EnvObjData_E_D1_FadedStump_TeleportArtifact_001_desc",
-     "teleport": 31
+     "teleport": 31,
+     "to": [
+      61685,
+      -88863
+     ]
     },
     "level": 28,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_PF_EarthEle_01_01_body",
+    "npcId": 2400310,
     "region": "Altgard",
     "spawns": 49,
     "zones": [
@@ -8349,13 +12341,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -196915,
+      232730
+     ],
      "m": 1558,
      "name": "EnvObjData_E_D1_TeleportArtifact_006_desc",
-     "teleport": 15
+     "teleport": 15,
+     "to": [
+      -211694,
+      77640
+     ]
     },
     "level": 51,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IoI_EarthEle_03_001_body",
+    "npcId": 2400817,
     "region": "Altgard",
     "spawns": 6,
     "zones": [
@@ -8392,13 +12394,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      35041,
+      -104480
+     ],
      "m": 26,
      "name": "EnvObjData_E_L1_EllunRiverMarsh_TeleportArtifact_004_desc",
-     "teleport": 11
+     "teleport": 11,
+     "to": [
+      32451,
+      -104105
+     ]
     },
     "level": 16,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_ER_WaterEle_01_002_body",
+    "npcId": 2100231,
     "region": "Verteron",
     "spawns": 34,
     "zones": [
@@ -8408,13 +12420,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -214897,
+      241923
+     ],
      "m": 1709,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_002_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      -64997,
+      159811
+     ]
     },
     "level": 51,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_FE_IoE_WaterEle_01_001_body",
+    "npcId": 2101088,
     "region": "Verteron",
     "spawns": 10,
     "zones": [
@@ -8438,13 +12460,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      95845,
+      152872
+     ],
      "m": 174,
      "name": "EnvObjData_E_L1_GardenOfMiraju_TeleportArtifact_001_desc",
-     "teleport": 58
+     "teleport": 58,
+     "to": [
+      79220,
+      147737
+     ]
     },
     "level": 45,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_RI_B_WaterEle_01_body",
+    "npcId": 2100657,
     "region": "Verteron",
     "spawns": 20,
     "zones": [
@@ -8454,13 +12486,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -212596,
+      242088
+     ],
      "m": 1690,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_002_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      -64997,
+      159811
+     ]
     },
     "level": 51,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_FE_IoE_WaterEle_02_001_body",
+    "npcId": 2101101,
     "region": "Verteron",
     "spawns": 1,
     "zones": [
@@ -8470,13 +12512,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      228609,
+      -205436
+     ],
      "m": 103,
      "name": "EnvObjData_E_D1_IslandOfSpirit_TeleportArtifact_001_desc",
-     "teleport": 61
+     "teleport": 61,
+     "to": [
+      232197,
+      -215117
+     ]
     },
     "level": 46,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IOS_WaterEle_01_01_body",
+    "npcId": 2400738,
     "region": "Altgard",
     "spawns": 21,
     "zones": [
@@ -8486,13 +12538,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -204263,
+      223057
+     ],
      "m": 1456,
      "name": "EnvObjData_E_D1_TeleportArtifact_006_desc",
-     "teleport": 15
+     "teleport": 15,
+     "to": [
+      -211694,
+      77640
+     ]
     },
     "level": 51,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IoI_WaterEle_02_001_body",
+    "npcId": 2400822,
     "region": "Altgard",
     "spawns": 11,
     "zones": [
@@ -8516,13 +12578,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -223000,
+      260282
+     ],
      "m": 1872,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_002_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      -64997,
+      159811
+     ]
     },
     "level": 49,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_FE_IoE_Cherubim_02_001_body",
+    "npcId": 2101076,
     "region": "Verteron",
     "spawns": 28,
     "zones": [
@@ -8532,13 +12604,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -223360,
+      262197
+     ],
      "m": 1886,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_002_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      -64997,
+      159811
+     ]
     },
     "level": 49,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_FE_IoE_Cherubim_02_001_body",
+    "npcId": 2101080,
     "region": "Verteron",
     "spawns": 111,
     "zones": [
@@ -8548,13 +12630,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -202208,
+      243673
+     ],
      "m": 1663,
      "name": "EnvObjData_E_D1_TeleportArtifact_006_desc",
-     "teleport": 15
+     "teleport": 15,
+     "to": [
+      -211694,
+      77640
+     ]
     },
     "level": 49,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IoI_Cherubim_02_001_body",
+    "npcId": 2400802,
     "region": "Altgard",
     "spawns": 28,
     "zones": [
@@ -8578,13 +12670,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -221257,
+      262514
+     ],
      "m": 1870,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_002_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      -64997,
+      159811
+     ]
     },
     "level": 49,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_FE_IoE_Cherubim_03_001_body",
+    "npcId": 2101077,
     "region": "Verteron",
     "spawns": 55,
     "zones": [
@@ -8594,13 +12696,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -202457,
+      246680
+     ],
      "m": 1693,
      "name": "EnvObjData_E_D1_TeleportArtifact_006_desc",
-     "teleport": 15
+     "teleport": 15,
+     "to": [
+      -211694,
+      77640
+     ]
     },
     "level": 49,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_Cherubim_03_body",
+    "npcId": 2400803,
     "region": "Altgard",
     "spawns": 39,
     "zones": [
@@ -8624,13 +12736,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      102062,
+      146348
+     ],
      "m": 145,
      "name": "EnvObjData_E_D1_SecretRendezvousPoint_TeleportArtifact_001_desc",
-     "teleport": 56
+     "teleport": 56,
+     "to": [
+      87560,
+      145662
+     ]
     },
     "level": 41,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_BCV_Duduka_01_body",
+    "npcId": 2400612,
     "region": "Altgard",
     "spawns": 75,
     "zones": [
@@ -8654,13 +12776,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      105510,
+      147281
+     ],
      "m": 180,
      "name": "EnvObjData_E_D1_SecretRendezvousPoint_TeleportArtifact_001_desc",
-     "teleport": 56
+     "teleport": 56,
+     "to": [
+      87560,
+      145662
+     ]
     },
     "level": 42,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_EGC_MOB_Duduka_02_body",
+    "npcId": 2400613,
     "region": "Altgard",
     "spawns": 44,
     "zones": [
@@ -8684,13 +12816,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      79848,
+      -209943
+     ],
      "m": 234,
      "name": "EnvObjData_E_L1_IslandofCrimson_TeleportArtifact_001_desc",
-     "teleport": 61
+     "teleport": 61,
+     "to": [
+      91401,
+      -189647
+     ]
     },
     "level": 48,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_IoC_DranaVar_03_body",
+    "npcId": 2110505,
     "region": "Verteron",
     "spawns": 41,
     "zones": [
@@ -8700,13 +12842,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -90137,
+      -63532
+     ],
      "m": 112,
      "name": "EnvObjData_E_D1_CreionCamp_TeleportArtifact_001_desc",
-     "teleport": 5
+     "teleport": 5,
+     "to": [
+      -97963,
+      -71538
+     ]
     },
     "level": 12,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_DC_DranaPredator_01_body",
+    "npcId": 2400010,
     "region": "Altgard",
     "spawns": 20,
     "zones": [
@@ -8730,13 +12882,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      105302,
+      61601
+     ],
      "m": 150,
      "name": "EnvObjData_E_D1_AbandonedCampsite_TeleportArtifact_001_desc",
-     "teleport": 49
+     "teleport": 49,
+     "to": [
+      105761,
+      76629
+     ]
     },
     "level": 35,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_FD_DranaVar_03_CV01_body",
+    "npcId": 2400480,
     "region": "Altgard",
     "spawns": 15,
     "zones": [
@@ -8760,13 +12922,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      142708,
+      60298
+     ],
      "m": 220,
      "name": "EnvObjData_E_D1_SteelHammerCamp_TeleportArtifact_001_desc",
-     "teleport": 48
+     "teleport": 48,
+     "to": [
+      124592,
+      47767
+     ]
     },
     "level": 36,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_FD_FafBlood_02_CV01_001_body",
+    "npcId": 2400481,
     "region": "Altgard",
     "spawns": 11,
     "zones": [
@@ -8776,13 +12948,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      159116,
+      170984
+     ],
      "m": 258,
      "name": "EnvObjData_E_D1_CollapsedHallOfFame_TeleportArtifact_001_desc",
-     "teleport": 58
+     "teleport": 58,
+     "to": [
+      134794,
+      162297
+     ]
     },
     "level": 44,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IS_FafBlood_02_CV01_001_body",
+    "npcId": 2400707,
     "region": "Altgard",
     "spawns": 26,
     "zones": [
@@ -8819,25 +13001,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       61670,
+       24732
+      ],
       "m": 798,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       61670,
+       24732
+      ],
       "m": 1176,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      61670,
+      24732
+     ],
      "m": 798,
      "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      56200,
+      -54866
+     ]
     },
     "level": 49,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_WSA_ELEGUARD_01_001_body",
+    "npcId": 2600066,
     "region": "Chaotic Lower Reshanta",
     "spawns": 18,
     "zones": [
@@ -8861,13 +13069,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -38440,
+      -83693
+     ],
      "m": 226,
      "name": "EnvObjData_E_D1_TemporaryBase_TeleportArtifact_001_desc",
-     "teleport": 4
+     "teleport": 4,
+     "to": [
+      -60969,
+      -82396
+     ]
     },
     "level": 10,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_DC_DranaVar_A_01_body",
+    "npcId": 2400001,
     "region": "Altgard",
     "spawns": 50,
     "zones": [
@@ -8891,13 +13109,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      119013,
+      62191
+     ],
      "m": 155,
      "name": "EnvObjData_E_D1_SteelHammerCamp_TeleportArtifact_001_desc",
-     "teleport": 48
+     "teleport": 48,
+     "to": [
+      124592,
+      47767
+     ]
     },
     "level": 35,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_PF_DranaVar_01_CV01_01_body",
+    "npcId": 2400477,
     "region": "Altgard",
     "spawns": 43,
     "zones": [
@@ -8921,13 +13149,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      113839,
+      -75964
+     ],
      "m": 84,
      "name": "EnvObjData_E_D1_TeleportArtifact_011_desc",
-     "teleport": 33
+     "teleport": 33,
+     "to": [
+      108433,
+      -82420
+     ]
     },
     "level": 33,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_DR_Brax_01_body",
+    "npcId": 2000954,
     "region": "Altgard",
     "spawns": 11,
     "zones": [
@@ -8937,13 +13175,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -39615,
+      30620
+     ],
      "m": 212,
      "name": "EnvObjData_E_L1_EllunRiverMidstream_TeleportArtifact_002_desc",
-     "teleport": 22
+     "teleport": 22,
+     "to": [
+      -24106,
+      45001
+     ]
     },
     "level": 18,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_EllunRiverBraxA_02_body",
+    "npcId": 2100217,
     "region": "Verteron",
     "spawns": 34,
     "zones": [
@@ -8953,13 +13201,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -25205,
+      -54623
+     ],
      "m": 128,
      "name": "EnvObjData_E_L1_EllunRiverMidstream_TeleportArtifact_004_desc",
-     "teleport": 13
+     "teleport": 13,
+     "to": [
+      -18740,
+      -43632
+     ]
     },
     "level": 18,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_EllunRiverBraxA_03_body",
+    "npcId": 2100303,
     "region": "Verteron",
     "spawns": 39,
     "zones": [
@@ -8970,13 +13228,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      44867,
+      41201
+     ],
      "m": 205,
      "name": "EnvObjData_E_L1_AlamiaHighland_TeleportArtifact_001_desc",
-     "teleport": 37
+     "teleport": 37,
+     "to": [
+      36134,
+      59735
+     ]
     },
     "level": 32,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AH_BF_Brax_01_001_body",
+    "npcId": 2100740,
     "region": "Verteron",
     "spawns": 51,
     "zones": [
@@ -8987,13 +13255,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      97078,
+      -128411
+     ],
      "m": 206,
      "name": "EnvObjData_E_D1_TeleportArtifact_013_desc",
-     "teleport": 38
+     "teleport": 38,
+     "to": [
+      97460,
+      -149042
+     ]
     },
     "level": 32,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_DR_Brax_01_body",
+    "npcId": 2400375,
     "region": "Altgard",
     "spawns": 8,
     "zones": [
@@ -9003,13 +13281,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -152357,
+      -784
+     ],
      "m": 124,
      "name": "EnvObjData_E_D1_DestroyedSite_TeleportArtifact_001_desc",
-     "teleport": 13
+     "teleport": 13,
+     "to": [
+      -152064,
+      -13202
+     ]
     },
     "level": 20,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_DR_Brax_01_body",
+    "npcId": 2400914,
     "region": "Altgard",
     "spawns": 21,
     "zones": [
@@ -9047,13 +13335,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      167996,
+      -92542
+     ],
      "m": 217,
      "name": "EnvObjData_E_D1_CreviceCave_TeleportArtifact_001_desc",
-     "teleport": 41
+     "teleport": 41,
+     "to": [
+      189739,
+      -92129
+     ]
     },
     "level": 33,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_BR_CorpeSpider_01_01_body",
+    "npcId": 2400413,
     "region": "Altgard",
     "spawns": 22,
     "zones": [
@@ -9077,13 +13375,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      111676,
+      -94136
+     ],
      "m": 339,
      "name": "EnvObjData_E_L1_DranaPlantation_TeleportArtifact_003_desc",
-     "teleport": 54
+     "teleport": 54,
+     "to": [
+      123452,
+      -62387
+     ]
     },
     "level": 42,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_DP_R_DrakanElite_02_001_body",
+    "npcId": 2100872,
     "region": "Verteron",
     "spawns": 23,
     "zones": [
@@ -9093,13 +13401,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      53105,
+      -142800
+     ],
      "m": 261,
      "name": "EnvObjData_E_D1_ColdwindShelter_TeleportArtifact_001_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      45697,
+      -117802
+     ]
     },
     "level": 32,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_DR_Drakan_02_01_body",
+    "npcId": 2400384,
     "region": "Altgard",
     "spawns": 8,
     "zones": [
@@ -9109,13 +13427,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      182899,
+      90417
+     ],
      "m": 114,
      "name": "EnvObjData_E_D1_TeleportArtifact_016_desc",
-     "teleport": 52
+     "teleport": 52,
+     "to": [
+      171524,
+      89545
+     ]
     },
     "level": 40,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_EGC_Drakan_02_01_body",
+    "npcId": 2400591,
     "region": "Altgard",
     "spawns": 24,
     "zones": [
@@ -9152,13 +13480,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      18568,
+      -82407
+     ],
      "m": 245,
      "name": "EnvObjData_E_D1_RecoverySpring_TeleportArtifact_001_desc",
-     "teleport": 32
+     "teleport": 32,
+     "to": [
+      18271,
+      -57878
+     ]
     },
     "level": 29,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_PF_FafBlood_02_01_body",
+    "npcId": 2400311,
     "region": "Altgard",
     "spawns": 28,
     "zones": [
@@ -9168,13 +13506,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      219065,
+      -233770
+     ],
      "m": 228,
      "name": "EnvObjData_E_D1_IslandOfSpirit_TeleportArtifact_001_desc",
-     "teleport": 61
+     "teleport": 61,
+     "to": [
+      232197,
+      -215117
+     ]
     },
     "level": 47,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IOS_FafBlood_02_V01_01_body",
+    "npcId": 2400743,
     "region": "Altgard",
     "spawns": 25,
     "zones": [
@@ -9198,13 +13546,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -219898,
+      238510
+     ],
      "m": 1737,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_002_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      -64997,
+      159811
+     ]
     },
     "level": 51,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_FE_IoE_FireEle_02_001_body",
+    "npcId": 2101100,
     "region": "Verteron",
     "spawns": 4,
     "zones": [
@@ -9214,13 +13572,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      244107,
+      -221103
+     ],
      "m": 133,
      "name": "EnvObjData_E_D1_IslandOfSpirit_TeleportArtifact_001_desc",
-     "teleport": 61
+     "teleport": 61,
+     "to": [
+      232197,
+      -215117
+     ]
     },
     "level": 48,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IOS_FireEle_01_01_body",
+    "npcId": 2400748,
     "region": "Altgard",
     "spawns": 14,
     "zones": [
@@ -9230,13 +13598,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -194074,
+      228895
+     ],
      "m": 1523,
      "name": "EnvObjData_E_D1_TeleportArtifact_006_desc",
-     "teleport": 15
+     "teleport": 15,
+     "to": [
+      -211694,
+      77640
+     ]
     },
     "level": 51,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IoI_FireEle_02_001_body",
+    "npcId": 2400821,
     "region": "Altgard",
     "spawns": 11,
     "zones": [
@@ -9260,13 +13638,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      41940,
+      75765
+     ],
      "m": 170,
      "name": "EnvObjData_E_L1_AlamiaHighland_TeleportArtifact_001_desc",
-     "teleport": 37
+     "teleport": 37,
+     "to": [
+      36134,
+      59735
+     ]
     },
     "level": 32,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AH_A_GraveBat_01_001_body",
+    "npcId": 2100583,
     "region": "Verteron",
     "spawns": 50,
     "zones": [
@@ -9277,13 +13665,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -141191,
+      -92009
+     ],
      "m": 182,
      "name": "EnvObjData_E_D1_GraveKeeperTent_TeleportArtifact_001_desc",
-     "teleport": 7
+     "teleport": 7,
+     "to": [
+      -151858,
+      -77322
+     ]
     },
     "level": 14,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_UC_GraveBat_01_001_body",
+    "npcId": 2400057,
     "region": "Altgard",
     "spawns": 71,
     "zones": [
@@ -9307,13 +13705,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      7258,
+      61602
+     ],
      "m": 271,
      "name": "EnvObjData_E_L1_PillgrimsRidgePath_TeleportArtifact_002_desc",
-     "teleport": 23
+     "teleport": 23,
+     "to": [
+      2864,
+      88304
+     ]
     },
     "level": 27,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_PilgrimsRidge_Zaif_01_002_body",
+    "npcId": 2100566,
     "region": "Verteron",
     "spawns": 6,
     "zones": [
@@ -9364,7 +13772,9 @@ const PET_SOURCES = {
     "chance": "100%",
     "level": 63,
     "map": "String_STR_Map_Fire_Temple_body",
+    "mapId": 600022,
     "npc": "String_STR_M_PD_Fire_Temple_Rotan_01_body",
+    "npcId": 2300310,
     "region": "Fire Temple",
     "spawns": 1,
     "zones": [
@@ -9375,7 +13785,9 @@ const PET_SOURCES = {
     "chance": "100%",
     "level": 37,
     "map": "String_STR_Map_Fire_Temple_body",
+    "mapId": 600021,
     "npc": "String_STR_M_PD_Fire_Temple_Rotan_01_body",
+    "npcId": 2310310,
     "region": "Fire Temple",
     "spawns": 1,
     "zones": [
@@ -9386,7 +13798,9 @@ const PET_SOURCES = {
     "chance": "100%",
     "level": 74,
     "map": "String_STR_Map_Fire_Temple_body",
+    "mapId": 600023,
     "npc": "String_STR_M_PD_Fire_Temple_Rotan_01_body",
+    "npcId": 2320310,
     "region": "Fire Temple",
     "spawns": 1,
     "zones": [
@@ -9396,25 +13810,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       -33368,
+       19349
+      ],
       "m": 1163,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       -33368,
+       19349
+      ],
       "m": 381,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -33368,
+      19349
+     ],
      "m": 381,
      "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      -52708,
+      52165
+     ]
     },
     "level": 46,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_DD_ROTAN_01_001_body",
+    "npcId": 2600003,
     "region": "Chaotic Lower Reshanta",
     "spawns": 13,
     "zones": [
@@ -9425,25 +13865,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       37146,
+       -22800
+      ],
       "m": 373,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       37146,
+       -22800
+      ],
       "m": 1170,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      37146,
+      -22800
+     ],
      "m": 373,
      "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      56200,
+      -54866
+     ]
     },
     "level": 46,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_BSZ_ROTAN_01_001_body",
+    "npcId": 2600013,
     "region": "Chaotic Lower Reshanta",
     "spawns": 13,
     "zones": [
@@ -9468,13 +13934,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      136611,
+      36181
+     ],
      "m": 167,
      "name": "EnvObjData_E_D1_SteelHammerCamp_TeleportArtifact_001_desc",
-     "teleport": 48
+     "teleport": 48,
+     "to": [
+      124592,
+      47767
+     ]
     },
     "level": 36,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_FD_AddShulack_03_001_body",
+    "npcId": 2400455,
     "region": "Altgard",
     "spawns": 29,
     "zones": [
@@ -9498,13 +13974,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      151878,
+      39663
+     ],
      "m": 108,
      "name": "EnvObjData_E_L1_AlamiaHighland_TeleportArtifact_003_desc",
-     "teleport": 42
+     "teleport": 42,
+     "to": [
+      162352,
+      42206
+     ]
     },
     "level": 36,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AH_C_Guardit_01_body",
+    "npcId": 2100712,
     "region": "Verteron",
     "spawns": 33,
     "zones": [
@@ -9528,13 +14014,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      126993,
+      -81266
+     ],
      "m": 192,
      "name": "EnvObjData_E_L1_DranaPlantation_TeleportArtifact_003_desc",
-     "teleport": 54
+     "teleport": 54,
+     "to": [
+      123452,
+      -62387
+     ]
     },
     "level": 41,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_DP_Dracuni_01_002_body",
+    "npcId": 2100867,
     "region": "Verteron",
     "spawns": 44,
     "zones": [
@@ -9544,13 +14040,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      220005,
+      -233079
+     ],
      "m": 217,
      "name": "EnvObjData_E_D1_IslandOfSpirit_TeleportArtifact_001_desc",
-     "teleport": 61
+     "teleport": 61,
+     "to": [
+      232197,
+      -215117
+     ]
     },
     "level": 47,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IOS_Dracuni_01_01_body",
+    "npcId": 2400746,
     "region": "Altgard",
     "spawns": 33,
     "zones": [
@@ -9588,13 +14094,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      161712,
+      25682
+     ],
      "m": 165,
      "name": "EnvObjData_E_L1_AlamiaHighland_TeleportArtifact_003_desc",
-     "teleport": 42
+     "teleport": 42,
+     "to": [
+      162352,
+      42206
+     ]
     },
     "level": 37,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AH_C_Guardit_02_body",
+    "npcId": 2100716,
     "region": "Verteron",
     "spawns": 44,
     "zones": [
@@ -9644,25 +14160,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       -58996,
+       -25100
+      ],
       "m": 1190,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       -58996,
+       -25100
+      ],
       "m": 775,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -58996,
+      -25100
+     ],
      "m": 775,
      "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      -52708,
+      52165
+     ]
     },
     "level": 48,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_STI_NAGAELITE_03_002_body",
+    "npcId": 2600042,
     "region": "Chaotic Lower Reshanta",
     "spawns": 7,
     "zones": [
@@ -9686,13 +14228,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      172658,
+      -56447
+     ],
      "m": 248,
      "name": "EnvObjData_E_L1_KrakaFootPath_TeleportArtifact_003_desc",
-     "teleport": 51
+     "teleport": 51,
+     "to": [
+      178104,
+      -32231
+     ]
     },
     "level": 40,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_KFP_BF_Lufilini_02_001_body",
+    "npcId": 2100815,
     "region": "Verteron",
     "spawns": 30,
     "zones": [
@@ -9702,13 +14254,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -226541,
+      237678
+     ],
      "m": 1793,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_002_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      -64997,
+      159811
+     ]
     },
     "level": 49,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_FE_IoE_Lufilini_01_001_body",
+    "npcId": 2101086,
     "region": "Verteron",
     "spawns": 22,
     "zones": [
@@ -9718,13 +14280,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -211169,
+      215812
+     ],
      "m": 1382,
      "name": "EnvObjData_E_D1_TeleportArtifact_006_desc",
-     "teleport": 15
+     "teleport": 15,
+     "to": [
+      -211694,
+      77640
+     ]
     },
     "level": 49,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IoI_Lufilini_03_001_body",
+    "npcId": 2400814,
     "region": "Altgard",
     "spawns": 71,
     "zones": [
@@ -9748,13 +14320,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      148216,
+      1297
+     ],
      "m": 208,
      "name": "EnvObjData_E_L1_AlamiaHighland_TeleportArtifact_004_desc",
-     "teleport": 43
+     "teleport": 43,
+     "to": [
+      141439,
+      20932
+     ]
     },
     "level": 35,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AH_BF_Lufilini_01_V01_001_body",
+    "npcId": 2100747,
     "region": "Verteron",
     "spawns": 8,
     "zones": [
@@ -9764,13 +14346,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -82533,
+      -85865
+     ],
      "m": 199,
      "name": "EnvObjData_E_D1_CheckpointofGarolik_TeleportArtifact_001_desc",
-     "teleport": 3
+     "teleport": 3,
+     "to": [
+      -95886,
+      -100576
+     ]
     },
     "level": 10,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_DC_Lufilini_01_V01_01_body",
+    "npcId": 2400004,
     "region": "Altgard",
     "spawns": 17,
     "zones": [
@@ -9781,13 +14373,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      81183,
+      -123124
+     ],
      "m": 306,
      "name": "EnvObjData_E_D1_TeleportArtifact_013_desc",
-     "teleport": 38
+     "teleport": 38,
+     "to": [
+      97460,
+      -149042
+     ]
     },
     "level": 32,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Lufilini_01_01_body",
+    "npcId": 2400378,
     "region": "Altgard",
     "spawns": 34,
     "zones": [
@@ -9797,13 +14399,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      105333,
+      -92780
+     ],
      "m": 108,
      "name": "EnvObjData_E_D1_TeleportArtifact_011_desc",
-     "teleport": 33
+     "teleport": 33,
+     "to": [
+      108433,
+      -82420
+     ]
     },
     "level": 33,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_DR_Lufilini_01_01_body",
+    "npcId": 2400391,
     "region": "Altgard",
     "spawns": 16,
     "zones": [
@@ -9813,13 +14425,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -99310,
+      -25364
+     ],
      "m": 125,
      "name": "EnvObjData_E_D1_Watcherstent_TeleportArtifact_001_desc",
-     "teleport": 16
+     "teleport": 16,
+     "to": [
+      -104603,
+      -36713
+     ]
     },
     "level": 20,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_Com_Lufilini_01_01_body",
+    "npcId": 2400911,
     "region": "Altgard",
     "spawns": 16,
     "zones": [
@@ -9845,13 +14467,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      15959,
+      -26279
+     ],
      "m": 186,
      "name": "EnvObjData_E_D1_VictoryDaevasStatue_TeleportArtifact_001_desc",
-     "teleport": 27
+     "teleport": 27,
+     "to": [
+      11882,
+      -44465
+     ]
     },
     "level": 24,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_SH_Kalnif_01_001_body",
+    "npcId": 2400257,
     "region": "Altgard",
     "spawns": 8,
     "zones": [
@@ -9861,13 +14493,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      114004,
+      92588
+     ],
      "m": 180,
      "name": "EnvObjData_E_D1_AbandonedCampsite_TeleportArtifact_001_desc",
-     "teleport": 49
+     "teleport": 49,
+     "to": [
+      105761,
+      76629
+     ]
     },
     "level": 37,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_WGC_AltKnife_03_01_body",
+    "npcId": 2400503,
     "region": "Altgard",
     "spawns": 56,
     "zones": [
@@ -9891,13 +14533,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      143395,
+      35371
+     ],
      "m": 146,
      "name": "EnvObjData_E_L1_AlamiaHighland_TeleportArtifact_004_desc",
-     "teleport": 43
+     "teleport": 43,
+     "to": [
+      141439,
+      20932
+     ]
     },
     "level": 45,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AH_C_Guardit_Named_body",
+    "npcId": 2100718,
     "region": "Verteron",
     "spawns": 1,
     "zones": [
@@ -9921,13 +14573,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -46336,
+      13501
+     ],
      "m": 237,
      "name": "EnvObjData_E_L1_VerteronFotress_TeleportArtifact_042_desc",
-     "teleport": 20
+     "teleport": 20,
+     "to": [
+      -22943,
+      9582
+     ]
     },
     "level": 18,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_EllunRiverAgrint_01_body",
+    "npcId": 2100143,
     "region": "Verteron",
     "spawns": 19,
     "zones": [
@@ -9937,13 +14599,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      101486,
+      156973
+     ],
      "m": 241,
      "name": "EnvObjData_E_L1_GardenOfMiraju_TeleportArtifact_001_desc",
-     "teleport": 58
+     "teleport": 58,
+     "to": [
+      79220,
+      147737
+     ]
     },
     "level": 44,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_RI_BF_Agrint_01_V02_001_body",
+    "npcId": 2100698,
     "region": "Verteron",
     "spawns": 33,
     "zones": [
@@ -9953,13 +14625,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      157685,
+      24362
+     ],
      "m": 166,
      "name": "EnvObjData_E_L1_AlamiaHighland_TeleportArtifact_004_desc",
-     "teleport": 43
+     "teleport": 43,
+     "to": [
+      141439,
+      20932
+     ]
     },
     "level": 37,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AH_C_Agrint_01_body",
+    "npcId": 2100714,
     "region": "Verteron",
     "spawns": 16,
     "zones": [
@@ -9969,13 +14651,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -210204,
+      247954
+     ],
      "m": 1699,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_002_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      -64997,
+      159811
+     ]
     },
     "level": 49,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_FE_IoE_Agrint_01_001_body",
+    "npcId": 2101099,
     "region": "Verteron",
     "spawns": 10,
     "zones": [
@@ -9985,13 +14677,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -11718,
+      37539
+     ],
      "m": 223,
      "name": "EnvObjData_E_D1_ForestsHideout_TeleportArtifact_001_desc",
-     "teleport": 21
+     "teleport": 21,
+     "to": [
+      -11660,
+      15210
+     ]
     },
     "level": 22,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_MF_Agrint_01_body",
+    "npcId": 2400221,
     "region": "Altgard",
     "spawns": 20,
     "zones": [
@@ -10001,13 +14703,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      159782,
+      -105004
+     ],
      "m": 217,
      "name": "EnvObjData_E_D1_StealerCamp_TeleportArtifact_001_desc",
-     "teleport": 40
+     "teleport": 40,
+     "to": [
+      140766,
+      -94614
+     ]
     },
     "level": 33,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_BR_Agrint_01_01_body",
+    "npcId": 2400415,
     "region": "Altgard",
     "spawns": 22,
     "zones": [
@@ -10017,13 +14729,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -189365,
+      219815
+     ],
      "m": 1439,
      "name": "EnvObjData_E_D1_TeleportArtifact_006_desc",
-     "teleport": 15
+     "teleport": 15,
+     "to": [
+      -211694,
+      77640
+     ]
     },
     "level": 49,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IoI_Agrint_01_001_body",
+    "npcId": 2400825,
     "region": "Altgard",
     "spawns": 11,
     "zones": [
@@ -10033,25 +14755,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       -47946,
+       -13280
+      ],
       "m": 1121,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       -47946,
+       -13280
+      ],
       "m": 656,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -47946,
+      -13280
+     ],
      "m": 656,
      "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      -52708,
+      52165
+     ]
     },
     "level": 47,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_STI_AGRINT_01_001_body",
+    "npcId": 2600027,
     "region": "Chaotic Lower Reshanta",
     "spawns": 2,
     "zones": [
@@ -10061,25 +14809,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       5222,
+       -6049
+      ],
       "m": 706,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       5222,
+       -6049
+      ],
       "m": 821,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      5222,
+      -6049
+     ],
      "m": 706,
      "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      56200,
+      -54866
+     ]
     },
     "level": 48,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_RR_AGRINT_01_001_body",
+    "npcId": 2600071,
     "region": "Chaotic Lower Reshanta",
     "spawns": 10,
     "zones": [
@@ -10103,13 +14877,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      245537,
+      -221698
+     ],
      "m": 149,
      "name": "EnvObjData_E_D1_IslandOfSpirit_TeleportArtifact_001_desc",
-     "teleport": 61
+     "teleport": 61,
+     "to": [
+      232197,
+      -215117
+     ]
     },
     "level": 48,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_IOS_Agrint_01_CV01_01_body",
+    "npcId": 2400750,
     "region": "Altgard",
     "spawns": 8,
     "zones": [
@@ -10133,13 +14917,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      102376,
+      -193253
+     ],
      "m": 116,
      "name": "EnvObjData_E_L1_IslandofCrimson_TeleportArtifact_001_desc",
-     "teleport": 61
+     "teleport": 61,
+     "to": [
+      91401,
+      -189647
+     ]
     },
     "level": 46,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_IoC_Agrint_01_V01_001_body",
+    "npcId": 2110508,
     "region": "Verteron",
     "spawns": 15,
     "zones": [
@@ -10149,13 +14943,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -142068,
+      -77356
+     ],
      "m": 98,
      "name": "EnvObjData_E_D1_GraveKeeperTent_TeleportArtifact_001_desc",
-     "teleport": 7
+     "teleport": 7,
+     "to": [
+      -151858,
+      -77322
+     ]
     },
     "level": 13,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_UC_Agrint_01_001_body",
+    "npcId": 2400054,
     "region": "Altgard",
     "spawns": 5,
     "zones": [
@@ -10165,25 +14969,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       -31623,
+       -36067
+      ],
       "m": 898,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       -31623,
+       -36067
+      ],
       "m": 907,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -31623,
+      -36067
+     ],
      "m": 898,
      "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      56200,
+      -54866
+     ]
     },
     "level": 47,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_STI_AGRINT_01_V01_001_body",
+    "npcId": 2600028,
     "region": "Chaotic Lower Reshanta",
     "spawns": 30,
     "zones": [
@@ -10209,13 +15039,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -57726,
+      73301
+     ],
      "m": 147,
      "name": "EnvObjData_E_L1_TolbasForest_TeleportArtifact_002_desc",
-     "teleport": 27
+     "teleport": 27,
+     "to": [
+      -64489,
+      86321
+     ]
     },
     "level": 25,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_TF_Agrint_01_body",
+    "npcId": 2100179,
     "region": "Verteron",
     "spawns": 32,
     "zones": [
@@ -10239,13 +15079,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -219777,
+      238833
+     ],
      "m": 1738,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_002_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      -64997,
+      159811
+     ]
     },
     "level": 51,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_FE_IoE_FireEle_01_001_body",
+    "npcId": 2101087,
     "region": "Verteron",
     "spawns": 15,
     "zones": [
@@ -10255,13 +15105,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      91418,
+      -77299
+     ],
      "m": 178,
      "name": "EnvObjData_E_D1_TeleportArtifact_011_desc",
-     "teleport": 33
+     "teleport": 33,
+     "to": [
+      108433,
+      -82420
+     ]
     },
     "level": 27,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_PF_FireEle_02_01_body",
+    "npcId": 2400325,
     "region": "Altgard",
     "spawns": 25,
     "zones": [
@@ -10285,13 +15145,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      8366,
+      -89787
+     ],
      "m": 212,
      "name": "EnvObjData_E_L1_EllunRiverMarsh_TeleportArtifact_003_desc",
-     "teleport": 10
+     "teleport": 10,
+     "to": [
+      -4631,
+      -106483
+     ]
     },
     "level": 15,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_ER_DarkEle_01_001_body",
+    "npcId": 2100460,
     "region": "Verteron",
     "spawns": 40,
     "zones": [
@@ -10301,13 +15171,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      82800,
+      -37811
+     ],
      "m": 162,
      "name": "EnvObjData_E_L1_DranaPlantation_TeleportArtifact_002_desc",
-     "teleport": 53
+     "teleport": 53,
+     "to": [
+      84175,
+      -53967
+     ]
     },
     "level": 39,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_BF_KFP_DarkEle_01_body",
+    "npcId": 2100807,
     "region": "Verteron",
     "spawns": 93,
     "zones": [
@@ -10318,13 +15198,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      158830,
+      174562
+     ],
      "m": 270,
      "name": "EnvObjData_E_D1_CollapsedHallOfFame_TeleportArtifact_001_desc",
-     "teleport": 58
+     "teleport": 58,
+     "to": [
+      134794,
+      162297
+     ]
     },
     "level": 44,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_DarkEle_01_body",
+    "npcId": 2400708,
     "region": "Altgard",
     "spawns": 18,
     "zones": [
@@ -10334,25 +15224,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       6423,
+       -2861
+      ],
       "m": 720,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       6423,
+       -2861
+      ],
       "m": 808,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      6423,
+      -2861
+     ],
      "m": 720,
      "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      56200,
+      -54866
+     ]
     },
     "level": 48,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_RR_DARKELE_01_001_body",
+    "npcId": 2600069,
     "region": "Chaotic Lower Reshanta",
     "spawns": 17,
     "zones": [
@@ -10377,7 +15293,9 @@ const PET_SOURCES = {
     "chance": "100%",
     "level": 45,
     "map": "String_STR_Map_Draupnir_body",
+    "mapId": 600032,
     "npc": "String_STR_M_PD_Draupnir_NagaElite_02_body",
+    "npcId": 2300403,
     "region": "Draupnir",
     "spawns": 1,
     "zones": [
@@ -10388,7 +15306,9 @@ const PET_SOURCES = {
     "chance": "100%",
     "level": 45,
     "map": "String_STR_Map_Draupnir_body",
+    "mapId": 600031,
     "npc": "String_STR_M_PD_Draupnir_NagaElite_02_body",
+    "npcId": 2310403,
     "region": "Draupnir",
     "spawns": 1,
     "zones": [
@@ -10399,7 +15319,9 @@ const PET_SOURCES = {
     "chance": "100%",
     "level": 70,
     "map": "String_STR_Map_Draupnir_body",
+    "mapId": 600033,
     "npc": "String_STR_M_PD_Draupnir_NagaElite_02_body",
+    "npcId": 2320403,
     "region": "Draupnir",
     "spawns": 1,
     "zones": [
@@ -10423,13 +15345,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      90597,
+      77120
+     ],
      "m": 173,
      "name": "EnvObjData_E_L1_AltamiCanyon_TeleportArtifact_001_desc",
-     "teleport": 38
+     "teleport": 38,
+     "to": [
+      78802,
+      64403
+     ]
     },
     "level": 33,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_AC_A_Specter_01_body",
+    "npcId": 2100600,
     "region": "Verteron",
     "spawns": 34,
     "zones": [
@@ -10439,13 +15371,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      96182,
+      152821
+     ],
      "m": 177,
      "name": "EnvObjData_E_L1_GardenOfMiraju_TeleportArtifact_001_desc",
-     "teleport": 58
+     "teleport": 58,
+     "to": [
+      79220,
+      147737
+     ]
     },
     "level": 45,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_RI_B_Specter_01_body",
+    "npcId": 2100656,
     "region": "Verteron",
     "spawns": 20,
     "zones": [
@@ -10469,13 +15411,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -89090,
+      -62849
+     ],
      "m": 124,
      "name": "EnvObjData_E_D1_CreionCamp_TeleportArtifact_001_desc",
-     "teleport": 5
+     "teleport": 5,
+     "to": [
+      -97963,
+      -71538
+     ]
     },
     "level": 12,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_DC_Incomplete_01_body",
+    "npcId": 2400009,
     "region": "Altgard",
     "spawns": 26,
     "zones": [
@@ -10499,13 +15451,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      117470,
+      63514
+     ],
      "m": 173,
      "name": "EnvObjData_E_D1_SteelHammerCamp_TeleportArtifact_001_desc",
-     "teleport": 48
+     "teleport": 48,
+     "to": [
+      124592,
+      47767
+     ]
     },
     "level": 35,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_D1_FD_DranaVar_06_CV01_body",
+    "npcId": 2400478,
     "region": "Altgard",
     "spawns": 13,
     "zones": [
@@ -10529,13 +15491,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -11849,
+      -92266
+     ],
      "m": 159,
      "name": "EnvObjData_E_L1_EllunRiverMarsh_TeleportArtifact_003_desc",
-     "teleport": 10
+     "teleport": 10,
+     "to": [
+      -4631,
+      -106483
+     ]
     },
     "level": 14,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_L1_ER_WaterEle_01_001_body",
+    "npcId": 2100458,
     "region": "Verteron",
     "spawns": 42,
     "zones": [
@@ -10545,13 +15517,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -207818,
+      249252
+     ],
      "m": 1685,
      "name": "EnvObjData_E_L1_OwllauVillage_TeleportArtifact_002_desc",
-     "teleport": 35
+     "teleport": 35,
+     "to": [
+      -64997,
+      159811
+     ]
     },
     "level": 49,
     "map": "String_STR_Map_World_L_A_body",
+    "mapId": 1010,
     "npc": "String_STR_M_FE_IoE_Jellofi_01_001_body",
+    "npcId": 2101085,
     "region": "Verteron",
     "spawns": 14,
     "zones": [
@@ -10561,13 +15543,23 @@ const PET_SOURCES = {
    {
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      -197150,
+      223085
+     ],
      "m": 1462,
      "name": "EnvObjData_E_D1_TeleportArtifact_006_desc",
-     "teleport": 15
+     "teleport": 15,
+     "to": [
+      -211694,
+      77640
+     ]
     },
     "level": 49,
     "map": "String_STR_Map_World_D_A_body",
+    "mapId": 1110,
     "npc": "String_STR_M_Jellofi_01_body",
+    "npcId": 2400811,
     "region": "Altgard",
     "spawns": 31,
     "zones": [
@@ -10577,25 +15569,51 @@ const PET_SOURCES = {
    {
     "bySide": {
      "asmodian": {
+      "at": [
+       51424,
+       26397
+      ],
       "m": 814,
       "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       56200,
+       -54866
+      ]
      },
      "elyos": {
+      "at": [
+       51424,
+       26397
+      ],
       "m": 1073,
       "name": "EnvObjData_E_AR1_TeminonLanding_TeleportArtifact_001_desc",
-      "teleport": 1
+      "teleport": 1,
+      "to": [
+       -52708,
+       52165
+      ]
      }
     },
     "chance": "100%",
     "kibelisk": {
+     "at": [
+      51424,
+      26397
+     ],
      "m": 814,
      "name": "EnvObjData_E_AR1_PrimumLanding_TeleportArtifact_001_desc",
-     "teleport": 1
+     "teleport": 1,
+     "to": [
+      56200,
+      -54866
+     ]
     },
     "level": 46,
     "map": "String_STR_Map_Abyss_Reshanta_A_body",
+    "mapId": 20,
     "npc": "String_STR_M_AR1_WSA_JELLOFI_01_001_body",
+    "npcId": 2600050,
     "region": "Chaotic Lower Reshanta",
     "spawns": 60,
     "zones": [

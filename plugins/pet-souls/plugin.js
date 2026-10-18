@@ -77,43 +77,43 @@ const SOURCE_UI = {
   en: { textSize: "Text size", noSource: "No source known.", noDrops: "No drops or chests listed.", spawns: (n) => `${n} spawn${n === 1 ? "" : "s"}`,
         teleport: (n, name) => `nearest teleport #${n} ${name}`, near: (name) => `near Kibelisk ${name}`,
         perOpening: (p) => `${p} per opening`, boxFrom: (x) => `The box comes from ${x}`, also: (x) => `Also drops in ${x} (hidden)`,
-        more: ["More on ", ""] },
+        map: "Map on Aion 2 Timers" },
   ko: { textSize: "글자 크기", noSource: "알려진 출처가 없습니다.", noDrops: "드롭이나 상자 정보가 없습니다.", spawns: (n) => `${n}곳 출현`,
         teleport: (n, name) => `가까운 텔레포트 #${n} ${name}`, near: (name) => `${name} 근처`,
         perOpening: (p) => `개봉당 ${p}`, boxFrom: (x) => `상자 획득처: ${x}`, also: (x) => `${x}에서도 드롭 (숨김)`,
-        more: ["", "에서 더 보기"] },
+        map: "Aion 2 Timers 지도" },
   ja: { textSize: "文字の大きさ", noSource: "入手先は不明です。", noDrops: "ドロップや箱の情報はありません。", spawns: (n) => `出現 ${n}か所`,
         teleport: (n, name) => `最寄りのテレポート #${n} ${name}`, near: (name) => `${name}付近`,
         perOpening: (p) => `開封ごとに ${p}`, boxFrom: (x) => `箱の入手先: ${x}`, also: (x) => `${x}でもドロップ（非表示）`,
-        more: ["", " で詳しく見る"] },
+        map: "Aion 2 Timersの地図" },
   de: { textSize: "Textgröße", noSource: "Keine Quelle bekannt.", noDrops: "Keine Drops oder Truhen bekannt.", spawns: (n) => `${n} Spawn${n === 1 ? "" : "s"}`,
         teleport: (n, name) => `nächster Teleport #${n} ${name}`, near: (name) => `nahe ${name}`,
         perOpening: (p) => `${p} pro Öffnung`, boxFrom: (x) => `Die Truhe gibt es über: ${x}`, also: (x) => `Droppt auch in ${x} (ausgeblendet)`,
-        more: ["Mehr auf ", ""] },
+        map: "Karte auf Aion 2 Timers" },
   fr: { textSize: "Taille du texte", noSource: "Aucune source connue.", noDrops: "Aucun butin ni coffre répertorié.", spawns: (n) => `${n} apparition${n === 1 ? "" : "s"}`,
         teleport: (n, name) => `téléporteur le plus proche n° ${n} ${name}`, near: (name) => `près de ${name}`,
         perOpening: (p) => `${p} par ouverture`, boxFrom: (x) => `Le coffre s'obtient via : ${x}`, also: (x) => `Tombe aussi à ${x} (masqué)`,
-        more: ["Plus sur ", ""] },
+        map: "Carte sur Aion 2 Timers" },
   es: { textSize: "Tamaño del texto", noSource: "No se conoce ninguna fuente.", noDrops: "No hay botín ni cofres.", spawns: (n) => `${n} aparici${n === 1 ? "ón" : "ones"}`,
         teleport: (n, name) => `teletransporte más cercano n.º ${n} ${name}`, near: (name) => `cerca de ${name}`,
         perOpening: (p) => `${p} por apertura`, boxFrom: (x) => `El cofre se obtiene en: ${x}`, also: (x) => `También cae en ${x} (oculto)`,
-        more: ["Más en ", ""] },
+        map: "Mapa en Aion 2 Timers" },
   pt: { textSize: "Tamanho do texto", noSource: "Nenhuma fonte conhecida.", noDrops: "Nenhum drop ou baú listado.", spawns: (n) => `${n} apari${n === 1 ? "ção" : "ções"}`,
         teleport: (n, name) => `teleporte mais próximo nº ${n} ${name}`, near: (name) => `perto de ${name}`,
         perOpening: (p) => `${p} por abertura`, boxFrom: (x) => `O baú vem de: ${x}`, also: (x) => `Também dropa em ${x} (oculto)`,
-        more: ["Mais em ", ""] },
+        map: "Mapa no Aion 2 Timers" },
   ru: { textSize: "Размер текста", noSource: "Источник неизвестен.", noDrops: "Нет данных о добыче и сундуках.", spawns: (n) => `мест появления: ${n}`,
         teleport: (n, name) => `ближайший телепорт №${n} ${name}`, near: (name) => `рядом: ${name}`,
         perOpening: (p) => `${p} за открытие`, boxFrom: (x) => `Сундук можно получить: ${x}`, also: (x) => `Также выпадает: ${x} (скрыто)`,
-        more: ["Подробнее на ", ""] },
+        map: "Карта на Aion 2 Timers" },
   "zh-Hant": { textSize: "文字大小", noSource: "來源不明。", noDrops: "沒有掉落或寶箱資料。", spawns: (n) => `${n} 個出現點`,
         teleport: (n, name) => `最近的傳送點 #${n} ${name}`, near: (name) => `${name}附近`,
         perOpening: (p) => `每次開啟 ${p}`, boxFrom: (x) => `寶箱來源：${x}`, also: (x) => `${x}也會掉落（已隱藏）`,
-        more: ["在 ", " 查看更多"] },
+        map: "Aion 2 Timers 地圖" },
   "zh-Hans": { textSize: "文字大小", noSource: "来源不明。", noDrops: "没有掉落或宝箱资料。", spawns: (n) => `${n} 个出现点`,
         teleport: (n, name) => `最近的传送点 #${n} ${name}`, near: (name) => `${name}附近`,
         perOpening: (p) => `每次开启 ${p}`, boxFrom: (x) => `宝箱来源：${x}`, also: (x) => `${x}也会掉落（已隐藏）`,
-        more: ["在 ", " 查看更多"] },
+        map: "Aion 2 Timers 地图" },
 };
 const ui = () => SOURCE_UI[language] || SOURCE_UI.en;
 // "A, B and C" as the meter's language writes it.
@@ -321,7 +321,16 @@ function whereOf(id) {
     const kib = k && `${text(k.name)} · ${k.m.toLocaleString(language)} m`;
     const kibelisk = kib && (k.teleport ? words.teleport(k.teleport, kib) : words.near(kib));
     const zones = listOf((d.zones || []).map(text)) || "?";
-    box.append(line("at", zones, d.map && text(d.map), d.spawns && words.spawns(d.spawns), kibelisk));
+    const at = line("at", zones, d.map && text(d.map), d.spawns && words.spawns(d.spawns), kibelisk);
+    const href = mapLink(d, k);
+    if (href) {
+      const link = document.createElement("a");
+      link.href = href;
+      link.textContent = words.map;
+      link.title = href;
+      at.append(" · ", link);
+    }
+    box.append(at);
   }
   for (const c of src.chests) {
     box.append(line("who", text(c.name), words.perOpening(c.chance)));
@@ -329,27 +338,38 @@ function whereOf(id) {
   }
   if (!src.drops.length && !src.chests.length) box.append(line("at", words.noDrops));
   if (elsewhere.size) box.append(line("at", words.also(listOf([...elsewhere].map((r) => text(REGION_MAP[r]))))));
-  const page = soulPage(src);
-  if (page) {
-    const more = document.createElement("div");
-    more.className = "more";
-    const link = document.createElement("a");
-    link.href = page;
-    link.textContent = "metabot.gg";
-    link.title = page;
-    more.append(words.more[0], link, words.more[1]);
-    box.append(more);
-  }
   return box;
 }
 
-// The soul's page on metabot.gg, opened in the browser: its address is the
-// soul item's English name, apostrophes dropped. A pet metabot hasn't added
-// yet has no page there.
-function soulPage(src) {
-  const slug = String(SOURCE_TEXT[src.title]?.en ?? "").toLowerCase()
-    .replace(/['’]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-  return slug ? `https://metabot.gg/en/aion-2/items/${slug}` : null;
+// The languages the Aion 2 Timers map speaks besides English.
+const MAP_LANGUAGES = new Set(["de", "fr", "es", "it", "ja", "ko", "pl", "pt", "ru", "tr"]);
+
+// A drop's monster on the Aion 2 Timers map, opened in the browser: every
+// spawn of it on its map, and the nearest teleport, measured from the spawn
+// this list measures from (`at`), so the two give the same distance. Their
+// teleport is the nearest of all; where this list takes your side's own
+// Kibelisk (the Abyss), it is named (`to`), which leaves it unlabelled there.
+// Coordinates are the game's world units, as theirs are. The name goes in
+// English, as their map reads it. Spec: homelessguynabox/a2tools-integration,
+// reference/map-links.md.
+function mapLink(d, k) {
+  if (!d.npcId) return null;
+  const q = new URLSearchParams();
+  if (d.mapId) q.set("map", String(d.mapId));
+  q.set("pet", String(d.npcId));
+  const name = SOURCE_TEXT[d.npc]?.en ?? (String(d.npc ?? "").startsWith("=") ? d.npc.slice(1) : "");
+  if (name) q.set("petName", name);
+  if (k?.at) {
+    q.set("x", String(Math.round(k.at[0])));
+    q.set("y", String(Math.round(k.at[1])));
+  }
+  if (k?.to && String(k.to) !== String(d.kibelisk?.to)) {
+    q.set("tx", String(Math.round(k.to[0])));
+    q.set("ty", String(Math.round(k.to[1])));
+  }
+  const lang = language.startsWith("zh") ? "zh" : MAP_LANGUAGES.has(language) ? language : "";
+  if (lang) q.set("lang", lang);
+  return "https://www.aion2timers.com/map/?" + q.toString();
 }
 
 // A filter row (genus or level): All, then each choice with how many of

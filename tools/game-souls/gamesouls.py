@@ -390,7 +390,7 @@ def main():
         m = re.match(r"TeleportArtifact_(\d+)$", e.get("UsageValue", ""))
         if m and int(m.group(1)) in tele_art:
             order = tele_art[int(m.group(1))]["Order"]
-        return tr(e["Desc"]["Key"]), round(dist), order, eid, e["Desc"]["Key"]
+        return tr(e["Desc"]["Key"]), round(dist), order, eid, e["Desc"]["Key"], med, q
 
     def join_zones(subs):
         if len(subs) <= 1:
@@ -457,7 +457,9 @@ def main():
                     unreleased_rows += 1
                     continue
                 d = {"name": tr(n["Desc"]["Key"]), "level": str(n["Level"])}
-                sd = {"npc": tk(n["Desc"]["Key"]), "level": n["Level"]}
+                sd = {"npc": tk(n["Desc"]["Key"]), "level": n["Level"], "npcId": npc_id}
+                if mid is not None:
+                    sd["mapId"] = mid
                 if a.chances:
                     d["chance"] = pct(chance, 1) if chance is not None else "?"
                     if chance is not None:
@@ -491,7 +493,8 @@ def main():
                     d["kibelisk"] = f"{k[0]} · {k[1]:,} m"
                     if k[2]:
                         d["teleport"] = k[2]
-                    sd["kibelisk"] = {"name": tk(k[4]), "m": k[1], **({"teleport": k[2]} if k[2] else {})}
+                    sd["kibelisk"] = {"name": tk(k[4]), "m": k[1], **({"teleport": k[2]} if k[2] else {}),
+                                      "at": [round(k[5][0]), round(k[5][1])], "to": [round(k[6][0]), round(k[6][1])]}
                 # In the Abyss each side has Kibelisks of its own: the nearest
                 # one each side can use, where the two differ.
                 races = {kib_race(c[0]) for c in kibs.get(mid, [])}
@@ -501,7 +504,8 @@ def main():
                         ks = nearest_kibelisk(mid, pos, side)
                         if ks:
                             by_side[side] = {"kibelisk": f"{ks[0]} · {ks[1]:,} m", **({"teleport": ks[2]} if ks[2] else {})}
-                            s_by_side[side] = {"name": tk(ks[4]), "m": ks[1], **({"teleport": ks[2]} if ks[2] else {})}
+                            s_by_side[side] = {"name": tk(ks[4]), "m": ks[1], **({"teleport": ks[2]} if ks[2] else {}),
+                                               "at": [round(ks[5][0]), round(ks[5][1])], "to": [round(ks[6][0]), round(ks[6][1])]}
                     if by_side:
                         d["bySide"] = by_side
                         sd["bySide"] = s_by_side

@@ -88,7 +88,7 @@ const DEFAULT_CLOSED_LEAD = 15;
 const REPEATS = [1, 2, 3, 5, 10, 0];
 const UNTIL_MUTED_MS = 5 * 60_000;
 // The alert sounds, in the order the list shows them (sounds.js).
-const SOUND_ORDER = ["chime", "bell", "sparkle", "ping", "soft", "gong", "horn", "harp", "alarm"];
+const SOUND_ORDER = ["chime", "bell", "sparkle", "ping", "soft", "gong", "horn", "harp", "alarm", "crystal", "marimba", "kalimba", "epiano", "sonar", "fanfare", "warhorn", "taiko"];
 // With "keep this window hidden until an alert goes off": hidden once the
 // window has gone this long without use (and no alert is up), so whoever is
 // working in it, in Settings say, keeps it. An alert's banner clears itself
@@ -188,53 +188,53 @@ const enterWord = () => ENTER[language] || ENTER.en;
 // The alerts' words, in each of the meter's languages.
 const ALERT_UI = {
   en: { closed: "If AION2 is closed", settings: "Settings", server: "Server", showIn: "Show times in", systemTime: (z) => `This computer's time (${z})`, serverTime: "Server time", enable: "Alert",
-        timers: "Timers", alerts: "Alerts", sound: "Sound", play: "Play", none: "None", pop: "Keep this window hidden until an alert goes off", alsoAtStart: "Also alert as it starts",
+        timers: "Timers", alerts: "Alerts", sound: "Sound", play: "Play", none: "None", pop: "Hide window until an alert", alsoAtStart: "Also alert as it starts",
         off: "Off", atStart: "As it starts", before: (n) => `${n} min before`, soon: (name, n) => `${name} in ${n} min`, now: (name) => `${name} is starting`,
-        sounds: { chime: "Chime", bell: "Bell", sparkle: "Sparkle", ping: "Ping", soft: "Soft", gong: "Gong", horn: "Horn", harp: "Harp", alarm: "Alarm" } },
+        sounds: { chime: "Chime", bell: "Bell", sparkle: "Sparkle", ping: "Ping", soft: "Soft", gong: "Gong", horn: "Horn", harp: "Harp", alarm: "Alarm", crystal: "Crystal", marimba: "Marimba", kalimba: "Kalimba", epiano: "Electric piano", sonar: "Sonar", fanfare: "Fanfare", warhorn: "War horn", taiko: "Taiko drums" } },
   ko: { closed: "AION2가 꺼져 있으면", settings: "설정", server: "서버", showIn: "시간 표시", systemTime: (z) => `이 컴퓨터 시간 (${z})`, serverTime: "서버 시간", enable: "알림",
         timers: "타이머", alerts: "알림", sound: "소리", play: "재생", none: "없음", pop: "알림이 울릴 때까지 이 창 숨기기", alsoAtStart: "시작할 때도 알림",
         off: "끔", atStart: "시작할 때", before: (n) => `${n}분 전`, soon: (name, n) => `${name} ${n}분 전`, now: (name) => `${name} 시작`,
-        sounds: { chime: "차임", bell: "종", sparkle: "반짝임", ping: "핑", soft: "부드러움", gong: "징", horn: "뿔피리", harp: "하프", alarm: "경보" } },
+        sounds: { chime: "차임", bell: "종", sparkle: "반짝임", ping: "핑", soft: "부드러움", gong: "징", horn: "뿔피리", harp: "하프", alarm: "경보", crystal: "크리스털", marimba: "마림바", kalimba: "칼림바", epiano: "일렉트릭 피아노", sonar: "소나", fanfare: "팡파르", warhorn: "전투 뿔피리", taiko: "태고 북" } },
   ja: { closed: "AION2を閉じている場合", settings: "設定", server: "サーバー", showIn: "時刻の表示", systemTime: (z) => `このPCの時刻（${z}）`, serverTime: "サーバー時間", enable: "通知",
         timers: "タイマー", alerts: "通知", sound: "サウンド", play: "再生", none: "なし", pop: "通知が鳴るまでこのウィンドウを隠す", alsoAtStart: "開始時にも通知",
         off: "オフ", atStart: "開始時", before: (n) => `${n}分前`, soon: (name, n) => `${name}まであと${n}分`, now: (name) => `${name}開始`,
-        sounds: { chime: "チャイム", bell: "ベル", sparkle: "きらめき", ping: "ピン", soft: "ソフト", gong: "銅鑼", horn: "ホルン", harp: "ハープ", alarm: "アラーム" } },
+        sounds: { chime: "チャイム", bell: "ベル", sparkle: "きらめき", ping: "ピン", soft: "ソフト", gong: "銅鑼", horn: "ホルン", harp: "ハープ", alarm: "アラーム", crystal: "クリスタル", marimba: "マリンバ", kalimba: "カリンバ", epiano: "エレピ", sonar: "ソナー", fanfare: "ファンファーレ", warhorn: "戦の角笛", taiko: "和太鼓" } },
   de: { closed: "Wenn AION2 geschlossen ist", settings: "Einstellungen", server: "Server", showIn: "Zeiten zeigen in", systemTime: (z) => `Zeit dieses Computers (${z})`, serverTime: "Serverzeit", enable: "Alarm",
         timers: "Timer", alerts: "Alarme", sound: "Ton", play: "Abspielen", none: "Keiner", pop: "Dieses Fenster bis zu einem Alarm verbergen", alsoAtStart: "Auch zum Start alarmieren",
         off: "Aus", atStart: "Zum Start", before: (n) => `${n} Min. vorher`, soon: (name, n) => `${name} in ${n} Min.`, now: (name) => `${name} beginnt`,
-        sounds: { chime: "Glockenspiel", bell: "Glocke", sparkle: "Funkeln", ping: "Ping", soft: "Sanft", gong: "Gong", horn: "Horn", harp: "Harfe", alarm: "Alarm" } },
+        sounds: { chime: "Glockenspiel", bell: "Glocke", sparkle: "Funkeln", ping: "Ping", soft: "Sanft", gong: "Gong", horn: "Horn", harp: "Harfe", alarm: "Alarm", crystal: "Kristall", marimba: "Marimba", kalimba: "Kalimba", epiano: "E-Piano", sonar: "Sonar", fanfare: "Fanfare", warhorn: "Kriegshorn", taiko: "Taiko-Trommeln" } },
   fr: { closed: "Si AION2 est fermé", settings: "Réglages", server: "Serveur", showIn: "Afficher les heures en", systemTime: (z) => `Heure de cet ordinateur (${z})`, serverTime: "Heure du serveur", enable: "Alerte",
         timers: "Minuteurs", alerts: "Alertes", sound: "Son", play: "Écouter", none: "Aucun", pop: "Masquer cette fenêtre jusqu'à une alerte", alsoAtStart: "Alerter aussi au début",
         off: "Désactivée", atStart: "Au début", before: (n) => `${n} min avant`, soon: (name, n) => `${name} dans ${n} min`, now: (name) => `${name} commence`,
-        sounds: { chime: "Carillon", bell: "Cloche", sparkle: "Scintillement", ping: "Ping", soft: "Doux", gong: "Gong", horn: "Cor", harp: "Harpe", alarm: "Alarme" } },
+        sounds: { chime: "Carillon", bell: "Cloche", sparkle: "Scintillement", ping: "Ping", soft: "Doux", gong: "Gong", horn: "Cor", harp: "Harpe", alarm: "Alarme", crystal: "Cristal", marimba: "Marimba", kalimba: "Kalimba", epiano: "Piano électrique", sonar: "Sonar", fanfare: "Fanfare", warhorn: "Cor de guerre", taiko: "Tambours taiko" } },
   es: { closed: "Si AION2 está cerrado", settings: "Ajustes", server: "Servidor", showIn: "Mostrar horas en", systemTime: (z) => `Hora de este equipo (${z})`, serverTime: "Hora del servidor", enable: "Alerta",
         timers: "Temporizadores", alerts: "Alertas", sound: "Sonido", play: "Reproducir", none: "Ninguno", pop: "Ocultar esta ventana hasta que suene una alerta", alsoAtStart: "Avisar también al empezar",
         off: "Desactivada", atStart: "Al empezar", before: (n) => `${n} min antes`, soon: (name, n) => `${name} en ${n} min`, now: (name) => `Empieza ${name}`,
-        sounds: { chime: "Campanilla", bell: "Campana", sparkle: "Destello", ping: "Ping", soft: "Suave", gong: "Gong", horn: "Cuerno", harp: "Arpa", alarm: "Alarma" } },
+        sounds: { chime: "Campanilla", bell: "Campana", sparkle: "Destello", ping: "Ping", soft: "Suave", gong: "Gong", horn: "Cuerno", harp: "Arpa", alarm: "Alarma", crystal: "Cristal", marimba: "Marimba", kalimba: "Kalimba", epiano: "Piano eléctrico", sonar: "Sonar", fanfare: "Fanfarria", warhorn: "Cuerno de guerra", taiko: "Tambores taiko" } },
   pt: { closed: "Se o AION2 estiver fechado", settings: "Configurações", server: "Servidor", showIn: "Mostrar horários em", systemTime: (z) => `Hora deste computador (${z})`, serverTime: "Hora do servidor", enable: "Alerta",
         timers: "Timers", alerts: "Alertas", sound: "Som", play: "Tocar", none: "Nenhum", pop: "Ocultar esta janela até um alerta tocar", alsoAtStart: "Alertar também ao começar",
         off: "Desligado", atStart: "Ao começar", before: (n) => `${n} min antes`, soon: (name, n) => `${name} em ${n} min`, now: (name) => `${name} está começando`,
-        sounds: { chime: "Carrilhão", bell: "Sino", sparkle: "Brilho", ping: "Ping", soft: "Suave", gong: "Gongo", horn: "Trompa", harp: "Harpa", alarm: "Alarme" } },
+        sounds: { chime: "Carrilhão", bell: "Sino", sparkle: "Brilho", ping: "Ping", soft: "Suave", gong: "Gongo", horn: "Trompa", harp: "Harpa", alarm: "Alarme", crystal: "Cristal", marimba: "Marimba", kalimba: "Kalimba", epiano: "Piano elétrico", sonar: "Sonar", fanfare: "Fanfarra", warhorn: "Trompa de guerra", taiko: "Tambores taiko" } },
   ru: { closed: "Если AION2 закрыт", settings: "Настройки", server: "Сервер", showIn: "Показывать время", systemTime: (z) => `Время этого компьютера (${z})`, serverTime: "Время сервера", enable: "Оповещать",
         timers: "Таймеры", alerts: "Оповещения", sound: "Звук", play: "Прослушать", none: "Нет", pop: "Скрывать это окно до оповещения", alsoAtStart: "Оповещать и при начале",
         off: "Выкл.", atStart: "При начале", before: (n) => `за ${n} мин`, soon: (name, n) => `${name} через ${n} мин`, now: (name) => `${name} начинается`,
-        sounds: { chime: "Перезвон", bell: "Колокол", sparkle: "Искры", ping: "Пинг", soft: "Мягкий", gong: "Гонг", horn: "Рог", harp: "Арфа", alarm: "Тревога" } },
+        sounds: { chime: "Перезвон", bell: "Колокол", sparkle: "Искры", ping: "Пинг", soft: "Мягкий", gong: "Гонг", horn: "Рог", harp: "Арфа", alarm: "Тревога", crystal: "Кристалл", marimba: "Маримба", kalimba: "Калимба", epiano: "Электропиано", sonar: "Сонар", fanfare: "Фанфары", warhorn: "Боевой рог", taiko: "Барабаны тайко" } },
   "zh-Hant": { closed: "若 AION2 未開啟", settings: "設定", server: "伺服器", showIn: "時間顯示", systemTime: (z) => `本機時間（${z}）`, serverTime: "伺服器時間", enable: "提醒",
         timers: "計時器", alerts: "提醒", sound: "音效", play: "播放", none: "無", pop: "在提醒前隱藏此視窗", alsoAtStart: "開始時也提醒",
         off: "關閉", atStart: "開始時", before: (n) => `${n} 分鐘前`, soon: (name, n) => `${name} ${n} 分鐘後開始`, now: (name) => `${name} 開始`,
-        sounds: { chime: "鐘聲", bell: "鈴聲", sparkle: "閃爍", ping: "叮", soft: "柔和", gong: "銅鑼", horn: "號角", harp: "豎琴", alarm: "警報" } },
+        sounds: { chime: "鐘聲", bell: "鈴聲", sparkle: "閃爍", ping: "叮", soft: "柔和", gong: "銅鑼", horn: "號角", harp: "豎琴", alarm: "警報", crystal: "水晶", marimba: "馬林巴", kalimba: "卡林巴", epiano: "電鋼琴", sonar: "聲納", fanfare: "凱旋號角", warhorn: "戰爭號角", taiko: "太鼓" } },
   "zh-Hans": { closed: "若 AION2 未开启", settings: "设置", server: "服务器", showIn: "时间显示", systemTime: (z) => `本机时间（${z}）`, serverTime: "服务器时间", enable: "提醒",
         timers: "计时器", alerts: "提醒", sound: "音效", play: "播放", none: "无", pop: "在提醒前隐藏此窗口", alsoAtStart: "开始时也提醒",
         off: "关闭", atStart: "开始时", before: (n) => `${n} 分钟前`, soon: (name, n) => `${name} ${n} 分钟后开始`, now: (name) => `${name} 开始`,
-        sounds: { chime: "钟声", bell: "铃声", sparkle: "闪烁", ping: "叮", soft: "柔和", gong: "铜锣", horn: "号角", harp: "竖琴", alarm: "警报" } },
+        sounds: { chime: "钟声", bell: "铃声", sparkle: "闪烁", ping: "叮", soft: "柔和", gong: "铜锣", horn: "号角", harp: "竖琴", alarm: "警报", crystal: "水晶", marimba: "马林巴", kalimba: "卡林巴", epiano: "电钢琴", sonar: "声呐", fanfare: "凯旋号角", warhorn: "战争号角", taiko: "太鼓" } },
 };
 
 // The words added with the tabs, the world bosses and repeating alerts.
 const MORE_UI = {
   en: { groupUp: "Up", groupWindow: "In window", groupUpcoming: "Upcoming", groupUnknown: "No report yet", ago: (t) => `${t} ago`, hpLeft: (n) => `HP ${n}%`,
-        openFull: "Open Event Timers", alertOptions: "Config", testAlert: "Test Alert", alertColor: "Alert colour", colors: {"orange": "Orange", "gold": "Gold", "red": "Red", "pink": "Pink", "purple": "Purple", "blue": "Blue", "green": "Green"},
-        whileOpen: "Remind me", allOn: "All on", allOff: "All off", defaultLead: "Alert time", defaultClosed: "Alert time while AION2 is closed", applyAll: "Apply to current alerts", applyAsk: (n, lead, closed) => `Set the ${n} alerts that are on to ${lead}, and ${closed} while AION2 is closed?`, apply: "Apply", cancel: "Cancel", defaultsNote: "Default times for new alerts",
-        textSize: "Text size", popNote: "The window hides after 30 seconds without use, and comes back on its own when an alert goes off. To open it before then: Settings → Plugins → Open.", events: "Events", bosses: "Bosses", region: "Region", daily: "Daily reset", weekly: "Weekly reset",
+        openFull: "Open Event Timers", alertOptions: "Options", testAlert: "Test alert", alertColor: "Alert colour", colors: {"orange": "Orange", "gold": "Gold", "red": "Red", "pink": "Pink", "purple": "Purple", "blue": "Blue", "green": "Green"},
+        whileOpen: "Remind me", allOn: "All on", allOff: "All off", defaultLead: "When to alert", defaultClosed: "When to alert (AION2 closed)", applyAll: "Apply to current alerts", applyAsk: (n, lead, closed) => `Set the ${n} alerts that are on to ${lead}, and ${closed} while AION2 is closed?`, apply: "Apply", cancel: "Cancel", defaultsNote: "Default times for new alerts",
+        textSize: "Text size", popNote: "Hides after 30 s unused and comes back when an alert goes off. To open it sooner: Settings → Plugins → Open.", events: "Events", bosses: "Bosses", region: "Region", daily: "Daily reset", weekly: "Weekly reset",
         scheduled: "Scheduled bosses", field: "World bosses", fieldNote: "Shared by players' meters as they open their map.",
         noFeed: "World boss timers need meter 2.0.65 or later.", feedFailed: "Couldn't read the world boss timers.",
         noServer: "Log in to a character to see your server's world bosses.", up: "Up", upFor: (t) => `for ${t}`,

@@ -19,8 +19,8 @@
 // in what order, and anchorShow() shows them in the frame.
 
 const ANCHOR_UI = {
-  en: { anchor: "Anchor mode", anchorNote: "Shown on screen while this tab is open.",
-        expand: "Expand direction", dirs: { "left-down": "Left, then down", "right-down": "Right, then down", "left-up": "Left, then up", "right-up": "Right, then up" },
+  en: { anchor: "Anchor mode", anchorNote: "The anchor shows while this tab is open.",
+        expand: "Fill direction", dirs: { "left-down": "Left, then down", "right-down": "Right, then down", "left-up": "Left, then up", "right-up": "Right, then up" },
         maxWidth: "Max width (icons across)", maxHeight: "Max height (icons down)", sortBy: "Sort by",
         sorts: { urgent: "Most urgent first", rarest: "Rarest first", soonest: "Soonest first" },
         sortNotes: { urgent: "Being fought (lowest HP first), then up now (rarest first), then the soonest.", rarest: "Up now, the longest to respawn first, then the soonest.", soonest: "Up now, then in the order they start." },
@@ -152,7 +152,7 @@ function trainPins(out, cfg) {
   if (!trainOn()) return;
   for (const b of fieldBosses()) {
     const id = `field:${b.id}`;
-    // Not "Keep icons on screen", and no reminder: on the grid only while
+    // Not "Show icons even when not alerting", and no reminder: on the grid only while
     // up or about to spawn, and "Fighting" when it is.
     if (!(id in out)) out[id] = { ...cfg(id), always: false, lead: -1, fought: true, train: true };
   }

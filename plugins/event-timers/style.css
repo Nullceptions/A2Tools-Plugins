@@ -756,3 +756,26 @@ body.alertOnly .openFull:hover {
     animation-timing-function: steps(1, end);
   }
 }
+
+/* The Artifact Siege (siege.js): each artifact's holder, in its side's
+   colour, and its core's HP while the siege is on. */
+.siege { margin-bottom: 8px; }
+.siege[hidden], body.compact .siege:not(.live) { display: none; }
+.siegeHead { margin-top: 0; }
+.siegeMap { margin: 4px 0 2px; font-size: 11px; color: rgba(255, 255, 255, 0.55); }
+.siegeRow { display: flex; align-items: center; gap: 8px; padding: 2px 0 2px 8px; border-left: 3px solid rgba(255, 255, 255, 0.2); }
+.siegeRow.owner-elyos { border-left-color: #5aa9ff; }
+.siegeRow.owner-asmodian { border-left-color: #c08bff; }
+.siegeName { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.siegeOwner { font-weight: 600; }
+.owner-elyos .siegeOwner { color: #7fbcff; }
+.owner-asmodian .siegeOwner { color: #d3adff; }
+.owner-none .siegeOwner { color: rgba(255, 255, 255, 0.45); font-weight: 400; }
+.siegeCore { min-width: 64px; text-align: right; font-size: 12px; color: rgba(255, 255, 255, 0.7); }
+.siegeCore.hasHp {
+  padding: 0 4px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, rgba(255, 90, 79, 0.45) var(--hp, 0%), rgba(255, 255, 255, 0.08) var(--hp, 0%));
+  color: #fff;
+}
+.siegeCore.dead { color: #ff8a80; }

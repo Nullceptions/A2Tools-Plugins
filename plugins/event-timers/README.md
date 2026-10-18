@@ -27,6 +27,10 @@ With alerts shown as icons, **Anchor mode** (under Settings) lines the icons up 
 
 **World Boss Train** puts every world boss that is up, or spawns within 5 minutes, on the grid, with an alert or not: the next stop for a group going from boss to boss. A boss's rarity is how long it takes to respawn, measured on a2tools.app from players' meters (30 minutes to 12 hours); one not measured yet counts as the least rare. Anchor mode needs meter 2.0.72 or newer.
 
+## Artifact Siege
+
+At the top of **Events**: who holds each Abyss artifact, in their side's colour, with the score, and during the siege each Dimensional Core's HP, or "Destroyed". It comes from a2tools.app, where players' meters report what they see near the artifacts and cores, and from your own meter at once when the game tells it (opening the Abyss map, entering the Abyss). Read every 15 seconds while the siege is on, every 5 minutes otherwise. Needs meter 2.0.72 or newer.
+
 ## Server time
 
 Each Global region's servers keep their own clock: NA East is New York time, NA West Los Angeles, Europe Berlin, South America São Paulo, Asia Seoul. The region comes from your character's server (the second digit of its number), and so does your faction (the first). Before you log in, or to see another region's times, pick it under **Settings → Server**. Korean and Taiwanese servers share their numbers and run some events on other cycles, so they aren't covered yet.

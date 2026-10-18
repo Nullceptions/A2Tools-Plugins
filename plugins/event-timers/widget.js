@@ -30,10 +30,12 @@ a2.on("widget", (d) => {
   }
   art.hidden = !src;
   glyph.hidden = !!src;
-  glyph.textContent = initials(d.name);
+  // Anchor mode's anchor, and its "+N" for the icons that don't fit.
+  glyph.textContent = d.kind === "anchor" ? "⚓" : d.glyph || initials(d.name);
+  pin.title = d.tip || "";
   time.textContent = d.countdown || "";
   sub.textContent = d.sub || "";
-  // A field boss's HP: the ring drains from the top as it falls.
+  // A world boss's HP: the ring drains from the top as it falls.
   const hasHp = typeof d.hp === "number";
   badge.classList.toggle("hasHp", hasHp);
   const hpColor = hasHp ? (d.hp > 50 ? "#5fe08a" : d.hp > 20 ? "#ffd54a" : "#ff5a4f") : "";

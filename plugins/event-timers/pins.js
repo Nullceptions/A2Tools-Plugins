@@ -7,7 +7,7 @@
 // their names, the lock); each alert can override any of them. "Show alerts
 // as: This window" keeps the old way, a banner in this window.
 //
-// A field boss's alert can also come when the boss is being fought (its HP
+// A world boss's alert can also come when the boss is being fought (its HP
 // reported falling), for players who want to go and join: once per spawn,
 // the icon showing "Fighting" and its HP. "Remind me: Don't remind" leaves
 // only that.
@@ -93,10 +93,10 @@ const pinUi = () => PIN_UI[language] || PIN_UI.en;
 const PIN_EFFECTS = ["shake", "glow", "nothing"];
 // How long a pin counts as due after its timer starts, so the effect is seen.
 const DUE_AFTER_MS = 60_000;
-// A field boss seen up and then killed shows "Killed" this long, then goes
+// A world boss seen up and then killed shows "Killed" this long, then goes
 // (or, shown always, counts down to its respawn).
 const KILLED_SHOW_MS = 20_000;
-// Field bosses seen up, and when each was seen killed.
+// World bosses seen up, and when each was seen killed.
 const seenUp = new Set();
 const killedAt = new Map();
 // A boss counts as fought while it is up and a report from the last 3
@@ -144,7 +144,7 @@ function migratePins() {
 }
 
 // The icons to show and how: one per alert that is on, and with "All field
-// bosses" on, one per field boss without an alert of its own. Each with the
+// bosses" on, one per world boss without an alert of its own. Each with the
 // key its settings come from.
 function iconPins() {
   if (!iconStyle()) return {};
@@ -177,6 +177,9 @@ function iconPins() {
       if (!(id in out)) out[id] = cfg(ALL_FIELD);
     }
   }
+  // World Boss Train (anchor.js): the rest of the world bosses, shown while
+  // up or about to spawn.
+  if (typeof trainPins === "function") trainPins(out, cfg);
   return out;
 }
 
@@ -196,7 +199,7 @@ const pinIcon = (id, kind) => {
 const pinSize = (showName) => ({ width: 80, height: showName ? 118 : 84 });
 
 // What a timer is doing now: its name, kind, the next start (ms) or null,
-// whether it is running (an event under way, a field boss up), and a field
+// whether it is running (an event under way, a world boss up), and a field
 // boss's HP and kill.
 function pinState(id, now) {
   if (id.startsWith("field:")) {
@@ -235,10 +238,10 @@ function pinState(id, now) {
   };
 }
 
-// "up" while a field boss with an icon is up, "soon" while one is due within
+// "up" while a world boss with an icon is up, "soon" while one is due within
 // 5 minutes or overdue, else "": how often plugin.js reads the feed, for its
 // HP as it falls and its kill.
-// The field bosses whose news matters now: those with an icon, and those
+// The world bosses whose news matters now: those with an icon, and those
 // watched for being fought.
 const watchedField = () => [...new Set([...Object.keys(iconPins()).filter((id) => id.startsWith("field:")), ...foughtWatched()])];
 
@@ -258,21 +261,21 @@ function pinnedIconOnly() {
   return iconStyle();
 }
 
-// Whether a field boss is being fought: up, and a fresh report has its HP
+// Whether a world boss is being fought: up, and a fresh report has its HP
 // falling below 99%.
 function bossFought(t, now) {
   return t?.state === "up" && t.hp != null && !!t.hpAt && Number(t.hp) < FOUGHT_BELOW
     && now - t.hpAt * 1000 < FOUGHT_FRESH_MS;
 }
 
-// The alert whose settings a field boss follows ("field:<id>", or "All field
+// The alert whose settings a world boss follows ("field:<id>", or "All field
 // bosses" for one without its own), if it is on.
 function fieldAlertKey(id) {
   if (id in prefs.alerts) return id;
   return ALL_FIELD in prefs.alerts ? ALL_FIELD : null;
 }
 
-// The field bosses whose alert asks to be told when they are fought.
+// The world bosses whose alert asks to be told when they are fought.
 function foughtWatched() {
   if (!prefs.fought) return [];
   return fieldBosses().map((b) => `field:${b.id}`).filter((id) => {
@@ -303,7 +306,7 @@ function checkFights(now, announce) {
   }
 }
 
-// The alert's "When it's being fought" line, for field bosses.
+// The alert's "When it's being fought" line, for world bosses.
 function fightControl(id) {
   const p = pinUi();
   const row = document.createElement("label");
@@ -400,7 +403,7 @@ function pinControls(id) {
   return box;
 }
 
-// Live updates (meter 2.0.68 with a site that pushes them): the field bosses
+// Live updates (meter 2.0.68 with a site that pushes them): the world bosses
 // with an icon that are up, due soon, overdue or just killed are followed,
 // and each change the site pushes lands in the feed at once. While the
 // connection is up, reading the feed is only the fallback.
@@ -471,7 +474,7 @@ let pinsBusy = false;
 // each its countdown.
 async function updatePins(now) {
   if (pinsBusy) return;
-  // A field boss just started to matter: read the feed now, not at its next
+  // A world boss just started to matter: read the feed now, not at its next
   // scheduled read.
   const live = pinnedBossLive(now);
   followLive(now);
@@ -483,7 +486,7 @@ async function updatePins(now) {
   try {
     const p = pinUi();
     const words = ui();
-    const wanted = new Map();
+    let wanted = new Map();
     for (const [id, pin] of Object.entries(iconPins())) {
       const state = pinState(id, now);
       if (!state) continue;
@@ -496,7 +499,8 @@ async function updatePins(now) {
       // "Don't remind", only then (and its kill, if it showed).
       const visible = pin.always || fight
         || (state.killed && (reminds || openPins.has(widgetName(id))))
-        || (reminds && (state.running || (until != null && until <= pin.lead * 60_000 + 1000)));
+        || (reminds && (state.running || (until != null && until <= pin.lead * 60_000 + 1000)))
+        || (typeof trainVisible === "function" && trainVisible(pin, state, until));
       if (!visible) continue;
       // Due: from its alert's time (or the last minute), and for a minute
       // after it starts; an event that can be entered, while it can be; a
@@ -516,10 +520,14 @@ async function updatePins(now) {
         : state.hp != null ? `${Math.round(state.hp)}%` : "";
       wanted.set(widgetName(id), {
         id,
+        // For anchor mode's Sort by (anchor.js).
+        order: { id, fight: !!fight, running: !!state.running && !state.killed, hp: state.hp ?? null, until, killed: !!state.killed },
         data: { name: state.name, showName: !!pin.name, countdown, sub, hp: state.killed ? 0 : state.hp ?? null,
           running: state.running, due: due && !state.killed, effect: pin.effect, kind: state.kind, icon: pinIcon(id, state.kind) },
       });
     }
+    // Anchor mode: in its order, with what doesn't fit folded into "+N".
+    if (typeof anchorPlan === "function") wanted = anchorPlan(wanted);
     for (const name of [...openPins.keys()]) {
       if (!wanted.has(name)) {
         openPins.delete(name);
@@ -536,6 +544,8 @@ async function updatePins(now) {
       }
       a2.widgets.send(name, data).catch(() => {});
     }
+    // Anchor mode lines them up beside the anchor (and closes it when off).
+    if (typeof anchorArrange === "function") anchorArrange(wanted);
   } finally {
     pinsBusy = false;
   }
@@ -655,6 +665,7 @@ function renderPinLock() {
     popNote.textContent = iconStyle() ? p.hideIdleNote : ui().popNote;
     popNote.hidden = !prefs.pop;
   }
+  if (typeof renderAnchorSettings === "function") renderAnchorSettings(box);
 }
 
 // Test Alert, with alerts as icons: a sample icon for 10 seconds, due, with

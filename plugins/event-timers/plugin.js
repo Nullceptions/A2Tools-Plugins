@@ -1,5 +1,5 @@
 // Event Timers: countdowns to the recurring events, the scheduled bosses and
-// the field bosses, in the player's server time, with alerts before the ones
+// the world bosses, in the player's server time, with alerts before the ones
 // they choose.
 //
 // The schedules are the game's own (schedule.js), in server time: each Global
@@ -8,7 +8,7 @@
 // the meter with the character and remembered for when the game is closed.
 // Resets are one moment on every Global server: 07:00 UTC.
 //
-// Field bosses respawn a while after each kill: their timers come from what
+// World bosses respawn a while after each kill: their timers come from what
 // players' meters read off the in-game map, shared through a2tools.app
 // (a2.bossTimers, meter 2.0.65 on), fetched when the window opens and every
 // 15 minutes; a map the player opens themselves comes straight from their
@@ -106,20 +106,20 @@ const ALERT_COLORS = {
 // 100% is BASE_ZOOM, a little larger than the stylesheet's own sizes.
 const SCALES = [0.9, 1, 1.1, 1.25, 1.5];
 const BASE_ZOOM = 1.2;
-// The feed of field boss timers: read this often, or every FEED_BUSY_MS
-// while a field boss on the server is up, due within 15 minutes or overdue,
+// The feed of world boss timers: read this often, or every FEED_BUSY_MS
+// while a world boss on the server is up, due within 15 minutes or overdue,
 // when its state changes fast (the feed's file is rewritten at once on a kill
 // or an HP report).
 const FEED_EVERY_MS = 15 * 60_000;
 const FEED_BUSY_MS = 2 * 60_000;
-// While a pinned field boss is up (pins.js): its HP as it falls and its kill,
+// While a pinned world boss is up (pins.js): its HP as it falls and its kill,
 // about as often as the feed's file changes on the CDN; while one is about to
 // spawn or overdue, often enough to see it come up.
 const FEED_PINNED_UP_MS = 5_000;
 const FEED_PINNED_MS = 10_000;
 // An overdue boss counts as "in its window" this long after its time.
 const WINDOW_MS = 2 * 3600_000;
-// "All field bosses" in the alert list.
+// "All world bosses" in the alert list.
 const ALL_FIELD = "field:*";
 // The time zone this computer is set to, for showing times.
 const SYSTEM_ZONE = (() => {
@@ -229,106 +229,106 @@ const ALERT_UI = {
         sounds: { chime: "钟声", bell: "铃声", sparkle: "闪烁", ping: "叮", soft: "柔和", gong: "铜锣", horn: "号角", harp: "竖琴", alarm: "警报" } },
 };
 
-// The words added with the tabs, the field bosses and repeating alerts.
+// The words added with the tabs, the world bosses and repeating alerts.
 const MORE_UI = {
   en: { groupUp: "Up", groupWindow: "In window", groupUpcoming: "Upcoming", groupUnknown: "No report yet", ago: (t) => `${t} ago`, hpLeft: (n) => `HP ${n}%`,
         openFull: "Open Event Timers", alertOptions: "Config", testAlert: "Test Alert", alertColor: "Alert colour", colors: {"orange": "Orange", "gold": "Gold", "red": "Red", "pink": "Pink", "purple": "Purple", "blue": "Blue", "green": "Green"},
         whileOpen: "Remind me", allOn: "All on", allOff: "All off", defaultLead: "Alert time", defaultClosed: "Alert time while AION2 is closed", applyAll: "Apply to current alerts", applyAsk: (n, lead, closed) => `Set the ${n} alerts that are on to ${lead}, and ${closed} while AION2 is closed?`, apply: "Apply", cancel: "Cancel", defaultsNote: "Default times for new alerts",
         textSize: "Text size", popNote: "The window hides after 30 seconds without use, and comes back on its own when an alert goes off. To open it before then: Settings → Plugins → Open.", events: "Events", bosses: "Bosses", region: "Region", daily: "Daily reset", weekly: "Weekly reset",
-        scheduled: "Scheduled bosses", field: "Field bosses", fieldNote: "Shared by players' meters as they open their map.",
-        noFeed: "Field boss timers need meter 2.0.65 or later.", feedFailed: "Couldn't read the field boss timers.",
-        noServer: "Log in to a character to see your server's field bosses.", up: "Up", upFor: (t) => `for ${t}`,
-        due: "Due", unknown: "No report yet", seen: (t) => `reported ${t} ago`, allField: "All field bosses",
+        scheduled: "Scheduled bosses", field: "World bosses", fieldNote: "Shared by players' meters as they open their map.",
+        noFeed: "World boss timers need meter 2.0.65 or later.", feedFailed: "Couldn't read the world boss timers.",
+        noServer: "Log in to a character to see your server's world bosses.", up: "Up", upFor: (t) => `for ${t}`,
+        due: "Due", unknown: "No report yet", seen: (t) => `reported ${t} ago`, allField: "All world bosses",
         repeat: "Repeat", once: "Once", times: (n) => `${n} times`, untilMuted: "Until muted", mute: "Mute", dismiss: "Dismiss",
         bossSoon: (name, n) => `${name} back in ${n} min`, bossNow: (name) => `${name} is back` },
   ko: { groupUp: "출현 중", groupWindow: "출현 시간 지남", groupUpcoming: "예정", groupUnknown: "아직 정보 없음", ago: (t) => `${t} 전`, hpLeft: (n) => `HP ${n}%`,
         openFull: "Event Timers 열기", alertOptions: "구성", testAlert: "알림 테스트", alertColor: "알림 색상", colors: {"orange": "주황", "gold": "금색", "red": "빨강", "pink": "분홍", "purple": "보라", "blue": "파랑", "green": "초록"},
         whileOpen: "알림 시간", allOn: "모두 켜기", allOff: "모두 끄기", defaultLead: "알림 시간", defaultClosed: "AION2가 꺼져 있을 때 알림 시간", applyAll: "현재 알림에 적용", applyAsk: (n, lead, closed) => `켜져 있는 알림 ${n}개를 ${lead}, AION2가 꺼져 있을 때는 ${closed}(으)로 바꿀까요?`, apply: "적용", cancel: "취소", defaultsNote: "새 알림의 기본 시간",
         textSize: "글자 크기", popNote: "30초 동안 사용하지 않으면 창이 숨겨지고, 알림이 울리면 다시 나타납니다. 그 전에 열려면: 설정 → 플러그인 → 열기.", events: "이벤트", bosses: "보스", region: "지역", daily: "일일 초기화", weekly: "주간 초기화",
-        scheduled: "정기 보스", field: "필드 보스", fieldNote: "플레이어들이 지도를 열 때 미터가 공유한 정보입니다.",
-        noFeed: "필드 보스 타이머는 미터 2.0.65 이상이 필요합니다.", feedFailed: "필드 보스 타이머를 읽지 못했습니다.",
-        noServer: "캐릭터로 접속하면 서버의 필드 보스가 표시됩니다.", up: "출현", upFor: (t) => `${t}째`,
-        due: "곧 출현", unknown: "아직 정보 없음", seen: (t) => `${t} 전 보고`, allField: "모든 필드 보스",
+        scheduled: "정기 보스", field: "월드 보스", fieldNote: "플레이어들이 지도를 열 때 미터가 공유한 정보입니다.",
+        noFeed: "월드 보스 타이머는 미터 2.0.65 이상이 필요합니다.", feedFailed: "월드 보스 타이머를 읽지 못했습니다.",
+        noServer: "캐릭터로 접속하면 서버의 월드 보스가 표시됩니다.", up: "출현", upFor: (t) => `${t}째`,
+        due: "곧 출현", unknown: "아직 정보 없음", seen: (t) => `${t} 전 보고`, allField: "모든 월드 보스",
         repeat: "반복", once: "1회", times: (n) => `${n}회`, untilMuted: "끌 때까지", mute: "소리 끄기", dismiss: "닫기",
         bossSoon: (name, n) => `${name} ${n}분 후 출현`, bossNow: (name) => `${name} 출현` },
   ja: { groupUp: "出現中", groupWindow: "出現時刻経過", groupUpcoming: "予定", groupUnknown: "情報なし", ago: (t) => `${t}前`, hpLeft: (n) => `HP ${n}%`,
         openFull: "Event Timers を開く", alertOptions: "構成", testAlert: "通知をテスト", alertColor: "通知の色", colors: {"orange": "オレンジ", "gold": "ゴールド", "red": "赤", "pink": "ピンク", "purple": "紫", "blue": "青", "green": "緑"},
         whileOpen: "通知するタイミング", allOn: "すべてオン", allOff: "すべてオフ", defaultLead: "通知のタイミング", defaultClosed: "AION2を閉じているときの通知タイミング", applyAll: "現在の通知に適用", applyAsk: (n, lead, closed) => `オンの通知${n}件を${lead}、AION2を閉じているときは${closed}に変更しますか？`, apply: "適用", cancel: "キャンセル", defaultsNote: "新しい通知の既定のタイミング",
         textSize: "文字の大きさ", popNote: "30秒操作がないとウィンドウは隠れ、通知が鳴ると自動で再表示されます。それまでに開くには：設定 → プラグイン → 開く。", events: "イベント", bosses: "ボス", region: "地域", daily: "デイリーリセット", weekly: "ウィークリーリセット",
-        scheduled: "定時ボス", field: "フィールドボス", fieldNote: "プレイヤーがマップを開いたときにメーターが共有した情報です。",
-        noFeed: "フィールドボスのタイマーにはメーター 2.0.65 以降が必要です。", feedFailed: "フィールドボスのタイマーを読み込めませんでした。",
-        noServer: "キャラクターでログインするとサーバーのフィールドボスが表示されます。", up: "出現中", upFor: (t) => `${t}経過`,
-        due: "まもなく", unknown: "情報なし", seen: (t) => `${t}前に報告`, allField: "すべてのフィールドボス",
+        scheduled: "定時ボス", field: "ワールドボス", fieldNote: "プレイヤーがマップを開いたときにメーターが共有した情報です。",
+        noFeed: "ワールドボスのタイマーにはメーター 2.0.65 以降が必要です。", feedFailed: "ワールドボスのタイマーを読み込めませんでした。",
+        noServer: "キャラクターでログインするとサーバーのワールドボスが表示されます。", up: "出現中", upFor: (t) => `${t}経過`,
+        due: "まもなく", unknown: "情報なし", seen: (t) => `${t}前に報告`, allField: "すべてのワールドボス",
         repeat: "繰り返し", once: "1回", times: (n) => `${n}回`, untilMuted: "ミュートするまで", mute: "ミュート", dismiss: "閉じる",
         bossSoon: (name, n) => `${name}まであと${n}分`, bossNow: (name) => `${name}出現` },
   de: { groupUp: "Da", groupWindow: "Im Zeitfenster", groupUpcoming: "Demnächst", groupUnknown: "Noch keine Meldung", ago: (t) => `vor ${t}`, hpLeft: (n) => `HP ${n} %`,
         openFull: "Event Timers öffnen", alertOptions: "Konfig", testAlert: "Testalarm", alertColor: "Alarmfarbe", colors: {"orange": "Orange", "gold": "Gold", "red": "Rot", "pink": "Pink", "purple": "Lila", "blue": "Blau", "green": "Grün"},
         whileOpen: "Erinnern", allOn: "Alle an", allOff: "Alle aus", defaultLead: "Alarmzeit", defaultClosed: "Alarmzeit, wenn AION2 geschlossen ist", applyAll: "Auf aktuelle Alarme anwenden", applyAsk: (n, lead, closed) => `Die ${n} aktiven Alarme auf ${lead} setzen, und auf ${closed}, wenn AION2 geschlossen ist?`, apply: "Anwenden", cancel: "Abbrechen", defaultsNote: "Standardzeiten für neue Alarme",
         textSize: "Textgröße", popNote: "Das Fenster verschwindet nach 30 Sekunden ohne Nutzung und kommt bei einem Alarm von selbst zurück. Um es vorher zu öffnen: Einstellungen → Plugins → Öffnen.", events: "Events", bosses: "Bosse", region: "Region", daily: "Täglicher Reset", weekly: "Wöchentlicher Reset",
-        scheduled: "Geplante Bosse", field: "Feldbosse", fieldNote: "Von den Metern der Spieler geteilt, wenn sie ihre Karte öffnen.",
-        noFeed: "Feldboss-Timer brauchen Meter 2.0.65 oder neuer.", feedFailed: "Die Feldboss-Timer konnten nicht gelesen werden.",
-        noServer: "Mit einem Charakter einloggen, um die Feldbosse deines Servers zu sehen.", up: "Da", upFor: (t) => `seit ${t}`,
-        due: "Fällig", unknown: "Noch keine Meldung", seen: (t) => `vor ${t} gemeldet`, allField: "Alle Feldbosse",
+        scheduled: "Geplante Bosse", field: "Weltbosse", fieldNote: "Von den Metern der Spieler geteilt, wenn sie ihre Karte öffnen.",
+        noFeed: "Weltboss-Timer brauchen Meter 2.0.65 oder neuer.", feedFailed: "Die Weltboss-Timer konnten nicht gelesen werden.",
+        noServer: "Mit einem Charakter einloggen, um die Weltbosse deines Servers zu sehen.", up: "Da", upFor: (t) => `seit ${t}`,
+        due: "Fällig", unknown: "Noch keine Meldung", seen: (t) => `vor ${t} gemeldet`, allField: "Alle Weltbosse",
         repeat: "Wiederholen", once: "Einmal", times: (n) => `${n}-mal`, untilMuted: "Bis stumm", mute: "Stumm", dismiss: "Schließen",
         bossSoon: (name, n) => `${name} in ${n} Min. zurück`, bossNow: (name) => `${name} ist zurück` },
   fr: { groupUp: "Présents", groupWindow: "Dans la fenêtre", groupUpcoming: "À venir", groupUnknown: "Pas encore signalés", ago: (t) => `il y a ${t}`, hpLeft: (n) => `PV ${n} %`,
         openFull: "Ouvrir Event Timers", alertOptions: "Config", testAlert: "Tester l'alerte", alertColor: "Couleur des alertes", colors: {"orange": "Orange", "gold": "Or", "red": "Rouge", "pink": "Rose", "purple": "Violet", "blue": "Bleu", "green": "Vert"},
         whileOpen: "Me rappeler", allOn: "Tout activer", allOff: "Tout désactiver", defaultLead: "Moment de l'alerte", defaultClosed: "Moment de l'alerte quand AION2 est fermé", applyAll: "Appliquer aux alertes actuelles", applyAsk: (n, lead, closed) => `Régler les ${n} alertes actives sur ${lead}, et ${closed} quand AION2 est fermé ?`, apply: "Appliquer", cancel: "Annuler", defaultsNote: "Moments par défaut des nouvelles alertes",
         textSize: "Taille du texte", popNote: "La fenêtre se masque après 30 secondes sans utilisation et revient d'elle-même lors d'une alerte. Pour l'ouvrir avant : Réglages → Plugins → Ouvrir.", events: "Événements", bosses: "Boss", region: "Région", daily: "Réinitialisation quotidienne", weekly: "Réinitialisation hebdomadaire",
-        scheduled: "Boss programmés", field: "Boss de terrain", fieldNote: "Partagés par les meters des joueurs quand ils ouvrent leur carte.",
-        noFeed: "Les minuteurs des boss de terrain demandent le meter 2.0.65 ou plus récent.", feedFailed: "Impossible de lire les minuteurs des boss de terrain.",
-        noServer: "Connectez-vous avec un personnage pour voir les boss de terrain de votre serveur.", up: "Présent", upFor: (t) => `depuis ${t}`,
-        due: "Imminent", unknown: "Pas encore signalé", seen: (t) => `signalé il y a ${t}`, allField: "Tous les boss de terrain",
+        scheduled: "Boss programmés", field: "Boss mondiaux", fieldNote: "Partagés par les meters des joueurs quand ils ouvrent leur carte.",
+        noFeed: "Les minuteurs des boss mondiaux demandent le meter 2.0.65 ou plus récent.", feedFailed: "Impossible de lire les minuteurs des boss mondiaux.",
+        noServer: "Connectez-vous avec un personnage pour voir les boss mondiaux de votre serveur.", up: "Présent", upFor: (t) => `depuis ${t}`,
+        due: "Imminent", unknown: "Pas encore signalé", seen: (t) => `signalé il y a ${t}`, allField: "Tous les boss mondiaux",
         repeat: "Répéter", once: "Une fois", times: (n) => `${n} fois`, untilMuted: "Jusqu'à coupure", mute: "Couper", dismiss: "Fermer",
         bossSoon: (name, n) => `${name} de retour dans ${n} min`, bossNow: (name) => `${name} est de retour` },
   es: { groupUp: "Activos", groupWindow: "En ventana", groupUpcoming: "Próximos", groupUnknown: "Sin informes", ago: (t) => `hace ${t}`, hpLeft: (n) => `PV ${n} %`,
         openFull: "Abrir Event Timers", alertOptions: "Config", testAlert: "Probar alerta", alertColor: "Color de las alertas", colors: {"orange": "Naranja", "gold": "Dorado", "red": "Rojo", "pink": "Rosa", "purple": "Morado", "blue": "Azul", "green": "Verde"},
         whileOpen: "Avisarme", allOn: "Activar todo", allOff: "Desactivar todo", defaultLead: "Momento de la alerta", defaultClosed: "Momento de la alerta con AION2 cerrado", applyAll: "Aplicar a las alertas actuales", applyAsk: (n, lead, closed) => `¿Poner las ${n} alertas activas en ${lead}, y ${closed} con AION2 cerrado?`, apply: "Aplicar", cancel: "Cancelar", defaultsNote: "Momentos predeterminados de las alertas nuevas",
         textSize: "Tamaño del texto", popNote: "La ventana se oculta tras 30 segundos sin uso y vuelve sola cuando suena una alerta. Para abrirla antes: Ajustes → Plugins → Abrir.", events: "Eventos", bosses: "Jefes", region: "Región", daily: "Reinicio diario", weekly: "Reinicio semanal",
-        scheduled: "Jefes programados", field: "Jefes de campo", fieldNote: "Compartidos por los medidores de los jugadores al abrir su mapa.",
-        noFeed: "Los temporizadores de jefes de campo necesitan el medidor 2.0.65 o posterior.", feedFailed: "No se pudieron leer los temporizadores de jefes de campo.",
-        noServer: "Entra con un personaje para ver los jefes de campo de tu servidor.", up: "Activo", upFor: (t) => `desde hace ${t}`,
-        due: "Inminente", unknown: "Sin informes", seen: (t) => `informado hace ${t}`, allField: "Todos los jefes de campo",
+        scheduled: "Jefes programados", field: "Jefes mundiales", fieldNote: "Compartidos por los medidores de los jugadores al abrir su mapa.",
+        noFeed: "Los temporizadores de jefes mundiales necesitan el medidor 2.0.65 o posterior.", feedFailed: "No se pudieron leer los temporizadores de jefes mundiales.",
+        noServer: "Entra con un personaje para ver los jefes mundiales de tu servidor.", up: "Activo", upFor: (t) => `desde hace ${t}`,
+        due: "Inminente", unknown: "Sin informes", seen: (t) => `informado hace ${t}`, allField: "Todos los jefes mundiales",
         repeat: "Repetir", once: "Una vez", times: (n) => `${n} veces`, untilMuted: "Hasta silenciar", mute: "Silenciar", dismiss: "Cerrar",
         bossSoon: (name, n) => `${name} vuelve en ${n} min`, bossNow: (name) => `${name} ha vuelto` },
   pt: { groupUp: "Ativos", groupWindow: "Na janela", groupUpcoming: "Próximos", groupUnknown: "Sem relatos ainda", ago: (t) => `há ${t}`, hpLeft: (n) => `PV ${n}%`,
         openFull: "Abrir Event Timers", alertOptions: "Config", testAlert: "Testar alerta", alertColor: "Cor dos alertas", colors: {"orange": "Laranja", "gold": "Dourado", "red": "Vermelho", "pink": "Rosa", "purple": "Roxo", "blue": "Azul", "green": "Verde"},
         whileOpen: "Avisar-me", allOn: "Ativar todos", allOff: "Desativar todos", defaultLead: "Momento do alerta", defaultClosed: "Momento do alerta com o AION2 fechado", applyAll: "Aplicar aos alertas atuais", applyAsk: (n, lead, closed) => `Ajustar os ${n} alertas ativos para ${lead}, e ${closed} com o AION2 fechado?`, apply: "Aplicar", cancel: "Cancelar", defaultsNote: "Momentos padrão dos novos alertas",
         textSize: "Tamanho do texto", popNote: "A janela some após 30 segundos sem uso e volta sozinha quando um alerta toca. Para abri-la antes: Configurações → Plugins → Abrir.", events: "Eventos", bosses: "Chefes", region: "Região", daily: "Reinício diário", weekly: "Reinício semanal",
-        scheduled: "Chefes agendados", field: "Chefes de campo", fieldNote: "Compartilhados pelos medidores dos jogadores ao abrir o mapa.",
-        noFeed: "Os timers de chefes de campo precisam do medidor 2.0.65 ou mais novo.", feedFailed: "Não foi possível ler os timers de chefes de campo.",
-        noServer: "Entre com um personagem para ver os chefes de campo do seu servidor.", up: "Ativo", upFor: (t) => `há ${t}`,
-        due: "Iminente", unknown: "Sem relatos ainda", seen: (t) => `relatado há ${t}`, allField: "Todos os chefes de campo",
+        scheduled: "Chefes agendados", field: "Chefes mundiais", fieldNote: "Compartilhados pelos medidores dos jogadores ao abrir o mapa.",
+        noFeed: "Os timers de chefes mundiais precisam do medidor 2.0.65 ou mais novo.", feedFailed: "Não foi possível ler os timers de chefes mundiais.",
+        noServer: "Entre com um personagem para ver os chefes mundiais do seu servidor.", up: "Ativo", upFor: (t) => `há ${t}`,
+        due: "Iminente", unknown: "Sem relatos ainda", seen: (t) => `relatado há ${t}`, allField: "Todos os chefes mundiais",
         repeat: "Repetir", once: "Uma vez", times: (n) => `${n} vezes`, untilMuted: "Até silenciar", mute: "Silenciar", dismiss: "Fechar",
         bossSoon: (name, n) => `${name} volta em ${n} min`, bossNow: (name) => `${name} voltou` },
   ru: { groupUp: "На месте", groupWindow: "В окне появления", groupUpcoming: "Скоро", groupUnknown: "Пока нет данных", ago: (t) => `${t} назад`, hpLeft: (n) => `HP ${n}%`,
         openFull: "Открыть Event Timers", alertOptions: "Конфиг", testAlert: "Проверить", alertColor: "Цвет оповещений", colors: {"orange": "Оранжевый", "gold": "Золотой", "red": "Красный", "pink": "Розовый", "purple": "Фиолетовый", "blue": "Синий", "green": "Зелёный"},
         whileOpen: "Напомнить", allOn: "Включить все", allOff: "Выключить все", defaultLead: "Время оповещения", defaultClosed: "Время оповещения, когда AION2 закрыт", applyAll: "Применить к текущим оповещениям", applyAsk: (n, lead, closed) => `Установить ${n} включённых оповещений на «${lead}», а когда AION2 закрыт — «${closed}»?`, apply: "Применить", cancel: "Отмена", defaultsNote: "Время по умолчанию для новых оповещений",
         textSize: "Размер текста", popNote: "Окно скрывается после 30 секунд без действий и само появляется при оповещении. Чтобы открыть его раньше: Настройки → Плагины → Открыть.", events: "События", bosses: "Боссы", region: "Регион", daily: "Ежедневный сброс", weekly: "Еженедельный сброс",
-        scheduled: "Боссы по расписанию", field: "Полевые боссы", fieldNote: "Делятся метры игроков, когда те открывают карту.",
-        noFeed: "Для таймеров полевых боссов нужен метр 2.0.65 или новее.", feedFailed: "Не удалось прочитать таймеры полевых боссов.",
-        noServer: "Войдите персонажем, чтобы видеть полевых боссов своего сервера.", up: "На месте", upFor: (t) => `уже ${t}`,
-        due: "Вот-вот", unknown: "Пока нет данных", seen: (t) => `данные ${t} назад`, allField: "Все полевые боссы",
+        scheduled: "Боссы по расписанию", field: "Мировые боссы", fieldNote: "Делятся метры игроков, когда те открывают карту.",
+        noFeed: "Для таймеров мировых боссов нужен метр 2.0.65 или новее.", feedFailed: "Не удалось прочитать таймеры мировых боссов.",
+        noServer: "Войдите персонажем, чтобы видеть мировых боссов своего сервера.", up: "На месте", upFor: (t) => `уже ${t}`,
+        due: "Вот-вот", unknown: "Пока нет данных", seen: (t) => `данные ${t} назад`, allField: "Все мировые боссы",
         repeat: "Повтор", once: "Один раз", times: (n) => `${n} раз`, untilMuted: "Пока не выключить", mute: "Выключить звук", dismiss: "Закрыть",
         bossSoon: (name, n) => `${name} через ${n} мин`, bossNow: (name) => `${name} появился` },
   "zh-Hant": { groupUp: "已出現", groupWindow: "出現時段中", groupUpcoming: "即將出現", groupUnknown: "尚無回報", ago: (t) => `${t} 前`, hpLeft: (n) => `HP ${n}%`,
         openFull: "開啟 Event Timers", alertOptions: "配置", testAlert: "測試提醒", alertColor: "提醒顏色", colors: {"orange": "橘色", "gold": "金色", "red": "紅色", "pink": "粉紅", "purple": "紫色", "blue": "藍色", "green": "綠色"},
         whileOpen: "提醒時間", allOn: "全部開啟", allOff: "全部關閉", defaultLead: "提醒時間", defaultClosed: "AION2 關閉時的提醒時間", applyAll: "套用到目前的提醒", applyAsk: (n, lead, closed) => `將已開啟的 ${n} 個提醒設為「${lead}」，AION2 關閉時設為「${closed}」？`, apply: "套用", cancel: "取消", defaultsNote: "新提醒的預設時間",
         textSize: "文字大小", popNote: "30 秒未使用後視窗會隱藏，提醒響起時會自動再出現。若要先開啟：設定 → 外掛 → 開啟。", events: "活動", bosses: "首領", region: "地區", daily: "每日重置", weekly: "每週重置",
-        scheduled: "定時首領", field: "野外首領", fieldNote: "由玩家開啟地圖時其計量器分享。",
-        noFeed: "野外首領計時需要計量器 2.0.65 以上。", feedFailed: "無法讀取野外首領計時。",
-        noServer: "登入角色即可查看伺服器的野外首領。", up: "已出現", upFor: (t) => `已 ${t}`,
-        due: "即將出現", unknown: "尚無回報", seen: (t) => `${t} 前回報`, allField: "所有野外首領",
+        scheduled: "定時首領", field: "世界首領", fieldNote: "由玩家開啟地圖時其計量器分享。",
+        noFeed: "世界首領計時需要計量器 2.0.65 以上。", feedFailed: "無法讀取世界首領計時。",
+        noServer: "登入角色即可查看伺服器的世界首領。", up: "已出現", upFor: (t) => `已 ${t}`,
+        due: "即將出現", unknown: "尚無回報", seen: (t) => `${t} 前回報`, allField: "所有世界首領",
         repeat: "重複", once: "一次", times: (n) => `${n} 次`, untilMuted: "直到靜音", mute: "靜音", dismiss: "關閉",
         bossSoon: (name, n) => `${name} ${n} 分鐘後出現`, bossNow: (name) => `${name} 已出現` },
   "zh-Hans": { groupUp: "已出现", groupWindow: "出现时段中", groupUpcoming: "即将出现", groupUnknown: "尚无回报", ago: (t) => `${t} 前`, hpLeft: (n) => `HP ${n}%`,
         openFull: "打开 Event Timers", alertOptions: "配置", testAlert: "测试提醒", alertColor: "提醒颜色", colors: {"orange": "橙色", "gold": "金色", "red": "红色", "pink": "粉红", "purple": "紫色", "blue": "蓝色", "green": "绿色"},
         whileOpen: "提醒时间", allOn: "全部开启", allOff: "全部关闭", defaultLead: "提醒时间", defaultClosed: "AION2 关闭时的提醒时间", applyAll: "应用到当前的提醒", applyAsk: (n, lead, closed) => `将已开启的 ${n} 个提醒设为“${lead}”，AION2 关闭时设为“${closed}”？`, apply: "应用", cancel: "取消", defaultsNote: "新提醒的默认时间",
         textSize: "文字大小", popNote: "30 秒未使用后窗口会隐藏，提醒响起时会自动再出现。若要先打开：设置 → 插件 → 打开。", events: "活动", bosses: "首领", region: "地区", daily: "每日重置", weekly: "每周重置",
-        scheduled: "定时首领", field: "野外首领", fieldNote: "由玩家打开地图时其计量器分享。",
-        noFeed: "野外首领计时需要计量器 2.0.65 以上。", feedFailed: "无法读取野外首领计时。",
-        noServer: "登录角色即可查看服务器的野外首领。", up: "已出现", upFor: (t) => `已 ${t}`,
-        due: "即将出现", unknown: "尚无回报", seen: (t) => `${t} 前回报`, allField: "所有野外首领",
+        scheduled: "定时首领", field: "世界首领", fieldNote: "由玩家打开地图时其计量器分享。",
+        noFeed: "世界首领计时需要计量器 2.0.65 以上。", feedFailed: "无法读取世界首领计时。",
+        noServer: "登录角色即可查看服务器的世界首领。", up: "已出现", upFor: (t) => `已 ${t}`,
+        due: "即将出现", unknown: "尚无回报", seen: (t) => `${t} 前回报`, allField: "所有世界首领",
         repeat: "重复", once: "一次", times: (n) => `${n} 次`, untilMuted: "直到静音", mute: "静音", dismiss: "关闭",
         bossSoon: (name, n) => `${name} ${n} 分钟后出现`, bossNow: (name) => `${name} 已出现` },
 };
@@ -336,25 +336,25 @@ const MORE_UI = {
 // The Bosses tab's row buttons: each boss's alert on or off, and the way to
 // its settings in Alerts.
 const ROW_UI = {
-  en: { alertOn: "Turn this alert on", alertOff: "Turn this alert off", viaAll: "On with “All field bosses”: click for an alert of its own",
+  en: { alertOn: "Turn this alert on", alertOff: "Turn this alert off", viaAll: "On with “All world bosses”: click for an alert of its own",
         settings: "This alert's settings", settingsOff: "Turn the alert on to set it" },
-  ko: { alertOn: "이 알림 켜기", alertOff: "이 알림 끄기", viaAll: "“모든 필드 보스”로 켜져 있음: 클릭하면 이 보스만의 알림",
+  ko: { alertOn: "이 알림 켜기", alertOff: "이 알림 끄기", viaAll: "“모든 월드 보스”로 켜져 있음: 클릭하면 이 보스만의 알림",
         settings: "이 알림 설정", settingsOff: "알림을 켜면 설정할 수 있습니다" },
-  ja: { alertOn: "この通知をオン", alertOff: "この通知をオフ", viaAll: "「すべてのフィールドボス」でオン：クリックでこのボス個別の通知",
+  ja: { alertOn: "この通知をオン", alertOff: "この通知をオフ", viaAll: "「すべてのワールドボス」でオン：クリックでこのボス個別の通知",
         settings: "この通知の設定", settingsOff: "通知をオンにすると設定できます" },
-  de: { alertOn: "Diesen Alarm einschalten", alertOff: "Diesen Alarm ausschalten", viaAll: "An über „Alle Feldbosse“: klicken für einen eigenen Alarm",
+  de: { alertOn: "Diesen Alarm einschalten", alertOff: "Diesen Alarm ausschalten", viaAll: "An über „Alle Weltbosse“: klicken für einen eigenen Alarm",
         settings: "Einstellungen dieses Alarms", settingsOff: "Alarm einschalten, um ihn einzustellen" },
-  fr: { alertOn: "Activer cette alerte", alertOff: "Désactiver cette alerte", viaAll: "Active via « Tous les boss de terrain » : cliquez pour une alerte à lui",
+  fr: { alertOn: "Activer cette alerte", alertOff: "Désactiver cette alerte", viaAll: "Active via « Tous les boss mondiaux » : cliquez pour une alerte à lui",
         settings: "Réglages de cette alerte", settingsOff: "Activez l'alerte pour la régler" },
-  es: { alertOn: "Activar esta alerta", alertOff: "Desactivar esta alerta", viaAll: "Activa con «Todos los jefes de campo»: haz clic para una alerta propia",
+  es: { alertOn: "Activar esta alerta", alertOff: "Desactivar esta alerta", viaAll: "Activa con «Todos los jefes mundiales»: haz clic para una alerta propia",
         settings: "Ajustes de esta alerta", settingsOff: "Activa la alerta para ajustarla" },
-  pt: { alertOn: "Ativar este alerta", alertOff: "Desativar este alerta", viaAll: "Ativo por “Todos os chefes de campo”: clique para um alerta próprio",
+  pt: { alertOn: "Ativar este alerta", alertOff: "Desativar este alerta", viaAll: "Ativo por “Todos os chefes mundiais”: clique para um alerta próprio",
         settings: "Configurações deste alerta", settingsOff: "Ative o alerta para configurá-lo" },
-  ru: { alertOn: "Включить это оповещение", alertOff: "Выключить это оповещение", viaAll: "Включено через «Все полевые боссы»: нажмите для отдельного оповещения",
+  ru: { alertOn: "Включить это оповещение", alertOff: "Выключить это оповещение", viaAll: "Включено через «Все мировые боссы»: нажмите для отдельного оповещения",
         settings: "Настройки этого оповещения", settingsOff: "Включите оповещение, чтобы настроить его" },
-  "zh-Hant": { alertOn: "開啟此提醒", alertOff: "關閉此提醒", viaAll: "已透過「所有野外首領」開啟：點擊為它設定專屬提醒",
+  "zh-Hant": { alertOn: "開啟此提醒", alertOff: "關閉此提醒", viaAll: "已透過「所有世界首領」開啟：點擊為它設定專屬提醒",
         settings: "此提醒的設定", settingsOff: "開啟提醒後即可設定" },
-  "zh-Hans": { alertOn: "开启此提醒", alertOff: "关闭此提醒", viaAll: "已通过“所有野外首领”开启：点击为它设置专属提醒",
+  "zh-Hans": { alertOn: "开启此提醒", alertOff: "关闭此提醒", viaAll: "已通过“所有世界首领”开启：点击为它设置专属提醒",
         settings: "此提醒的设置", settingsOff: "开启提醒后即可设置" },
 };
 
@@ -364,7 +364,7 @@ let character = null;
 // say, taken as open.
 let gameRunning = null;
 // alerts: id -> minutes before (0 = as it starts); absent = off. Ids are an
-// event's, "field:<world-map id>" for a field boss, ALL_FIELD for all of them.
+// event's, "field:<world-map id>" for a world boss, ALL_FIELD for all of them.
 // leads: the lead chosen per id, kept while its alert is off.
 // closedLeads: id -> minutes before while the game is closed, or -1 for no
 // alert then; absent = DEFAULT_CLOSED_LEAD.
@@ -377,7 +377,7 @@ let gameRunning = null;
 let prefs = { region: "auto", hidden: [], alerts: {}, leads: {}, closedLeads: {}, sound: "chime", repeat: 1, pop: false,
   tab: "events", display: "system", lastServer: 0, scale: 1, defaultLead: DEFAULT_LEAD, defaultClosedLead: DEFAULT_CLOSED_LEAD,
   alertColor: "orange", alsoAtStart: false, folded: {} };
-// The field boss timers: { server, bosses, at, error }, from the feed and the
+// The world boss timers: { server, bosses, at, error }, from the feed and the
 // player's own map, the newest report of each boss kept.
 let feed = null;
 // Bosses read off the player's own map, kept across a feed refresh.
@@ -516,14 +516,14 @@ const eventName = (ev) => {
   const side = serverSide();
   return [ev.name, ...(ev.also || [])].map(text).join(" · ") + (ev.side && !side ? ` (${ui()[ev.side]})` : "");
 };
-// The field bosses on the maps this player's side sees.
+// The world bosses on the maps this player's side sees.
 const fieldBosses = () => {
   const side = serverSide();
   return Object.entries(FIELD_BOSSES)
     .filter(([, b]) => !b.side || !side || b.side === side)
     .map(([id, b]) => ({ id, ...b }));
 };
-// A field boss's timer from the feed: { state, upSince, nextSpawn, reportedAt } (seconds), or null.
+// A world boss's timer from the feed: { state, upSince, nextSpawn, reportedAt } (seconds), or null.
 const fieldTimer = (id) => (feed && feed.server === serverId() ? feed.bosses?.[id] || null : null);
 
 function renderStatic() {
@@ -643,7 +643,7 @@ const GEAR_ICON = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" s
   + '0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>';
 
 // A boss's alert as the Bosses tab shows it: "own" (its own alert is on),
-// "all" (a field boss with no alert of its own, covered by "All field
+// "all" (a world boss with no alert of its own, covered by "All field
 // bosses"), or "" (none). `key` is the alert entry its settings are in.
 function bossAlert(id) {
   if (id in prefs.alerts) return { state: "own", key: id };
@@ -842,7 +842,7 @@ function renderHidden(shown) {
   }
 }
 
-// Field bosses: up ones first, then by when they're back, then the ones no
+// World bosses: up ones first, then by when they're back, then the ones no
 // meter has reported yet.
 function renderField(now) {
   const words = ui();
@@ -920,8 +920,8 @@ function render() {
   }
 }
 
-// The alert list: every event, the scheduled bosses, all field bosses at once,
-// then each field boss. A second lead, for while AION2 is closed, shows once
+// The alert list: every event, the scheduled bosses, all world bosses at once,
+// then each world boss. A second lead, for while AION2 is closed, shows once
 // the alert is on.
 function renderAlerts() {
   const words = ui();
@@ -958,7 +958,7 @@ function renderAlerts() {
     const leads = document.createElement("div");
     leads.className = "leads";
     leads.append(timeRow(words.whileOpen, lead), timeRow(a.closed, closed));
-    // A field boss: also, or only ("Don't remind"), when it is being fought
+    // A world boss: also, or only ("Don't remind"), when it is being fought
     // (pins.js).
     if (id.startsWith("field:") && typeof fightControl === "function") {
       lead.prepend(option(-1, pinUi().noRemind));
@@ -1025,7 +1025,7 @@ function renderAlerts() {
   els.alertList.replaceChildren(
     heading(words.events, events.map((ev) => ev.id)), ...events.map((ev) => item(ev.id, eventName(ev))),
     heading(words.scheduled, bosses.map((ev) => ev.id)), ...bosses.map((ev) => item(ev.id, eventName(ev))),
-    // The field bosses' button covers each boss, not "All field bosses",
+    // The world bosses' button covers each boss, not "All world bosses",
     // which stands for bosses with no alert of their own.
     heading(words.field, field.map((b) => `field:${b.id}`)), item(ALL_FIELD, words.allField),
     ...field.map((b) => item(`field:${b.id}`, `${text(b.name)} · ${text(b.where)}`)),
@@ -1232,12 +1232,12 @@ function checkAlerts(now) {
       }
     }
   }
-  // Field bosses being fought, for those who want to join (pins.js).
+  // World bosses being fought, for those who want to join (pins.js).
   if (typeof checkFights === "function") checkFights(now, announce);
   lastCheck = now;
 }
 
-// The field boss timers for the player's server: when the window opens, when
+// The world boss timers for the player's server: when the window opens, when
 // the server changes, and every 15 minutes.
 let feedTimer = 0;
 // Each boss's newest report, between the feed's and the player's own map's.
@@ -1256,7 +1256,7 @@ function mergeOwn(bosses) {
   }
   return out;
 }
-// Whether the server's field bosses change fast just now: one up, due within
+// Whether the server's world bosses change fast just now: one up, due within
 // 15 minutes, or overdue (in its window).
 function feedBusy(now) {
   return fieldBosses().some((b) => {

@@ -17,6 +17,22 @@ html, body {
   cursor: grab;
 }
 body.locked .pin { cursor: default; }
+/* Anchor mode's anchor (anchor.js): a small dashed handle the grid of icons
+   grows from, hidden while the icons are locked. */
+.pin.anchor { padding-top: 3px; cursor: move; }
+.pin.anchor .badge {
+  width: 24px;
+  height: 24px;
+  background: rgba(12, 16, 26, 0.75);
+  box-shadow: none;
+  border: 2px dashed #ffd54a;
+}
+.pin.anchor .glyph { font-size: 13px; }
+.pin.anchor .time, .pin.anchor .sub, .pin.anchor .name { display: none; }
+body.locked .pin.anchor { visibility: hidden; }
+/* "+N": the icons past the grid's room, named in its tooltip. */
+.pin.more .badge { --ring: #9aa4b2; }
+.pin.more .glyph { font-size: 16px; }
 .badge {
   --ring: #5aa9ff;
   width: 42px;

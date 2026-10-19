@@ -449,6 +449,14 @@ function levelUp(st, pet) {
   }
 }
 
+// Each pet's souls in a soul-gained event.
+const soulsIn = (data) => (Array.isArray(data?.souls) ? data.souls : data && data.pet != null ? [{ pet: data.pet, amount: data.amount }] : []);
+function gain(st, pet, amount) {
+  st.points[pet] = (st.points[pet] || 0) + amount;
+  st.lastGain = { pet, at: Date.now() };
+  levelUp(st, pet);
+}
+
 // What each event does to a character's counts.
 const handle = {
   "decoded:pet-list"(st, data) {
@@ -458,10 +466,11 @@ const handle = {
     for (const { pet, level } of data.levels || []) st.levels[pet] = level;
     for (const { pet, points } of data.points || []) st.points[pet] = points;
   },
-  "decoded:soul-gained"(st, { pet, amount }) {
-    st.points[pet] = (st.points[pet] || 0) + amount;
-    st.lastGain = { pet, at: Date.now() };
-    levelUp(st, pet);
+  // A kill can give souls for several pets at once: the packet lists each
+  // (BobbySk, 2026-10-19: two pets in one, and only the first was counted).
+  // Before 0.4.6 the decoder read one pet; its events still come as { pet, amount }.
+  "decoded:soul-gained"(st, data) {
+    for (const { pet, amount } of soulsIn(data)) gain(st, pet, amount);
   },
   "decoded:level-up"(st, { pet, level }) {
     // The game resets a pet's points as it levels (Karnif: 25 -> 0). Already
@@ -528,6 +537,13 @@ const queued = (fn) => {
 // the game's: [time, event, pet, amount or level, level after, souls after].
 const HISTORY = 200;
 function note(st, event, data) {
+  if (event === "decoded:soul-gained") {
+    for (const soul of soulsIn(data)) noteOne(st, event, soul);
+    return;
+  }
+  noteOne(st, event, data);
+}
+function noteOne(st, event, data) {
   const pets = event === "decoded:pet-list" ? [] : [data.pet];
   const value = event === "decoded:soul-gained" ? data.amount : event === "decoded:level-up" ? data.level : null;
   const entry = [new Date().toISOString(), event.replace("decoded:", ""), pets[0] ?? null, value];

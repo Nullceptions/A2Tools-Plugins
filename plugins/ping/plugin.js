@@ -22,6 +22,10 @@ const DEFAULTS = { show: true, background: true, bars: true, size: "1", good: 80
 let prefs = { ...DEFAULTS };
 let ms = null;
 let heard = false;
+// Whether AION2 is open: the widget only shows while it is. The meter says
+// at start (after a2.ready) and on each change; until then, closed, so the
+// widget doesn't flash up with the game shut.
+let gameOpen = false;
 
 const stateOf = (v) => (typeof v !== "number" ? "none" : v <= prefs.good ? "good" : v <= prefs.fair ? "fair" : "poor");
 // The widget's window: the pill and a little room for its shadow.
@@ -39,13 +43,15 @@ function render() {
   els.value.textContent = typeof ms === "number" ? `${ms} ms` : heard ? "– ms" : words.old;
 }
 
+const widgetShown = () => prefs.show && gameOpen;
+
 async function sendWidget() {
-  if (!prefs.show) return;
+  if (!widgetShown()) return;
   await a2.widgets.send("ping", { ms, state: stateOf(ms), scale: Number(prefs.size), background: prefs.background, bars: prefs.bars }).catch(() => {});
 }
 
 async function placeWidget() {
-  if (prefs.show) {
+  if (widgetShown()) {
     await a2.widgets.open("ping", sizeOf(Number(prefs.size))).catch(() => {});
     await sendWidget();
   } else {
@@ -62,6 +68,12 @@ a2.on("ping", (d) => {
   ms = d && typeof d.ms === "number" ? d.ms : null;
   render();
   sendWidget();
+});
+a2.on("game", (d) => {
+  const open = !!(d && d.running);
+  if (open === gameOpen) return;
+  gameOpen = open;
+  placeWidget();
 });
 a2.on("language", (code) => {
   words = UI[code] || UI[String(code).split("-")[0]] || UI.en;

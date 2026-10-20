@@ -1063,3 +1063,22 @@ body.alertOnly .openFull:hover {
 .addBtn.on { color: #8fc2ff; border-color: rgba(143, 194, 255, 0.45); }
 @media (prefers-reduced-motion: reduce) { .chev { transition: none; } }
 .alertOptionsBtn[hidden] { display: none; }
+
+/* A boss row's nearest teleport (plugin.js placeTip), on hover: the
+   dialogs' dark box and blue edge. */
+.tpTip {
+  position: fixed;
+  z-index: 20;
+  max-width: 300px;
+  padding: 6px 9px;
+  border-radius: 6px;
+  background: #161b26;
+  border: 1px solid rgba(143, 194, 255, 0.35);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 12px;
+  line-height: 1.45;
+  white-space: pre-line;
+  pointer-events: none;
+}
+.tpTip[hidden] { display: none; }

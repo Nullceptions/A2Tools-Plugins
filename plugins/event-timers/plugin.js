@@ -387,6 +387,45 @@ const ui = () => ({ ...(UI[language] || UI.en), ...(MORE_UI[language] || MORE_UI
 const aui = () => ALERT_UI[language] || ALERT_UI.en;
 const rui = () => ROW_UI[language] || ROW_UI.en;
 const text = (k) => EVENT_TEXT[k]?.[language] ?? EVENT_TEXT[k]?.en ?? k;
+
+// A boss's nearest teleport (teleports.js, from the game's map data), shown
+// on hover: in its row and on its icon. One line per spawn point, for the
+// player's side (both sides, named, before they log in).
+const TP_UI = {
+  en: { label: "Nearest teleport", tp: (n) => `TP ${n}` },
+  ko: { label: "가까운 텔레포트", tp: (n) => `${n}번` },
+  ja: { label: "最寄りのテレポート", tp: (n) => `${n}番` },
+  de: { label: "Nächster Teleport", tp: (n) => `TP ${n}` },
+  fr: { label: "Téléporteur le plus proche", tp: (n) => `TP ${n}` },
+  es: { label: "Teletransporte más cercano", tp: (n) => `TP ${n}` },
+  pt: { label: "Teleporte mais próximo", tp: (n) => `TP ${n}` },
+  ru: { label: "Ближайший телепорт", tp: (n) => `ТП ${n}` },
+  "zh-Hant": { label: "最近的傳送點", tp: (n) => `${n} 號` },
+  "zh-Hans": { label: "最近的传送点", tp: (n) => `${n} 号` },
+};
+const teleportTip = (id) => {
+  const spots = typeof TELEPORTS === "object" ? TELEPORTS[id] : null;
+  if (!spots?.length) return "";
+  const u = TP_UI[language] || TP_UI.en;
+  const side = serverSide();
+  // Several bosses at once (one event): each line names its boss.
+  const named = !!EVENTS.find((e) => e.id === id)?.also?.length;
+  const lines = [];
+  for (const spot of spots) {
+    for (const s of ["elyos", "asmodian"]) {
+      const t = spot[s];
+      if (!t || (side && s !== side)) continue;
+      const place = TELEPORT_TEXT[t.name]?.[language] ?? TELEPORT_TEXT[t.name]?.en ?? "";
+      const where = [t.tp != null ? u.tp(t.tp) : "", place].filter(Boolean).join(" – ");
+      const who = [named && spot.boss ? text(spot.boss) : "", !side && spot.elyos && spot.asmodian ? ui()[s] : ""]
+        .filter(Boolean).join(" · ");
+      const line = `${who ? `${who}: ` : ""}${where} (${unit(t.dist, "meter")})`;
+      if (!lines.includes(line)) lines.push(line);
+    }
+  }
+  if (!lines.length) return "";
+  return lines.length === 1 ? `${u.label}: ${lines[0]}` : `${u.label}:\n${lines.join("\n")}`;
+};
 const savePrefs = () => a2.storage.set("prefs", prefs).catch(() => {});
 const defaultLead = () => (LEADS.includes(Number(prefs.defaultLead)) ? Number(prefs.defaultLead) : DEFAULT_LEAD);
 const defaultClosed = () => {
@@ -716,6 +755,55 @@ for (const list of [els.scheduled, els.field]) {
     if (e.target.closest?.(".rowBtn")) rowPress = true;
   });
 }
+// A boss row's nearest teleport, in a tooltip while the pointer is on it.
+// One tooltip for the page, placed by the row (the rows are drawn anew every
+// second; the tooltip stays). Positions are corrected by what the browser
+// reports, so the page's zoom (Text size) doesn't throw them off.
+const tpTip = document.createElement("div");
+tpTip.className = "tpTip";
+tpTip.hidden = true;
+document.body.append(tpTip);
+let tpRow = null;
+const placeTip = () => {
+  const li = tpRow && [els.scheduled, els.field].map((l) => [...l.children].find((x) => x.dataset.id === tpRow)).find(Boolean);
+  const tip = li && teleportTip(tpRow);
+  if (!tip) {
+    tpTip.hidden = true;
+    return;
+  }
+  if (tpTip.textContent !== tip) tpTip.textContent = tip;
+  tpTip.hidden = false;
+  const r = li.getBoundingClientRect();
+  if (!r.width) {
+    tpTip.hidden = true;
+    return;
+  }
+  const set = (x, y) => {
+    tpTip.style.left = `${x}px`;
+    tpTip.style.top = `${y}px`;
+  };
+  set(100, 100);
+  const k = tpTip.getBoundingClientRect().left / 100 || 1;
+  const t = tpTip.getBoundingClientRect();
+  const below = r.bottom + 4 + t.height <= innerHeight || r.top - 4 - t.height < 0;
+  const x = Math.max(4, Math.min(r.left + 12, innerWidth - t.width - 4));
+  const y = below ? r.bottom + 4 : r.top - 4 - t.height;
+  set(x / k, y / k);
+};
+for (const list of [els.scheduled, els.field]) {
+  list.addEventListener("mouseover", (e) => {
+    const id = e.target.closest?.("li[data-id]")?.dataset.id || null;
+    if (id === tpRow) return;
+    tpRow = id;
+    placeTip();
+  });
+  list.addEventListener("mouseleave", () => {
+    tpRow = null;
+    placeTip();
+  });
+}
+addEventListener("scroll", () => tpRow && placeTip(), true);
+
 document.addEventListener("pointerup", endPress, true);
 document.addEventListener("pointercancel", endPress, true);
 window.addEventListener("blur", endPress);
@@ -741,6 +829,7 @@ for (const btn of document.querySelectorAll(".foldBtn")) {
 // buttons (rowActions) in place of the bell.
 function row({ id, name, where, countdown, at, running, up, soon, hide, actions }) {
   const li = document.createElement("li");
+  li.dataset.id = id;
   li.classList.toggle("running", !!running);
   li.classList.toggle("up", !!up);
   li.classList.toggle("soon", !!soon && !running && !up);
@@ -900,6 +989,8 @@ function render() {
   const refocus = focused && { act: focused.dataset.act, id: focused.dataset.id };
   renderSchedule(els.scheduled, scheduled("boss"), now, { hideable: false, actions: true });
   renderField(now);
+  // Rows move as timers change: the teleport tooltip follows its row.
+  if (tpRow) placeTip();
   if (refocus) {
     const again = [...els.views.bosses.querySelectorAll(".rowBtn")]
       .find((b) => b.dataset.act === refocus.act && b.dataset.id === refocus.id);

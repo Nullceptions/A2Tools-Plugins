@@ -45,6 +45,12 @@ The game's own tables: `EventSchedule` and `FieldEvent` for the field events, `P
 python tools/event-timers/build.py --tables <Output>/AION2/Content/Data/Table --tw-l10n <TW Output>/AION2/Content/Data/Table/L10N
 ```
 
+Hovering a boss, in the Bosses tab or on its icon, shows its nearest teleport: the teleport number and name, and how far it lands from the boss. It's worked out from the maps' spawn points and teleport landing spots, on the boss's own map and for your faction. Then rebuild `teleports.js` (needs `pip install ijson`):
+
+```
+python tools/event-timers/build_teleports.py --tables <Output>/AION2/Content/Data/Table --tw-l10n <TW Output>/AION2/Content/Data/Table/L10N
+```
+
 World bosses that respawn a while after they're killed (most of the world map's named bosses) aren't on a schedule, so they aren't here yet.
 
 ## Permissions

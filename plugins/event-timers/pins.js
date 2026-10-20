@@ -523,7 +523,9 @@ async function updatePins(now) {
         id,
         // For anchor mode's Sort by (anchor.js).
         order: { id, fight: !!fight, running: !!state.running && !state.killed, hp: state.hp ?? null, until, killed: !!state.killed },
-        data: { name: state.name, showName: !!pin.name, countdown, sub, hp: state.killed ? 0 : state.hp ?? null,
+        // The icon's tooltip: its name, and a boss's nearest teleport.
+        data: { name: state.name, tip: teleportTip(id) && [state.name, teleportTip(id)].join("\n"),
+          showName: !!pin.name, countdown, sub, hp: state.killed ? 0 : state.hp ?? null,
           running: state.running, due: due && !state.killed, effect: pin.effect, kind: state.kind, icon: pinIcon(id, state.kind) },
       });
     }

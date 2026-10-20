@@ -4,7 +4,8 @@ Shows how many souls each of your pets still needs to reach level 3 (Special pet
 
 ## Layouts
 
-Filters → **Layout** draws the list one of four ways:
+Filters → **Layout** draws the list one of four ways. In each, a pet's genus (Cogni, Fera, Natura, Varian) shows beside its name, in its colour.
+
 
 - **Cards** (the default): each pet's level in a ring of its genus colour, the ring filling with the souls toward the next level; the souls left to level 3 in the card's corner; and under its name the way to level 3 as three steps (5, 25 and 75 souls), the steps done full and the current one by its souls. The card's edge is its genus colour, green for the pet being farmed, gold at level 3.
 - **Filled cards**: the genus icon, the card filling with the souls toward the next level, the level as dots and the souls left large.

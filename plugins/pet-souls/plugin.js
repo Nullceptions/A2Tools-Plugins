@@ -306,8 +306,9 @@ const el = (tag, cls, text) => {
   if (text != null) node.textContent = text;
   return node;
 };
-// Its pin, its name (double-click to rename) and, while farmed, the tag.
-function nameOf(p, { pinned, farming }) {
+// Its pin, its name (double-click to rename), its genus (unless the layout
+// shows it elsewhere) and, while farmed, the tag.
+function nameOf(p, { pinned, farming }, { genus = true } = {}) {
   const name = el("span", "name");
   const pin = el("button", "pin", pinned ? "★" : "☆");
   pin.type = "button";
@@ -317,6 +318,7 @@ function nameOf(p, { pinned, farming }) {
   text.title = `${p.name}${p.genus ? ` · ${genusName(p.genus)}` : ""} (double-click to rename)`;
   text.addEventListener("dblclick", () => rename(p.id, text));
   name.append(pin, text);
+  if (genus && p.genus) name.append(el("span", "genusTag", genusName(p.genus)));
   if (farming) {
     const tag = el("span", "farming", "farming");
     tag.title = "You picked up a soul for this pet in the last 30 minutes";
@@ -369,7 +371,7 @@ const LAYOUTS = {
     sub.append(pips, el("span", "count", p.target ? `${p.points}/${p.target}` : "MAX"));
     if (p.genus) sub.append(el("span", "genusName", genusName(p.genus)));
     const top = el("div", "line");
-    top.append(nameOf(p, flags));
+    top.append(nameOf(p, flags, { genus: false }));
     main.append(top, sub);
     const left = el("span", "left");
     if (p.target) left.append(el("b", "", String(p.left)), el("small", "", "to Lv 3"));

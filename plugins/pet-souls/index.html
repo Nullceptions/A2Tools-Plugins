@@ -7,20 +7,35 @@
   </head>
   <body>
     <div class="controls">
-      <div class="status"></div>
-      <div class="summary"></div>
-      <div class="chips genus" role="group" aria-label="Genus"></div>
-      <div class="chips levels" role="group" aria-label="Level"></div>
-      <div class="chips regions" role="group" aria-label="Regions" title="Regions: the pets whose souls drop in the ones turned on, and their spawns there. Click to turn one off or on"></div>
-      <label class="option"><input type="checkbox" class="hideMax" checked /> Hide pets at level 3</label>
-      <label class="option sizeRow"><span class="scaleLabel">Text size</span> <select class="scaleSelect"></select></label>
-      <input type="search" class="search" placeholder="Search pets" aria-label="Search pets" spellcheck="false" />
+      <div class="totals">
+        <div class="summary"></div>
+        <div class="overall" aria-hidden="true"><span></span></div>
+        <div class="status"></div>
+      </div>
+      <div class="toolbar">
+        <input type="search" class="search" placeholder="Search pets" aria-label="Search pets" spellcheck="false" />
+        <button type="button" class="filtersButton" aria-expanded="false" title="Genus, level, regions and text size">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4" /></svg>
+          <span class="filtersLabel">Filters</span> <span class="filterCount"></span>
+        </button>
+      </div>
+      <div class="filters" hidden>
+        <div class="chips genus" role="group" aria-label="Genus"></div>
+        <div class="chips levels" role="group" aria-label="Level"></div>
+        <div class="chips regions" role="group" aria-label="Regions" title="Regions: the pets whose souls drop in the ones turned on, and their spawns there. Click to turn one off or on"></div>
+        <div class="optionRow">
+          <label class="option"><input type="checkbox" class="hideMax" checked /> Hide pets at level 3</label>
+          <label class="option" title="Pets no monster drops: their souls come only from pet chests"><input type="checkbox" class="chestOnly" /> Show pets only from chests</label>
+          <label class="option sizeRow">Layout <select class="layoutSelect"></select></label>
+          <label class="option sizeRow"><span class="scaleLabel">Text size</span> <select class="scaleSelect"></select></label>
+        </div>
+      </div>
     </div>
     <div class="head" role="row">
+      <button type="button" data-sort="left">To Lv 3</button>
+      <button type="button" data-sort="progress">Souls</button>
       <button type="button" data-sort="level">Lv</button>
       <button type="button" data-sort="name">Pet</button>
-      <button type="button" data-sort="progress">Souls</button>
-      <button type="button" data-sort="left">To Lv 3</button>
     </div>
     <ol class="pets"></ol>
     <p class="empty" hidden>No pets match.</p>

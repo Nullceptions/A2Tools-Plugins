@@ -1,6 +1,19 @@
 # Pet Soul Tracker
 
-Shows how many souls each of your pets still needs to reach level 3 (Special pets are left out: they come at their highest level). Filter by genus and level, or search by name: the bar shows the current level's progress, and **To Lv 3** the total still to collect.
+Shows how many souls each of your pets still needs to reach level 3 (Special pets are left out: they come at their highest level). At the top: the souls still needed for every pet, how many pets are left, and a bar of how far along you are. Search by name, or open **Filters** for genus, level, regions, "Hide pets at level 3", the layout and the text size (the button shows how many filters are on).
+
+## Layouts
+
+Filters → **Layout** draws the list one of four ways:
+
+- **Cards** (the default): each pet's level in a ring of its genus colour, the ring filling with the souls toward the next level; the souls left to level 3 in the card's corner; and under its name the way to level 3 as three steps (5, 25 and 75 souls), the steps done full and the current one by its souls. The card's edge is its genus colour, green for the pet being farmed, gold at level 3.
+- **Filled cards**: the genus icon, the card filling with the souls toward the next level, the level as dots and the souls left large.
+- **Rows**: one line per pet, with the ring and the three steps: the most pets on screen.
+- **Classic**: the table as before 0.4.7, its columns Lv, Pet, Souls and To Lv 3.
+
+## Pets only from chests
+
+A pet no monster drops can only be raised with Pet Soul Chests (the battle pass's), so it can't be farmed: it is hidden unless **Show pets only from chests** is ticked under Filters. A pinned pet always shows. The totals at the top count the pets shown.
 
 It reads three things the game sends: every pet's level and soul points when you log in, each soul as you pick it up, and each level a pet reaches. Counts are kept per server, as the game keeps a pet collection for all your characters on a server, so the list survives restarts and switching characters; logging in again resyncs it from the game.
 
@@ -8,7 +21,7 @@ A soul shows the moment you pick it up on a meter that sends a plugin's records 
 
 Souls per level: 5 (level 0 → 1, inferred), 25 (1 → 2) and 75 (2 → 3).
 
-Pets show by their in-game names, in the meter's language (all ten; `pets.js`, built from the game's `String_str_veh_*` texts). Double-click a name to give it your own; clear it to go back. Search filters by name (shown or English) or id, and each column header sorts the list; pressing it again reverses the order.
+Pets show by their in-game names, in the meter's language (all ten; `pets.js`, built from the game's `String_str_veh_*` texts). Double-click a name to give it your own; clear it to go back. Search filters by name (shown or English) or id, and the sort buttons (To Lv 3, Souls, Lv, Pet) sort the list; pressing one again reverses the order.
 
 A pet levels up as soon as its souls reach what its level needs, and its count starts again from 0, as the game's does. The game's own level-up record doesn't come for every step (a pet at level 0 showed 24 souls in 0.2.0), so the counts level themselves; the next login's pet list corrects them either way. Counts saved by 0.2.0 are corrected the same way when they're loaded.
 
@@ -33,7 +46,7 @@ Every name in a pet's sources (monsters, zones, maps, Kibelisks, chests) shows i
 
 - `decoder:pet-list`, `decoder:soul-gained`, `decoder:level-up`: read your own pets' levels and soul gains.
 - `events:character`: keep a separate list per server.
-- `storage`: save the counts (with the last 200 changes per server, to trace a count that drifts from the game's), your pet names, the sort order, pins and region choice on this computer.
+- `storage`: save the counts (with the last 200 changes per server, to trace a count that drifts from the game's), your pet names, the sort order, pins, region choice, filters and layout on this computer.
 
 ## Try it (developer mode)
 

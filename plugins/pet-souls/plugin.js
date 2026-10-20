@@ -18,9 +18,15 @@ const els = {
   search: document.querySelector(".search"),
   status: document.querySelector(".status"),
   summary: document.querySelector(".summary"),
+  overall: document.querySelector(".overall span"),
+  filtersButton: document.querySelector(".filtersButton"),
+  filterCount: document.querySelector(".filterCount"),
+  filters: document.querySelector(".filters"),
   hideMax: document.querySelector(".hideMax"),
+  chestOnly: document.querySelector(".chestOnly"),
   scaleLabel: document.querySelector(".scaleLabel"),
   scale: document.querySelector(".scaleSelect"),
+  layout: document.querySelector(".layoutSelect"),
   genus: document.querySelector(".genus"),
   levels: document.querySelector(".levels"),
   regions: document.querySelector(".regions"),
@@ -37,7 +43,7 @@ let language = "en";
 let openId = null; // the pet whose sources are shown
 // How the list is sorted, and whether maxed pets show; kept across restarts.
 // hiddenRegions: null until the user picks; until then the other side's maps hide.
-let prefs = { sort: "left", desc: false, hideMax: true, genus: "", level: "", pinned: [], hiddenRegions: null, scale: 1 };
+let prefs = { sort: "left", desc: false, hideMax: true, genus: "", level: "", pinned: [], hiddenRegions: null, scale: 1, filtersOpen: false, chestOnly: false, layout: "cards" };
 // Text size: the whole page scaled, spacing and controls with the text. 100%
 // is BASE_ZOOM, a little larger than the stylesheet's own sizes.
 const SCALES = [0.9, 1, 1.1, 1.25, 1.5];
@@ -45,6 +51,15 @@ const BASE_ZOOM = 1.1;
 function applyScale() {
   const scale = SCALES.includes(Number(prefs.scale)) ? Number(prefs.scale) : 1;
   document.documentElement.style.zoom = String(Math.round(BASE_ZOOM * scale * 1000) / 1000);
+}
+// The layout, as a class on the page: the stylesheet draws each its own way.
+function applyLayout() {
+  const layout = LAYOUT_NAMES[prefs.layout] ? prefs.layout : "cards";
+  for (const name of Object.keys(LAYOUT_NAMES)) document.body.classList.toggle(`layout-${name}`, name === layout);
+  if (!els.layout.options.length) {
+    els.layout.replaceChildren(...Object.entries(LAYOUT_NAMES).map(([value, label]) => Object.assign(document.createElement("option"), { value, textContent: label })));
+  }
+  els.layout.value = layout;
 }
 function renderScale() {
   els.scaleLabel.textContent = ui().textSize;
@@ -142,6 +157,12 @@ const savePrefs = () => a2.storage.set("prefs", prefs).catch(() => {});
 // The game's name in the meter's language, then English; the user's own name wins.
 const gameName = (id) => PET_NAMES[id]?.[language] || PET_NAMES[id]?.en || `Pet #${id}`;
 const petName = (id) => names[id] || gameName(id);
+// A pet no monster drops: its souls come only from pet chests (the battle
+// pass's), so it can't be farmed. Hidden unless asked for.
+const chestOnly = (id) => {
+  const src = PET_SOURCES[id];
+  return !!src && !src.drops.length && src.chests.length > 0;
+};
 const genusName = (genus) => GENUS_NAMES[genus]?.[language] || GENUS_NAMES[genus]?.en || genus;
 
 const SORTS = {
@@ -157,7 +178,9 @@ function render() {
   // Special pets come at their highest level and take no souls, so they are
   // left out, as are pets only found on maps not open yet (the game lists
   // them anyway). A pet missing from PET_GENUS (newer than this plugin) stays in.
-  const pets = [...ids].filter((id) => PET_GENUS[id] !== "special" && !PET_SOURCES[id]?.unreleased).map((id) => {
+  const pinned = (prefs.pinned || []).map(String);
+  const pets = [...ids].filter((id) => PET_GENUS[id] !== "special" && !PET_SOURCES[id]?.unreleased)
+    .filter((id) => prefs.chestOnly || !chestOnly(id) || pinned.includes(id)).map((id) => {
     const level = state.levels[id] || 0;
     const points = state.points[id] || 0;
     const target = NEEDED[level];
@@ -176,11 +199,23 @@ function render() {
   });
   const open = pets.filter((p) => p.level < MAX_LEVEL);
   const souls = open.reduce((n, p) => n + p.left, 0);
-  els.summary.textContent = pets.length
-    ? `${open.length} of ${pets.length} pets still to reach level 3 · ${souls} souls to go`
-    : "";
+  // The souls still to go, large; the pets left beside them; under them a bar
+  // of every soul picked up toward level 3 so far.
+  const num = (n) => n.toLocaleString(language);
+  els.summary.replaceChildren();
+  if (pets.length) {
+    const big = document.createElement("b");
+    big.textContent = num(souls);
+    const pl = document.createElement("span");
+    pl.className = "petsLeft";
+    pl.textContent = `${open.length} / ${pets.length} pets to go`;
+    els.summary.append(big, " souls to level 3", pl);
+  }
+  const needed = pets.length * TO_MAX[0];
+  els.overall.parentElement.hidden = !pets.length;
+  els.overall.style.width = needed ? `${(100 * (needed - souls)) / needed}%` : "0";
   els.status.textContent = state.syncedAt
-    ? `Synced at login, ${new Date(state.syncedAt).toLocaleString()}`
+    ? `Synced at login ${syncedText(state.syncedAt)}`
     : "Log in to a character (or relog) to read your pets.";
 
   // A search matches the shown name, the English one or the id.
@@ -212,7 +247,11 @@ function render() {
     (p) => String(Math.min(p.level, MAX_LEVEL)),
     NEEDED.map((_, l) => [String(l), `Lv ${l}`]).concat([[String(MAX_LEVEL), `Lv ${MAX_LEVEL}`]]));
   // Pinned pets first, in the order pinned; then the one being farmed; then the chosen sort.
-  const pinned = (prefs.pinned || []).map(String);
+  const active = Number(!!prefs.chestOnly) + Number(!!prefs.genus) + Number(!!prefs.level) + Number(hidden.size > 0 && !!prefs.regionsPicked);
+  els.filterCount.textContent = active ? String(active) : "";
+  els.filtersButton.classList.toggle("active", active > 0);
+  els.filters.hidden = !prefs.filtersOpen;
+  els.filtersButton.setAttribute("aria-expanded", String(!!prefs.filtersOpen));
   const farming = state.lastGain && Date.now() - state.lastGain.at < FARMING_MS ? String(state.lastGain.pet) : null;
   const pinRank = (p) => (pinned.includes(p.id) ? pinned.indexOf(p.id) : pinned.length + (p.id === farming ? 0 : 1));
   els.regions.replaceChildren(
@@ -241,44 +280,14 @@ function render() {
   }
   els.empty.hidden = !(pets.length && !shown.length);
 
+  const build = LAYOUTS[prefs.layout] || LAYOUTS.cards;
   els.list.replaceChildren(
     ...shown.map((p) => {
-      const li = document.createElement("li");
-      const name = document.createElement("span");
-      name.className = "name";
-      const pin = document.createElement("button");
-      pin.type = "button";
-      pin.className = "pin";
-      pin.textContent = pinned.includes(p.id) ? "★" : "☆";
-      pin.title = pinned.includes(p.id) ? "Unpin" : "Pin to the top";
-      pin.setAttribute("aria-pressed", String(pinned.includes(p.id)));
-      name.append(pin, p.name);
-      if (p.id === farming) {
-        const tag = document.createElement("span");
-        tag.className = "farming";
-        tag.textContent = "farming";
-        tag.title = "You picked up a soul for this pet in the last 30 minutes";
-        name.append(tag);
-      }
-      name.title = `${p.name} (double-click to rename)`;
-      name.addEventListener("dblclick", (e) => { if (!e.target.closest(".pin")) rename(p.id, name); });
-      const level = document.createElement("span");
-      level.className = "level";
-      level.textContent = p.level >= MAX_LEVEL ? "MAX" : `Lv ${p.level}`;
-      const bar = document.createElement("span");
-      bar.className = "bar";
-      const fill = document.createElement("span");
-      fill.style.width = `${Math.min(100, p.progress * 100)}%`;
-      const count = document.createElement("span");
-      count.className = "count";
-      count.textContent = p.target ? `${p.points}/${p.target}` : "";
-      bar.append(fill, count);
-      const left = document.createElement("span");
-      left.className = "left";
-      left.textContent = p.target ? String(p.left) : "";
-      left.title = p.target ? `${p.left} souls to level 3` : "";
-      li.append(level, name, bar, left);
+      const li = build(p, { pinned: pinned.includes(p.id), farming: p.id === farming });
       li.dataset.id = p.id;
+      li.dataset.genus = p.genus;
+      li.classList.toggle("max", p.level >= MAX_LEVEL);
+      li.classList.toggle("farmed", p.id === farming);
       if (PET_SOURCES[p.id]) li.classList.add("hasWhere");
       if (openId === p.id) {
         li.classList.add("open");
@@ -287,6 +296,165 @@ function render() {
       return li;
     }),
   );
+}
+
+// ---- The layouts: how each pet's row is drawn (Settings → Layout) --------
+
+const el = (tag, cls, text) => {
+  const node = document.createElement(tag);
+  if (cls) node.className = cls;
+  if (text != null) node.textContent = text;
+  return node;
+};
+// Its pin, its name (double-click to rename) and, while farmed, the tag.
+function nameOf(p, { pinned, farming }) {
+  const name = el("span", "name");
+  const pin = el("button", "pin", pinned ? "★" : "☆");
+  pin.type = "button";
+  pin.title = pinned ? "Unpin" : "Pin to the top";
+  pin.setAttribute("aria-pressed", String(pinned));
+  const text = el("span", "nameText", p.name);
+  text.title = `${p.name}${p.genus ? ` · ${genusName(p.genus)}` : ""} (double-click to rename)`;
+  text.addEventListener("dblclick", () => rename(p.id, text));
+  name.append(pin, text);
+  if (farming) {
+    const tag = el("span", "farming", "farming");
+    tag.title = "You picked up a soul for this pet in the last 30 minutes";
+    name.append(tag);
+  }
+  return name;
+}
+// The way to level 3 in its three steps (5, 25 and 75 souls): the steps
+// done full, the current one by its souls, the count beside it.
+function stepsOf(p) {
+  const souls = el("span", "souls");
+  const steps = el("span", "steps");
+  steps.title = p.target ? `${p.points}/${p.target} souls toward level ${p.level + 1}` : "Level 3";
+  for (let l = 0; l < MAX_LEVEL; l += 1) {
+    const step = el("i");
+    const fill = l < p.level ? 1 : l === p.level && p.target ? p.points / p.target : 0;
+    step.style.setProperty("--f", `${Math.min(100, fill * 100)}%`);
+    steps.append(step);
+  }
+  souls.append(steps, el("span", "count", p.target ? `${p.points}/${p.target}` : "MAX"));
+  return souls;
+}
+const leftTitle = (p) => (p.target ? `${p.left} souls to level 3` : "");
+
+const LAYOUTS = {
+  // A card: the level ring, the name and the souls left in its corner, and
+  // under them the three steps.
+  cards(p, flags) {
+    const li = el("li");
+    const left = el("span", "left");
+    if (p.target) left.append(el("b", "", String(p.left)), " left");
+    left.title = leftTitle(p);
+    const top = el("div", "line");
+    top.append(nameOf(p, flags), left);
+    const main = el("div", "main");
+    main.append(top, stepsOf(p));
+    li.append(levelRing(p), main);
+    return li;
+  },
+  // A card that fills with the souls toward the next level: its genus icon,
+  // its level as dots, the souls left large.
+  filled(p, flags) {
+    const li = el("li");
+    li.style.setProperty("--p", `${Math.min(100, p.progress * 100)}%`);
+    const main = el("div", "main");
+    const sub = el("div", "line sub");
+    const pips = el("span", "pips");
+    pips.title = `Level ${Math.min(p.level, MAX_LEVEL)}`;
+    for (let l = 0; l < MAX_LEVEL; l += 1) pips.append(el("i", l < p.level ? "on" : ""));
+    sub.append(pips, el("span", "count", p.target ? `${p.points}/${p.target}` : "MAX"));
+    if (p.genus) sub.append(el("span", "genusName", genusName(p.genus)));
+    const top = el("div", "line");
+    top.append(nameOf(p, flags));
+    main.append(top, sub);
+    const left = el("span", "left");
+    if (p.target) left.append(el("b", "", String(p.left)), el("small", "", "to Lv 3"));
+    left.title = leftTitle(p);
+    li.append(genusIcon(p.genus), main, left);
+    return li;
+  },
+  // One line: the level ring, the name, the three steps, the souls left.
+  rows(p, flags) {
+    const li = el("li");
+    const left = el("span", "left", p.target ? String(p.left) : "");
+    left.title = leftTitle(p);
+    li.append(levelRing(p), nameOf(p, flags), stepsOf(p), left);
+    return li;
+  },
+  // The table as it was: level, name, a bar of the souls toward the next
+  // level, the souls left.
+  classic(p, flags) {
+    const li = el("li");
+    const bar = el("span", "bar");
+    const fill = el("span");
+    fill.style.width = `${Math.min(100, p.progress * 100)}%`;
+    bar.append(fill, el("span", "count", p.target ? `${p.points}/${p.target}` : ""));
+    const left = el("span", "left", p.target ? String(p.left) : "");
+    left.title = leftTitle(p);
+    li.append(el("span", "level", p.level >= MAX_LEVEL ? "MAX" : `Lv ${p.level}`), nameOf(p, flags), bar, left);
+    return li;
+  },
+};
+const LAYOUT_NAMES = { cards: "Cards", filled: "Filled cards", rows: "Rows", classic: "Classic" };
+
+// Each genus's mark: an eye (Cogni), a paw (Fera), a leaf (Natura), a
+// spiral (Varian).
+const GENUS_ICONS = {
+  cogni: "M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Zm9.5 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z",
+  fera: "M12 13c-3 0-5.5 3-5.5 5.2 0 1.6 1.4 2.3 2.8 2.3 1.2 0 1.8-.6 2.7-.6s1.5.6 2.7.6c1.4 0 2.8-.7 2.8-2.3C17.5 16 15 13 12 13ZM5 11.5a2 2.4 0 1 0 0 .01M19 11.5a2 2.4 0 1 0 0 .01M9 7a2 2.5 0 1 0 0 .01M15 7a2 2.5 0 1 0 0 .01",
+  natura: "M5 19C5 10 10 5 20 4c0 9-5 15-13 15m-2 0 8-8",
+  varian: "M12 12m-1 0a1 1 0 1 1 2 0 3 3 0 1 1-6 0 5 5 0 1 1 10 0 7 7 0 1 1-14 0 9 9 0 0 1 9-9",
+};
+function genusIcon(genus) {
+  const NS = "http://www.w3.org/2000/svg";
+  const box = el("span", "icon");
+  const svg = document.createElementNS(NS, "svg");
+  svg.setAttribute("viewBox", "0 0 24 24");
+  svg.setAttribute("aria-hidden", "true");
+  const path = document.createElementNS(NS, "path");
+  path.setAttribute("d", GENUS_ICONS[genus] || "M12 12m-4 0a4 4 0 1 0 8 0 4 4 0 1 0-8 0");
+  svg.append(path);
+  box.append(svg);
+  return box;
+}
+
+// A pet's level in a ring of its genus colour, the ring filling with the
+// souls toward the next level (full and gold at level 3).
+function levelRing(p) {
+  const NS = "http://www.w3.org/2000/svg";
+  const box = document.createElement("span");
+  box.className = "ring";
+  box.title = `Level ${Math.min(p.level, MAX_LEVEL)}`;
+  const svg = document.createElementNS(NS, "svg");
+  svg.setAttribute("viewBox", "0 0 36 36");
+  svg.setAttribute("aria-hidden", "true");
+  const circle = (cls, part) => {
+    const c = document.createElementNS(NS, "circle");
+    c.setAttribute("class", cls);
+    c.setAttribute("cx", "18");
+    c.setAttribute("cy", "18");
+    c.setAttribute("r", "15");
+    c.setAttribute("pathLength", "100");
+    if (part != null) c.setAttribute("stroke-dasharray", `${part} 100`);
+    return c;
+  };
+  svg.append(circle("track"), circle("arc", Math.round(Math.min(1, p.progress) * 100)));
+  const n = document.createElement("b");
+  n.textContent = String(Math.min(p.level, MAX_LEVEL));
+  box.append(svg, n);
+  return box;
+}
+
+// When the pet list came: the time today, else the date and time.
+function syncedText(at) {
+  const d = new Date(at);
+  const today = d.toDateString() === new Date().toDateString();
+  const time = d.toLocaleTimeString(language, { hour: "2-digit", minute: "2-digit" });
+  return today ? time : `${d.toLocaleDateString(language, { month: "short", day: "numeric" })} ${time}`;
 }
 
 // Where a pet's souls come from: the monsters that drop them (level, chance,
@@ -307,6 +475,12 @@ function whereOf(id) {
     div.textContent = parts.filter(Boolean).join(" · ");
     return div;
   };
+  const tag = (t, cls = "") => {
+    const span = document.createElement("span");
+    span.className = `tag ${cls}`.trim();
+    span.textContent = t;
+    return span;
+  };
   const hidden = new Set(hiddenRegions());
   const elsewhere = new Set();
   // The monsters with the most spawns first: the easiest to find (a
@@ -317,7 +491,10 @@ function whereOf(id) {
       elsewhere.add(regionOf(d));
       continue;
     }
-    box.append(line("who", text(d.npc), d.level && `Lv ${d.level}`, d.chance));
+    const who = line("who", text(d.npc));
+    if (d.level) who.append(tag(`Lv ${d.level}`));
+    if (d.chance) who.append(tag(d.chance, "chance"));
+    box.append(who);
     // In the Abyss each side has Kibelisks of its own: yours, when known.
     const k = d.bySide?.[sideOf(key)] || d.kibelisk;
     // The teleport's number as the in-game map lists it, where known.
@@ -346,7 +523,9 @@ function whereOf(id) {
     box.append(at);
   }
   for (const c of src.chests) {
-    box.append(line("who", text(c.name), words.perOpening(c.chance)));
+    const who = line("who chest", text(c.name));
+    who.append(tag(words.perOpening(c.chance), "chance"));
+    box.append(who);
     if (c.from) box.append(line("at", words.boxFrom(listOf(c.from.map(text)))));
   }
   if (!src.drops.length && !src.chests.length) box.append(line("at", words.noDrops));
@@ -605,10 +784,26 @@ els.regions.addEventListener("click", (e) => {
   savePrefs();
   render();
 });
+els.filtersButton.addEventListener("click", () => {
+  prefs.filtersOpen = !prefs.filtersOpen;
+  savePrefs();
+  render();
+});
+els.layout.addEventListener("change", () => {
+  prefs.layout = els.layout.value;
+  savePrefs();
+  applyLayout();
+  render();
+});
 els.scale.addEventListener("change", () => {
   prefs.scale = Number(els.scale.value);
   savePrefs();
   applyScale();
+});
+els.chestOnly.addEventListener("change", () => {
+  prefs.chestOnly = els.chestOnly.checked;
+  savePrefs();
+  render();
 });
 els.hideMax.addEventListener("change", () => {
   prefs.hideMax = els.hideMax.checked;
@@ -646,6 +841,8 @@ els.head.addEventListener("click", (e) => {
   names = (await a2.storage.get("names").catch(() => null)) || {};
   prefs = { ...prefs, ...((await a2.storage.get("prefs").catch(() => null)) || {}) };
   els.hideMax.checked = prefs.hideMax;
+  els.chestOnly.checked = !!prefs.chestOnly;
+  applyLayout();
   applyScale();
   renderScale();
   await a2.ready();

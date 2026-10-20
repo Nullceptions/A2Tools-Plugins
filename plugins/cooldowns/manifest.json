@@ -1,0 +1,74 @@
+{
+  "id": "cooldowns",
+  "name": "Cooldowns",
+  "version": "0.1.0",
+  "apiVersion": 2,
+  "author": "A2 Tools",
+  "description": "Your skill cooldowns and buffs as icons you place anywhere over the game, with a sound or your skill's name spoken when one is ready.",
+  "permissions": [
+    "storage",
+    "window",
+    "widgets",
+    "events:character",
+    "decoder:skill-used",
+    "decoder:cooldowns",
+    "decoder:buff-added",
+    "decoder:buff-changed",
+    "decoder:buff-removed"
+  ],
+  "decoders": [
+    {
+      "name": "skill-used",
+      "opcode": "01 38",
+      "immediate": true,
+      "fields": [ { "type": "skip:3" }, { "name": "skill", "type": "u32" } ]
+    },
+    {
+      "name": "cooldowns",
+      "opcode": "47 38",
+      "immediate": true,
+      "fields": [
+        { "name": "skills", "type": "list", "count": "u8", "fields": [ { "name": "group", "type": "u32" }, { "name": "ms", "type": "varint" } ] }
+      ]
+    },
+    {
+      "name": "buff-added",
+      "opcode": "2A 38",
+      "self": "entity",
+      "immediate": true,
+      "fields": [
+        { "name": "entity", "type": "varint" }, { "type": "skip:1" }, { "name": "flags", "type": "u8" },
+        { "name": "instance", "type": "varint" }, { "name": "abnormal", "type": "u32" },
+        { "name": "length", "type": "u64" }, { "name": "end", "type": "u64" },
+        { "name": "caster", "type": "varint" }, { "name": "level", "type": "u8" }, { "name": "skill", "type": "u32" }
+      ]
+    },
+    {
+      "name": "buff-changed",
+      "opcode": "2B 38",
+      "self": "entity",
+      "immediate": true,
+      "fields": [
+        { "name": "entity", "type": "varint" }, { "name": "flags", "type": "u8" },
+        { "name": "instance", "type": "varint" }, { "name": "abnormal", "type": "u32" },
+        { "name": "length", "type": "u64" }, { "name": "end", "type": "u64" }
+      ]
+    },
+    {
+      "name": "buff-removed",
+      "opcode": "2C 38",
+      "self": "entity",
+      "immediate": true,
+      "fields": [
+        { "name": "entity", "type": "varint" }, { "name": "count", "type": "u8" },
+        { "name": "kind", "type": "u8" }, { "name": "instance", "type": "varint" }
+      ]
+    }
+  ],
+  "ui": {
+    "panel": {
+      "width": 380,
+      "height": 560
+    }
+  }
+}

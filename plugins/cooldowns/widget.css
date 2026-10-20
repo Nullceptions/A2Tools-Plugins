@@ -1,0 +1,80 @@
+/* The icons: a dark sweep and the seconds while a skill cools down, a green
+   bar and its seconds while a buff lasts. */
+:root { --s: 42px; --gap: 5px; }
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+  user-select: none;
+}
+.grid {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: var(--gap);
+  padding: calc(var(--gap) + 4px);
+  width: 100%;
+  height: 100%;
+}
+.grid.left { flex-direction: row-reverse; }
+.grid.down { flex-direction: column; }
+.grid.up { flex-direction: column-reverse; }
+.slot {
+  position: relative;
+  width: var(--s);
+  height: var(--s);
+  flex: none;
+  border-radius: calc(var(--s) * 0.14);
+  overflow: hidden;
+  background: #10161f center / cover no-repeat;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.8), 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+.slot[hidden] { display: none; }
+body:not(.locked) .slot { cursor: grab; }
+/* Unlocked, every icon shows, dimmed when there is nothing to show, so the
+   bar can be placed. */
+.slot.idle { opacity: 0.35; }
+.sweep {
+  position: absolute;
+  inset: 0;
+  background: conic-gradient(rgba(0, 0, 0, 0.68) var(--p, 0deg), rgba(0, 0, 0, 0.12) 0);
+}
+.slot:not(.cooling) .sweep { display: none; }
+.num {
+  position: absolute;
+  font-family: "Bahnschrift", "Segoe UI", sans-serif;
+  font-variation-settings: "wght" 650, "wdth" 87.5;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 0 2px #000, 0 1px 2px #000, 0 0 4px #000;
+}
+.cdNum { inset: 0; display: grid; place-items: center; font-size: calc(var(--s) * 0.38); }
+.slot.both .cdNum { inset: 2px 3px auto auto; display: block; font-size: calc(var(--s) * 0.28); }
+.buffNum { left: 3px; bottom: 5px; font-size: calc(var(--s) * 0.26); color: #9ff0b8; }
+.bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: max(3px, calc(var(--s) * 0.08));
+  width: var(--w, 0%);
+  background: #5fd08a;
+  box-shadow: 0 0 4px rgba(95, 208, 138, 0.8);
+}
+.slot:not(.buffing) .bar,
+.slot:not(.buffing) .buffNum { display: none; }
+.slot.buffing { box-shadow: 0 0 0 2px #5fd08a, 0 2px 6px rgba(0, 0, 0, 0.5); }
+.noNumbers .num { display: none; }
+.slot.flash::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 2px #fff6c2, inset 0 0 calc(var(--s) * 0.4) rgba(255, 236, 140, 0.9);
+  animation: flash 900ms ease-out forwards;
+}
+@keyframes flash { from { opacity: 1; } to { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .slot.flash::after { animation-duration: 1ms; } }

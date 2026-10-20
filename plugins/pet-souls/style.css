@@ -271,6 +271,18 @@ body.compact .foot {
   text-overflow: ellipsis;
   cursor: text;
 }
+/* The pet's genus beside its name, in its colour. */
+.genusTag {
+  flex: none;
+  margin-left: 6px;
+  font-size: 10.5px;
+  font-weight: 500;
+  color: color-mix(in srgb, var(--g) 85%, white);
+  opacity: 0.85;
+}
+.layout-classic .genusTag {
+  color: rgba(255, 255, 255, 0.4);
+}
 .count {
   font-size: 11px;
   font-variant-numeric: tabular-nums;
@@ -537,7 +549,7 @@ body.compact .foot {
 /* ---- Rows: one line each, the ring, the name, the steps, the souls left - */
 .layout-rows .pets li {
   display: grid;
-  grid-template-columns: 26px minmax(0, 1fr) 104px 34px;
+  grid-template-columns: 26px minmax(0, 1fr) 84px 30px;
   align-items: center;
   gap: 8px;
   padding: 4px 6px;
@@ -564,7 +576,10 @@ body.compact .foot {
   color: rgba(255, 255, 255, 0.92);
 }
 .layout-rows .souls {
-  gap: 6px;
+  gap: 5px;
+}
+.layout-rows .souls .count {
+  min-width: 30px;
 }
 .layout-rows .left {
   text-align: right;

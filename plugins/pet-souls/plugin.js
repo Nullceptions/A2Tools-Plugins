@@ -31,11 +31,21 @@ const els = {
   levels: document.querySelector(".levels"),
   regions: document.querySelector(".regions"),
   head: document.querySelector(".head"),
-  list: document.querySelector(".pets"),
+  list: document.querySelector(".pets:not(.farmList)"),
   empty: document.querySelector(".empty"),
+  farm: document.querySelector(".farm"),
+  farmList: document.querySelector(".farmList"),
+  farmLeft: document.querySelector(".farmLeft"),
+  toFull: document.querySelector(".toFull"),
+  toFarm: document.querySelector(".toFarm"),
+  farmHide: document.querySelector(".farmHide"),
+  farmPopup: document.querySelector(".farmPopup"),
+  farmAfter: document.querySelector(".farmAfter"),
+  hideAfter: document.querySelector(".hideAfterSelect"),
 };
 
-const empty = () => ({ levels: {}, points: {}, syncedAt: 0, lastGain: null });
+// farmed: each pet given a soul below level 3, by when (the farming pop-up).
+const empty = () => ({ levels: {}, points: {}, syncedAt: 0, lastGain: null, farmed: {} });
 let key = null; // storage key of the character shown
 let state = empty();
 let names = {};
@@ -43,7 +53,7 @@ let language = "en";
 let openId = null; // the pet whose sources are shown
 // How the list is sorted, and whether maxed pets show; kept across restarts.
 // hiddenRegions: null until the user picks; until then the other side's maps hide.
-let prefs = { sort: "left", desc: false, hideMax: true, genus: "", level: "", pinned: [], hiddenRegions: null, scale: 1, filtersOpen: false, chestOnly: false, layout: "cards" };
+let prefs = { sort: "left", desc: false, hideMax: true, genus: "", level: "", pinned: [], hiddenRegions: null, scale: 1, filtersOpen: false, chestOnly: false, layout: "cards", farmPopup: false, hideAfter: 20 };
 // Text size: the whole page scaled, spacing and controls with the text. 100%
 // is BASE_ZOOM, a little larger than the stylesheet's own sizes.
 const SCALES = [0.9, 1, 1.1, 1.25, 1.5];
@@ -173,6 +183,25 @@ const SORTS = {
   left: (a, b) => a.rank - b.rank,
 };
 
+// A pet as the list draws it.
+function petOf(id) {
+  const level = state.levels[id] || 0;
+  const points = state.points[id] || 0;
+  const target = NEEDED[level];
+  return {
+    id: String(id),
+    level,
+    points,
+    target,
+    name: petName(id),
+    genus: PET_GENUS[id] || "",
+    progress: target ? points / target : 1,
+    // The goal is level 3, so this counts every soul still needed to get there.
+    left: target === undefined ? 0 : Math.max(0, TO_MAX[level] - points),
+    rank: target === undefined ? Infinity : Math.max(0, TO_MAX[level] - points),
+  };
+}
+
 function render() {
   const ids = new Set([...Object.keys(state.levels), ...Object.keys(state.points)]);
   // Special pets come at their highest level and take no souls, so they are
@@ -180,23 +209,7 @@ function render() {
   // them anyway). A pet missing from PET_GENUS (newer than this plugin) stays in.
   const pinned = (prefs.pinned || []).map(String);
   const pets = [...ids].filter((id) => PET_GENUS[id] !== "special" && !PET_SOURCES[id]?.unreleased)
-    .filter((id) => prefs.chestOnly || !chestOnly(id) || pinned.includes(id)).map((id) => {
-    const level = state.levels[id] || 0;
-    const points = state.points[id] || 0;
-    const target = NEEDED[level];
-    return {
-      id,
-      level,
-      points,
-      target,
-      name: petName(id),
-      genus: PET_GENUS[id] || "",
-      progress: target ? points / target : 1,
-      // The goal is level 3, so this counts every soul still needed to get there.
-      left: target === undefined ? 0 : Math.max(0, TO_MAX[level] - points),
-      rank: target === undefined ? Infinity : Math.max(0, TO_MAX[level] - points),
-    };
-  });
+    .filter((id) => prefs.chestOnly || !chestOnly(id) || pinned.includes(id)).map(petOf);
   const open = pets.filter((p) => p.level < MAX_LEVEL);
   const souls = open.reduce((n, p) => n + p.left, 0);
   // The souls still to go, large; the pets left beside them; under them a bar
@@ -280,23 +293,125 @@ function render() {
   }
   els.empty.hidden = !(pets.length && !shown.length);
 
-  const build = LAYOUTS[prefs.layout] || LAYOUTS.cards;
-  els.list.replaceChildren(
-    ...shown.map((p) => {
-      const li = build(p, { pinned: pinned.includes(p.id), farming: p.id === farming });
-      li.dataset.id = p.id;
-      li.dataset.genus = p.genus;
-      li.classList.toggle("max", p.level >= MAX_LEVEL);
-      li.classList.toggle("farmed", p.id === farming);
-      if (PET_SOURCES[p.id]) li.classList.add("hasWhere");
-      if (openId === p.id) {
-        li.classList.add("open");
-        li.append(whereOf(p.id));
-      }
-      return li;
-    }),
-  );
+  els.list.replaceChildren(...shown.map((p) => rowOf(p, pinned, farming)));
+  renderFarm(pinned, farming);
 }
+
+// A pet's row in the chosen layout, its sources under it while open.
+function rowOf(p, pinned, farming) {
+  const build = LAYOUTS[prefs.layout] || LAYOUTS.cards;
+  const li = build(p, { pinned: pinned.includes(p.id), farming: p.id === farming });
+  li.dataset.id = p.id;
+  li.dataset.genus = p.genus;
+  li.classList.toggle("max", p.level >= MAX_LEVEL);
+  li.classList.toggle("farmed", p.id === farming);
+  if (PET_SOURCES[p.id]) li.classList.add("hasWhere");
+  if (openId === p.id) {
+    li.classList.add("open");
+    li.append(whereOf(p.id));
+  }
+  return li;
+}
+
+// ---- The farming pop-up (Filters → "Pop up while farming") ---------------
+//
+// A soul for a pet below level 3 shows the window with only the pets being
+// farmed (a soul in the last 30 minutes), fitted to them, and hides it again
+// once nothing has happened for the time chosen; the whole list stays a
+// click away. Meters before 2.0.62 have no a2.window, 2.0.65 brought fit.
+const win = a2.window;
+const canFit = () => !!(win && typeof win.fit === "function");
+const HIDE_AFTER = [10, 20, 30, 60, 0]; // seconds; 0 never
+// A pet that reached level 3 stays this long, to be seen done.
+const DONE_SHOWN_MS = 60 * 1000;
+let view = "full"; // or "farm"
+let poppedAt = 0;
+// The last click, key or wheel in the window: someone using it. The mouse
+// only passing over it isn't (it sits above the game, which the pointer
+// crosses while playing), but keeps the pop-up up.
+let usedAt = 0;
+let hoveredAt = 0;
+const startedAt = Date.now();
+
+// The pets being farmed, the last given a soul first.
+function farmedPets() {
+  const now = Date.now();
+  return Object.entries(state.farmed || {})
+    .filter(([, at]) => now - at < FARMING_MS)
+    .map(([id, at]) => ({ ...petOf(id), at }))
+    .filter((p) => p.level < MAX_LEVEL || Date.now() - p.at < DONE_SHOWN_MS)
+    .sort((a, b) => b.at - a.at);
+}
+
+function renderFarm(pinned, farming) {
+  const pets = farmedPets();
+  const usable = !!prefs.farmPopup && canFit();
+  els.toFarm.hidden = !usable || !pets.length;
+  if (!usable) {
+    if (view === "farm") showFull();
+    return;
+  }
+  const left = pets.reduce((n, p) => n + p.left, 0);
+  els.farmLeft.textContent = pets.length
+    ? `${pets.length} pet${pets.length === 1 ? "" : "s"} · ${left.toLocaleString(language)} souls to level 3`
+    : "";
+  els.farmList.replaceChildren(...pets.map((p) => rowOf(p, pinned, farming)));
+  if (view === "farm") fitFarm();
+}
+
+// The page's zoom (Text size) that sizes measured on it leave out: all of it
+// where they come unzoomed, none where the browser has zoomed them already
+// (newer Chromium). Told apart by measuring 100 px.
+function zoomLeft() {
+  const zoom = Number(document.documentElement.style.zoom) || 1;
+  const probe = document.createElement("div");
+  probe.style.cssText = "position:absolute;visibility:hidden;height:100px;width:1px";
+  document.body.append(probe);
+  const measured = probe.getBoundingClientRect().height / 100;
+  probe.remove();
+  return measured > 0 ? zoom / measured : zoom;
+}
+// Measured at once: the list was just drawn, and measuring lays it out.
+function fitFarm() {
+  if (view !== "farm") return;
+  win.fit(Math.ceil(els.farm.getBoundingClientRect().height * zoomLeft()) + 2).catch(() => {});
+}
+function showFarm() {
+  view = "farm";
+  document.body.classList.add("farmOnly");
+  render();
+}
+function showFull() {
+  if (view === "full") return;
+  view = "full";
+  document.body.classList.remove("farmOnly");
+  if (canFit()) win.fit().catch(() => {});
+  render();
+}
+// A soul just picked up for a pet below level 3. Someone using the whole
+// list (a click, a key or the wheel in the last 10 seconds) keeps it.
+function popFarm() {
+  if (!prefs.farmPopup || !canFit()) return;
+  if (view === "full" && Date.now() - usedAt < 10_000) return;
+  poppedAt = Date.now();
+  showFarm();
+  win.show().catch(() => {});
+}
+// Hidden, it is the whole list again, for when it is opened from Settings.
+function hideFarm() {
+  // The click on × doesn't count as using the whole list.
+  usedAt = 0;
+  win.hide().catch(() => {});
+  showFull();
+}
+setInterval(() => {
+  const after = Number(prefs.hideAfter) * 1000;
+  if (view === "farm" && after > 0 && Date.now() - Math.max(poppedAt, usedAt, hoveredAt) > after) hideFarm();
+}, 1000);
+for (const type of ["pointerdown", "keydown", "wheel"]) {
+  document.addEventListener(type, () => { usedAt = Date.now(); }, { passive: true });
+}
+document.addEventListener("pointermove", () => { hoveredAt = Date.now(); }, { passive: true });
 
 // ---- The layouts: how each pet's row is drawn (Settings → Layout) --------
 
@@ -632,10 +747,18 @@ function levelUp(st, pet) {
 
 // Each pet's souls in a soul-gained event.
 const soulsIn = (data) => (Array.isArray(data?.souls) ? data.souls : data && data.pet != null ? [{ pet: data.pet, amount: data.amount }] : []);
-function gain(st, pet, amount) {
+// Whether the pet was below level 3: being farmed.
+function gain(st, pet, amount, at = Date.now()) {
+  const farmed = (st.levels[pet] || 0) < MAX_LEVEL;
   st.points[pet] = (st.points[pet] || 0) + amount;
-  st.lastGain = { pet, at: Date.now() };
+  st.lastGain = { pet, at };
+  if (farmed) {
+    const now = Date.now();
+    st.farmed = Object.fromEntries(Object.entries(st.farmed || {}).filter(([, t]) => now - t < FARMING_MS));
+    st.farmed[pet] = at;
+  }
   levelUp(st, pet);
+  return farmed;
 }
 
 // What each event does to a character's counts.
@@ -650,8 +773,11 @@ const handle = {
   // A kill can give souls for several pets at once: the packet lists each
   // (BobbySk, 2026-10-19: two pets in one, and only the first was counted).
   // Before 0.4.6 the decoder read one pet; its events still come as { pet, amount }.
-  "decoded:soul-gained"(st, data) {
-    for (const { pet, amount } of soulsIn(data)) gain(st, pet, amount);
+  // Returns whether one was a pet being farmed.
+  "decoded:soul-gained"(st, data, at) {
+    let farmed = false;
+    for (const { pet, amount } of soulsIn(data)) farmed = gain(st, pet, amount, at) || farmed;
+    return farmed;
   },
   "decoded:level-up"(st, { pet, level }) {
     // The game resets a pet's points as it levels (Karnif: 25 -> 0). Already
@@ -744,12 +870,17 @@ for (const event of Object.keys(handle)) {
       || (event === "decoded:pet-list" ? UNNAMED_KEY : await fallbackKey());
     await adopt(k, meta?.character);
     const st = await load(k);
-    handle[event](st, data);
+    const at = Number(meta?.at) > 0 ? Number(meta.at) : Date.now();
+    const farmed = handle[event](st, data, at);
     note(st, event, data);
     await a2.storage.set(k, st).catch(() => {});
     await a2.storage.set("last", k).catch(() => {});
     if (k !== key) await show(k);
     else render();
+    // Not for the souls of before the window opened, which the meter sends
+    // again as it opens.
+    const live = meta?.at != null ? Date.now() - Number(meta.at) < 15_000 : Date.now() - startedAt > 5_000;
+    if (farmed && live) popFarm();
   }));
 }
 // Who is playing as the window opens.
@@ -807,6 +938,22 @@ els.chestOnly.addEventListener("change", () => {
   savePrefs();
   render();
 });
+els.farmPopup.addEventListener("change", () => {
+  prefs.farmPopup = els.farmPopup.checked;
+  els.farmAfter.hidden = !prefs.farmPopup;
+  savePrefs();
+  render();
+});
+els.hideAfter.addEventListener("change", () => {
+  prefs.hideAfter = Number(els.hideAfter.value);
+  savePrefs();
+});
+els.toFull.addEventListener("click", showFull);
+els.toFarm.addEventListener("click", () => {
+  poppedAt = Date.now();
+  showFarm();
+});
+els.farmHide.addEventListener("click", hideFarm);
 els.hideMax.addEventListener("change", () => {
   prefs.hideMax = els.hideMax.checked;
   savePrefs();
@@ -814,7 +961,7 @@ els.hideMax.addEventListener("change", () => {
 });
 // A click on a pet shows or hides where its souls drop (a double click on
 // its name still renames it).
-els.list.addEventListener("click", (e) => {
+const onListClick = (e) => {
   const li = e.target.closest("li[data-id]");
   if (!li) return;
   if (e.target.closest(".pin")) {
@@ -827,7 +974,9 @@ els.list.addEventListener("click", (e) => {
   if (e.detail > 1 || e.target.closest("input, a, .where")) return;
   openId = openId === li.dataset.id ? null : li.dataset.id;
   render();
-});
+};
+els.list.addEventListener("click", onListClick);
+els.farmList.addEventListener("click", onListClick);
 // A column's button sorts by it; pressing it again reverses the order.
 els.head.addEventListener("click", (e) => {
   const button = e.target.closest("button[data-sort]");
@@ -844,6 +993,15 @@ els.head.addEventListener("click", (e) => {
   prefs = { ...prefs, ...((await a2.storage.get("prefs").catch(() => null)) || {}) };
   els.hideMax.checked = prefs.hideMax;
   els.chestOnly.checked = !!prefs.chestOnly;
+  els.farmPopup.checked = !!prefs.farmPopup;
+  els.farmAfter.hidden = !prefs.farmPopup;
+  if (!canFit()) {
+    els.farmPopup.disabled = true;
+    els.farmPopup.parentElement.title = "Needs meter 2.0.65 or later";
+  }
+  els.hideAfter.replaceChildren(...HIDE_AFTER.map((n) =>
+    Object.assign(document.createElement("option"), { value: String(n), textContent: n ? (n < 60 ? `${n} s` : `${n / 60} min`) : "Never" })));
+  els.hideAfter.value = String(HIDE_AFTER.includes(Number(prefs.hideAfter)) ? Number(prefs.hideAfter) : 20);
   applyLayout();
   applyScale();
   renderScale();

@@ -19,7 +19,8 @@ function build() {
   document.documentElement.style.setProperty("--gap", `${Math.round(look.size * 0.08) + 2}px`);
   grid.className = `grid ${look.direction}`;
   document.body.classList.toggle("noNumbers", !look.numbers);
-  grid.style.opacity = String(look.opacity ?? 1);
+  // Out of combat the icons fade, unless they are unlocked to be placed.
+  grid.style.opacity = look.away && locked ? "0" : String(look.opacity ?? 1);
   const keep = new Set(slots.map((s) => s.key));
   for (const [key, n] of nodes) {
     if (!keep.has(key)) {
@@ -94,6 +95,7 @@ a2.on("widget", (d) => {
 a2.on("locked", (on) => {
   locked = !!on;
   document.body.classList.toggle("locked", locked);
+  build();
   tick();
 });
 

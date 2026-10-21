@@ -46,6 +46,7 @@ body { padding: 10px 12px 14px; }
 .tab:hover { color: #fff; }
 .tab.isActive { color: #fff; border-bottom-color: #5fbf87; }
 .pane[hidden] { display: none; }
+.row[hidden] { display: none; }
 .filter {
   box-sizing: border-box;
   width: 100%;

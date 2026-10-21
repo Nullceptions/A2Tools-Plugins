@@ -63,6 +63,7 @@ const DEFAULTS = {
   show: true, autoAdd: true, ownBuffs: true,
   layout: "combined", size: "42", direction: "right", perLine: 10, opacity: 100,
   numbers: true, readyGlow: true, sound: "chime", voice: false, lead: 3,
+  combatOnly: false, combatAfter: 10,
 };
 let prefs = { ...DEFAULTS };
 // What each character shows: { cls, skills: { g: opts }, buffs: { a: opts },
@@ -133,6 +134,8 @@ function onSkill(data, at) {
     renderSkills();
   }
   live.used.set(g, at);
+  lastSkillAt = Math.max(lastSkillAt, at);
+  if (away) checkAway();
   live.changed.delete(g);
   live.unsure.delete(g);
   live.cd.set(g, { start: at, end: at + cooldownOf(g) });
@@ -272,6 +275,16 @@ function sizeFor(count) {
 }
 
 let gameOpen = false;
+// Out of combat: no skill of yours for `combatAfter` seconds. The meter has
+// no combat state for plugins; your own skills are the sign this plugin reads.
+let lastSkillAt = 0;
+let away = false;
+function checkAway() {
+  const now = prefs.combatOnly && Date.now() - lastSkillAt > prefs.combatAfter * 1000;
+  if (now === away) return;
+  away = now;
+  send();
+}
 const widgetsWanted = () => prefs.show && gameOpen;
 let openNow = new Set();
 let lastSizes = "";
@@ -303,7 +316,7 @@ async function placeWidgets() {
 function send() {
   if (!openNow.size) return;
   const { skills, buffs } = slots();
-  const look = { size: Number(prefs.size), direction: prefs.direction, perLine: prefs.perLine, opacity: prefs.opacity / 100, numbers: prefs.numbers, readyGlow: prefs.readyGlow };
+  const look = { size: Number(prefs.size), direction: prefs.direction, perLine: prefs.perLine, opacity: prefs.opacity / 100, numbers: prefs.numbers, readyGlow: prefs.readyGlow, away };
   if (openNow.has("bar")) a2.widgets.send("bar", { look, slots: [...skills, ...buffs] }).catch(() => {});
   if (openNow.has("skills")) a2.widgets.send("skills", { look, slots: skills }).catch(() => {});
   if (openNow.has("buffs")) a2.widgets.send("buffs", { look, slots: buffs }).catch(() => {});
@@ -361,6 +374,7 @@ setInterval(() => {
     if (o?.voice) speak(buffName(b.a));
   }
   if (alerted.size > 500) alerted.clear();
+  checkAway();
   // Icons that just ran out go (or turn ready).
   if (any) changed();
 }, 250);
@@ -371,6 +385,7 @@ const els = {
   show: $(".show"), lock: $(".lock"), autoAdd: $(".autoAdd"), ownBuffs: $(".ownBuffs"),
   layout: $(".layout"), size: $(".size"), direction: $(".direction"), perLine: $(".perLine"), opacity: $(".opacity"),
   numbers: $(".numbers"), readyGlow: $(".readyGlow"), sound: $(".sound"), voice: $(".voice"), lead: $(".lead"),
+  combatOnly: $(".combatOnly"), combatAfter: $(".combatAfter"),
 };
 let tab = "skills";
 let openRow = null;
@@ -512,8 +527,10 @@ function renderBuffs() {
   $(".buffEmpty").hidden = !!ids.length || !!filter;
 }
 
+const showCombatAfter = () => ($(".combatAfterRow").hidden = !prefs.combatOnly);
 function renderAll() {
   translate();
+  showCombatAfter();
   for (const [key, el] of Object.entries(els)) {
     if (key === "lock" || !(key in prefs)) continue;
     if (el.type === "checkbox") el.checked = !!prefs[key];
@@ -541,12 +558,17 @@ for (const [key, el] of Object.entries(els)) {
     let v = el.type === "checkbox" ? el.checked : el.value;
     if (key === "perLine") v = Math.max(1, Math.min(20, Math.round(Number(v)) || DEFAULTS.perLine));
     if (key === "lead") v = Math.max(1, Math.min(30, Math.round(Number(v)) || DEFAULTS.lead));
+    if (key === "combatAfter") v = Math.max(3, Math.min(120, Math.round(Number(v)) || DEFAULTS.combatAfter));
     if (key === "opacity") v = Number(v);
     prefs[key] = v;
     if (el.type === "number") el.value = v;
     save();
     if (["show", "layout", "size", "direction", "perLine"].includes(key)) placeWidgets();
     else if (key === "ownBuffs" || key === "opacity" || key === "numbers" || key === "readyGlow") send();
+    if (key === "combatOnly" || key === "combatAfter") {
+      showCombatAfter();
+      checkAway();
+    }
   });
 }
 els.lock.addEventListener("change", () => a2.widgets.lock(els.lock.checked).catch(() => {}));

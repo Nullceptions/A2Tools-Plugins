@@ -79,16 +79,48 @@ const saveMine = () => {
   saving = setTimeout(() => a2.storage.set(`char:${charKey}`, mine).catch(() => {}), 1500);
 };
 
+// The meter names classes in Korean; the skill data keys them by the skills'
+// first two digits (entity/job_class.rs from_prefix).
+const CLASS_IDS = { "검성": "11", "수호성": "12", "살성": "13", "궁성": "14", "마도성": "15", "정령성": "16", "치유성": "17", "호법성": "18", "권성": "19" };
+let charName = null;
+
+// The class the meter knows, over the one learnt from the last skill cast:
+// so the right skills show from login, before anything is cast (Hirai).
+function takeClass(c) {
+  const cls = CLASS_IDS[c?.class];
+  if (!cls || mine.cls === cls) return;
+  mine.cls = cls;
+  saveMine();
+  renderSkills();
+}
+
 async function loadCharacter(c) {
-  const key = c && c.name ? `${c.name}@${c.serverId ?? ""}` : "?";
-  if (key === charKey) return;
+  // No name: the meter is between zones, learning again who is playing.
+  // That is no other character: what is shown stays. Taking it as one lost
+  // the class and the ticked skills on entering a dungeon or the Shugo
+  // Festival (Plexas, Hirai, 2026-10-22).
+  if (!c || !c.name) return;
+  const server = Number(c.serverId) || 0;
+  const key = `${c.name}@${server || ""}`;
+  // The same name with another server is the same character, its server
+  // reported again as the meter relearns it; it moves only from a server
+  // not known yet (0) to the real one, whose setup is the one saved.
+  const knownServer = Number(charKey.split("@")[1]) || 0;
+  if (c.name === charName && (key === charKey || knownServer || !server)) {
+    takeClass(c);
+    return;
+  }
+  const sameCharacter = c.name === charName;
+  charName = c.name;
   clearTimeout(saving);
-  if (charKey !== "?") await a2.storage.set(`char:${charKey}`, mine).catch(() => {});
+  if (charKey !== "?" && !sameCharacter) await a2.storage.set(`char:${charKey}`, mine).catch(() => {});
   const stored = await a2.storage.get(`char:${key}`).catch(() => null);
-  // A first character takes what was set up before its name came.
-  const carried = charKey === "?" && !stored ? mine : null;
+  // A first character takes what was set up before its name came, and one
+  // whose server just became known what was set up meanwhile.
+  const carried = (charKey === "?" || sameCharacter) && !stored ? mine : null;
   charKey = key;
   mine = { cls: null, skills: {}, buffs: {}, learned: {}, ...(stored || carried || {}) };
+  takeClass(c);
   live.cd.clear();
   live.buffs.clear();
   $(".char").textContent = c && c.name ? c.name : "";

@@ -189,7 +189,8 @@ body.compact .foot {
 /* color-scheme only on the dropdown: on the page it would make the browser
    paint the frame opaque. */
 .scaleSelect,
-.layoutSelect {
+.layoutSelect,
+.hideAfterSelect {
   color-scheme: dark;
   font: inherit;
   font-size: 12px;
@@ -201,11 +202,13 @@ body.compact .foot {
   outline: none;
 }
 .scaleSelect:focus,
-.layoutSelect:focus {
+.layoutSelect:focus,
+.hideAfterSelect:focus {
   border-color: rgba(143, 194, 255, 0.6);
 }
 .scaleSelect option,
-.layoutSelect option {
+.layoutSelect option,
+.hideAfterSelect option {
   color: rgba(255, 255, 255, 0.9);
   background: #161b26;
 }
@@ -777,4 +780,79 @@ body.compact .foot {
   stroke: currentColor;
   stroke-width: 2;
   stroke-linejoin: round;
+}
+
+/* ---- The farming pop-up: only the pets being farmed ---------------------- */
+.farm {
+  display: none;
+}
+body.farmOnly {
+  padding: 0;
+}
+body.farmOnly .farm {
+  display: block;
+  /* The window is fitted to it with no panel around it, so it draws its own. */
+  padding: 6px 8px 4px;
+  border-radius: 8px;
+  background: rgba(14, 18, 27, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+body.farmOnly .controls,
+body.farmOnly .head,
+body.farmOnly .pets:not(.farmList),
+body.farmOnly .empty,
+body.farmOnly .foot {
+  display: none;
+}
+.farmHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.farmTitle {
+  font-weight: 650;
+  color: #7ee0a0;
+}
+.farmLeft {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: rgba(255, 255, 255, 0.55);
+  font-variant-numeric: tabular-nums;
+}
+.farmHead button,
+.toFarm {
+  font: inherit;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 5px;
+  padding: 1px 7px;
+  cursor: pointer;
+}
+.farmHead button:hover,
+.toFarm:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+}
+.farmHead .farmHide {
+  padding: 0 6px;
+  font-size: 14px;
+  line-height: 1.2;
+}
+.toFarm {
+  color: #7ee0a0;
+  border-color: rgba(126, 224, 160, 0.4);
+}
+.toFarm[hidden],
+.farmAfter[hidden] {
+  display: none;
+}
+.farmList {
+  margin-bottom: 0;
 }

@@ -12,6 +12,12 @@ Filters → **Layout** draws the list one of four ways. In each, a pet's genus (
 - **Rows**: one line per pet, with the ring and the three steps: the most pets on screen.
 - **Classic**: the table as before 0.4.7, its columns Lv, Pet, Souls and To Lv 3.
 
+## Farming pop-up
+
+Tick **Pop up while farming** under Filters, and you don't need the window open while you farm. When you pick up a soul for a pet below level 3, the window comes up with only the pets you are farming (those you picked up a soul for in the last 30 minutes, the last first), fitted to them, and hides itself again once nothing has happened for the time under **Hide after** (10 s to 1 min, or Never). Moving the mouse over it keeps it up. A pet that reaches level 3 stays a minute, then leaves the list.
+
+**All pets** shows the whole list; **×** hides the window until the next soul. Open from Settings, the window shows the whole list, and a soul doesn't swap it for the farming list while you are using it (a click, a key or the wheel in the last 10 seconds; the mouse only passing over it doesn't count); otherwise **Farming** beside the search box goes back to it. The pop-up comes up where the window is, at its width: move and size the whole list where you want it. It needs meter 2.0.65 or later.
+
 ## Pets only from chests
 
 A pet no monster drops can only be raised with Pet Soul Chests (the battle pass's), so it can't be farmed: it is hidden unless **Show pets only from chests** is ticked under Filters. A pinned pet always shows. The totals at the top count the pets shown.
@@ -47,7 +53,8 @@ Every name in a pet's sources (monsters, zones, maps, Kibelisks, chests) shows i
 
 - `decoder:pet-list`, `decoder:soul-gained`, `decoder:level-up`: read your own pets' levels and soul gains.
 - `events:character`: keep a separate list per server.
-- `storage`: save the counts (with the last 200 changes per server, to trace a count that drifts from the game's), your pet names, the sort order, pins, region choice, filters and layout on this computer.
+- `window`: show the window when you pick up a soul for a pet you are farming, fitted to that list, and hide it again (only with **Pop up while farming** on).
+- `storage`: save the counts (with the last 200 changes per server, to trace a count that drifts from the game's), your pet names, the sort order, pins, region choice, filters, layout and the pets you are farming on this computer.
 
 ## Try it (developer mode)
 

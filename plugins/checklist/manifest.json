@@ -1,0 +1,19 @@
+{
+  "id": "checklist",
+  "name": "Daily Checklist",
+  "version": "1.1.0",
+  "apiVersion": 2,
+  "author": "Nullception",
+  "description": "Your dailies, weeklies and one-time goals, ticked per character and cleared at reset, with a reminder before reset.",
+  "permissions": [
+    "storage",
+    "events:character",
+    "window"
+  ],
+  "ui": {
+    "panel": {
+      "width": 300,
+      "height": 440
+    }
+  }
+}

@@ -412,7 +412,9 @@ const img = (icon) => {
   const i = document.createElement("img");
   i.className = "ico";
   i.alt = "";
-  if (icon) i.src = `icons/${icon}.webp`;
+  // From icons.js: on Linux a file path set from a script shows nothing.
+  const url = icon && window.COOLDOWN_ICONS?.[icon];
+  if (url) i.src = url;
   return i;
 };
 

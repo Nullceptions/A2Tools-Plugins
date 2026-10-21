@@ -42,7 +42,9 @@ function build() {
       nodes.set(s.key, n);
     }
     n.slot = s;
-    n.el.style.backgroundImage = s.icon ? `url("icons/${s.icon}.webp")` : "";
+    // From icons.js: on Linux a file path set from a script shows nothing.
+    const url = s.icon && window.COOLDOWN_ICONS?.[s.icon];
+    n.el.style.backgroundImage = url ? `url("${url}")` : "";
     grid.append(n.el);
   }
   tick();

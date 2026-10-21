@@ -7,6 +7,10 @@ Reviewed plugins for the [A2 Tools DPS Meter](https://a2tools.app), the damage m
 | [Pet Soul Tracker](plugins/pet-souls) | How many souls each of your pets still needs to reach level 3, from the game's own pet data, with filters by genus and level, in all ten meter languages, and where each pet's souls drop and the nearest teleport, from the game's own data. |
 | [Mantra Watch](plugins/mantra-watch) | For Chanters: your mantras on or off, how many party members each reaches, an alert the moment one drops in a fight, and each fight's uptime. |
 | [Event Timers](plugins/event-timers) | Countdowns to the recurring events and scheduled bosses (Shugo Festival, Dimensional Invasion, Spacetime Rift, Artifact Siege, the Abyss bosses, resets), from the game's own schedules, in your server's time and your language. |
+| [Cooldowns](plugins/cooldowns) | Your skill cooldowns and buffs as icons you place anywhere over the game, with a sound or your skill's name spoken when one is ready, and hidden outside combat if you like. |
+| [Ping](plugins/ping) | Your ping to the game server in a small widget you can drag anywhere and lock in place, coloured by how good it is. |
+| [Daily Checklist](plugins/checklist) | Your dailies, weeklies and one-time goals, ticked per character and cleared at reset, with a reminder before reset. |
+| [Heal Alert](plugins/heal-alert) | For Clerics: a sound and a red banner the moment a party member's HP drops under 60% (or the level you pick), with each member's HP as a bar. |
 
 ## Install a plugin
 

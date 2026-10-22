@@ -355,12 +355,15 @@ function send() {
 }
 
 // A change: the icons now, and soon again (several records come together).
+// The windows are sized again too: at start the class and its skills come
+// after the bar opens, and a bar sized for its first 2 or 3 icons wrapped
+// the rest until a setting changed (placeWidgets resizes only on a change).
 let sendSoon = null;
 function changed() {
   if (sendSoon) return;
   sendSoon = setTimeout(() => {
     sendSoon = null;
-    send();
+    placeWidgets();
   }, 60);
 }
 

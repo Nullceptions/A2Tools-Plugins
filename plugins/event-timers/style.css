@@ -63,8 +63,8 @@ body.compact .view.events {
 }
 .chips button[aria-selected="true"] {
   color: #0a0e16;
-  background: #8fc2ff;
-  border-color: #8fc2ff;
+  background: var(--a2-accent, #8fc2ff);
+  border-color: var(--a2-accent, #8fc2ff);
 }
 
 /* Dropdowns, buttons and checkboxes, dark. color-scheme only on the controls:
@@ -75,7 +75,6 @@ select,
 input[type="checkbox"] {
   color-scheme: dark;
 }
-select,
 .testSound,
 .banner button,
 .btn,
@@ -89,17 +88,35 @@ select,
   padding: 2px 5px;
   outline: none;
 }
-select:focus,
 .testSound:focus-visible,
 .banner button:focus-visible,
 .btn:focus-visible,
 .modal button:focus-visible {
-  border-color: rgba(143, 194, 255, 0.6);
+  border-color: color-mix(in srgb, var(--a2-accent, #8fc2ff) 60%, transparent);
 }
-select option {
-  color: rgba(255, 255, 255, 0.9);
-  background: #161b26;
+/* Dropdowns drawn by the page, as the meter's Settings draws them: the
+   webview's own was a grey (or, under a GTK theme, white) box. color-scheme
+   only here: on the whole page the frame gets an opaque backdrop. */
+select {
+  color-scheme: dark;
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  min-height: 26px;
+  padding: 3px 26px 3px 8px;
+  font: inherit;
+  font-size: 12px;
+  color: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='white' stroke-opacity='.7' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 9px center / 10px 6px;
+  cursor: pointer;
+  transition: border-color 120ms ease, background-color 120ms ease;
 }
+select:hover { border-color: rgba(255, 255, 255, 0.3); background-color: rgba(255, 255, 255, 0.09); }
+select:focus-visible { outline: 2px solid var(--a2-accent, var(--a2-accent, #8fc2ff)); outline-offset: 1px; }
+select:disabled { opacity: 0.5; cursor: default; }
+select option, select optgroup { background: var(--a2-panel, #0e1420); color: #fff; }
 .testSound,
 .banner button,
 .btn,
@@ -113,7 +130,7 @@ select option {
   background: rgba(255, 255, 255, 0.1);
 }
 input[type="checkbox"] {
-  accent-color: #8fc2ff;
+  accent-color: var(--a2-accent, #8fc2ff);
 }
 
 /* Countdown lists. */
@@ -447,7 +464,7 @@ input[type="checkbox"] {
   padding: 12px 14px;
   border-radius: 6px;
   background: #161b26;
-  border: 1px solid rgba(143, 194, 255, 0.35);
+  border: 1px solid color-mix(in srgb, var(--a2-accent, #8fc2ff) 35%, transparent);
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.5);
 }
 .modalText {
@@ -462,8 +479,8 @@ input[type="checkbox"] {
 }
 .modal .modalYes {
   color: #0a0e16;
-  background: #8fc2ff;
-  border-color: #8fc2ff;
+  background: var(--a2-accent, #8fc2ff);
+  border-color: var(--a2-accent, #8fc2ff);
   font-weight: 600;
 }
 .modal .modalYes:hover {
@@ -515,7 +532,7 @@ input[type="checkbox"] {
   padding: 0;
   font: inherit;
   font-size: 11px;
-  color: #8fc2ff;
+  color: var(--a2-accent, #8fc2ff);
   background: none;
   border: 0;
   cursor: pointer;
@@ -552,15 +569,15 @@ input.switch::before {
   transition: transform 0.15s;
 }
 input.switch:checked {
-  background: #8fc2ff;
-  border-color: #8fc2ff;
+  background: var(--a2-accent, #8fc2ff);
+  border-color: var(--a2-accent, #8fc2ff);
 }
 input.switch:checked::before {
   transform: translateX(13px);
   background: #0a0e16;
 }
 input.switch:focus-visible {
-  outline: 2px solid rgba(143, 194, 255, 0.6);
+  outline: 2px solid color-mix(in srgb, var(--a2-accent, #8fc2ff) 60%, transparent);
   outline-offset: 2px;
 }
 input.switch:disabled {
@@ -613,7 +630,7 @@ body.alertOnly .openFull:hover {
   background: #1f2633;
 }
 .fieldCredit a {
-  color: #8fc2ff;
+  color: var(--a2-accent, #8fc2ff);
   text-decoration: none;
 }
 .fieldCredit a:hover {
@@ -713,22 +730,22 @@ body.alertOnly .openFull:hover {
   background: rgba(255, 255, 255, 0.07);
 }
 .list .rowBtn:focus-visible {
-  outline: 2px solid rgba(143, 194, 255, 0.6);
+  outline: 2px solid color-mix(in srgb, var(--a2-accent, #8fc2ff) 60%, transparent);
   outline-offset: -1px;
 }
 .list .alertBtn.own,
 .list .gearBtn.lit {
-  color: #8fc2ff;
+  color: var(--a2-accent, #8fc2ff);
 }
 .list .alertBtn.own .fillable {
   fill: currentColor;
 }
 /* Covered by "All field bosses" only: half lit. */
 .list .alertBtn.all {
-  color: rgba(143, 194, 255, 0.6);
+  color: color-mix(in srgb, var(--a2-accent, #8fc2ff) 60%, transparent);
 }
 .list .alertBtn.all .fillable {
-  fill: rgba(143, 194, 255, 0.2);
+  fill: color-mix(in srgb, var(--a2-accent, #8fc2ff) 20%, transparent);
 }
 .list .alertBtn.own:hover,
 .list .alertBtn.all:hover,
@@ -742,7 +759,7 @@ body.alertOnly .openFull:hover {
 }
 /* The alert a boss's gear led to: a flash, then as it was. */
 @keyframes alertFlash {
-  0%, 35% { background: rgba(143, 194, 255, 0.22); box-shadow: inset 2px 0 #8fc2ff; }
+  0%, 35% { background: color-mix(in srgb, var(--a2-accent, #8fc2ff) 22%, transparent); box-shadow: inset 2px 0 var(--a2-accent, #8fc2ff); }
   100% { background: transparent; box-shadow: inset 2px 0 transparent; }
 }
 .alertList li.flash {
@@ -801,10 +818,10 @@ body.alertOnly .openFull:hover {
 .segBtn + .segBtn { border-left: 1px solid rgba(255, 255, 255, 0.14); }
 .segBtn[aria-checked="true"] {
   color: #0a0e16;
-  background: #8fc2ff;
+  background: var(--a2-accent, #8fc2ff);
   font-weight: 600;
 }
-.segBtn:focus-visible { outline: 2px solid rgba(143, 194, 255, 0.6); outline-offset: -2px; }
+.segBtn:focus-visible { outline: 2px solid color-mix(in srgb, var(--a2-accent, #8fc2ff) 60%, transparent); outline-offset: -2px; }
 .segBtn:disabled { opacity: 0.45; cursor: default; }
 
 /* The Placement card: anchor mode, the one card in Settings, in the gold of
@@ -919,7 +936,7 @@ body.alertOnly .openFull:hover {
   cursor: pointer;
 }
 .stepBtn:hover:not(:disabled) { background: rgba(255, 255, 255, 0.12); }
-.stepBtn:focus-visible { outline: 2px solid rgba(143, 194, 255, 0.6); outline-offset: 1px; }
+.stepBtn:focus-visible { outline: 2px solid color-mix(in srgb, var(--a2-accent, #8fc2ff) 60%, transparent); outline-offset: 1px; }
 .stepBtn:disabled { opacity: 0.35; cursor: default; }
 .stepValue { text-align: center; font-weight: 600; color: rgba(255, 255, 255, 0.92); }
 .cornerNote { margin: 0 0 8px; }
@@ -940,11 +957,11 @@ body.alertOnly .openFull:hover {
   border-radius: 999px;
   cursor: pointer;
 }
-.pickChips .chip:hover, .pickChips .chip:focus-visible { color: #fff; border-color: rgba(143, 194, 255, 0.6); outline: none; }
+.pickChips .chip:hover, .pickChips .chip:focus-visible { color: #fff; border-color: color-mix(in srgb, var(--a2-accent, #8fc2ff) 60%, transparent); outline: none; }
 .pickChips .chip.on {
   color: #0a0e16;
-  background: #8fc2ff;
-  border-color: #8fc2ff;
+  background: var(--a2-accent, #8fc2ff);
+  border-color: var(--a2-accent, #8fc2ff);
   font-weight: 600;
 }
 .yoursHead { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
@@ -995,7 +1012,7 @@ body.alertOnly .openFull:hover {
   cursor: pointer;
 }
 .mineToggle:hover .mineName, .mineToggle:focus-visible .mineName { color: #fff; }
-.mineToggle:focus-visible { outline: 2px solid rgba(143, 194, 255, 0.6); outline-offset: -2px; border-radius: 4px; }
+.mineToggle:focus-visible { outline: 2px solid color-mix(in srgb, var(--a2-accent, #8fc2ff) 60%, transparent); outline-offset: -2px; border-radius: 4px; }
 .mineText { display: grid; min-width: 0; }
 .mineName, .mineWhen { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .mineWhen { font-size: 11px; color: rgba(255, 255, 255, 0.5); }
@@ -1019,7 +1036,7 @@ body.alertOnly .openFull:hover {
   outline: none;
   color-scheme: dark;
 }
-.alertSearch:focus { border-color: rgba(143, 194, 255, 0.6); }
+.alertSearch:focus { border-color: color-mix(in srgb, var(--a2-accent, #8fc2ff) 60%, transparent); }
 .addHead { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 4px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
 .addFold {
   display: flex;
@@ -1035,7 +1052,7 @@ body.alertOnly .openFull:hover {
   text-align: left;
   cursor: pointer;
 }
-.addFold:focus-visible { outline: 2px solid rgba(143, 194, 255, 0.6); outline-offset: 1px; border-radius: 3px; }
+.addFold:focus-visible { outline: 2px solid color-mix(in srgb, var(--a2-accent, #8fc2ff) 60%, transparent); outline-offset: 1px; border-radius: 3px; }
 .addList { list-style: none; margin: 0; padding: 0 0 4px 16px; }
 .addRow {
   display: grid;
@@ -1059,8 +1076,8 @@ body.alertOnly .openFull:hover {
   border-radius: 999px;
   cursor: pointer;
 }
-.addBtn:hover, .addBtn:focus-visible { border-color: rgba(143, 194, 255, 0.6); outline: none; }
-.addBtn.on { color: #8fc2ff; border-color: rgba(143, 194, 255, 0.45); }
+.addBtn:hover, .addBtn:focus-visible { border-color: color-mix(in srgb, var(--a2-accent, #8fc2ff) 60%, transparent); outline: none; }
+.addBtn.on { color: var(--a2-accent, #8fc2ff); border-color: color-mix(in srgb, var(--a2-accent, #8fc2ff) 45%, transparent); }
 @media (prefers-reduced-motion: reduce) { .chev { transition: none; } }
 .alertOptionsBtn[hidden] { display: none; }
 
@@ -1073,7 +1090,7 @@ body.alertOnly .openFull:hover {
   padding: 6px 9px;
   border-radius: 6px;
   background: #161b26;
-  border: 1px solid rgba(143, 194, 255, 0.35);
+  border: 1px solid color-mix(in srgb, var(--a2-accent, #8fc2ff) 35%, transparent);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
   color: rgba(255, 255, 255, 0.9);
   font-size: 12px;

@@ -7,7 +7,7 @@ html, body {
 }
 body {
   padding: 10px 12px;
-  --accent: #8fc2ff;
+  --accent: var(--a2-accent, #8fc2ff);
   --gold: #f5c542;
   --line: rgba(255, 255, 255, 0.08);
 }
@@ -81,7 +81,7 @@ body.compact .foot {
   outline: none;
 }
 .search:focus {
-  border-color: rgba(143, 194, 255, 0.6);
+  border-color: color-mix(in srgb, var(--accent) 60%, transparent);
 }
 .search::placeholder {
   color: rgba(255, 255, 255, 0.4);
@@ -186,33 +186,6 @@ body.compact .foot {
   color: rgba(255, 255, 255, 0.7);
   font-size: 12px;
 }
-/* color-scheme only on the dropdown: on the page it would make the browser
-   paint the frame opaque. */
-.scaleSelect,
-.layoutSelect,
-.hideAfterSelect {
-  color-scheme: dark;
-  font: inherit;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.88);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 4px;
-  padding: 1px 4px;
-  outline: none;
-}
-.scaleSelect:focus,
-.layoutSelect:focus,
-.hideAfterSelect:focus {
-  border-color: rgba(143, 194, 255, 0.6);
-}
-.scaleSelect option,
-.layoutSelect option,
-.hideAfterSelect option {
-  color: rgba(255, 255, 255, 0.9);
-  background: #161b26;
-}
-
 /* ---- Sort: one segmented row --------------------------------------------- */
 .head {
   display: flex;
@@ -629,7 +602,7 @@ body.compact .foot {
 }
 .layout-classic .level {
   font-size: 11px;
-  color: #8fc2ff;
+  color: var(--accent);
 }
 .layout-classic .bar {
   position: relative;
@@ -856,3 +829,27 @@ body.farmOnly .foot {
 .farmList {
   margin-bottom: 0;
 }
+
+/* Dropdowns drawn by the page, as the meter's Settings draws them: the
+   webview's own was a grey (or, under a GTK theme, white) box. color-scheme
+   only here: on the whole page the frame gets an opaque backdrop. */
+select {
+  color-scheme: dark;
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  min-height: 26px;
+  padding: 3px 26px 3px 8px;
+  font: inherit;
+  font-size: 12px;
+  color: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='white' stroke-opacity='.7' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 9px center / 10px 6px;
+  cursor: pointer;
+  transition: border-color 120ms ease, background-color 120ms ease;
+}
+select:hover { border-color: rgba(255, 255, 255, 0.3); background-color: rgba(255, 255, 255, 0.09); }
+select:focus-visible { outline: 2px solid var(--a2-accent, #8fc2ff); outline-offset: 1px; }
+select:disabled { opacity: 0.5; cursor: default; }
+select option, select optgroup { background: var(--a2-panel, #0e1420); color: #fff; }

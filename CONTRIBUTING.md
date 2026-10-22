@@ -47,6 +47,7 @@ a2.on("decoded:<name>", (data) => …)  // your decoder read a packet       (dec
 a2.on("character", (c) => …)          // name, serverId, class, level     (events:character)
 a2.on("language", (code) => …)        // "en", "ko", "zh-Hans", … at start and on change
 a2.on("compact", (on) => …)           // the window's fold button: show only the essentials
+a2.on("theme", (t) => …)              // the Settings colours {bg, panel, accent}, at start and on change (meter 2.0.76)
 await a2.storage.get("key")           // your saved JSON, or null           (storage)
 await a2.storage.set("key", value)
 a2.notify("Text")                     // a short message in your window     (notify)
@@ -54,7 +55,28 @@ await a2.window.show() / hide()       // your window, without taking focus  (win
 a2.ready()                            // once your handlers are set: queued events arrive then
 ```
 
-Keep the page background transparent. The window paints the panel at the opacity the player picks.
+## Look
+
+Keep the page background transparent. The window paints the panel at the opacity the player picks. Don't set `color-scheme` on `:root` or `body` either: it makes the page opaque and the opacity slider stops working.
+
+The window takes the colours the player picks in **Settings → Appearance → Settings colours**. Your page gets them as CSS variables (meter 2.0.76 and later):
+
+| Variable | What it is |
+|---|---|
+| `--a2-accent` | the accent: selected tabs, switches, focus rings, highlights |
+| `--a2-bg` | the panel's background |
+| `--a2-panel` | a slightly different background, for lists and menus |
+
+Use the accent for your interface's highlights, with a fallback for older meters, and mix it for tints:
+
+```css
+.tab.active { border-color: var(--a2-accent, #8fc2ff); }
+.row:hover  { background: color-mix(in srgb, var(--a2-accent, #8fc2ff) 15%, transparent); }
+```
+
+Keep colours that mean something (ready green, low-HP red, rarity gold) as they are.
+
+The meter also styles your page's selects, checkboxes, radio buttons, sliders and scrollbars to match the Settings window. Its rules have no specificity, so any rule of your own wins. If you style a `select` yourself, keep `appearance: none` and draw the chevron, or it falls back to the webview's grey box. The official plugins show one way to do it; it also looks right on older meters.
 
 ## Decoders
 

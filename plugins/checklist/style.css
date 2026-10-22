@@ -8,13 +8,35 @@ body {
   font: 13px/1.35 "Segoe UI", system-ui, sans-serif;
   user-select: none;
 }
-button, select, input {
+button, input {
   font: inherit; font-size: 12px; color: inherit;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 3px;
 }
 button { cursor: pointer; padding: 0 7px; }
-select option { background: #222; }
+/* Dropdowns drawn by the page, as the meter's Settings draws them: the
+   webview's own was a grey (or, under a GTK theme, white) box. color-scheme
+   only here: on the whole page the frame gets an opaque backdrop. */
+select {
+  color-scheme: dark;
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  min-height: 22px;
+  padding: 1px 24px 1px 6px;
+  font: inherit;
+  font-size: 12px;
+  color: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='white' stroke-opacity='.7' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 9px center / 10px 6px;
+  cursor: pointer;
+  transition: border-color 120ms ease, background-color 120ms ease;
+}
+select:hover { border-color: rgba(255, 255, 255, 0.3); background-color: rgba(255, 255, 255, 0.09); }
+select:focus-visible { outline: 2px solid var(--a2-accent, #8fc2ff); outline-offset: 1px; }
+select:disabled { opacity: 0.5; cursor: default; }
+select option, select optgroup { background: var(--a2-panel, #0e1420); color: #fff; }
 input[type="text"], input[type="number"] { padding: 1px 4px; }
 
 .head { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
@@ -73,3 +95,24 @@ body.editing .items li { cursor: default; }
 
 /* The fold button: only what is left to do. */
 body.compact .resets, body.compact .others, body.compact .items li.done, body.compact .edit { display: none; }
+
+/* A quiet scrollbar: thin, no track, brighter only while in use. */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  min-height: 28px;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.22);
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:active {
+  background-color: rgba(255, 255, 255, 0.35);
+}

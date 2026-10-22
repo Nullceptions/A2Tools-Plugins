@@ -1,7 +1,7 @@
 {
   "id": "mantra-watch",
   "name": "Mantra Watch",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "apiVersion": 2,
   "author": "Nullception",
   "description": "For Chanters: your mantras on or off, how many party members they reach, an alert the moment one drops in a fight, and each fight's uptime.",

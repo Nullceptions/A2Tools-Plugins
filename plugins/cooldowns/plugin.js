@@ -165,6 +165,21 @@ function onSkill(data, at) {
     mine.skills[g] = { show: true };
     renderSkills();
   }
+  // Used again before its cooldown was due: the game let it, so its real
+  // cooldown is at most the time since the last use (a Chanter's Power of
+  // the Storm with its -30 s, 90 s, showed the base 120 s: long cooldowns are
+  // rarely measured from a full list). Not when something changed or reset
+  // it meanwhile, and only from half the base up: a skill with charges is
+  // used again at once.
+  const before = live.used.get(g);
+  const due = live.cd.get(g)?.end;
+  if (before && due && at < due - 1000 && !live.changed.has(g) && !live.unsure.has(g)) {
+    const gap = Math.round((at - before) / 50) * 50;
+    if (gap >= s.cd * 0.5 && gap < cooldownOf(g)) {
+      mine.learned[g] = gap;
+      renderSkills();
+    }
+  }
   live.used.set(g, at);
   lastSkillAt = Math.max(lastSkillAt, at);
   if (away) checkAway();

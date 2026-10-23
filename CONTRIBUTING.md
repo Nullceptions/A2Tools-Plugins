@@ -53,9 +53,14 @@ await a2.storage.set("key", value)
 a2.notify("Text")                     // a short message in your window     (notify)
 await a2.window.show() / hide()       // your window, without taking focus  (window, API 2)
 a2.ready()                            // once your handlers are set: queued events arrive then
+// In a widget's page (widgets permission):
+a2.widget.area({ x, y, width, height })    // the part that takes the mouse; clicks elsewhere go through to the game
+a2.widget.areas([{ x, y, width, height }, …])  // the same as several parts, up to 64 (meter 2.0.77)
 ```
 
 ## Look
+
+Report only what you draw with `a2.widget.areas`: the gaps between your icons, and room you keep for more, then let clicks through to the game. On older meters, fall back to one box around them with `a2.widget.area`.
 
 Keep the page background transparent. The window paints the panel at the opacity the player picks. Don't set `color-scheme` on `:root` or `body` either: it makes the page opaque and the opacity slider stops working.
 

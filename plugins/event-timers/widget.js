@@ -165,33 +165,63 @@ a2.on("widget", (d) => {
 });
 
 // The drawn parts: only they take the mouse, so icons set close together
-// don't catch each other's drags (meter 2.0.70 on, Linux; elsewhere a press
-// beside them just does nothing). In the grid, the grip and the icons shown.
+// don't catch each other's drags, and the grid's empty cells let clicks
+// through to the game (meter 2.0.70 on, Linux; 2.0.77 on, Windows too). In
+// the grid, the grip and each icon shown: one rectangle each where the meter
+// takes several (a2.widget.areas, 2.0.77), else the box around them all.
+const PARTS = ".badge, .time, .sub, .name";
+// What can be grabbed: the grip in setup, and the parts of each icon shown.
 const SHOWN = ".setup > .grip, .pin:not([hidden]) .badge, .pin:not([hidden]) .time, .pin:not([hidden]) .sub, .pin:not([hidden]) .name";
 let lastArea = "";
+function partsOf(el, rect) {
+  const r = el.getBoundingClientRect();
+  if (!r.width || !r.height) return rect;
+  // The badge's ring and glow reach a little past it.
+  const pad = el.classList.contains("badge") ? 4 : 0;
+  const box = rect || { left: Infinity, top: Infinity, right: -Infinity, bottom: -Infinity };
+  return {
+    left: Math.min(box.left, r.left - pad),
+    top: Math.min(box.top, r.top - pad),
+    right: Math.max(box.right, r.right + pad),
+    bottom: Math.max(box.bottom, r.bottom + pad),
+  };
+}
+const toArea = (b) => ({
+  x: Math.max(0, Math.floor(b.left)),
+  y: Math.max(0, Math.floor(b.top)),
+  width: Math.ceil(b.right - Math.max(0, Math.floor(b.left))),
+  height: Math.ceil(b.bottom - Math.max(0, Math.floor(b.top))),
+});
 function reportArea() {
-  if (typeof a2.widget.area !== "function") return;
-  let left = Infinity, top = Infinity, right = -Infinity, bottom = -Infinity;
-  for (const el of document.querySelectorAll(SHOWN)) {
-    const r = el.getBoundingClientRect();
-    if (!r.width || !r.height) continue;
-    // The badge's ring and glow reach a little past it.
-    const pad = el.classList.contains("badge") ? 4 : 0;
-    left = Math.min(left, r.left - pad);
-    top = Math.min(top, r.top - pad);
-    right = Math.max(right, r.right + pad);
-    bottom = Math.max(bottom, r.bottom + pad);
+  const several = typeof a2.widget.areas === "function";
+  if (!several && typeof a2.widget.area !== "function") return;
+  const boxes = [];
+  const grip = document.querySelector(".setup > .grip");
+  if (grip) {
+    const b = partsOf(grip, null);
+    if (b) boxes.push(b);
   }
-  // Nothing drawn (an empty grid, its anchor hidden): a point, so the frame's
-  // empty space doesn't keep clicks from the game.
-  if (!(right > left && bottom > top)) {
-    left = 0; top = 0; right = 1; bottom = 1;
+  for (const pin of document.querySelectorAll(".pin:not([hidden])")) {
+    let b = null;
+    for (const el of pin.querySelectorAll(PARTS)) b = partsOf(el, b);
+    if (b && b.right > b.left && b.bottom > b.top) boxes.push(b);
   }
-  const area = { x: Math.max(0, Math.floor(left)), y: Math.max(0, Math.floor(top)), width: Math.ceil(right - left), height: Math.ceil(bottom - top) };
-  const key = JSON.stringify(area);
+  let payload;
+  if (several) {
+    payload = boxes.map(toArea);
+  } else {
+    // Nothing drawn (an empty grid, its anchor hidden): a point, so the
+    // frame's empty space doesn't keep clicks from the game.
+    const all = boxes.reduce((acc, b) => (acc ? {
+      left: Math.min(acc.left, b.left), top: Math.min(acc.top, b.top),
+      right: Math.max(acc.right, b.right), bottom: Math.max(acc.bottom, b.bottom),
+    } : b), null);
+    payload = all ? toArea(all) : { x: 0, y: 0, width: 1, height: 1 };
+  }
+  const key = JSON.stringify(payload);
   if (key === lastArea) return;
   lastArea = key;
-  a2.widget.area(area).catch(() => {});
+  (several ? a2.widget.areas(payload) : a2.widget.area(payload)).catch(() => {});
 }
 addEventListener("resize", () => {
   lastArea = "";

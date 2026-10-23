@@ -198,6 +198,13 @@ def main():
         events.append({"id": "rift", "kind": "event", "name": own("rift"),
                        "where": [map_text(m) for m in sorted(rift_maps)], "side": None,
                        "days": list(rift_cycle[1]), "starts": list(rift_cycle[0]), "minutes": life // 60})
+        # No Dimensional Invasion while a Spacetime Rift is on: the tables list
+        # one every hour at :30, but in a rift's hour (02:00, 05:00, 08:00,
+        # 11:00... server time) none starts (a player, 2026-10-24).
+        rift_hours = {start // 60 for start in rift_cycle[0]}
+        for ev in events:
+            if ev["id"].startswith("invasion-"):
+                ev["starts"] = [start for start in ev["starts"] if start // 60 not in rift_hours]
 
     # Resets: one moment on every Global server, 16:00 Korean time (07:00 UTC).
     events.append({"id": "daily", "kind": "reset", "name": own("daily"), "where": [], "side": None,

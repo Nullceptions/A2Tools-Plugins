@@ -236,9 +236,18 @@ function frameLayout(named) {
   return { cols, rows, dir, cellW, cellH, gapX, gapY, width, height, grip, gripSize: GRIP, top: TOP };
 }
 
-// Placing the grid: this window shown, on its Settings tab.
-const placing = () => document.visibilityState === "visible"
+// Placing the grid: this window shown, on its Settings tab. Hidden by its
+// × (or its dock tab hidden), the page stays loaded and looks visible to
+// itself, so the meter says (a2.on("visible"), meter 2.0.77; older meters
+// never do, and it counts as shown): the frame went only when leaving
+// Settings, and stayed up with the window hidden on it.
+let windowShown = true;
+const placing = () => windowShown && document.visibilityState === "visible"
   && document.querySelector(".view.settings")?.hidden === false;
+a2.on("visible", (shown) => {
+  windowShown = shown !== false;
+  updatePins(Date.now());
+});
 // Into Settings or out of it: the anchor shows or goes at once, not at the
 // next second's update.
 document.addEventListener("click", (e) => {

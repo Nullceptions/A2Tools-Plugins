@@ -1588,6 +1588,15 @@ function checkAlerts(now) {
 // The world boss timers for the player's server: when the window opens, when
 // the server changes, and every 15 minutes.
 let feedTimer = 0;
+// Whether `entry`'s HP belongs to the life `life` says is up: both up, and
+// the HP reported since it spawned. Not by the same up-since: the site's
+// comes from whoever saw the spawn (Aion 2 Timers' a few seconds off the
+// game's), and with the player's own map newer, every live HP of that boss
+// was dropped and its icon stayed a bare "up" (Kernon, 2026-10-24).
+function hpOfLife(entry, life) {
+  if (entry?.state !== "up" || life?.state !== "up" || entry.hp == null || !entry.hpAt) return false;
+  return !life.upSince || Number(entry.hpAt) >= Number(life.upSince);
+}
 // Each boss's newest report, between the feed's and the player's own map's.
 function mergeOwn(bosses) {
   const out = { ...bosses };
@@ -1598,9 +1607,7 @@ function mergeOwn(bosses) {
     // The map says nothing of HP: opening it mid-fight replaced the boss
     // with an entry without its HP, which came back only at the next HP
     // report. The same life still up keeps the HP it had.
-    const sameLife = known && known.state === "up" && mine.state === "up"
-      && (!known.upSince || !mine.upSince || Number(known.upSince) === Number(mine.upSince));
-    out[id] = sameLife && known.hp != null ? { ...mine, hp: known.hp, hpAt: known.hpAt } : mine;
+    out[id] = known && hpOfLife(known, mine) ? { ...mine, hp: known.hp, hpAt: known.hpAt } : mine;
   }
   return out;
 }

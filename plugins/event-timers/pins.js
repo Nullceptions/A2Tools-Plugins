@@ -452,9 +452,7 @@ a2.on("bossLive", (m) => {
     }
     // An older report can still bring newer HP: the site's HP updates leave
     // reportedAt as it was. Taken for the same life still up.
-    const sameLife = have.state === "up" && entry?.state === "up"
-      && (!have.upSince || !entry.upSince || Number(have.upSince) === Number(entry.upSince));
-    if (sameLife && entry.hp != null && (Number(entry.hpAt) || 0) > (Number(have.hpAt) || 0)) {
+    if (hpOfLife(entry, have) && (Number(entry.hpAt) || 0) > (Number(have.hpAt) || 0)) {
       bosses[id] = { ...have, hp: entry.hp, hpAt: entry.hpAt };
     }
   };

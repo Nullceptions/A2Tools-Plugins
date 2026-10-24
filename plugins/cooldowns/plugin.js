@@ -72,11 +72,34 @@ let charKey = "?";
 let mine = { cls: null, skills: {}, buffs: {}, learned: {} };
 
 const save = () => a2.storage.set("prefs", prefs).catch(() => {});
+// The storage key of a character's setup. The meter takes only letters,
+// digits, "-" and "_" (up to 64): "char:name@server" was refused, and every
+// character's ticked skills were lost with each restart. The name goes as
+// its UTF-8 in hex (any script), a long one as a hash of it.
+function charStoreKey(key) {
+  if (key === "?") return "char_none";
+  const at = key.lastIndexOf("@");
+  const name = key.slice(0, at < 0 ? key.length : at);
+  const server = (at < 0 ? "" : key.slice(at + 1)).replace(/[^0-9]/g, "");
+  const hex = [...new TextEncoder().encode(name)].map((b) => b.toString(16).padStart(2, "0")).join("");
+  let id = hex;
+  if (`char_${hex}_${server}`.length > 64) {
+    // FNV-1a, 32 bits, twice (two seeds): a name over ~27 bytes.
+    const fnv = (seed) => {
+      let h = seed >>> 0;
+      for (const b of new TextEncoder().encode(name)) h = Math.imul(h ^ b, 16777619) >>> 0;
+      return h.toString(16).padStart(8, "0");
+    };
+    id = `h${fnv(2166136261)}${fnv(84696351)}`;
+  }
+  return `char_${id}_${server}`;
+}
+const storeMine = (key, value) => a2.storage.set(charStoreKey(key), value).catch(() => {});
 let saving = null;
 // Per character, a moment after the last change (casts change it often).
 const saveMine = () => {
   clearTimeout(saving);
-  saving = setTimeout(() => a2.storage.set(`char:${charKey}`, mine).catch(() => {}), 1500);
+  saving = setTimeout(() => storeMine(charKey, mine), 1500);
 };
 
 // The meter names classes in Korean; the skill data keys them by the skills'
@@ -113,8 +136,8 @@ async function loadCharacter(c) {
   const sameCharacter = c.name === charName;
   charName = c.name;
   clearTimeout(saving);
-  if (charKey !== "?" && !sameCharacter) await a2.storage.set(`char:${charKey}`, mine).catch(() => {});
-  const stored = await a2.storage.get(`char:${key}`).catch(() => null);
+  if (charKey !== "?" && !sameCharacter) await storeMine(charKey, mine);
+  const stored = await a2.storage.get(charStoreKey(key)).catch(() => null);
   // A first character takes what was set up before its name came, and one
   // whose server just became known what was set up meanwhile.
   const carried = (charKey === "?" || sameCharacter) && !stored ? mine : null;
@@ -665,8 +688,10 @@ a2.on("widget-message", ({ data }) => {
 (async () => {
   const stored = await a2.storage.get("prefs").catch(() => null);
   if (stored && typeof stored === "object") prefs = { ...DEFAULTS, ...stored };
-  const before = await a2.storage.get("char:?").catch(() => null);
-  if (before && typeof before === "object") mine = { ...mine, ...before };
+  const before = await a2.storage.get(charStoreKey("?")).catch(() => null);
+  // Only while no character has come yet: the meter can name one before this
+  // read returns, and its own setup stands then.
+  if (before && typeof before === "object" && charKey === "?") mine = { ...mine, ...before };
   els.lock.checked = await a2.widgets.locked().catch(() => false);
   renderAll();
   a2.ready();

@@ -15,7 +15,10 @@
 // replaced by what is measured: when a full list arrives, the time since the
 // skill was used plus the time it still has left is its real cooldown (a
 // Sorcerer's 60 s skills ran 27.8 s), unless something changed it meanwhile.
-// Skills not yet measured scale by how far the measured ones are below base.
+// Skills not yet measured scale by how far the measured ones are below base
+// (not those cooldown reduction leaves alone, skills.js noCdr). A held skill
+// (skills.js held) sends no 01 38: its cooldown starts with its first 47 38
+// entry. A variant with charges (skills.js ch) is counted down per charge.
 const $ = (s) => document.querySelector(s);
 const DATA = window.COOLDOWN_DATA || { classes: {}, buffs: {} };
 const LANGS = Object.keys(UI);
@@ -187,6 +190,7 @@ async function loadCharacter(c) {
   mine = fresh({ cls: null, skills: {}, buffs: {}, learned: {}, ...(stored || carried || {}) });
   takeClass(c);
   live.cd.clear();
+  live.charges.clear();
   live.buffs.clear();
   $(".char").textContent = c && c.name ? c.name : "";
   renderAll();
@@ -202,6 +206,10 @@ const live = {
   // that use's time can't be measured.
   unsure: new Set(),
   changed: new Set(), // groups whose cooldown something changed since use
+  // Groups with charges (the variant last used has them, skills.js ch):
+  // group -> { max, per, full }, full = when every charge is back, one coming
+  // back every `per` ms. live.cd is then the time with none left.
+  charges: new Map(),
   samples: new Map(), // group -> the last few measured cooldowns
   early: new Map(), // group -> the last early use's gap, not yet seen twice
   buffs: new Map(), // instance -> { a, skill, start, end }
@@ -215,6 +223,8 @@ const live = {
 function reduction() {
   const byBase = new Map();
   for (const [g, ms] of Object.entries(mine.learned)) {
+    // Not the skills cooldown reduction doesn't touch (CoolTimeStat false).
+    if (SKILLS.get(Number(g))?.noCdr) continue;
     const base = SKILLS.get(Number(g))?.cd || 0;
     const x = ms / base;
     if (!Number.isFinite(x) || x <= 0 || x > 1.2) continue;
@@ -223,13 +233,13 @@ function reduction() {
   const r = [...byBase.values()].sort((a, b) => a - b);
   return r.length ? r[Math.floor(r.length / 2)] : 1;
 }
-const cooldownOf = (g) => mine.learned[g] || Math.round((SKILLS.get(g)?.cd || 0) * reduction());
+const scaled = (g, ms) => (SKILLS.get(g)?.noCdr ? ms : Math.round(ms * reduction()));
+const cooldownOf = (g) => mine.learned[g] || scaled(g, SKILLS.get(g)?.cd || 0);
 
-function onSkill(data, at) {
-  const g = groupOf(Number(data.skill));
-  if (!g) return;
+// A use, announced (01 38) or seen in the cooldown list: the class, the
+// skill added to the bar, the time of your last skill.
+function took(g, at) {
   const s = SKILLS.get(g);
-  if (!s.cd) return;
   if (mine.cls !== s.cls) {
     mine.cls = s.cls;
     renderSkills();
@@ -238,6 +248,49 @@ function onSkill(data, at) {
     mine.skills[g] = { show: true };
     renderSkills();
   }
+  lastSkillAt = Math.max(lastSkillAt, at);
+  if (away) checkAway();
+}
+
+// Charges: how many are there at `t`, and when the first comes back with
+// none left.
+const chargesAt = (c, t) => c.max - Math.min(c.max, Math.ceil(Math.max(0, c.full - t) / c.per));
+const nextCharge = (c) => c.full - (c.max - 1) * c.per;
+function chargesCooling(g, c, at, start) {
+  if (chargesAt(c, at) > 0) {
+    const was = live.cd.get(g);
+    if (was && was.end > at) live.cd.set(g, { ...was, end: at });
+  } else {
+    live.cd.set(g, { start, end: nextCharge(c) });
+  }
+}
+
+function onSkill(data, at) {
+  const g = groupOf(Number(data.skill));
+  if (!g) return;
+  const s = SKILLS.get(g);
+  if (!s.cd) return;
+  took(g, at);
+  // A variant with charges (Healing Light 17100130: 3, one back every 6 s):
+  // each use takes one, and they come back one after another.
+  const ch = s.ch && s.ch[data.skill];
+  if (ch) {
+    const c = live.charges.get(g) || { full: 0 };
+    const was = `${c.max}/${c.per}`;
+    c.max = ch[0];
+    c.per = scaled(g, ch[1]);
+    c.full = Math.min(Math.max(c.full, at) + c.per, at + c.max * c.per);
+    live.charges.set(g, c);
+    if (was !== `${c.max}/${c.per}`) renderSkills();
+    live.used.set(g, at);
+    live.changed.delete(g);
+    live.unsure.add(g); // a use's time to its next one says nothing here
+    chargesCooling(g, c, at, at);
+    saveMine();
+    changed();
+    return;
+  }
+  if (live.charges.delete(g)) renderSkills();
   // Used again before its cooldown was due: the game let it, so its real
   // cooldown is at most the time since the last use (a Chanter's Power of
   // the Storm with its -30 s, 90 s, showed the base 120 s: long cooldowns are
@@ -260,8 +313,6 @@ function onSkill(data, at) {
     }
   }
   live.used.set(g, at);
-  lastSkillAt = Math.max(lastSkillAt, at);
-  if (away) checkAway();
   live.changed.delete(g);
   live.unsure.delete(g);
   live.cd.set(g, { start: at, end: at + cooldownOf(g) });
@@ -279,6 +330,21 @@ function onCooldowns(data, at) {
     const was = live.cd.get(g);
     const used = live.used.get(g);
     const first = !live.changed.has(g);
+    const c = live.charges.get(g);
+    if (c) {
+      // Charges: what the list says is when the next one comes back (0: it
+      // is back). Nothing is learnt from these.
+      const missing = c.max - chargesAt(c, at);
+      if (ms) {
+        if (!missing) took(g, at); // one used without a word
+        c.full = at + ms + Math.max(0, missing - 1) * c.per;
+      } else if (missing) {
+        c.full = at + (missing - 1) * c.per;
+      }
+      chargesCooling(g, c, at, was && was.end > at ? was.start : at);
+      if (!all) live.changed.add(g);
+      continue;
+    }
     if (!ms) {
       if (was && was.end > at) live.cd.set(g, { ...was, end: at });
       if (used) live.unsure.add(g);
@@ -287,8 +353,25 @@ function onCooldowns(data, at) {
       // entry since a use, within the base time of it: what it had was
       // only the estimate (an Ancient Spirit's 82.5 s against 77.4 s).
       const fits = first && used && at + ms <= used + SKILLS.get(g).cd * 1.2;
-      if (was && at + ms > was.end + 1000 && !fits) live.unsure.add(g);
-      const start = was && was.end > at && !live.unsure.has(g) ? was.start : at + ms - Math.max(ms, cooldownOf(g));
+      const left = was && was.end > at ? was.end - at : 0;
+      if (ms > left + 1000 && !fits) {
+        live.unsure.add(g);
+        // And no 01 38 for it just now: a use the game didn't announce. A
+        // held skill's never is (Bolt, a Cleric's: only these lists, its
+        // first ~14-21 s left, 47 38 then taking time off and resetting it):
+        // it is used now, for what the list says. Another skill's use is
+        // put a whole cooldown before its end. Nothing is learnt from it.
+        if (!used || at - used > 1500) {
+          took(g, at);
+          live.used.set(g, at);
+          live.changed.add(g);
+          const total = SKILLS.get(g).held ? ms : Math.max(ms, cooldownOf(g));
+          live.cd.set(g, { start: at + ms - total, end: at + ms });
+          continue;
+        }
+      }
+      // Less than it had (a proc taking time off): it keeps its start.
+      const start = was && was.end > at ? was.start : at + ms - Math.max(ms, cooldownOf(g));
       live.cd.set(g, { start, end: at + ms });
     }
     // A full list, or a group's first entry since its use: what is left,
@@ -399,10 +482,14 @@ function slots() {
     if (!o?.show) continue;
     const c = live.cd.get(g);
     const b = onSkill.get(g);
+    // Charges: the widget counts them against its clock (one back every
+    // chPer ms until chFull).
+    const ch = live.charges.get(g);
     skills.push({
       key: `s${g}`, icon: SKILLS.get(g).icon, always: !!o.always,
       cdStart: c?.start || 0, cdEnd: c?.end || 0,
       buffStart: b?.start || 0, buffEnd: b?.end || 0,
+      ...(ch ? { chMax: ch.max, chPer: ch.per, chFull: ch.full } : {}),
     });
   }
   return { skills, buffs };
@@ -692,6 +779,7 @@ function renderSkills() {
       const g = s.g;
       const o = mine.skills[g] || {};
       const learned = mine.learned[g];
+      const ch = live.charges.get(g);
       const set = (key, value) => {
         mine.skills[g] = { ...(mine.skills[g] || {}), [key]: value };
         saveMine();
@@ -700,8 +788,8 @@ function renderSkills() {
       };
       return row({
         id: `s${g}`, icon: s.icon, name: skillName(g),
-        time: `${learned ? "" : "≈ "}${seconds(cooldownOf(g))}`,
-        timeTitle: learned ? words.learned : words.base,
+        time: ch ? `${ch.max} × ≈ ${seconds(ch.per)}` : `${learned ? "" : "≈ "}${seconds(cooldownOf(g))}`,
+        timeTitle: learned && !ch ? words.learned : words.base,
         shown: o.show, onShow: (on) => set("show", on),
         options: [
           check(words.optAlways, o.always, (v) => set("always", v)),

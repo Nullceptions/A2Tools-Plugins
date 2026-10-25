@@ -63,6 +63,8 @@ body:not(.locked) .slot { cursor: grab; }
 .cdNum { inset: 0; display: grid; place-items: center; font-size: calc(var(--s) * 0.38); }
 .slot.both .cdNum { inset: 2px 3px auto auto; display: block; font-size: calc(var(--s) * 0.28); }
 .buffNum { left: 3px; bottom: 5px; font-size: calc(var(--s) * 0.26); color: #9ff0b8; }
+/* How many charges a skill has left. */
+.chNum { right: 3px; bottom: 3px; font-size: calc(var(--s) * 0.26); color: #ffe08a; }
 .bar {
   position: absolute;
   left: 0;

@@ -34,7 +34,7 @@ function build() {
     if (!n) {
       const el = document.createElement("div");
       el.className = "slot";
-      for (const c of ["art", "sweep", "ring", "bar", "num cdNum", "num buffNum"]) {
+      for (const c of ["art", "sweep", "ring", "bar", "num cdNum", "num buffNum", "num chNum"]) {
         const part = document.createElement(c.startsWith("num") ? "span" : "div");
         part.className = c;
         el.append(part);
@@ -61,7 +61,14 @@ function tick() {
     el.classList.toggle("cooling", cooling);
     el.classList.toggle("buffing", buffing);
     el.classList.toggle("both", cooling && buffing);
-    const active = cooling || buffing || s.always;
+    // Charges (a skill's variant with them): how many there are now, one
+    // back every chPer ms until chFull; the count shows while there are any.
+    const charges = s.chMax ? s.chMax - Math.min(s.chMax, Math.ceil(Math.max(0, s.chFull - now) / s.chPer)) : 0;
+    const recharging = !!s.chMax && charges < s.chMax;
+    const chNum = el.querySelector(".chNum");
+    const chText = s.chMax && charges ? String(charges) : "";
+    if (chNum.textContent !== chText) chNum.textContent = chText;
+    const active = cooling || buffing || recharging || s.always;
     el.hidden = !active && locked;
     el.classList.toggle("idle", !active);
     const cdNum = el.querySelector(".cdNum");

@@ -70,3 +70,17 @@ select option, select optgroup { background: var(--a2-panel, #0e1420); color: #f
 input[type="number"] { width: 64px; text-align: right; }
 .num { color: rgba(233, 240, 248, 0.7); }
 input[type="checkbox"] { color-scheme: dark; width: 16px; height: 16px; accent-color: var(--a2-accent, #5fbf87); }
+/* "Run as administrator", under "Show the game's FPS" when the meter needs it. */
+.fpsNote .admin {
+  margin-top: 6px;
+  display: inline-block;
+  font: inherit;
+  color: #fff;
+  background: var(--a2-accent, #3d7bd9);
+  border: 0;
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+.fpsNote .admin:hover { filter: brightness(1.1); }
+.fpsNote .admin:focus-visible { outline: 2px solid #fff; outline-offset: 1px; }

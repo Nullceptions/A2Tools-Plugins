@@ -2,12 +2,16 @@
 // dragged by the pill unless locked; a double-click opens the settings.
 const pill = document.querySelector(".pill");
 const msEl = document.querySelector(".ms");
+const fpsEl = document.querySelector(".fps");
 let locked = false;
 
 a2.on("widget", (d) => {
   if (!d) return;
   pill.dataset.state = d.state || "none";
   msEl.textContent = typeof d.ms === "number" ? `${d.ms} ms` : "– ms";
+  // The game's FPS, when asked for (undefined: not shown).
+  fpsEl.hidden = d.fps === undefined;
+  fpsEl.textContent = typeof d.fps === "number" ? `${d.fps} fps` : "– fps";
   if (d.scale) document.documentElement.style.setProperty("--scale", String(d.scale));
   pill.classList.toggle("bare", d.background === false);
   pill.classList.toggle("noBars", d.bars === false);

@@ -36,7 +36,8 @@ SKIP = {"README.md"}
 # feed:boss-timers: the shared field boss timers (a2.bossTimers, the bossMap
 # event; meter 2.0.65). A meter without it simply has no a2.bossTimers.
 # "widgets": small windows of the plugin's own (a2.widgets, meter 2.0.68).
-PERMISSIONS = {"storage", "notify", "events:character", "window", "feed:boss-timers", "widgets"}
+# "fps": the game's frame rate (a2.watchFps, a2.fpsAdmin; meter 2.0.78).
+PERMISSIONS = {"storage", "notify", "events:character", "window", "feed:boss-timers", "widgets", "fps"}
 DECODER_TYPES = {"u8", "u16", "u32", "u64", "i32", "varint", "list"}
 
 

@@ -52,6 +52,9 @@ await a2.storage.get("key")           // your saved JSON, or null           (sto
 await a2.storage.set("key", value)
 a2.notify("Text")                     // a short message in your window     (notify)
 await a2.window.show() / hide()       // your window, without taking focus  (window, API 2)
+await a2.watchFps(true)               // the game's FPS as a2.on("fps", ({ fps, state }) => …) about every second; (fps, meter 2.0.78)
+                                      // state "ok", "noGame", "needsAdmin" or "unsupported"; false stops
+await a2.fpsAdmin()                   // Windows: ask the player to restart the meter as administrator, for FPS (fps)
 a2.ready()                            // once your handlers are set: queued events arrive then
 // In a widget's page (widgets permission):
 a2.widget.area({ x, y, width, height })    // the part that takes the mouse; clicks elsewhere go through to the game

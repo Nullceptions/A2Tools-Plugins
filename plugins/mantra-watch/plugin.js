@@ -23,52 +23,52 @@ const nameOf = (m) => (NAMES[lang] || NAMES.en)[m];
 // Everything else the page says, in the same languages (the class name as
 // the meter has it).
 const UI = {
-  en: { alertWhen: "Alert when one drops", inFight: "In a fight", always: "Always", never: "Never", sound: "Sound",
+  en: { alertWhen: "Alert when one drops", inFight: "In a fight", always: "Always", never: "Never", sound: "Sound", volume: "Volume",
     alarm: "Alarm", chime: "Chime", ping: "Ping", none: "None", test: "Test", settings: "Settings", watch: "Watch",
     reaches: "Party members it reaches", notChanter: "Not a Chanter: no alerts", fighting: "Fighting",
     noFight: "No fight yet", lastFight: "Last fight", lastN: (n) => `last ${n}`, off: (name) => `${name} is off!`,
     dismiss: "Click to dismiss until it is back on" },
-  ko: { alertWhen: "꺼지면 알림", inFight: "전투 중", always: "항상", never: "안 함", sound: "소리",
+  ko: { alertWhen: "꺼지면 알림", inFight: "전투 중", always: "항상", never: "안 함", sound: "소리", volume: "음량",
     alarm: "경보", chime: "차임", ping: "핑", none: "없음", test: "테스트", settings: "설정", watch: "감시",
     reaches: "닿는 파티원 수", notChanter: "호법성이 아님: 알림 없음", fighting: "전투 중",
     noFight: "아직 전투 없음", lastFight: "지난 전투", lastN: (n) => `최근 ${n}회`, off: (name) => `${name} 꺼짐!`,
     dismiss: "클릭하면 다시 켜질 때까지 숨깁니다" },
-  ja: { alertWhen: "切れたら通知", inFight: "戦闘中", always: "常に", never: "しない", sound: "サウンド",
+  ja: { alertWhen: "切れたら通知", inFight: "戦闘中", always: "常に", never: "しない", sound: "サウンド", volume: "音量",
     alarm: "アラーム", chime: "チャイム", ping: "ピン", none: "なし", test: "テスト", settings: "設定", watch: "監視",
     reaches: "届いているパーティーメンバー", notChanter: "チャンターではありません: 通知なし", fighting: "戦闘中",
     noFight: "まだ戦闘なし", lastFight: "前回の戦闘", lastN: (n) => `直近${n}回`, off: (name) => `${name}が切れています！`,
     dismiss: "クリックすると、再び有効になるまで隠します" },
-  de: { alertWhen: "Alarm, wenn eine ausfällt", inFight: "Im Kampf", always: "Immer", never: "Nie", sound: "Ton",
+  de: { alertWhen: "Alarm, wenn eine ausfällt", inFight: "Im Kampf", always: "Immer", never: "Nie", sound: "Ton", volume: "Lautstärke",
     alarm: "Alarm", chime: "Glocke", ping: "Ping", none: "Keiner", test: "Test", settings: "Einstellungen", watch: "Beobachten",
     reaches: "Gruppenmitglieder in Reichweite", notChanter: "Kein Kantor: keine Alarme", fighting: "Im Kampf",
     noFight: "Noch kein Kampf", lastFight: "Letzter Kampf", lastN: (n) => `letzte ${n}`, off: (name) => `${name} ist aus!`,
     dismiss: "Klicken: ausblenden, bis sie wieder an ist" },
-  fr: { alertWhen: "Alerter quand un tombe", inFight: "En combat", always: "Toujours", never: "Jamais", sound: "Son",
+  fr: { alertWhen: "Alerter quand un tombe", inFight: "En combat", always: "Toujours", never: "Jamais", sound: "Son", volume: "Volume",
     alarm: "Alarme", chime: "Carillon", ping: "Ping", none: "Aucun", test: "Tester", settings: "Réglages", watch: "Surveiller",
     reaches: "Membres du groupe touchés", notChanter: "Pas un Aède : aucune alerte", fighting: "En combat",
     noFight: "Pas encore de combat", lastFight: "Dernier combat", lastN: (n) => `${n} derniers`, off: (name) => `${name} est coupé !`,
     dismiss: "Cliquer : masquer jusqu'à son retour" },
-  es: { alertWhen: "Avisar si uno se corta", inFight: "En combate", always: "Siempre", never: "Nunca", sound: "Sonido",
+  es: { alertWhen: "Avisar si uno se corta", inFight: "En combate", always: "Siempre", never: "Nunca", sound: "Sonido", volume: "Volumen",
     alarm: "Alarma", chime: "Campana", ping: "Ping", none: "Ninguno", test: "Probar", settings: "Ajustes", watch: "Vigilar",
     reaches: "Miembros del grupo alcanzados", notChanter: "No eres Conjurador: sin avisos", fighting: "En combate",
     noFight: "Aún sin combate", lastFight: "Último combate", lastN: (n) => `últimos ${n}`, off: (name) => `¡${name} está apagado!`,
     dismiss: "Clic: ocultar hasta que vuelva" },
-  pt: { alertWhen: "Avisar quando um cair", inFight: "Em combate", always: "Sempre", never: "Nunca", sound: "Som",
+  pt: { alertWhen: "Avisar quando um cair", inFight: "Em combate", always: "Sempre", never: "Nunca", sound: "Som", volume: "Volume",
     alarm: "Alarme", chime: "Sino", ping: "Ping", none: "Nenhum", test: "Testar", settings: "Configurações", watch: "Vigiar",
     reaches: "Membros do grupo alcançados", notChanter: "Não é Encantador: sem avisos", fighting: "Em combate",
     noFight: "Nenhum combate ainda", lastFight: "Último combate", lastN: (n) => `últimos ${n}`, off: (name) => `${name} está desligado!`,
     dismiss: "Clique: ocultar até voltar" },
-  ru: { alertWhen: "Оповещать, если спадёт", inFight: "В бою", always: "Всегда", never: "Никогда", sound: "Звук",
+  ru: { alertWhen: "Оповещать, если спадёт", inFight: "В бою", always: "Всегда", never: "Никогда", sound: "Звук", volume: "Громкость",
     alarm: "Тревога", chime: "Звон", ping: "Пинг", none: "Нет", test: "Проверить", settings: "Настройки", watch: "Следить",
     reaches: "Сколько участников группы затронуто", notChanter: "Не Чародей: без оповещений", fighting: "Бой",
     noFight: "Боёв ещё не было", lastFight: "Последний бой", lastN: (n) => `последние ${n}`, off: (name) => `${name} не действует!`,
     dismiss: "Нажмите, чтобы скрыть до включения" },
-  "zh-Hans": { alertWhen: "中断时提醒", inFight: "战斗中", always: "总是", never: "从不", sound: "声音",
+  "zh-Hans": { alertWhen: "中断时提醒", inFight: "战斗中", always: "总是", never: "从不", sound: "声音", volume: "音量",
     alarm: "警报", chime: "钟声", ping: "提示音", none: "无", test: "试听", settings: "设置", watch: "监视",
     reaches: "覆盖的队友数", notChanter: "不是护法圣：不提醒", fighting: "战斗中",
     noFight: "还没有战斗", lastFight: "上次战斗", lastN: (n) => `最近 ${n} 场`, off: (name) => `${name} 已中断！`,
     dismiss: "点击隐藏，直到它重新开启" },
-  "zh-Hant": { alertWhen: "中斷時提醒", inFight: "戰鬥中", always: "總是", never: "從不", sound: "音效",
+  "zh-Hant": { alertWhen: "中斷時提醒", inFight: "戰鬥中", always: "總是", never: "從不", sound: "音效", volume: "音量",
     alarm: "警報", chime: "鐘聲", ping: "提示音", none: "無", test: "試聽", settings: "設定", watch: "監視",
     reaches: "涵蓋的隊友數", notChanter: "不是護法聖：不提醒", fighting: "戰鬥中",
     noFight: "還沒有戰鬥", lastFight: "上次戰鬥", lastN: (n) => `最近 ${n} 場`, off: (name) => `${name} 已中斷！`,
@@ -86,7 +86,8 @@ let fight = null;
 let lastHit = 0;
 let quietUntil = 0; // no alert before this: a teleport is loading
 // watch: mantra -> false for one the player doesn't want alerts for.
-const prefs = { alert: "fight", sound: "alarm", watch: {} };
+// volume: the alert's loudness, 0-100 %.
+const prefs = { alert: "fight", sound: "alarm", watch: {}, volume: 100 };
 let fights = []; // the last fights: { at, length, uptime: { mantra: 0..1 }, who }
 
 const isOn = (m, now) => now - (lastTick[m] || 0) < DROP_MS;
@@ -261,11 +262,23 @@ const SOUNDS = {
   ping: [[1760, 0, 0.3, "sine", 0.22], [1760, 0.35, 0.3, "sine", 0.14]],
 };
 let audio = null;
+// Every note goes out through one gain, the Volume setting: squared, so the
+// slider follows how loud it sounds.
+let out = null;
+const gainOf = (percent) => Math.pow(Math.max(0, Math.min(100, Number(percent) || 0)) / 100, 2);
+function setVolume() {
+  if (out) out.gain.value = gainOf(prefs.volume);
+}
 function playSound(name) {
   const notes = SOUNDS[name];
   if (!notes) return;
   try {
     audio ||= new AudioContext();
+    if (!out) {
+      out = audio.createGain();
+      out.connect(audio.destination);
+      setVolume();
+    }
     // Not awaited: in a hidden window WebKitGTK's resume() waits for the page
     // to be used, and a sound that waited for it stayed silent.
     if (audio.state !== "running") audio.resume().catch(() => {});
@@ -278,7 +291,7 @@ function playSound(name) {
       gain.gain.setValueAtTime(0.0001, t);
       gain.gain.exponentialRampToValueAtTime(volume, t + 0.02);
       gain.gain.exponentialRampToValueAtTime(0.0001, t + length);
-      osc.connect(gain).connect(audio.destination);
+      osc.connect(gain).connect(out);
       osc.start(t);
       osc.stop(t + length + 0.05);
     }
@@ -328,6 +341,13 @@ for (const key of ["alert", "sound"]) {
     update();
   });
 }
+$(".volume").addEventListener("input", (e) => {
+  prefs.volume = Number(e.target.value);
+  setVolume();
+  a2.storage.set("prefs", prefs).catch(() => {});
+});
+// Heard where the slider is let go.
+$(".volume").addEventListener("change", () => playSound(prefs.sound));
 $(".test").addEventListener("click", () => playSound(prefs.sound));
 a2.on("language", (code) => {
   lang = code in NAMES ? code : "en";
@@ -344,6 +364,7 @@ a2.on("compact", (on) => document.body.classList.toggle("compact", !!on));
   applyTexts();
   $(".alert").value = prefs.alert;
   $(".sound").value = prefs.sound;
+  $(".volume").value = String(prefs.volume);
   update();
   a2.ready();
   setInterval(update, 250);

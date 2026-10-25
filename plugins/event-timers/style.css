@@ -270,6 +270,10 @@ input[type="checkbox"] {
 .setting select {
   max-width: 62%;
 }
+.setting input[type="range"] {
+  width: 140px;
+  accent-color: var(--a2-accent, #8fc2ff);
+}
 .option {
   display: block;
   margin-bottom: 8px;

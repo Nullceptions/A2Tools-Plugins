@@ -54,6 +54,7 @@ select option, select optgroup { background: var(--a2-panel, #0e1420); color: #f
 
 .settings { margin-top: 4px; display: grid; gap: 3px; font-size: 12px; }
 .settings label { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+.settings input[type="range"] { width: 110px; margin: 0; accent-color: var(--a2-accent, #8fc2ff); }
 
 /* Someone to heal: hard to miss. */
 .banner {

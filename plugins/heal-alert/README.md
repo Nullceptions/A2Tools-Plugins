@@ -17,7 +17,7 @@ still show, with no alert. Until the meter knows your class (at login, or
 from your skills if it started mid-game) there is no alert either.
 
 ⚙: the line and the sound: the voice, an alarm, a chime, a ping, your own
-file (any audio file up to 600 KB, kept by the plugin), or none.
+file (any audio file up to 600 KB, kept by the plugin), or none; and its volume.
 
 The voice is made with [Kokoro](https://huggingface.co/hexgrad/Kokoro-82M)
 (voice `af_nicole`; the model and its voices are Apache 2.0).

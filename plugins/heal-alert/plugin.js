@@ -8,7 +8,8 @@ const $ = (sel, root = document) => root.querySelector(sel);
 const STALE_MS = 5_000;
 // The sound at most this often, however many members drop at once.
 const SOUND_GAP_MS = 1_500;
-const prefs = { line: 60, sound: "voice" };
+// volume: every sound's loudness, 0-100 %.
+const prefs = { line: 60, sound: "voice", volume: 100 };
 // Your own sound, as the file's bytes in base64 and its name.
 let own = null; // { name, data }
 // Most a file may be: the plugin's storage holds 1 MB.
@@ -106,6 +107,13 @@ const SOUNDS = {
   ping: [[1760, 0, 0.3, "sine", 0.22], [1760, 0.35, 0.3, "sine", 0.14]],
 };
 let audio = null;
+// Every sound goes out through one gain, the Volume setting: squared, so the
+// slider follows how loud it sounds.
+let out = null;
+const gainOf = (percent) => Math.pow(Math.max(0, Math.min(100, Number(percent) || 0)) / 100, 2);
+function setVolume() {
+  if (out) out.gain.value = gainOf(prefs.volume);
+}
 const clips = new Map(); // base64 -> Promise<AudioBuffer>
 function clip(base64) {
   if (!clips.has(base64)) {
@@ -120,6 +128,11 @@ function playSound(name) {
   if (!data && !notes) return;
   try {
     audio ||= new AudioContext();
+    if (!out) {
+      out = audio.createGain();
+      out.connect(audio.destination);
+      setVolume();
+    }
     // Not awaited: in a hidden window WebKitGTK's resume() waits for the page
     // to be used, and a sound that waited for it stayed silent.
     if (audio.state !== "running") audio.resume().catch(() => {});
@@ -128,7 +141,7 @@ function playSound(name) {
         .then((buffer) => {
           const src = audio.createBufferSource();
           src.buffer = buffer;
-          src.connect(audio.destination);
+          src.connect(out);
           src.start();
         })
         // A file it can't play: the alarm, so the alert is never silent.
@@ -144,7 +157,7 @@ function playSound(name) {
       gain.gain.setValueAtTime(0.0001, t);
       gain.gain.exponentialRampToValueAtTime(volume, t + 0.02);
       gain.gain.exponentialRampToValueAtTime(0.0001, t + length);
-      osc.connect(gain).connect(audio.destination);
+      osc.connect(gain).connect(out);
       osc.start(t);
       osc.stop(t + length + 0.05);
     }
@@ -190,6 +203,13 @@ $(".file").addEventListener("change", (e) => {
   };
   reader.readAsDataURL(file);
 });
+$(".volume").addEventListener("input", (e) => {
+  prefs.volume = Number(e.target.value);
+  setVolume();
+  a2.storage.set("prefs", prefs).catch(() => {});
+});
+// Heard where the slider is let go.
+$(".volume").addEventListener("change", () => playSound(prefs.sound));
 $(".test").addEventListener("click", () => playSound(prefs.sound));
 a2.on("compact", (on) => document.body.classList.toggle("compact", !!on));
 
@@ -199,6 +219,7 @@ a2.on("compact", (on) => document.body.classList.toggle("compact", !!on));
   if (savedOwn?.data) own = savedOwn;
   $(".line").value = String(prefs.line);
   $(".sound").value = prefs.sound;
+  $(".volume").value = String(prefs.volume);
   showOwn();
   update();
   a2.ready();

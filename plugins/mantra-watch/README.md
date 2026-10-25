@@ -14,7 +14,7 @@ last fight's, with the average of the last 10 (per character). A fight runs
 from your first hit to 8 s after your last; fights under 10 s aren't kept,
 and a heal or buff on someone your mantras reach starts none.
 
-⚙: when to alert (in a fight, always, never), the sound, and which mantras
+⚙: when to alert (in a fight, always, never), the sound and its volume, and which mantras
 to watch. Everything is in the meter's 10 languages.
 
 Switching character starts over (with `events:character`, meter 2.0.65 on):

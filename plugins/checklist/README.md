@@ -19,7 +19,7 @@ Ticks clear at the game's resets: daily at 07:00 UTC, weekly on Wednesday at
 
 Before each reset, if anything is left on your current character, the window
 comes up with what is left and a sound (default: 2 h before the daily reset,
-1 day before the weekly one; Off is a choice). Only while AION2 is running.
+1 day before the weekly one; Off is a choice), at the volume set under Edit. Only while AION2 is running.
 **Test** under Edit shows one.
 
 ## What it reads

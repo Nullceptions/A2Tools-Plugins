@@ -39,7 +39,7 @@ const state = {
   main: null, // your main character's key
   progress: {},
   reminded: {},
-  prefs: { minutes: 420, weekday: 3, remindDaily: 2, remindWeekly: 24, sound: "chime" },
+  prefs: { minutes: 420, weekday: 3, remindDaily: 2, remindWeekly: 24, sound: "chime", volume: 100 },
   last: null,
 };
 const KEYS = Object.keys(state);
@@ -304,11 +304,23 @@ const SOUNDS = {
   ping: [[1760, 0, 0.3, "sine", 0.22], [1760, 0.35, 0.3, "sine", 0.14]],
 };
 let audio = null;
+// Every note goes out through one gain, the Volume setting (0-100 %):
+// squared, so the slider follows how loud it sounds.
+let out = null;
+const gainOf = (percent) => Math.pow(Math.max(0, Math.min(100, Number(percent ?? 100) || 0)) / 100, 2);
+function setVolume() {
+  if (out) out.gain.value = gainOf(state.prefs.volume);
+}
 function playSound(name) {
   const notes = SOUNDS[name];
   if (!notes) return;
   try {
     audio ||= new AudioContext();
+    if (!out) {
+      out = audio.createGain();
+      out.connect(audio.destination);
+      setVolume();
+    }
     // Not awaited: in a hidden window WebKitGTK's resume() waits for the page
     // to be used, and a sound that waited for it stayed silent.
     if (audio.state !== "running") audio.resume().catch(() => {});
@@ -321,7 +333,7 @@ function playSound(name) {
       gain.gain.setValueAtTime(0.0001, t);
       gain.gain.exponentialRampToValueAtTime(volume, t + 0.02);
       gain.gain.exponentialRampToValueAtTime(0.0001, t + length);
-      osc.connect(gain).connect(audio.destination);
+      osc.connect(gain).connect(out);
       osc.start(t);
       osc.stop(t + length + 0.05);
     }
@@ -340,6 +352,8 @@ function showPrefs() {
   $(".remindDaily").value = String(state.prefs.remindDaily);
   $(".remindWeekly").value = String(state.prefs.remindWeekly);
   $(".sound").value = state.prefs.sound;
+  $(".volume").value = String(state.prefs.volume ?? 100);
+  setVolume();
 }
 $(".resetTime").addEventListener("change", (e) => {
   const [h, m] = e.target.value.split(":").map(Number);
@@ -355,6 +369,13 @@ for (const [cls, key] of [["resetDay", "weekday"], ["remindDaily", "remindDaily"
     render();
   });
 }
+$(".volume").addEventListener("input", (e) => {
+  state.prefs.volume = Number(e.target.value);
+  setVolume();
+  save("prefs");
+});
+// Heard where the slider is let go.
+$(".volume").addEventListener("change", () => playSound(state.prefs.sound));
 $(".testAlert").addEventListener("click", () => checkReminders(true));
 
 a2.on("compact", (on) => document.body.classList.toggle("compact", !!on));

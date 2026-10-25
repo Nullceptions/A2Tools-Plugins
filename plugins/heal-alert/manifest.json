@@ -1,7 +1,7 @@
 {
   "id": "heal-alert",
   "name": "Heal Alert",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "apiVersion": 2,
   "author": "Nullception",
   "description": "For Clerics: a sound and a red banner the moment a party member's HP drops under 60% (or the level you pick), with each member's HP as a bar.",

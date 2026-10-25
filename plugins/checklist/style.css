@@ -81,6 +81,7 @@ body.editing .items li { cursor: default; }
 .settings { margin-top: 8px; display: grid; gap: 4px; font-size: 12px; }
 .settings label { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
 .settings label button { margin-left: 4px; }
+.settings input[type="range"] { width: 110px; margin: 0; accent-color: var(--a2-accent, #8fc2ff); }
 .settings .makeMain { justify-self: start; }
 .settings .note { margin: 2px 0 0; color: rgba(255, 255, 255, 0.5); }
 

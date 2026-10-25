@@ -50,6 +50,8 @@ const els = {
   alertOptionsBtn: $(".alertOptionsBtn"),
   alertSettings: $(".alertSettings"),
   repeatLabel: $(".repeatLabel"),
+  volumeLabel: $(".volumeLabel"),
+  volume: $(".volume"),
   repeat: $(".repeat"),
   pop: $(".pop"),
   popLabel: $(".popLabel"),
@@ -239,7 +241,7 @@ const MORE_UI = {
         noFeed: "World boss timers need meter 2.0.65 or later.", feedFailed: "Couldn't read the world boss timers.",
         noServer: "Log in to a character to see your server's world bosses.", up: "Up", upFor: (t) => `for ${t}`,
         due: "Due", unknown: "No report yet", seen: (t) => `reported ${t} ago`, allField: "All world bosses",
-        repeat: "Repeat", once: "Once", times: (n) => `${n} times`, untilMuted: "Until muted", mute: "Mute", dismiss: "Dismiss",
+        repeat: "Repeat", volume: "Volume", once: "Once", times: (n) => `${n} times`, untilMuted: "Until muted", mute: "Mute", dismiss: "Dismiss",
         bossSoon: (name, n) => `${name} back in ${n} min`, bossNow: (name) => `${name} is back` },
   ko: { groupUp: "출현 중", groupWindow: "출현 시간 지남", groupUpcoming: "예정", groupUnknown: "아직 정보 없음", ago: (t) => `${t} 전`, hpLeft: (n) => `HP ${n}%`,
         openFull: "Event Timers 열기", alertOptions: "구성", testAlert: "알림 테스트", alertColor: "알림 색상", colors: {"orange": "주황", "gold": "금색", "red": "빨강", "pink": "분홍", "purple": "보라", "blue": "파랑", "green": "초록"},
@@ -249,7 +251,7 @@ const MORE_UI = {
         noFeed: "월드 보스 타이머는 미터 2.0.65 이상이 필요합니다.", feedFailed: "월드 보스 타이머를 읽지 못했습니다.",
         noServer: "캐릭터로 접속하면 서버의 월드 보스가 표시됩니다.", up: "출현", upFor: (t) => `${t}째`,
         due: "곧 출현", unknown: "아직 정보 없음", seen: (t) => `${t} 전 보고`, allField: "모든 월드 보스",
-        repeat: "반복", once: "1회", times: (n) => `${n}회`, untilMuted: "끌 때까지", mute: "소리 끄기", dismiss: "닫기",
+        repeat: "반복", volume: "음량", once: "1회", times: (n) => `${n}회`, untilMuted: "끌 때까지", mute: "소리 끄기", dismiss: "닫기",
         bossSoon: (name, n) => `${name} ${n}분 후 출현`, bossNow: (name) => `${name} 출현` },
   ja: { groupUp: "出現中", groupWindow: "出現時刻経過", groupUpcoming: "予定", groupUnknown: "情報なし", ago: (t) => `${t}前`, hpLeft: (n) => `HP ${n}%`,
         openFull: "Event Timers を開く", alertOptions: "構成", testAlert: "通知をテスト", alertColor: "通知の色", colors: {"orange": "オレンジ", "gold": "ゴールド", "red": "赤", "pink": "ピンク", "purple": "紫", "blue": "青", "green": "緑"},
@@ -259,7 +261,7 @@ const MORE_UI = {
         noFeed: "ワールドボスのタイマーにはメーター 2.0.65 以降が必要です。", feedFailed: "ワールドボスのタイマーを読み込めませんでした。",
         noServer: "キャラクターでログインするとサーバーのワールドボスが表示されます。", up: "出現中", upFor: (t) => `${t}経過`,
         due: "まもなく", unknown: "情報なし", seen: (t) => `${t}前に報告`, allField: "すべてのワールドボス",
-        repeat: "繰り返し", once: "1回", times: (n) => `${n}回`, untilMuted: "ミュートするまで", mute: "ミュート", dismiss: "閉じる",
+        repeat: "繰り返し", volume: "音量", once: "1回", times: (n) => `${n}回`, untilMuted: "ミュートするまで", mute: "ミュート", dismiss: "閉じる",
         bossSoon: (name, n) => `${name}まであと${n}分`, bossNow: (name) => `${name}出現` },
   de: { groupUp: "Da", groupWindow: "Im Zeitfenster", groupUpcoming: "Demnächst", groupUnknown: "Noch keine Meldung", ago: (t) => `vor ${t}`, hpLeft: (n) => `HP ${n} %`,
         openFull: "Event Timers öffnen", alertOptions: "Konfig", testAlert: "Testalarm", alertColor: "Alarmfarbe", colors: {"orange": "Orange", "gold": "Gold", "red": "Rot", "pink": "Pink", "purple": "Lila", "blue": "Blau", "green": "Grün"},
@@ -269,7 +271,7 @@ const MORE_UI = {
         noFeed: "Weltboss-Timer brauchen Meter 2.0.65 oder neuer.", feedFailed: "Die Weltboss-Timer konnten nicht gelesen werden.",
         noServer: "Mit einem Charakter einloggen, um die Weltbosse deines Servers zu sehen.", up: "Da", upFor: (t) => `seit ${t}`,
         due: "Fällig", unknown: "Noch keine Meldung", seen: (t) => `vor ${t} gemeldet`, allField: "Alle Weltbosse",
-        repeat: "Wiederholen", once: "Einmal", times: (n) => `${n}-mal`, untilMuted: "Bis stumm", mute: "Stumm", dismiss: "Schließen",
+        repeat: "Wiederholen", volume: "Lautstärke", once: "Einmal", times: (n) => `${n}-mal`, untilMuted: "Bis stumm", mute: "Stumm", dismiss: "Schließen",
         bossSoon: (name, n) => `${name} in ${n} Min. zurück`, bossNow: (name) => `${name} ist zurück` },
   fr: { groupUp: "Présents", groupWindow: "Dans la fenêtre", groupUpcoming: "À venir", groupUnknown: "Pas encore signalés", ago: (t) => `il y a ${t}`, hpLeft: (n) => `PV ${n} %`,
         openFull: "Ouvrir Event Timers", alertOptions: "Config", testAlert: "Tester l'alerte", alertColor: "Couleur des alertes", colors: {"orange": "Orange", "gold": "Or", "red": "Rouge", "pink": "Rose", "purple": "Violet", "blue": "Bleu", "green": "Vert"},
@@ -279,7 +281,7 @@ const MORE_UI = {
         noFeed: "Les minuteurs des boss mondiaux demandent le meter 2.0.65 ou plus récent.", feedFailed: "Impossible de lire les minuteurs des boss mondiaux.",
         noServer: "Connectez-vous avec un personnage pour voir les boss mondiaux de votre serveur.", up: "Présent", upFor: (t) => `depuis ${t}`,
         due: "Imminent", unknown: "Pas encore signalé", seen: (t) => `signalé il y a ${t}`, allField: "Tous les boss mondiaux",
-        repeat: "Répéter", once: "Une fois", times: (n) => `${n} fois`, untilMuted: "Jusqu'à coupure", mute: "Couper", dismiss: "Fermer",
+        repeat: "Répéter", volume: "Volume", once: "Une fois", times: (n) => `${n} fois`, untilMuted: "Jusqu'à coupure", mute: "Couper", dismiss: "Fermer",
         bossSoon: (name, n) => `${name} de retour dans ${n} min`, bossNow: (name) => `${name} est de retour` },
   es: { groupUp: "Activos", groupWindow: "En ventana", groupUpcoming: "Próximos", groupUnknown: "Sin informes", ago: (t) => `hace ${t}`, hpLeft: (n) => `PV ${n} %`,
         openFull: "Abrir Event Timers", alertOptions: "Config", testAlert: "Probar alerta", alertColor: "Color de las alertas", colors: {"orange": "Naranja", "gold": "Dorado", "red": "Rojo", "pink": "Rosa", "purple": "Morado", "blue": "Azul", "green": "Verde"},
@@ -289,7 +291,7 @@ const MORE_UI = {
         noFeed: "Los temporizadores de jefes mundiales necesitan el medidor 2.0.65 o posterior.", feedFailed: "No se pudieron leer los temporizadores de jefes mundiales.",
         noServer: "Entra con un personaje para ver los jefes mundiales de tu servidor.", up: "Activo", upFor: (t) => `desde hace ${t}`,
         due: "Inminente", unknown: "Sin informes", seen: (t) => `informado hace ${t}`, allField: "Todos los jefes mundiales",
-        repeat: "Repetir", once: "Una vez", times: (n) => `${n} veces`, untilMuted: "Hasta silenciar", mute: "Silenciar", dismiss: "Cerrar",
+        repeat: "Repetir", volume: "Volumen", once: "Una vez", times: (n) => `${n} veces`, untilMuted: "Hasta silenciar", mute: "Silenciar", dismiss: "Cerrar",
         bossSoon: (name, n) => `${name} vuelve en ${n} min`, bossNow: (name) => `${name} ha vuelto` },
   pt: { groupUp: "Ativos", groupWindow: "Na janela", groupUpcoming: "Próximos", groupUnknown: "Sem relatos ainda", ago: (t) => `há ${t}`, hpLeft: (n) => `PV ${n}%`,
         openFull: "Abrir Event Timers", alertOptions: "Config", testAlert: "Testar alerta", alertColor: "Cor dos alertas", colors: {"orange": "Laranja", "gold": "Dourado", "red": "Vermelho", "pink": "Rosa", "purple": "Roxo", "blue": "Azul", "green": "Verde"},
@@ -299,7 +301,7 @@ const MORE_UI = {
         noFeed: "Os timers de chefes mundiais precisam do medidor 2.0.65 ou mais novo.", feedFailed: "Não foi possível ler os timers de chefes mundiais.",
         noServer: "Entre com um personagem para ver os chefes mundiais do seu servidor.", up: "Ativo", upFor: (t) => `há ${t}`,
         due: "Iminente", unknown: "Sem relatos ainda", seen: (t) => `relatado há ${t}`, allField: "Todos os chefes mundiais",
-        repeat: "Repetir", once: "Uma vez", times: (n) => `${n} vezes`, untilMuted: "Até silenciar", mute: "Silenciar", dismiss: "Fechar",
+        repeat: "Repetir", volume: "Volume", once: "Uma vez", times: (n) => `${n} vezes`, untilMuted: "Até silenciar", mute: "Silenciar", dismiss: "Fechar",
         bossSoon: (name, n) => `${name} volta em ${n} min`, bossNow: (name) => `${name} voltou` },
   ru: { groupUp: "На месте", groupWindow: "В окне появления", groupUpcoming: "Скоро", groupUnknown: "Пока нет данных", ago: (t) => `${t} назад`, hpLeft: (n) => `HP ${n}%`,
         openFull: "Открыть Event Timers", alertOptions: "Конфиг", testAlert: "Проверить", alertColor: "Цвет оповещений", colors: {"orange": "Оранжевый", "gold": "Золотой", "red": "Красный", "pink": "Розовый", "purple": "Фиолетовый", "blue": "Синий", "green": "Зелёный"},
@@ -309,7 +311,7 @@ const MORE_UI = {
         noFeed: "Для таймеров мировых боссов нужен метр 2.0.65 или новее.", feedFailed: "Не удалось прочитать таймеры мировых боссов.",
         noServer: "Войдите персонажем, чтобы видеть мировых боссов своего сервера.", up: "На месте", upFor: (t) => `уже ${t}`,
         due: "Вот-вот", unknown: "Пока нет данных", seen: (t) => `данные ${t} назад`, allField: "Все мировые боссы",
-        repeat: "Повтор", once: "Один раз", times: (n) => `${n} раз`, untilMuted: "Пока не выключить", mute: "Выключить звук", dismiss: "Закрыть",
+        repeat: "Повтор", volume: "Громкость", once: "Один раз", times: (n) => `${n} раз`, untilMuted: "Пока не выключить", mute: "Выключить звук", dismiss: "Закрыть",
         bossSoon: (name, n) => `${name} через ${n} мин`, bossNow: (name) => `${name} появился` },
   "zh-Hant": { groupUp: "已出現", groupWindow: "出現時段中", groupUpcoming: "即將出現", groupUnknown: "尚無回報", ago: (t) => `${t} 前`, hpLeft: (n) => `HP ${n}%`,
         openFull: "開啟 Event Timers", alertOptions: "配置", testAlert: "測試提醒", alertColor: "提醒顏色", colors: {"orange": "橘色", "gold": "金色", "red": "紅色", "pink": "粉紅", "purple": "紫色", "blue": "藍色", "green": "綠色"},
@@ -319,7 +321,7 @@ const MORE_UI = {
         noFeed: "世界首領計時需要計量器 2.0.65 以上。", feedFailed: "無法讀取世界首領計時。",
         noServer: "登入角色即可查看伺服器的世界首領。", up: "已出現", upFor: (t) => `已 ${t}`,
         due: "即將出現", unknown: "尚無回報", seen: (t) => `${t} 前回報`, allField: "所有世界首領",
-        repeat: "重複", once: "一次", times: (n) => `${n} 次`, untilMuted: "直到靜音", mute: "靜音", dismiss: "關閉",
+        repeat: "重複", volume: "音量", once: "一次", times: (n) => `${n} 次`, untilMuted: "直到靜音", mute: "靜音", dismiss: "關閉",
         bossSoon: (name, n) => `${name} ${n} 分鐘後出現`, bossNow: (name) => `${name} 已出現` },
   "zh-Hans": { groupUp: "已出现", groupWindow: "出现时段中", groupUpcoming: "即将出现", groupUnknown: "尚无回报", ago: (t) => `${t} 前`, hpLeft: (n) => `HP ${n}%`,
         openFull: "打开 Event Timers", alertOptions: "配置", testAlert: "测试提醒", alertColor: "提醒颜色", colors: {"orange": "橙色", "gold": "金色", "red": "红色", "pink": "粉红", "purple": "紫色", "blue": "蓝色", "green": "绿色"},
@@ -329,7 +331,7 @@ const MORE_UI = {
         noFeed: "世界首领计时需要计量器 2.0.65 以上。", feedFailed: "无法读取世界首领计时。",
         noServer: "登录角色即可查看服务器的世界首领。", up: "已出现", upFor: (t) => `已 ${t}`,
         due: "即将出现", unknown: "尚无回报", seen: (t) => `${t} 前回报`, allField: "所有世界首领",
-        repeat: "重复", once: "一次", times: (n) => `${n} 次`, untilMuted: "直到静音", mute: "静音", dismiss: "关闭",
+        repeat: "重复", volume: "音量", once: "一次", times: (n) => `${n} 次`, untilMuted: "直到静音", mute: "静音", dismiss: "关闭",
         bossSoon: (name, n) => `${name} ${n} 分钟后出现`, bossNow: (name) => `${name} 已出现` },
 };
 
@@ -374,7 +376,8 @@ let gameRunning = null;
 // lastServer: the last character's server, kept for when nobody is logged in.
 // alsoAtStart: an alert with a lead goes off again as its event starts.
 // folded: the Bosses tab's sections folded away ({ scheduled, field }).
-let prefs = { region: "auto", hidden: [], alerts: {}, leads: {}, closedLeads: {}, sound: "chime", repeat: 1, pop: false,
+// volume: the alerts' loudness, 0-100 %.
+let prefs = { region: "auto", hidden: [], alerts: {}, leads: {}, closedLeads: {}, sound: "chime", repeat: 1, volume: 100, pop: false,
   tab: "events", display: "system", lastServer: 0, scale: 1, defaultLead: DEFAULT_LEAD, defaultClosedLead: DEFAULT_CLOSED_LEAD,
   alertColor: "orange", alsoAtStart: false, folded: {} };
 // The world boss timers: { server, bosses, at, error }, from the feed and the
@@ -598,6 +601,8 @@ function renderStatic() {
   els.testAlert.textContent = words.testAlert;
   els.alertOptionsBtn.textContent = words.alertOptions;
   els.repeatLabel.textContent = words.repeat;
+  els.volumeLabel.textContent = words.volume;
+  els.volume.value = String(prefs.volume ?? 100);
   els.popLabel.textContent = a.pop;
   els.alsoAtStartLabel.textContent = a.alsoAtStart;
   els.popNote.textContent = words.popNote;
@@ -1683,6 +1688,15 @@ els.alertOptionsBtn.addEventListener("click", () => {
   renderTabs();
   els.alertSettings.scrollIntoView({ block: "start" });
 });
+// The volume, for every alert's sound; heard where the slider is let go.
+els.volume.addEventListener("input", () => {
+  prefs.volume = Number(els.volume.value);
+  setSoundVolume(prefs.volume);
+  savePrefs();
+});
+els.volume.addEventListener("change", () => {
+  if (prefs.sound !== "off") playSound(prefs.sound);
+});
 els.repeat.addEventListener("change", () => {
   prefs.repeat = Number(els.repeat.value);
   savePrefs();
@@ -1800,6 +1814,7 @@ a2.on("compact", (on) => document.body.classList.toggle("compact", !!on));
 (async () => {
   prefs = { ...prefs, ...((await a2.storage.get("prefs").catch(() => null)) || {}) };
   prefs.closedLeads = prefs.closedLeads || {};
+  setSoundVolume(prefs.volume);
   // The old single "timers" tab is the events one now.
   if (!els.views[prefs.tab]) prefs.tab = "events";
   applyScale();

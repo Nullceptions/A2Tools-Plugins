@@ -1,7 +1,5 @@
 // Pet Soul Tracker: souls still needed to raise each pet, and where each
 // pet's souls drop (sources.js, from the game's own data; click a pet to see them).
-// "Around you" is a map of where the monsters that drop a soul for a pet below
-// level 3 spawn, with you and the monsters in range on it (maps.js, nearby.js).
 //
 // The game sends every pet's level and soul points once, at login (decoder
 // "pet-list"), then each soul as it is picked up ("soul-gained") and each
@@ -44,24 +42,6 @@ const els = {
   farmPopup: document.querySelector(".farmPopup"),
   farmAfter: document.querySelector(".farmAfter"),
   hideAfter: document.querySelector(".hideAfterSelect"),
-  controls: document.querySelector(".controls"),
-  nearby: document.querySelector(".nearby"),
-  nearbyWhere: document.querySelector(".nearbyWhere"),
-  nearbyOn: document.querySelector(".nearbyOn"),
-  allNpcs: document.querySelector(".allNpcsBox"),
-  nearbyTitle: document.querySelector(".nearbyTitle"),
-  nearbyCount: document.querySelector(".nearbyCount"),
-  minimap: document.querySelector(".minimap"),
-  zoomIn: document.querySelector(".zoomIn"),
-  zoomOut: document.querySelector(".zoomOut"),
-  follow: document.querySelector(".follow"),
-  mapNote: document.querySelector(".mapNote"),
-  mapCredit: document.querySelector(".mapCredit"),
-  mapBox: document.querySelector(".mapBox"),
-  popOut: document.querySelector(".popOut"),
-  popIn: document.querySelector(".popIn"),
-  poppedNote: document.querySelector(".poppedNote"),
-  nearbyList: document.querySelector(".nearbyList"),
 };
 
 // farmed: each pet given a soul below level 3, by when (the farming pop-up).
@@ -73,7 +53,7 @@ let language = "en";
 let openId = null; // the pet whose sources are shown
 // How the list is sorted, and whether maxed pets show; kept across restarts.
 // hiddenRegions: null until the user picks; until then the other side's maps hide.
-let prefs = { sort: "left", desc: false, hideMax: true, genus: "", level: "", pinned: [], hiddenRegions: null, scale: 1, filtersOpen: false, chestOnly: false, layout: "cards", farmPopup: false, hideAfter: 20, nearby: false, allNpcs: false, mapZoom: 2, popZoom: 2, popSize: 1, mapPopped: false };
+let prefs = { sort: "left", desc: false, hideMax: true, genus: "", level: "", pinned: [], hiddenRegions: null, scale: 1, filtersOpen: false, chestOnly: false, layout: "cards", farmPopup: false, hideAfter: 20 };
 // Text size: the whole page scaled, spacing and controls with the text. 100%
 // is BASE_ZOOM, a little larger than the stylesheet's own sizes.
 const SCALES = [0.9, 1, 1.1, 1.25, 1.5];
@@ -223,7 +203,6 @@ function petOf(id) {
 }
 
 function render() {
-  renderNearby();
   const ids = new Set([...Object.keys(state.levels), ...Object.keys(state.points)]);
   // Special pets come at their highest level and take no souls, so they are
   // left out, as are pets only found on maps not open yet (the game lists
@@ -400,14 +379,12 @@ function fitFarm() {
 function showFarm() {
   view = "farm";
   document.body.classList.add("farmOnly");
-  els.farmList.before(els.nearby);
   render();
 }
 function showFull() {
   if (view === "full") return;
   view = "full";
   document.body.classList.remove("farmOnly");
-  els.controls.after(els.nearby);
   if (canFit()) win.fit().catch(() => {});
   render();
 }
@@ -435,423 +412,6 @@ for (const type of ["pointerdown", "keydown", "wheel"]) {
   document.addEventListener(type, () => { usedAt = Date.now(); }, { passive: true });
 }
 document.addEventListener("pointermove", () => { hoveredAt = Date.now(); }, { passive: true });
-
-// ---- Around you: a map of where the souls you need are ---------------------
-//
-// The map is the game's world map with every spawn of the monsters that drop
-// a soul for a pet below level 3 (maps.js, from aion2timers.com), you on it,
-// and the monsters in range as the game sends them (nearby.js), which sit on
-// those spawns. Your own position only comes now and then: as your effects
-// land on you (fighting, mounting, gliding: 6 in a minute of running,
-// mounting and flying, 2026-10-25), a Chanter's mantras once a second, never
-// for running alone. So "you" can lag: the header says how old it is. The
-// monsters are placed by the game's own positions, whatever yours.
-const field = new PetNearby.Field();
-// Each NPC id's drops (its name, level and the pets it drops souls for), and
-// each map's name, from sources.js.
-const NPC_DROPS = {};
-const MAP_NAMES = {};
-for (const [pet, src] of Object.entries(PET_SOURCES)) {
-  for (const d of src.drops) {
-    if (d.mapId && d.map) MAP_NAMES[d.mapId] ||= d.map;
-    if (!d.npcId) continue;
-    const n = (NPC_DROPS[d.npcId] ||= { npc: d.npc, level: d.level, pets: [] });
-    if (!n.pets.includes(pet)) n.pets.push(pet);
-  }
-}
-// Older than this, the header says how old your position is.
-const STALE_MS = 15_000;
-const NEARBY_ROWS = 4;
-const GENUS_COLOURS = { cogni: "#b99bff", fera: "#ff9f66", natura: "#74d99a", varian: "#5cc9e6" };
-// Metres per screen pixel, zoomed in to out.
-const ZOOMS = [0.5, 1, 2, 4, 8, 16];
-// A pet still to raise: below level 3, not special.
-const needs = (pet) => PET_GENUS[pet] !== "special" && !PET_SOURCES[pet]?.unreleased && (state.levels[pet] || 0) < MAX_LEVEL;
-// The pets still to raise that a monster drops souls for, fewest souls left first.
-const neededFrom = (npc) => (NPC_DROPS[npc]?.pets || []).filter(needs).map(petOf).sort((a, b) => a.left - b.left);
-const colourOf = (pets) => GENUS_COLOURS[pets[0]?.genus] || "#8fc2ff";
-const agoText = (ms) => {
-  const s = Math.round(ms / 1000);
-  const [n, unit] = s < 60 ? [s, "second"] : s < 3600 ? [Math.round(s / 60), "minute"] : [Math.round(s / 3600), "hour"];
-  try {
-    return new Intl.NumberFormat(language, { style: "unit", unit, unitDisplay: "short" }).format(n);
-  } catch {
-    return `${n} ${unit === "second" ? "s" : unit === "minute" ? "min" : "h"}`;
-  }
-};
-
-// The map's words, in each of the meter's languages. Ages ("5 min") and
-// distances come from Intl.
-const MAP_UI = {
-  en: { around: "Around you", showMap: "Show the map", showMapTip: "A map of where the monsters that drop a soul for a pet below level 3 spawn, with you on it",
-        allMonsters: "All monsters", allMonstersTip: "Every other monster in range too, as grey dots", popOut: "Pop the map out into a window of its own",
-        popped: "The map is in its own window.", putBack: "Put it back", unknown: "position not known yet", estimated: "≈ position estimated",
-        old: (t) => `position ${t} old`,
-        estimatedTip: "Guessed from the monsters coming into view, within about 20 to 30 m. Fight, dodge or use a skill on yourself to make it exact",
-        inRange: (n) => `${n} in range`, forPets: (x) => `for ${x}`, toLv3: (name, left) => `${name} (${left} to Lv 3)`,
-        noneInRange: "No monster in range drops a soul you need. The dots are where they spawn.", noneOnMap: "No monster on this map drops a soul you need.",
-        noMapYet: "The map shows after your next teleport or zone change", noPicture: "No map picture for this place",
-        compass4: ["N", "E", "S", "W"], compass8: ["N", "NE", "E", "SE", "S", "SW", "W", "NW"],
-        zoomIn: "Zoom in", zoomOut: "Zoom out", back: "Back to you", mapTip: "Drag to move, wheel to zoom, double-click to follow you again",
-        mapLabel: "Map of where the monsters you need spawn, north up", drag: "Drag to move", bigger: "Bigger (then back to the smallest)",
-        backIn: "Back into the Pet Soul Tracker window", credit: "Map: Aion 2 Timers" },
-  ko: { around: "주변", showMap: "지도 표시", showMapTip: "레벨 3 미만 펫의 영혼을 주는 몬스터가 나타나는 곳과 내 위치를 보여 주는 지도",
-        allMonsters: "모든 몬스터", allMonstersTip: "범위 안의 다른 몬스터도 회색 점으로 표시", popOut: "지도를 별도 창으로 띄우기",
-        popped: "지도가 별도 창에 있습니다.", putBack: "되돌리기", unknown: "위치 아직 모름", estimated: "≈ 추정 위치",
-        old: (t) => `위치: ${t} 전`,
-        estimatedTip: "시야에 들어오는 몬스터로 추정한 위치로, 오차는 약 20~30 m입니다. 전투, 회피 또는 자신에게 스킬을 쓰면 정확해집니다",
-        inRange: (n) => `범위 안 ${n}`, forPets: (x) => `대상: ${x}`, toLv3: (name, left) => `${name} (Lv 3까지 ${left})`,
-        noneInRange: "범위 안에 필요한 영혼을 주는 몬스터가 없습니다. 점은 출현 위치입니다.", noneOnMap: "이 지도에는 필요한 영혼을 주는 몬스터가 없습니다.",
-        noMapYet: "다음 텔레포트나 지역 이동 후에 지도가 표시됩니다", noPicture: "이 장소의 지도 그림이 없습니다",
-        compass4: ["북", "동", "남", "서"], compass8: ["북", "북동", "동", "남동", "남", "남서", "서", "북서"],
-        zoomIn: "확대", zoomOut: "축소", back: "내 위치로", mapTip: "드래그로 이동, 휠로 확대/축소, 더블클릭하면 다시 나를 따라갑니다",
-        mapLabel: "필요한 몬스터가 나타나는 곳의 지도 (북쪽이 위)", drag: "드래그해서 이동", bigger: "크게 (가장 크면 다시 작게)",
-        backIn: "Pet Soul Tracker 창으로 되돌리기", credit: "지도: Aion 2 Timers" },
-  ja: { around: "周辺", showMap: "地図を表示", showMapTip: "レベル3未満のペットの魂を落とすモンスターの出現場所と、あなたの位置を示す地図",
-        allMonsters: "すべてのモンスター", allMonstersTip: "範囲内のほかのモンスターも灰色の点で表示", popOut: "地図を別ウィンドウに出す",
-        popped: "地図は別ウィンドウにあります。", putBack: "戻す", unknown: "位置はまだ不明", estimated: "≈ 推定位置",
-        old: (t) => `位置は${t}前`,
-        estimatedTip: "視界に入ったモンスターから推定した位置で、誤差は約20〜30 mです。戦闘、回避、自分へのスキル使用で正確になります",
-        inRange: (n) => `範囲内 ${n}`, forPets: (x) => `対象: ${x}`, toLv3: (name, left) => `${name}（Lv 3まで${left}）`,
-        noneInRange: "範囲内に必要な魂を落とすモンスターはいません。点は出現場所です。", noneOnMap: "この地図には必要な魂を落とすモンスターはいません。",
-        noMapYet: "次のテレポートかエリア移動のあとに地図が表示されます", noPicture: "この場所の地図画像はありません",
-        compass4: ["北", "東", "南", "西"], compass8: ["北", "北東", "東", "南東", "南", "南西", "西", "北西"],
-        zoomIn: "拡大", zoomOut: "縮小", back: "自分の位置へ", mapTip: "ドラッグで移動、ホイールで拡大縮小、ダブルクリックで再び追従",
-        mapLabel: "必要なモンスターの出現場所の地図（北が上）", drag: "ドラッグで移動", bigger: "大きく（最大の次は最小に戻る）",
-        backIn: "Pet Soul Trackerのウィンドウに戻す", credit: "地図: Aion 2 Timers" },
-  de: { around: "In der Nähe", showMap: "Karte zeigen", showMapTip: "Eine Karte, wo die Monster erscheinen, die eine Seele für ein Pet unter Stufe 3 droppen, mit dir darauf",
-        allMonsters: "Alle Monster", allMonstersTip: "Auch alle anderen Monster in Reichweite, als graue Punkte", popOut: "Karte in ein eigenes Fenster lösen",
-        popped: "Die Karte ist in einem eigenen Fenster.", putBack: "Zurückholen", unknown: "Position noch unbekannt", estimated: "≈ Position geschätzt",
-        old: (t) => `Position von vor ${t}`,
-        estimatedTip: "Geschätzt aus den Monstern, die in Sicht kommen, auf etwa 20 bis 30 m genau. Kämpfe, weiche aus oder wirke eine Fertigkeit auf dich, damit sie genau wird",
-        inRange: (n) => `${n} in Reichweite`, forPets: (x) => `für ${x}`, toLv3: (name, left) => `${name} (${left} bis Lv 3)`,
-        noneInRange: "Kein Monster in Reichweite droppt eine Seele, die du brauchst. Die Punkte zeigen, wo sie erscheinen.", noneOnMap: "Auf dieser Karte droppt kein Monster eine Seele, die du brauchst.",
-        noMapYet: "Die Karte erscheint nach deinem nächsten Teleport oder Gebietswechsel", noPicture: "Kein Kartenbild für diesen Ort",
-        compass4: ["N", "O", "S", "W"], compass8: ["N", "NO", "O", "SO", "S", "SW", "W", "NW"],
-        zoomIn: "Vergrößern", zoomOut: "Verkleinern", back: "Zurück zu dir", mapTip: "Ziehen zum Verschieben, Mausrad zum Zoomen, Doppelklick folgt dir wieder",
-        mapLabel: "Karte, wo die Monster erscheinen, die du brauchst, Norden oben", drag: "Ziehen zum Verschieben", bigger: "Größer (danach wieder am kleinsten)",
-        backIn: "Zurück ins Fenster von Pet Soul Tracker", credit: "Karte: Aion 2 Timers" },
-  fr: { around: "Autour de vous", showMap: "Afficher la carte", showMapTip: "Une carte des apparitions des monstres qui donnent une âme pour un familier sous le niveau 3, avec vous dessus",
-        allMonsters: "Tous les monstres", allMonstersTip: "Tous les autres monstres à portée aussi, en points gris", popOut: "Détacher la carte dans sa propre fenêtre",
-        popped: "La carte est dans sa propre fenêtre.", putBack: "La remettre", unknown: "position encore inconnue", estimated: "≈ position estimée",
-        old: (t) => `position d'il y a ${t}`,
-        estimatedTip: "Estimée d'après les monstres qui entrent dans votre champ de vision, à 20 ou 30 m près. Combattez, esquivez ou lancez une compétence sur vous pour la rendre exacte",
-        inRange: (n) => `${n} à portée`, forPets: (x) => `pour ${x}`, toLv3: (name, left) => `${name} (${left} avant Niv. 3)`,
-        noneInRange: "Aucun monstre à portée ne donne une âme dont vous avez besoin. Les points montrent où ils apparaissent.", noneOnMap: "Aucun monstre de cette carte ne donne une âme dont vous avez besoin.",
-        noMapYet: "La carte s'affiche après votre prochaine téléportation ou changement de zone", noPicture: "Pas d'image de carte pour cet endroit",
-        compass4: ["N", "E", "S", "O"], compass8: ["N", "NE", "E", "SE", "S", "SO", "O", "NO"],
-        zoomIn: "Zoom avant", zoomOut: "Zoom arrière", back: "Revenir sur vous", mapTip: "Glisser pour déplacer, molette pour zoomer, double-clic pour vous suivre à nouveau",
-        mapLabel: "Carte des apparitions des monstres dont vous avez besoin, nord en haut", drag: "Glisser pour déplacer", bigger: "Plus grand (puis retour au plus petit)",
-        backIn: "Revenir dans la fenêtre de Pet Soul Tracker", credit: "Carte : Aion 2 Timers" },
-  es: { around: "A tu alrededor", showMap: "Mostrar el mapa", showMapTip: "Un mapa de dónde aparecen los monstruos que sueltan un alma para una mascota por debajo del nivel 3, contigo en él",
-        allMonsters: "Todos los monstruos", allMonstersTip: "También el resto de monstruos al alcance, como puntos grises", popOut: "Sacar el mapa a su propia ventana",
-        popped: "El mapa está en su propia ventana.", putBack: "Devolverlo", unknown: "posición aún desconocida", estimated: "≈ posición estimada",
-        old: (t) => `posición de hace ${t}`,
-        estimatedTip: "Calculada a partir de los monstruos que entran a la vista, con un margen de unos 20 a 30 m. Lucha, esquiva o usa una habilidad sobre ti para que sea exacta",
-        inRange: (n) => `${n} al alcance`, forPets: (x) => `para ${x}`, toLv3: (name, left) => `${name} (${left} para Nv. 3)`,
-        noneInRange: "Ningún monstruo al alcance suelta un alma que necesites. Los puntos son donde aparecen.", noneOnMap: "Ningún monstruo de este mapa suelta un alma que necesites.",
-        noMapYet: "El mapa aparece tras tu próximo teletransporte o cambio de zona", noPicture: "No hay imagen del mapa de este lugar",
-        compass4: ["N", "E", "S", "O"], compass8: ["N", "NE", "E", "SE", "S", "SO", "O", "NO"],
-        zoomIn: "Acercar", zoomOut: "Alejar", back: "Volver a ti", mapTip: "Arrastra para mover, rueda para hacer zoom, doble clic para seguirte de nuevo",
-        mapLabel: "Mapa de dónde aparecen los monstruos que necesitas, norte arriba", drag: "Arrastra para mover", bigger: "Más grande (luego vuelve al más pequeño)",
-        backIn: "Volver a la ventana de Pet Soul Tracker", credit: "Mapa: Aion 2 Timers" },
-  pt: { around: "Ao seu redor", showMap: "Mostrar o mapa", showMapTip: "Um mapa de onde surgem os monstros que dropam uma alma para um mascote abaixo do nível 3, com você nele",
-        allMonsters: "Todos os monstros", allMonstersTip: "Também os outros monstros ao alcance, como pontos cinza", popOut: "Destacar o mapa em uma janela própria",
-        popped: "O mapa está em uma janela própria.", putBack: "Trazer de volta", unknown: "posição ainda desconhecida", estimated: "≈ posição estimada",
-        old: (t) => `posição de ${t} atrás`,
-        estimatedTip: "Estimada pelos monstros que entram no campo de visão, com margem de uns 20 a 30 m. Lute, esquive ou use uma habilidade em você para torná-la exata",
-        inRange: (n) => `${n} ao alcance`, forPets: (x) => `para ${x}`, toLv3: (name, left) => `${name} (${left} até Nv. 3)`,
-        noneInRange: "Nenhum monstro ao alcance dropa uma alma de que você precisa. Os pontos são onde eles surgem.", noneOnMap: "Nenhum monstro deste mapa dropa uma alma de que você precisa.",
-        noMapYet: "O mapa aparece após seu próximo teleporte ou mudança de área", noPicture: "Sem imagem de mapa para este lugar",
-        compass4: ["N", "L", "S", "O"], compass8: ["N", "NE", "L", "SE", "S", "SO", "O", "NO"],
-        zoomIn: "Aproximar", zoomOut: "Afastar", back: "Voltar para você", mapTip: "Arraste para mover, roda para zoom, clique duplo para seguir você de novo",
-        mapLabel: "Mapa de onde surgem os monstros de que você precisa, norte para cima", drag: "Arraste para mover", bigger: "Maior (depois volta ao menor)",
-        backIn: "Voltar para a janela do Pet Soul Tracker", credit: "Mapa: Aion 2 Timers" },
-  ru: { around: "Вокруг вас", showMap: "Показывать карту", showMapTip: "Карта мест появления монстров, с которых падает душа для питомца ниже 3-го уровня, и ваше положение на ней",
-        allMonsters: "Все монстры", allMonstersTip: "Остальные монстры поблизости тоже, серыми точками", popOut: "Вынести карту в отдельное окно",
-        popped: "Карта в отдельном окне.", putBack: "Вернуть", unknown: "положение пока неизвестно", estimated: "≈ примерное положение",
-        old: (t) => `положение ${t} назад`,
-        estimatedTip: "Определено по монстрам, появляющимся в поле зрения, с точностью около 20–30 м. Сражайтесь, уклоняйтесь или примените умение на себя, чтобы оно стало точным",
-        inRange: (n) => `рядом: ${n}`, forPets: (x) => `для: ${x}`, toLv3: (name, left) => `${name} (${left} до ур. 3)`,
-        noneInRange: "Поблизости нет монстров, с которых падает нужная вам душа. Точки — места их появления.", noneOnMap: "На этой карте нет монстров, с которых падает нужная вам душа.",
-        noMapYet: "Карта появится после следующего телепорта или смены локации", noPicture: "Для этого места нет изображения карты",
-        compass4: ["С", "В", "Ю", "З"], compass8: ["С", "СВ", "В", "ЮВ", "Ю", "ЮЗ", "З", "СЗ"],
-        zoomIn: "Приблизить", zoomOut: "Отдалить", back: "К вам", mapTip: "Перетаскивайте, чтобы сдвинуть, колесо — масштаб, двойной щелчок — снова следовать за вами",
-        mapLabel: "Карта мест появления нужных монстров, север сверху", drag: "Перетащите, чтобы переместить", bigger: "Крупнее (после самого большого — снова маленький)",
-        backIn: "Вернуть в окно Pet Soul Tracker", credit: "Карта: Aion 2 Timers" },
-  "zh-Hant": { around: "周圍", showMap: "顯示地圖", showMapTip: "顯示掉落 3 級以下寵物靈魂的怪物出現位置與你所在位置的地圖",
-        allMonsters: "所有怪物", allMonstersTip: "範圍內的其他怪物也以灰點顯示", popOut: "將地圖彈出為獨立視窗",
-        popped: "地圖在獨立視窗中。", putBack: "放回", unknown: "位置尚未知", estimated: "≈ 推估位置",
-        old: (t) => `位置是 ${t} 前的`,
-        estimatedTip: "依進入視野的怪物推估，誤差約 20 至 30 公尺。戰鬥、閃避或對自己使用技能即可取得精確位置",
-        inRange: (n) => `範圍內 ${n}`, forPets: (x) => `適用：${x}`, toLv3: (name, left) => `${name}（距 Lv 3 還差 ${left}）`,
-        noneInRange: "範圍內沒有掉落你所需靈魂的怪物。圓點是牠們的出現位置。", noneOnMap: "這張地圖上沒有掉落你所需靈魂的怪物。",
-        noMapYet: "下次傳送或切換區域後就會顯示地圖", noPicture: "此地點沒有地圖圖片",
-        compass4: ["北", "東", "南", "西"], compass8: ["北", "東北", "東", "東南", "南", "西南", "西", "西北"],
-        zoomIn: "放大", zoomOut: "縮小", back: "回到你的位置", mapTip: "拖曳移動，滾輪縮放，按兩下重新跟隨你",
-        mapLabel: "你需要的怪物出現位置地圖，北方在上", drag: "拖曳以移動", bigger: "放大（最大後回到最小）",
-        backIn: "放回 Pet Soul Tracker 視窗", credit: "地圖：Aion 2 Timers" },
-  "zh-Hans": { around: "周围", showMap: "显示地图", showMapTip: "显示掉落 3 级以下宠物灵魂的怪物出现位置与你所在位置的地图",
-        allMonsters: "所有怪物", allMonstersTip: "范围内的其他怪物也以灰点显示", popOut: "将地图弹出为独立窗口",
-        popped: "地图在独立窗口中。", putBack: "放回", unknown: "位置尚未知", estimated: "≈ 估计位置",
-        old: (t) => `位置是 ${t} 前的`,
-        estimatedTip: "根据进入视野的怪物估计，误差约 20 至 30 米。战斗、闪避或对自己使用技能即可获得精确位置",
-        inRange: (n) => `范围内 ${n}`, forPets: (x) => `适用：${x}`, toLv3: (name, left) => `${name}（距 Lv 3 还差 ${left}）`,
-        noneInRange: "范围内没有掉落你所需灵魂的怪物。圆点是它们的出现位置。", noneOnMap: "这张地图上没有掉落你所需灵魂的怪物。",
-        noMapYet: "下次传送或切换区域后就会显示地图", noPicture: "此地点没有地图图片",
-        compass4: ["北", "东", "南", "西"], compass8: ["北", "东北", "东", "东南", "南", "西南", "西", "西北"],
-        zoomIn: "放大", zoomOut: "缩小", back: "回到你的位置", mapTip: "拖动移动，滚轮缩放，双击重新跟随你",
-        mapLabel: "你需要的怪物出现位置地图，北方在上", drag: "拖动以移动", bigger: "放大（最大后回到最小）",
-        backIn: "放回 Pet Soul Tracker 窗口", credit: "地图：Aion 2 Timers" },
-};
-const mui = () => MAP_UI[language] || MAP_UI.en;
-// The words in the page's own HTML, in the meter's language.
-function applyMapText() {
-  const t = mui();
-  const set = (node, text, title) => {
-    if (text != null) node.textContent = text;
-    if (title != null) node.title = title;
-  };
-  set(els.nearbyOn.parentElement.lastChild, ` ${t.showMap}`);
-  els.nearbyOn.parentElement.title = t.showMapTip;
-  set(els.allNpcs.parentElement.lastChild, ` ${t.allMonsters}`);
-  els.allNpcs.parentElement.title = t.allMonstersTip;
-  els.popOut.title = t.popOut;
-  els.poppedNote.firstChild.textContent = `${t.popped} `;
-  set(els.popIn, t.putBack);
-  set(els.zoomIn, null, t.zoomIn);
-  set(els.zoomOut, null, t.zoomOut);
-  set(els.follow, null, t.back);
-  els.minimap.title = t.mapTip;
-  els.minimap.setAttribute("aria-label", t.mapLabel);
-  set(els.mapCredit, t.credit);
-}
-
-// The map shown: the one the game said it loaded, else (the meter started
-// mid-session) the one whose spawns list the monsters in range, else the one
-// last loaded on this server (prefs.lastMaps): the game says only as a map
-// loads, so a meter started in a zone showed no map until a teleport.
-function currentMap() {
-  if (field.mapId) return field.mapId;
-  const votes = {};
-  for (const n of field.npcs.values()) {
-    for (const [id, spawns] of Object.entries(PET_SPAWNS)) if (spawns[n.npc]) votes[id] = (votes[id] || 0) + 1;
-  }
-  const best = Object.entries(votes).sort((a, b) => b[1] - a[1])[0];
-  return best ? Number(best[0]) : (key && prefs.lastMaps?.[key]) || null;
-}
-// The map itself (minimap.js), in the window; the pop-out draws its own from
-// the same scene.
-const minimap = new PetMiniMap.MiniMap(
-  { canvas: els.minimap, zoomIn: els.zoomIn, zoomOut: els.zoomOut, follow: els.follow, note: els.mapNote },
-  { zoom: prefs.mapZoom, onZoom: (zoom) => { prefs.mapZoom = zoom; savePrefs(); } },
-);
-
-let nearbyTimer = 0;
-// Redrawn at most 5 times a second, however many records come.
-function queueNearby() {
-  if (nearbyTimer) return;
-  nearbyTimer = setTimeout(() => {
-    nearbyTimer = 0;
-    renderNearby();
-  }, 200);
-}
-let nearbyShape = "";
-let nearbyLive = { wanted: [], others: [] };
-function renderNearby() {
-  // Off unless turned on (Filters → Show the map).
-  const on = prefs.nearby === true;
-  els.nearby.hidden = !on;
-  if (!on) return;
-  const t = mui();
-  const now = Date.now();
-  // Every monster in range, with its distance from you when you are known.
-  const you = field.where(now);
-  const me = you?.pos;
-  const live = [...field.npcs.values()].map((n) => (me ? { ...n, m: PetNearby.metres(me, n.pos), deg: PetNearby.bearing(me, n.pos) } : n));
-  if (me) live.sort((a, b) => a.m - b.m);
-  const wanted = [];
-  const others = [];
-  for (const n of live) {
-    const pets = neededFrom(n.npc);
-    if (pets.length) wanted.push({ ...n, pets });
-    else others.push(n);
-  }
-  nearbyLive = { wanted, others };
-  const id = currentMap();
-  els.nearbyTitle.textContent = id ? (MAP_NAMES[id] ? text(MAP_NAMES[id]) : PET_MAPS[id]?.name || t.around) : t.around;
-  // Exact, estimated from what came into view, or old.
-  const stale = !!you && !you.estimated && now - you.at > STALE_MS;
-  els.nearbyWhere.textContent = !you ? t.unknown
-    : you.estimated ? t.estimated
-    : stale ? t.old(agoText(now - you.at)) : "";
-  els.nearbyWhere.title = you?.estimated ? t.estimatedTip : "";
-  els.nearbyWhere.classList.toggle("stale", stale || !you);
-  els.nearbyWhere.classList.toggle("estimated", !!you?.estimated);
-  // How many spawns on this map drop a soul you need, and how many are in range.
-  let spawns = 0;
-  for (const [npc, points] of Object.entries(PET_SPAWNS[id] || {})) if (neededFrom(npc).length) spawns += points.length / 2;
-  els.nearbyCount.textContent = `${ui().spawns(spawns.toLocaleString(language))} · ${t.inRange(wanted.length)}`;
-  // What the map draws, here and in the pop-out.
-  const spawnColours = {};
-  for (const npc of Object.keys(PET_SPAWNS[id] || {})) {
-    const pets = neededFrom(npc);
-    if (pets.length) spawnColours[npc] = colourOf(pets);
-  }
-  const scene = {
-    mapId: id,
-    you: you ? { pos: you.pos, at: you.at, estimated: !!you.estimated } : null,
-    wanted: wanted.map((n) => ({ pos: n.pos, colour: colourOf(n.pets) })),
-    others: prefs.allNpcs ? others.map((n) => n.pos) : [],
-    spawnColours,
-    title: els.nearbyTitle.textContent,
-    where: els.nearbyWhere.textContent,
-    whereTitle: els.nearbyWhere.title,
-    whereClass: stale || !you ? "stale" : you.estimated ? "estimated" : "",
-    count: els.nearbyCount.textContent,
-    // The map's own words, and the pop-out's.
-    labels: { compass: t.compass4, noMapYet: t.noMapYet, noPicture: t.noPicture, credit: t.credit,
-              zoomIn: t.zoomIn, zoomOut: t.zoomOut, back: t.back, mapTip: t.mapTip, mapLabel: t.mapLabel,
-              drag: t.drag, bigger: t.bigger, backIn: t.backIn },
-  };
-  lastScene = scene;
-  sendPop(scene);
-  els.mapBox.hidden = popOpen;
-  els.poppedNote.hidden = !popOpen;
-  els.popOut.hidden = popOpen || !canPop();
-  minimap.set(scene);
-
-  // One row per kind of monster in range, nearest first: its name and level,
-  // how many, the pets it drops souls for with the souls each still needs,
-  // and the way.
-  const kinds = new Map();
-  for (const n of wanted) {
-    const k = kinds.get(n.npc);
-    if (k) k.count += 1;
-    else kinds.set(n.npc, { ...n, count: 1 });
-  }
-  const rows = [...kinds.values()].slice(0, NEARBY_ROWS).map((k) => {
-    const drop = NPC_DROPS[k.npc];
-    const li = el("li");
-    li.style.setProperty("--g", colourOf(k.pets));
-    const who = el("span", "who");
-    who.append(el("i", "dot"), el("span", "npcName", text(drop.npc)));
-    if (drop.level) who.append(el("small", "", `Lv ${drop.level}`));
-    if (k.count > 1) who.append(el("small", "", `×${k.count}`));
-    const dist = el("span", "dist", k.m != null ? `${Math.round(k.m)} m ${t.compass8[Math.round(k.deg / 45) % 8]}` : "");
-    const souls = el("span", "for", t.forPets(listOf(k.pets.map((p) => t.toLv3(p.name, p.left)))));
-    souls.title = souls.textContent;
-    li.append(who, dist, souls);
-    return li;
-  });
-  if (!rows.length) {
-    rows.push(el("li", "none", spawns ? t.noneInRange : t.noneOnMap));
-  }
-  els.nearbyList.replaceChildren(...rows);
-  // The farming pop-up follows its height.
-  const shape = `${rows.length}`;
-  if (shape !== nearbyShape) {
-    nearbyShape = shape;
-    fitFarm();
-  }
-}
-
-// ---- The pop-out: the map in a window of its own (a widget, meter 2.0.68 on)
-//
-// The widget (widget.html) draws the same map from the scene sent to it, a
-// few times a second; it can be dragged anywhere by its bar and locked with
-// the plugin's other widgets. Its size steps through POP_SIZES; × puts the
-// map back in this window.
-const POP = "map";
-const POP_SIZES = [[300, 270], [380, 340], [480, 420], [600, 520], [760, 660]];
-const canPop = () => !!(a2.widgets && typeof a2.widgets.open === "function");
-const popSize = () => POP_SIZES[Math.max(0, Math.min(POP_SIZES.length - 1, Number(prefs.popSize) || 1))];
-let popOpen = false;
-async function popOut() {
-  if (!canPop()) return;
-  const [width, height] = popSize();
-  popOpen = await a2.widgets.open(POP, { width, height }).then(() => true, () => false);
-  if (!popOpen) return;
-  prefs.mapPopped = true;
-  savePrefs();
-  renderNearby();
-}
-function popIn() {
-  if (popOpen) a2.widgets.close(POP).catch(() => {});
-  popOpen = false;
-  prefs.mapPopped = false;
-  savePrefs();
-  renderNearby();
-  fitFarm();
-}
-function sendPop(scene) {
-  if (!popOpen) return;
-  a2.widgets.send(POP, { ...scene, zoom: prefs.popZoom }).catch(() => {});
-}
-let lastScene = null;
-a2.on("widget-message", (msg) => {
-  if (msg?.name !== POP) return;
-  const d = msg.data || {};
-  if (d.hello && lastScene) sendPop(lastScene);
-  if (d.zoom != null) {
-    prefs.popZoom = d.zoom;
-    savePrefs();
-  }
-  if (d.size != null) {
-    prefs.popSize = (Number(prefs.popSize ?? 1) + 1) % POP_SIZES.length;
-    savePrefs();
-    popOut();
-  }
-  if (d.close) popIn();
-});
-els.popOut.addEventListener("click", popOut);
-els.popIn.addEventListener("click", popIn);
-
-// When the meter says when it read a record, that; else now.
-const readAt = (meta) => (Number(meta?.at) > 0 ? Math.min(Number(meta.at), Date.now()) : Date.now());
-a2.on("decoded:npc-spawn", (d, meta) => {
-  field.spawn(d, readAt(meta));
-  queueNearby();
-});
-a2.on("decoded:npc-gone", (d) => {
-  field.gone(d);
-  queueNearby();
-});
-a2.on("decoded:map-load", (d, meta) => {
-  field.mapLoad(d, readAt(meta));
-  const k = keyFor(meta?.character) || key;
-  if (k && d.map > 0 && prefs.lastMaps?.[k] !== d.map) {
-    prefs.lastMaps = { ...(prefs.lastMaps || {}), [k]: d.map };
-    savePrefs();
-  }
-  queueNearby();
-});
-// A record about a player itself, or one of its own effects landing on it
-// (Hidden Cube Finder's checks).
-const aboutItself = (d) => d.target === d.source && d.one === 1 && d.p === 1 && d.q === 0;
-// The meter passes on only records whose source is you ("self").
-a2.on("decoded:own-position", (d, meta) => {
-  if (!aboutItself(d) || d.kind !== 0x11) return;
-  field.here(d, readAt(meta));
-  queueNearby();
-});
-a2.on("decoded:own-effect", (d, meta) => {
-  if (!aboutItself(d) || d.kind !== 0x13) return;
-  field.here(d, readAt(meta));
-  queueNearby();
-});
-// A mantra goes with you (ends 02): a Chanter's position once a second.
-a2.on("decoded:mantra-tick", (d, meta) => {
-  if (d.target !== d.source || d.kind !== 0x13 || d.q !== 2) return;
-  field.here(d, readAt(meta));
-  queueNearby();
-});
-a2.on("decoded:teleport", (d, meta) => {
-  // Entity 0: you being teleported, not another entity's update.
-  if (d.flag !== 0) return;
-  field.teleport(d, readAt(meta));
-  queueNearby();
-});
 
 // ---- The layouts: how each pet's row is drawn (Settings → Layout) --------
 
@@ -1332,9 +892,7 @@ a2.on("character", (character) => queued(async () => {
 a2.on("language", (code) => {
   language = typeof code === "string" ? code : "en";
   renderScale();
-  applyMapText();
   render();
-  renderNearby();
 });
 // The window's fold button: the list (and its column headers) only.
 a2.on("compact", (on) => document.body.classList.toggle("compact", !!on));
@@ -1390,19 +948,6 @@ els.hideAfter.addEventListener("change", () => {
   prefs.hideAfter = Number(els.hideAfter.value);
   savePrefs();
 });
-els.nearbyOn.addEventListener("change", () => {
-  prefs.nearby = els.nearbyOn.checked;
-  savePrefs();
-  // Off, the pop-out goes too.
-  if (!prefs.nearby && popOpen) popIn();
-  renderNearby();
-  fitFarm();
-});
-els.allNpcs.addEventListener("change", () => {
-  prefs.allNpcs = els.allNpcs.checked;
-  savePrefs();
-  renderNearby();
-});
 els.toFull.addEventListener("click", showFull);
 els.toFarm.addEventListener("click", () => {
   poppedAt = Date.now();
@@ -1450,9 +995,6 @@ els.head.addEventListener("click", (e) => {
   els.chestOnly.checked = !!prefs.chestOnly;
   els.farmPopup.checked = !!prefs.farmPopup;
   els.farmAfter.hidden = !prefs.farmPopup;
-  els.nearbyOn.checked = prefs.nearby === true;
-  minimap.setZoom(prefs.mapZoom);
-  els.allNpcs.checked = !!prefs.allNpcs;
   if (!canFit()) {
     els.farmPopup.disabled = true;
     els.farmPopup.parentElement.title = "Needs meter 2.0.65 or later";
@@ -1463,14 +1005,9 @@ els.head.addEventListener("click", (e) => {
   applyLayout();
   applyScale();
   renderScale();
-  applyMapText();
   await a2.ready();
   // The "farming" mark wears off without an event to redraw it.
   setInterval(() => { if (state.lastGain) render(); }, 60_000);
-  // The map popped out last time comes back out.
-  if (prefs.mapPopped && prefs.nearby === true) popOut();
-  // How old your position is, as it ages.
-  setInterval(() => { if (field.me || field.arrivals.length) queueNearby(); }, 1000);
   // Without a character from the meter, show the last one tracked.
   queued(async () => { if (!key) await show(await fallbackKey()); });
 })();

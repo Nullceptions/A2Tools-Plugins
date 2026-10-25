@@ -25,6 +25,8 @@ body { padding: 12px 14px 14px; }
 .value[data-state="fair"] { color: #f2b94f; }
 .value[data-state="poor"] { color: #ef6262; }
 .value[data-state="none"] { color: rgba(233, 240, 248, 0.5); }
+/* A row hidden (the FPS thresholds while FPS is off) stays hidden. */
+.row[hidden] { display: none; }
 .row {
   display: flex;
   align-items: center;

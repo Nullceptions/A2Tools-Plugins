@@ -4,23 +4,23 @@
 // (a2.watchFps, meter 2.0.78 on) when asked: on Windows the meter must run
 // as administrator for it, and asks the player to restart so.
 const $ = (s) => document.querySelector(s);
-const els = { value: $(".now .value"), fps: $(".fps"), fpsNote: $(".fpsNote"), fpsText: $(".fpsNote .text"), fpsAdmin: $(".fpsNote .admin"), show: $(".show"), lock: $(".lock"), background: $(".background"), bars: $(".bars"), size: $(".size"), good: $(".good"), fair: $(".fair") };
+const els = { value: $(".now .value"), fps: $(".fps"), fpsGood: $(".fpsGood"), fpsFair: $(".fpsFair"), fpsRows: [...document.querySelectorAll(".fpsRow")], fpsNote: $(".fpsNote"), fpsText: $(".fpsNote .text"), fpsAdmin: $(".fpsNote .admin"), show: $(".show"), lock: $(".lock"), background: $(".background"), bars: $(".bars"), size: $(".size"), good: $(".good"), fair: $(".fair") };
 
 const UI = {
-  en: { now: "Ping now", show: "Show the ping widget", lock: "Lock the widget", lockNote: "Clicks pass through to the game. Unlock to move it.", background: "Show the background", bars: "Show the signal bars", size: "Size", small: "Small", medium: "Medium", large: "Large", good: "Green up to", fair: "Amber up to", help: "Drag the widget anywhere. Double-click it to open this window.", old: "Needs meter 2.0.73 or newer", fps: "Show the game's FPS", fpsAdmin: "FPS needs the meter to run as administrator.", fpsAdminButton: "Run as administrator", fpsUnsupported: "FPS isn't available on this system.", fpsOld: "FPS needs meter 2.0.78 or newer." },
-  ko: { now: "현재 핑", show: "핑 위젯 표시", lock: "위젯 잠금", lockNote: "클릭이 게임으로 통과됩니다. 옮기려면 잠금을 푸세요.", background: "배경 표시", bars: "신호 막대 표시", size: "크기", small: "작게", medium: "보통", large: "크게", good: "초록색 최대", fair: "주황색 최대", help: "위젯을 원하는 곳으로 끌어 놓으세요. 더블클릭하면 이 창이 열립니다.", old: "미터 2.0.73 이상이 필요합니다", fps: "게임 FPS 표시", fpsAdmin: "FPS를 보려면 미터를 관리자 권한으로 실행해야 합니다.", fpsAdminButton: "관리자 권한으로 실행", fpsUnsupported: "이 시스템에서는 FPS를 볼 수 없습니다.", fpsOld: "FPS에는 미터 2.0.78 이상이 필요합니다." },
-  ja: { now: "現在のPing", show: "Pingウィジェットを表示", lock: "ウィジェットをロック", lockNote: "クリックがゲームに通ります。動かすにはロックを解除。", background: "背景を表示", bars: "電波バーを表示", size: "サイズ", small: "小", medium: "中", large: "大", good: "緑の上限", fair: "橙の上限", help: "ウィジェットは好きな場所にドラッグできます。ダブルクリックでこの画面を開きます。", old: "メーター2.0.73以降が必要です", fps: "ゲームのFPSを表示", fpsAdmin: "FPSの表示にはメーターを管理者として実行する必要があります。", fpsAdminButton: "管理者として実行", fpsUnsupported: "このシステムではFPSを表示できません。", fpsOld: "FPSにはメーター2.0.78以降が必要です。" },
-  de: { now: "Ping jetzt", show: "Ping-Widget anzeigen", lock: "Widget sperren", lockNote: "Klicks gehen zum Spiel durch. Zum Verschieben entsperren.", background: "Hintergrund anzeigen", bars: "Signalbalken anzeigen", size: "Größe", small: "Klein", medium: "Mittel", large: "Groß", good: "Grün bis", fair: "Gelb bis", help: "Zieh das Widget an eine beliebige Stelle. Doppelklick öffnet dieses Fenster.", old: "Benötigt Meter 2.0.73 oder neuer", fps: "FPS des Spiels anzeigen", fpsAdmin: "Für die FPS muss das Meter als Administrator laufen.", fpsAdminButton: "Als Administrator ausführen", fpsUnsupported: "FPS sind auf diesem System nicht verfügbar.", fpsOld: "FPS benötigen Meter 2.0.78 oder neuer." },
-  fr: { now: "Ping actuel", show: "Afficher le widget de ping", lock: "Verrouiller le widget", lockNote: "Les clics passent au jeu. Déverrouille pour le déplacer.", background: "Afficher le fond", bars: "Afficher les barres de signal", size: "Taille", small: "Petit", medium: "Moyen", large: "Grand", good: "Vert jusqu'à", fair: "Orange jusqu'à", help: "Fais glisser le widget où tu veux. Double-clique dessus pour ouvrir cette fenêtre.", old: "Nécessite le compteur 2.0.73 ou plus récent", fps: "Afficher les FPS du jeu", fpsAdmin: "Les FPS nécessitent que le compteur s'exécute en tant qu'administrateur.", fpsAdminButton: "Exécuter en tant qu'administrateur", fpsUnsupported: "Les FPS ne sont pas disponibles sur ce système.", fpsOld: "Les FPS nécessitent le compteur 2.0.78 ou plus récent." },
-  es: { now: "Ping actual", show: "Mostrar el widget de ping", lock: "Bloquear el widget", lockNote: "Los clics pasan al juego. Desbloquéalo para moverlo.", background: "Mostrar el fondo", bars: "Mostrar las barras de señal", size: "Tamaño", small: "Pequeño", medium: "Mediano", large: "Grande", good: "Verde hasta", fair: "Ámbar hasta", help: "Arrastra el widget a donde quieras. Haz doble clic para abrir esta ventana.", old: "Necesita el medidor 2.0.73 o posterior", fps: "Mostrar los FPS del juego", fpsAdmin: "Los FPS necesitan que el medidor se ejecute como administrador.", fpsAdminButton: "Ejecutar como administrador", fpsUnsupported: "Los FPS no están disponibles en este sistema.", fpsOld: "Los FPS necesitan el medidor 2.0.78 o posterior." },
-  pt: { now: "Ping agora", show: "Mostrar o widget de ping", lock: "Travar o widget", lockNote: "Os cliques passam para o jogo. Destrave para movê-lo.", background: "Mostrar o fundo", bars: "Mostrar as barras de sinal", size: "Tamanho", small: "Pequeno", medium: "Médio", large: "Grande", good: "Verde até", fair: "Âmbar até", help: "Arraste o widget para onde quiser. Clique duas vezes para abrir esta janela.", old: "Requer o medidor 2.0.73 ou mais recente", fps: "Mostrar o FPS do jogo", fpsAdmin: "O FPS precisa que o medidor seja executado como administrador.", fpsAdminButton: "Executar como administrador", fpsUnsupported: "O FPS não está disponível neste sistema.", fpsOld: "O FPS requer o medidor 2.0.78 ou mais recente." },
-  ru: { now: "Пинг сейчас", show: "Показывать виджет пинга", lock: "Закрепить виджет", lockNote: "Клики проходят в игру. Открепите, чтобы переместить.", background: "Показывать фон", bars: "Показывать полоски сигнала", size: "Размер", small: "Маленький", medium: "Средний", large: "Большой", good: "Зелёный до", fair: "Жёлтый до", help: "Перетащите виджет куда угодно. Двойной щелчок открывает это окно.", old: "Нужен метр 2.0.73 или новее", fps: "Показывать FPS игры", fpsAdmin: "Для FPS метр должен работать от имени администратора.", fpsAdminButton: "Запустить от имени администратора", fpsUnsupported: "FPS недоступен в этой системе.", fpsOld: "Для FPS нужен метр 2.0.78 или новее." },
-  "zh-Hant": { now: "目前延遲", show: "顯示延遲小工具", lock: "鎖定小工具", lockNote: "點擊會穿透到遊戲。解鎖後才能移動。", background: "顯示背景", bars: "顯示訊號格", size: "大小", small: "小", medium: "中", large: "大", good: "綠色上限", fair: "橘色上限", help: "可將小工具拖到任何位置。按兩下開啟此視窗。", old: "需要計量器 2.0.73 或更新版本", fps: "顯示遊戲 FPS", fpsAdmin: "顯示 FPS 需要計量器以系統管理員身分執行。", fpsAdminButton: "以系統管理員身分執行", fpsUnsupported: "此系統無法顯示 FPS。", fpsOld: "FPS 需要計量器 2.0.78 或更新版本。" },
-  "zh-Hans": { now: "当前延迟", show: "显示延迟小组件", lock: "锁定小组件", lockNote: "点击会穿透到游戏。解锁后才能移动。", background: "显示背景", bars: "显示信号格", size: "大小", small: "小", medium: "中", large: "大", good: "绿色上限", fair: "橙色上限", help: "可将小组件拖到任意位置。双击打开此窗口。", old: "需要计量器 2.0.73 或更新版本", fps: "显示游戏 FPS", fpsAdmin: "显示 FPS 需要计量器以管理员身份运行。", fpsAdminButton: "以管理员身份运行", fpsUnsupported: "此系统无法显示 FPS。", fpsOld: "FPS 需要计量器 2.0.78 或更新版本。" },
+  en: { now: "Ping now", show: "Show the ping widget", lock: "Lock the widget", lockNote: "Clicks pass through to the game. Unlock to move it.", background: "Show the background", bars: "Show the signal bars", size: "Size", small: "Small", medium: "Medium", large: "Large", good: "Green up to", fair: "Amber up to", help: "Drag the widget anywhere. Double-click it to open this window.", old: "Needs meter 2.0.73 or newer", fps: "Show the game's FPS", fpsAdmin: "FPS needs the meter to run as administrator.", fpsAdminButton: "Run as administrator", fpsUnsupported: "FPS isn't available on this system.", fpsOld: "FPS needs meter 2.0.78 or newer.", fpsGood: "FPS green from", fpsFair: "FPS amber from" },
+  ko: { now: "현재 핑", show: "핑 위젯 표시", lock: "위젯 잠금", lockNote: "클릭이 게임으로 통과됩니다. 옮기려면 잠금을 푸세요.", background: "배경 표시", bars: "신호 막대 표시", size: "크기", small: "작게", medium: "보통", large: "크게", good: "초록색 최대", fair: "주황색 최대", help: "위젯을 원하는 곳으로 끌어 놓으세요. 더블클릭하면 이 창이 열립니다.", old: "미터 2.0.73 이상이 필요합니다", fps: "게임 FPS 표시", fpsAdmin: "FPS를 보려면 미터를 관리자 권한으로 실행해야 합니다.", fpsAdminButton: "관리자 권한으로 실행", fpsUnsupported: "이 시스템에서는 FPS를 볼 수 없습니다.", fpsOld: "FPS에는 미터 2.0.78 이상이 필요합니다.", fpsGood: "FPS 초록색 최소", fpsFair: "FPS 주황색 최소" },
+  ja: { now: "現在のPing", show: "Pingウィジェットを表示", lock: "ウィジェットをロック", lockNote: "クリックがゲームに通ります。動かすにはロックを解除。", background: "背景を表示", bars: "電波バーを表示", size: "サイズ", small: "小", medium: "中", large: "大", good: "緑の上限", fair: "橙の上限", help: "ウィジェットは好きな場所にドラッグできます。ダブルクリックでこの画面を開きます。", old: "メーター2.0.73以降が必要です", fps: "ゲームのFPSを表示", fpsAdmin: "FPSの表示にはメーターを管理者として実行する必要があります。", fpsAdminButton: "管理者として実行", fpsUnsupported: "このシステムではFPSを表示できません。", fpsOld: "FPSにはメーター2.0.78以降が必要です。", fpsGood: "FPS 緑の下限", fpsFair: "FPS 橙の下限" },
+  de: { now: "Ping jetzt", show: "Ping-Widget anzeigen", lock: "Widget sperren", lockNote: "Klicks gehen zum Spiel durch. Zum Verschieben entsperren.", background: "Hintergrund anzeigen", bars: "Signalbalken anzeigen", size: "Größe", small: "Klein", medium: "Mittel", large: "Groß", good: "Grün bis", fair: "Gelb bis", help: "Zieh das Widget an eine beliebige Stelle. Doppelklick öffnet dieses Fenster.", old: "Benötigt Meter 2.0.73 oder neuer", fps: "FPS des Spiels anzeigen", fpsAdmin: "Für die FPS muss das Meter als Administrator laufen.", fpsAdminButton: "Als Administrator ausführen", fpsUnsupported: "FPS sind auf diesem System nicht verfügbar.", fpsOld: "FPS benötigen Meter 2.0.78 oder neuer.", fpsGood: "FPS grün ab", fpsFair: "FPS gelb ab" },
+  fr: { now: "Ping actuel", show: "Afficher le widget de ping", lock: "Verrouiller le widget", lockNote: "Les clics passent au jeu. Déverrouille pour le déplacer.", background: "Afficher le fond", bars: "Afficher les barres de signal", size: "Taille", small: "Petit", medium: "Moyen", large: "Grand", good: "Vert jusqu'à", fair: "Orange jusqu'à", help: "Fais glisser le widget où tu veux. Double-clique dessus pour ouvrir cette fenêtre.", old: "Nécessite le compteur 2.0.73 ou plus récent", fps: "Afficher les FPS du jeu", fpsAdmin: "Les FPS nécessitent que le compteur s'exécute en tant qu'administrateur.", fpsAdminButton: "Exécuter en tant qu'administrateur", fpsUnsupported: "Les FPS ne sont pas disponibles sur ce système.", fpsOld: "Les FPS nécessitent le compteur 2.0.78 ou plus récent.", fpsGood: "FPS vert à partir de", fpsFair: "FPS orange à partir de" },
+  es: { now: "Ping actual", show: "Mostrar el widget de ping", lock: "Bloquear el widget", lockNote: "Los clics pasan al juego. Desbloquéalo para moverlo.", background: "Mostrar el fondo", bars: "Mostrar las barras de señal", size: "Tamaño", small: "Pequeño", medium: "Mediano", large: "Grande", good: "Verde hasta", fair: "Ámbar hasta", help: "Arrastra el widget a donde quieras. Haz doble clic para abrir esta ventana.", old: "Necesita el medidor 2.0.73 o posterior", fps: "Mostrar los FPS del juego", fpsAdmin: "Los FPS necesitan que el medidor se ejecute como administrador.", fpsAdminButton: "Ejecutar como administrador", fpsUnsupported: "Los FPS no están disponibles en este sistema.", fpsOld: "Los FPS necesitan el medidor 2.0.78 o posterior.", fpsGood: "FPS verde desde", fpsFair: "FPS ámbar desde" },
+  pt: { now: "Ping agora", show: "Mostrar o widget de ping", lock: "Travar o widget", lockNote: "Os cliques passam para o jogo. Destrave para movê-lo.", background: "Mostrar o fundo", bars: "Mostrar as barras de sinal", size: "Tamanho", small: "Pequeno", medium: "Médio", large: "Grande", good: "Verde até", fair: "Âmbar até", help: "Arraste o widget para onde quiser. Clique duas vezes para abrir esta janela.", old: "Requer o medidor 2.0.73 ou mais recente", fps: "Mostrar o FPS do jogo", fpsAdmin: "O FPS precisa que o medidor seja executado como administrador.", fpsAdminButton: "Executar como administrador", fpsUnsupported: "O FPS não está disponível neste sistema.", fpsOld: "O FPS requer o medidor 2.0.78 ou mais recente.", fpsGood: "FPS verde a partir de", fpsFair: "FPS âmbar a partir de" },
+  ru: { now: "Пинг сейчас", show: "Показывать виджет пинга", lock: "Закрепить виджет", lockNote: "Клики проходят в игру. Открепите, чтобы переместить.", background: "Показывать фон", bars: "Показывать полоски сигнала", size: "Размер", small: "Маленький", medium: "Средний", large: "Большой", good: "Зелёный до", fair: "Жёлтый до", help: "Перетащите виджет куда угодно. Двойной щелчок открывает это окно.", old: "Нужен метр 2.0.73 или новее", fps: "Показывать FPS игры", fpsAdmin: "Для FPS метр должен работать от имени администратора.", fpsAdminButton: "Запустить от имени администратора", fpsUnsupported: "FPS недоступен в этой системе.", fpsOld: "Для FPS нужен метр 2.0.78 или новее.", fpsGood: "FPS зелёный от", fpsFair: "FPS жёлтый от" },
+  "zh-Hant": { now: "目前延遲", show: "顯示延遲小工具", lock: "鎖定小工具", lockNote: "點擊會穿透到遊戲。解鎖後才能移動。", background: "顯示背景", bars: "顯示訊號格", size: "大小", small: "小", medium: "中", large: "大", good: "綠色上限", fair: "橘色上限", help: "可將小工具拖到任何位置。按兩下開啟此視窗。", old: "需要計量器 2.0.73 或更新版本", fps: "顯示遊戲 FPS", fpsAdmin: "顯示 FPS 需要計量器以系統管理員身分執行。", fpsAdminButton: "以系統管理員身分執行", fpsUnsupported: "此系統無法顯示 FPS。", fpsOld: "FPS 需要計量器 2.0.78 或更新版本。", fpsGood: "FPS 綠色下限", fpsFair: "FPS 橘色下限" },
+  "zh-Hans": { now: "当前延迟", show: "显示延迟小组件", lock: "锁定小组件", lockNote: "点击会穿透到游戏。解锁后才能移动。", background: "显示背景", bars: "显示信号格", size: "大小", small: "小", medium: "中", large: "大", good: "绿色上限", fair: "橙色上限", help: "可将小组件拖到任意位置。双击打开此窗口。", old: "需要计量器 2.0.73 或更新版本", fps: "显示游戏 FPS", fpsAdmin: "显示 FPS 需要计量器以管理员身份运行。", fpsAdminButton: "以管理员身份运行", fpsUnsupported: "此系统无法显示 FPS。", fpsOld: "FPS 需要计量器 2.0.78 或更新版本。", fpsGood: "FPS 绿色下限", fpsFair: "FPS 橙色下限" },
 };
 let words = UI.en;
 
-const DEFAULTS = { show: true, background: true, bars: true, size: "1", good: 80, fair: 150, fps: false };
+const DEFAULTS = { show: true, background: true, bars: true, size: "1", good: 80, fair: 150, fps: false, fpsGood: 60, fpsFair: 30 };
 let prefs = { ...DEFAULTS };
 let ms = null;
 let heard = false;
@@ -52,17 +52,20 @@ function render() {
   els.fpsNote.hidden = !note;
   els.fpsText.textContent = note;
   els.fpsAdmin.hidden = state !== "needsAdmin";
+  for (const row of els.fpsRows) row.hidden = !prefs.fps;
 }
 
 // The FPS for the widget: a number while counted, null ("–") while not (no
 // game, or not allowed yet), undefined when not shown.
 const fpsShown = () => (!prefs.fps ? undefined : fps?.state === "ok" ? fps.fps : null);
+// Its colour: green from fpsGood, amber from fpsFair, red below (more is better).
+const fpsStateOf = (v) => (typeof v !== "number" ? "none" : v >= prefs.fpsGood ? "good" : v >= prefs.fpsFair ? "fair" : "poor");
 
 const widgetShown = () => prefs.show && gameOpen;
 
 async function sendWidget() {
   if (!widgetShown()) return;
-  await a2.widgets.send("ping", { ms, state: stateOf(ms), scale: Number(prefs.size), background: prefs.background, bars: prefs.bars, fps: fpsShown() }).catch(() => {});
+  await a2.widgets.send("ping", { ms, state: stateOf(ms), scale: Number(prefs.size), background: prefs.background, bars: prefs.bars, fps: fpsShown(), fpsState: fpsStateOf(fpsShown()) }).catch(() => {});
 }
 
 async function placeWidget() {
@@ -162,11 +165,30 @@ for (const key of ["good", "fair"]) {
   });
 }
 
+for (const key of ["fpsGood", "fpsFair"]) {
+  els[key].addEventListener("change", async () => {
+    const v = Math.round(Number(els[key].value));
+    if (!Number.isFinite(v) || v <= 0) {
+      els[key].value = prefs[key];
+      return;
+    }
+    prefs[key] = v;
+    // Amber ends where green starts.
+    if (prefs.fpsFair >= prefs.fpsGood) prefs.fpsFair = Math.max(1, prefs.fpsGood - 5);
+    els.fpsGood.value = prefs.fpsGood;
+    els.fpsFair.value = prefs.fpsFair;
+    await save();
+    sendWidget();
+  });
+}
+
 (async () => {
   const stored = await a2.storage.get("prefs").catch(() => null);
   if (stored && typeof stored === "object") prefs = { ...DEFAULTS, ...stored };
   els.show.checked = prefs.show;
   els.fps.checked = prefs.fps;
+  els.fpsGood.value = prefs.fpsGood;
+  els.fpsFair.value = prefs.fpsFair;
   els.background.checked = prefs.background;
   els.bars.checked = prefs.bars;
   els.size.value = String(prefs.size);

@@ -79,7 +79,7 @@ body.locked .pill { cursor: default; }
   text-align: right;
 }
 /* The game's FPS, after the ping, in the HUD face, coloured by its own
-   thresholds (widget.js). */
+   thresholds (Settings: FPS green from, amber from). */
 .fps {
   font-family: "Bahnschrift", "Segoe UI", sans-serif;
   font-variation-settings: "wght" 600, "wdth" 87.5;

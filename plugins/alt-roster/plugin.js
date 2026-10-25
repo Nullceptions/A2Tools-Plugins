@@ -27,12 +27,17 @@ const state = { chars: {}, servers: {}, prefs: { sort: "name", tab: "roster" } }
 let current = null; // the key of who is playing now
 let gameRunning = true; // meters before 2.0.65 don't say
 let saveTimer = 0;
+// What each key last held in storage: only a key that changed is written.
+const written = {};
 function save() {
   clearTimeout(saveTimer);
   saveTimer = setTimeout(() => {
-    a2.storage.set("chars", state.chars).catch((e) => console.warn(e));
-    a2.storage.set("prefs", state.prefs).catch((e) => console.warn(e));
-    a2.storage.set("servers", state.servers).catch((e) => console.warn(e));
+    for (const key of ["chars", "prefs", "servers"]) {
+      const json = JSON.stringify(state[key]);
+      if (written[key] === json) continue;
+      written[key] = json;
+      a2.storage.set(key, state[key]).catch((e) => console.warn(e));
+    }
   }, 400);
 }
 
@@ -42,12 +47,13 @@ const num = (v) => (typeof v === "number" && Number.isFinite(v) && v > 0 ? v : n
 a2.on("character", (c) => {
   if (!c?.name) return;
   const key = `${c.name}@${c.serverId ?? ""}`;
-  const ch = (state.chars[key] ||= { name: c.name, serverId: c.serverId, cap: CAPS[0] });
+  // 560 until more is seen: only a membership goes over it.
+  const ch = (state.chars[key] ||= { name: c.name, serverId: c.serverId, cap: CAPS[1] });
   ch.name = c.name;
   if (c.serverId) ch.serverId = c.serverId;
   if (c.class) ch.class = c.class;
   if (num(c.level)) ch.level = c.level;
-  // Meters up to 2.0.77 send none of these: what was seen stays.
+  // Meters before 2.0.78 send none of these: what was seen stays.
   if (num(c.combatPower)) ch.cp = c.combatPower;
   if (num(c.gearScore)) ch.gs = c.gearScore;
   const e = c.odyleEnergy;
@@ -166,8 +172,8 @@ function render() {
   empty.textContent = all.length ? "No character matches." : "Log in to a character and it shows up here. Each one you play is kept.";
   const anyStats = all.some((r) => r.ch.cp || r.ch.gs || r.ch.energy);
   $(".foot").textContent = all.length && !anyStats
-    ? "Combat power, gear score and energy need a meter newer than 2.0.77."
-    : "≈ estimated: +15 basic energy every 3 h while away. Click a cap to switch 840 (membership) / 560.";
+    ? "Combat power, gear score and energy need meter 2.0.78 or newer."
+    : "≈ estimated: +15 basic energy every 3 h while away. The cap is 560, or 840 with a membership: click a cap to switch.";
 }
 
 // ── Content ────────────────────────────────────────────────────────────────
@@ -269,12 +275,12 @@ function renderContent() {
     }
   }
   table.replaceChildren(thead, tbody);
-  // Meters up to 2.0.77 send no counts: say so rather than only "?".
+  // Meters before 2.0.78 send no counts: say so rather than only "?".
   const any = chars.some(({ ch }) => ch.counts && Object.keys(ch.counts).length)
     || Object.values(state.servers).some((s) => s.counts && Object.keys(s.counts).length);
   $(".placeholder").textContent = any
     ? "As the game last said, per character or shared on the server. ≈ recharged since (estimated). +N: extra from recharge items."
-    : "The counts need a meter newer than 2.0.77; then log in to each character once. Caps and recharge times are real.";
+    : "The counts need meter 2.0.78 or newer; then log in to each character once. Caps and recharge times are real.";
 }
 
 // A server's total of a count kept per character (Daily Duty): each one's
@@ -461,13 +467,20 @@ $(".sort").addEventListener("change", (e) => {
   if (chars && typeof chars === "object") state.chars = chars;
   if (servers && typeof servers === "object") state.servers = servers;
   Object.assign(state.prefs, prefs || {});
+  for (const key of ["chars", "prefs", "servers"]) written[key] = JSON.stringify(state[key]);
   $(".sort").value = state.prefs.sort;
   showTab(state.prefs.tab);
   a2.ready();
-  // The countdowns, and the one playing stays "seen now".
+  // The countdowns, and the one playing stays "seen now" (saved every 5 min).
+  let seenSaved = Date.now();
   setInterval(() => {
-    if (current && gameRunning && state.chars[current]) state.chars[current].seen = Date.now();
+    if (current && gameRunning && state.chars[current]) {
+      state.chars[current].seen = Date.now();
+      if (Date.now() - seenSaved >= 300_000) {
+        seenSaved = Date.now();
+        save();
+      }
+    }
     if (!document.querySelector(".remove.confirm")) render();
   }, 30_000);
-  setInterval(save, 300_000);
 })();

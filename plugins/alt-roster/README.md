@@ -32,9 +32,16 @@ move it to a second monitor: it never hides by itself.
   Abyss Corridors done per character, out of the corridors your side
   holds since the last Artifact Siege (up to 3; your side from the server
   id), from the Abyss passages' usage timers the game lists at each login;
-  after the next siege `?` until the game says again.
+  after the next siege `?` until the game says again. Who holds which
+  artifact, and when the next siege is, come from the game as you enter
+  the Abyss or open its map, else from A2Tools' copy of them. With neither
+  (offline, before any Abyss visit), all three corridors count and the
+  weekly reset (Wednesday 07:00 UTC) stands in for the siege: an estimate.
+  A side holding none of the artifacts shows `—`.
 - **Recharges while you are away are estimates** (`≈`, striped), up to the
-  cap. From the game's tooltips: Nightmare +2 a day (cap 14), Shugo +3 a day
+  cap. A count is as the game last said it, from when it last changed: the
+  meter sends its last values with every update, so an old count isn't
+  taken as new. From the game's tooltips: Nightmare +2 a day (cap 14), Shugo +3 a day
   (cap 21), Ascension Trial +3 a week (cap 3), Daily Dungeon 14 a week.
   Not from the game, so less sure: Invasion cap 7 at +1 a day, Daily Duty 5
   a day shared by the server's characters (from another app, and how the
@@ -50,13 +57,15 @@ move it to a second monitor: it never hides by itself.
 
 ## What it reads
 
-No decoders. Only the meter's `character` event (`events:character`): name,
+No decoders. The meter's `character` event (`events:character`): name,
 server, class and level, and from meter 2.0.78 on combat power, gear score
 and Odyle energy (basic and charged). On older meters the roster shows the
 characters without those. The Content counts (`contentCounts`) come from
 the same event from meter 2.0.78 on; without them the Content tab shows
-`?`. The Other tab's (`shopLimits`, `crafts`, `kinahToday`, `abyssPoints`, `contentTimes`, `abyssSiege`) come from meter 2.0.78
-on.
+`?`. The Other tab's (`shopLimits`, `crafts`, `kinahToday`, `abyssPoints`) and the
+Abyss passages (`contentTimes`) come from newer meters too. The Artifact
+Siege comes with `feed:boss-timers`: the meter's `abyss` event and
+`a2.abyssSiege` (who holds each artifact, and when the next siege is).
 
 Server names: `servers.js`, from the meter's own list.
 

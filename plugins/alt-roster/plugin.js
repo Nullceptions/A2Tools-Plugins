@@ -48,6 +48,11 @@ function save() {
 }
 
 const num = (v) => (typeof v === "number" && Number.isFinite(v) && v > 0 ? v : null);
+// What was seen again unchanged keeps when it was first seen: the meter sends
+// its last values with every character event, so a count from Monday sent
+// again on Wednesday is still Monday's, and its reset has passed since.
+const same = (a, b) => JSON.stringify({ ...a, at: 0 }) === JSON.stringify({ ...b, at: 0 });
+const kept = (prev, next) => (prev && same(prev, next) ? prev : next);
 
 // ── What the meter says ────────────────────────────────────────────────────
 a2.on("character", (c) => {
@@ -64,7 +69,7 @@ a2.on("character", (c) => {
   if (num(c.gearScore)) ch.gs = c.gearScore;
   const e = c.odyleEnergy;
   if (e && Number.isFinite(e.basic) && Number.isFinite(e.charged)) {
-    ch.energy = { basic: e.basic, charged: e.charged, at: Date.now() };
+    ch.energy = kept(ch.energy, { basic: e.basic, charged: e.charged, at: Date.now() });
     // Over 560 can only be with a membership.
     if (e.basic > CAPS[1]) ch.cap = CAPS[0];
   }
@@ -77,7 +82,8 @@ a2.on("character", (c) => {
       const v = x.id == null ? null : counts[x.id];
       if (!Array.isArray(v)) continue;
       const home = x.scope === "server" && !x.ofChars ? (state.servers[ch.serverId ?? ""] ||= {}) : ch;
-      (home.counts ||= {})[x.id] = { v: [Number(v[0]) || 0, Number(v[1]) || 0], at };
+      home.counts ||= {};
+      home.counts[x.id] = kept(home.counts[x.id], { v: [Number(v[0]) || 0, Number(v[1]) || 0], at });
     }
   }
   // The shop's weekly limits and the crafts made (meter 2.0.78 on), once the
@@ -91,42 +97,90 @@ a2.on("character", (c) => {
     if (v == null) continue;
     const home = x.scope === "server" ? (state.servers[ch.serverId ?? ""] ||= {}) : ch;
     const n = Array.isArray(v) ? v[0] : v;
+    // A shop limit past its reset comes as [0, null]: the next reset isn't
+    // known until the shop opens again, so the game's weekly one counts.
     const second = Array.isArray(v) && Number.isFinite(v[1]) ? v[1] : undefined;
     const seen = { v: [Number(n) || 0, 0], at: Date.now() };
     if (x.capFromGame) seen.cap = second;
-    else seen.reset = second;
-    (home.counts ||= {})[x.id] = seen;
+    else if (second !== undefined) seen.reset = second;
+    home.counts ||= {};
+    home.counts[x.id] = kept(home.counts[x.id], seen);
   }
   // Abyss Corridors: passage 1000000N is the corridor of artifact 100N
   // (Reshanta's Root, Sulfur Tree Island, Siel's Wings: the two run on
   // 2026-10-25 were 10000001 and 10000002). One still to run has its usage
-  // time left (2:10), a used one comes as a plain 0. A side can run only
-  // the corridors it holds since the last siege (meter's abyssSiege): the
-  // limit is how many, done is how many of those have no time left.
-  // Counted only when all three are known (a meter started mid-session has
-  // only what changed). No time on any is all used, or the passages not
-  // handed out yet (on the first Abyss visit after a siege): all done only
-  // after times were seen since that siege.
+  // time left (2:10; contentTimes [time, seen at]), a used one comes as a
+  // plain 0. Kept only when all three are known (a meter started
+  // mid-session has only what changed); counted with the siege (corridors()).
   if (counts && typeof counts === "object") {
     const times = c.contentTimes || {};
-    const states = PASSAGES.map((id) => (Number(times[id]) > 0 ? "left" : Array.isArray(counts[id]) ? "used" : null));
-    if (!states.includes(null)) {
-      const side = sideOf(ch.serverId);
-      const holders = c.abyssSiege?.holders || {};
-      const ours = PASSAGES.map((_, k) => !side || !holders[1001 + k] || holders[1001 + k] === side);
-      const cap = ours.filter(Boolean).length;
-      const done = states.filter((st, k) => ours[k] && st === "used").length;
-      const siege = Number(c.abyssSiege?.next?.[1001]) || undefined;
-      const prev = ch.counts?.["abyss:corridors"];
-      const samePeriod = prev && (prev.reset ? Date.now() < prev.reset : !resetsBetween("weekly", prev.at, Date.now()));
-      if (done < cap || samePeriod) (ch.counts ||= {})["abyss:corridors"] = { v: [done, 0], at: Date.now(), reset: siege, cap };
-    }
+    const time = (id) => Number(Array.isArray(times[id]) ? times[id][0] : times[id]);
+    const states = PASSAGES.map((id) => (time(id) > 0 ? "left" : Array.isArray(counts[id]) ? "used" : null));
+    if (!states.includes(null)) ch.passages = states;
   }
-  ch.seen = Date.now();
+  corridors(ch);
+  // Seen now: kept fresh every 30 s while playing (below), so an event alone
+  // doesn't write storage again.
+  if (key !== current || Date.now() - (ch.seen || 0) > 300_000) ch.seen = Date.now();
   current = key;
   save();
   render();
 });
+// The Abyss Artifact Siege (permission "feed:boss-timers"): who holds each
+// corridor's artifact, and when the holding resets. From the game as you
+// enter the Abyss or open its map (a2.on("abyss")), else the site's copy
+// (a2.abyssSiege). Kept per server.
+function keepSiege(serverId, d) {
+  if (!serverId || !d || !Array.isArray(d.artifacts)) return;
+  const holders = {};
+  for (const a of d.artifacts) if (a?.id) holders[a.id] = a.owner;
+  const war = (d.wars || []).find((w) => w?.event === 1001);
+  const next = Number(war?.until) > 0 ? Number(war.until) * 1000 : undefined;
+  const server = (state.servers[serverId] ||= {});
+  const siege = { holders, next, at: (Number(d.observedAt) || 0) * 1000 || Date.now() };
+  if (server.siege && same(server.siege, siege)) return;
+  server.siege = siege;
+  for (const ch of Object.values(state.chars)) if (ch.serverId === serverId) corridors(ch);
+  save();
+  render();
+}
+a2.on("abyss", (d) => keepSiege(state.chars[current]?.serverId, d));
+// The site's copy, for a server not seen in the Abyss yet this session.
+const asked = new Set();
+function askSiege(serverId) {
+  if (!serverId || asked.has(serverId) || typeof a2.abyssSiege !== "function") return;
+  asked.add(serverId);
+  a2.abyssSiege(serverId).then((d) => {
+    if (!d || (state.servers[serverId]?.siege?.at || 0) > (Number(d.observedAt) || 0) * 1000) return;
+    keepSiege(serverId, d);
+  }).catch(() => {});
+}
+
+// The corridors a character has done since the last siege: a side can run
+// only the ones it holds, so the limit is how many, and done is how many of
+// those have no time left. No time on any is all used, or the passages not
+// handed out yet (on the first Abyss visit after a siege): all done only
+// after times were seen since that siege. Without the siege known, all three
+// count and the week's reset stands in for it (an estimate).
+function corridors(ch) {
+  const states = ch.passages;
+  if (!states) return;
+  askSiege(ch.serverId);
+  const siege = state.servers[ch.serverId ?? ""]?.siege;
+  const side = sideOf(ch.serverId);
+  const holders = siege?.holders || {};
+  const ours = PASSAGES.map((_, k) => !side || !holders[1001 + k] || holders[1001 + k] === side);
+  const cap = ours.filter(Boolean).length;
+  const done = states.filter((st, k) => ours[k] && st === "used").length;
+  const prev = ch.counts?.["abyss:corridors"];
+  const samePeriod = prev && (prev.reset ? Date.now() < prev.reset : !resetsBetween("weekly", prev.at, Date.now()));
+  // None held: nothing to run, whatever the timers say.
+  if (cap === 0 || done < cap || samePeriod) {
+    ch.counts ||= {};
+    ch.counts["abyss:corridors"] = kept(prev, { v: [done, 0], at: Date.now(), reset: siege?.next, cap });
+  }
+}
+
 a2.on("game", ({ running }) => {
   gameRunning = !!running;
   if (!gameRunning && current && state.chars[current]) state.chars[current].seen = Date.now();
@@ -387,6 +441,12 @@ function sumOfChars(c, chars, now) {
 function cellOf(c, seen, at, now, cls = "") {
   if (seen?.cap >= 0 && (seen.cap > 0 || c.siege)) c = { ...c, cap: seen.cap };
   const td = el("td", `cell ${cls}`.trim());
+  // Nothing to do (your side holds no corridor's artifact): a dash.
+  if (c.cap === 0 && seen) {
+    td.append(el("div", "cellValue unknownValue", "—"), el("div", "bar"), el("div", "cellNote", c.siege ? t.noneHeld : ""));
+    td.title = c.siege ? t.tipNoneHeld : "";
+    return td;
+  }
   const est = countNow(c, seen, now);
   const value = el("div", `cellValue${est ? "" : " unknownValue"}`);
   value.append(el("b", null, est ? `${est.gained || est.reset ? "≈" : ""}${fmt.format(est.left)}` : "?"), el("span", "of", ` / ${fmt.format(c.cap)}`));

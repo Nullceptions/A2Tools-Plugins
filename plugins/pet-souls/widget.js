@@ -30,11 +30,19 @@ a2.on("locked", (on) => {
   locked = !!on;
   document.body.classList.toggle("locked", locked);
 });
-bar.addEventListener("mousedown", (e) => {
-  if (e.button !== 0 || locked || e.target.closest("button")) return;
+// Heard on the page and placed by where the press is, not by its target: a
+// pointer the map still held would send the press there, and the widget
+// could no longer be moved until it was opened again.
+document.addEventListener("pointerdown", (e) => {
+  // Any capture left over goes first (the map takes a new one for its own drag).
+  for (const el of document.querySelectorAll("canvas")) if (el.hasPointerCapture?.(e.pointerId)) el.releasePointerCapture(e.pointerId);
+  if (e.button !== 0 || locked) return;
+  const r = bar.getBoundingClientRect();
+  if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) return;
+  if (document.elementsFromPoint(e.clientX, e.clientY).some((el) => el.closest?.("button"))) return;
   e.preventDefault();
   a2.widget.drag().catch(() => {});
-});
+}, true);
 $(".size").addEventListener("click", () => a2.widget.post({ size: true }).catch(() => {}));
 $(".dock").addEventListener("click", () => a2.widget.post({ close: true }).catch(() => {}));
 

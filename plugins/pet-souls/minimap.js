@@ -51,8 +51,16 @@
         drag = { x: e.clientX, y: e.clientY, center: [...(this.center || [0, 0])], moved: false };
         canvas.setPointerCapture(e.pointerId);
       });
+      // The capture is let go of with the button: a release that never
+      // reached the page (the game or a window drag took the mouse) left the
+      // map holding every press, so the pop-out's bar no longer moved it.
+      const end = (e) => {
+        drag = null;
+        if (e?.pointerId != null && canvas.hasPointerCapture?.(e.pointerId)) canvas.releasePointerCapture(e.pointerId);
+      };
       canvas.addEventListener("pointermove", (e) => {
         if (!drag) return;
+        if (!(e.buttons & 1)) return end(e);
         const dx = e.clientX - drag.x;
         const dy = e.clientY - drag.y;
         if (!drag.moved && Math.hypot(dx, dy) < 3) return;
@@ -61,9 +69,10 @@
         this.center = [drag.center[0] - dx * this.zoom * 100, drag.center[1] - dy * this.zoom * 100];
         this.draw();
       });
-      const end = () => { drag = null; };
       canvas.addEventListener("pointerup", end);
       canvas.addEventListener("pointercancel", end);
+      canvas.addEventListener("lostpointercapture", () => { drag = null; });
+      window.addEventListener("blur", () => { drag = null; });
       canvas.addEventListener("wheel", (e) => {
         e.preventDefault();
         this.#step(e.deltaY > 0 ? 1 : -1);
@@ -170,8 +179,10 @@
         ctx.drawImage(picture, x0, y0, (maxX - minX) / cmPerPx, (maxY - minY) / cmPerPx);
       }
       if (note) {
-        note.hidden = !!picture || !(id && !info);
-        note.textContent = "No map picture for this place";
+        note.hidden = !!picture;
+        note.textContent = !id
+          ? "The map shows after your next teleport or zone change"
+          : info ? "" : "No map picture for this place";
       }
 
       const dot = ([x, y], r, fill, stroke, width = 1) => {

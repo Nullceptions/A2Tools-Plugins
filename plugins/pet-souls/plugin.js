@@ -475,7 +475,9 @@ const agoText = (ms) => {
 };
 
 // The map shown: the one the game said it loaded, else (the meter started
-// mid-session) the one whose spawns list the monsters in range.
+// mid-session) the one whose spawns list the monsters in range, else the one
+// last loaded on this server (prefs.lastMaps): the game says only as a map
+// loads, so a meter started in a zone showed no map until a teleport.
 function currentMap() {
   if (field.mapId) return field.mapId;
   const votes = {};
@@ -483,7 +485,7 @@ function currentMap() {
     for (const [id, spawns] of Object.entries(PET_SPAWNS)) if (spawns[n.npc]) votes[id] = (votes[id] || 0) + 1;
   }
   const best = Object.entries(votes).sort((a, b) => b[1] - a[1])[0];
-  return best ? Number(best[0]) : null;
+  return best ? Number(best[0]) : (key && prefs.lastMaps?.[key]) || null;
 }
 // The map itself (minimap.js), in the window; the pop-out draws its own from
 // the same scene.
@@ -668,6 +670,11 @@ a2.on("decoded:npc-gone", (d) => {
 });
 a2.on("decoded:map-load", (d, meta) => {
   field.mapLoad(d, readAt(meta));
+  const k = keyFor(meta?.character) || key;
+  if (k && d.map > 0 && prefs.lastMaps?.[k] !== d.map) {
+    prefs.lastMaps = { ...(prefs.lastMaps || {}), [k]: d.map };
+    savePrefs();
+  }
   queueNearby();
 });
 // A record about a player itself, or one of its own effects landing on it

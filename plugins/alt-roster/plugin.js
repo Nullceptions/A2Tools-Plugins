@@ -80,6 +80,48 @@ a2.on("character", (c) => {
       (home.counts ||= {})[x.id] = { v: [Number(v[0]) || 0, Number(v[1]) || 0], at };
     }
   }
+  // The shop's weekly limits and the crafts made (meter 2.0.78 on), once the
+  // shop or the crafting window has opened: each kept the same way.
+  // Kinah gained today and the week's Abyss Points, with its limit (it
+  // grows each week).
+  const from = { shop: c.shopLimits, craft: c.crafts, kinah: { today: c.kinahToday }, abyss: { week: c.abyssPoints } };
+  for (const x of OTHER) {
+    const [kind, id] = x.id.split(":");
+    const v = from[kind]?.[id];
+    if (v == null) continue;
+    const home = x.scope === "server" ? (state.servers[ch.serverId ?? ""] ||= {}) : ch;
+    const n = Array.isArray(v) ? v[0] : v;
+    const second = Array.isArray(v) && Number.isFinite(v[1]) ? v[1] : undefined;
+    const seen = { v: [Number(n) || 0, 0], at: Date.now() };
+    if (x.capFromGame) seen.cap = second;
+    else seen.reset = second;
+    (home.counts ||= {})[x.id] = seen;
+  }
+  // Abyss Corridors: passage 1000000N is the corridor of artifact 100N
+  // (Reshanta's Root, Sulfur Tree Island, Siel's Wings: the two run on
+  // 2026-10-25 were 10000001 and 10000002). One still to run has its usage
+  // time left (2:10), a used one comes as a plain 0. A side can run only
+  // the corridors it holds since the last siege (meter's abyssSiege): the
+  // limit is how many, done is how many of those have no time left.
+  // Counted only when all three are known (a meter started mid-session has
+  // only what changed). No time on any is all used, or the passages not
+  // handed out yet (on the first Abyss visit after a siege): all done only
+  // after times were seen since that siege.
+  if (counts && typeof counts === "object") {
+    const times = c.contentTimes || {};
+    const states = PASSAGES.map((id) => (Number(times[id]) > 0 ? "left" : Array.isArray(counts[id]) ? "used" : null));
+    if (!states.includes(null)) {
+      const side = sideOf(ch.serverId);
+      const holders = c.abyssSiege?.holders || {};
+      const ours = PASSAGES.map((_, k) => !side || !holders[1001 + k] || holders[1001 + k] === side);
+      const cap = ours.filter(Boolean).length;
+      const done = states.filter((st, k) => ours[k] && st === "used").length;
+      const siege = Number(c.abyssSiege?.next?.[1001]) || undefined;
+      const prev = ch.counts?.["abyss:corridors"];
+      const samePeriod = prev && (prev.reset ? Date.now() < prev.reset : !resetsBetween("weekly", prev.at, Date.now()));
+      if (done < cap || samePeriod) (ch.counts ||= {})["abyss:corridors"] = { v: [done, 0], at: Date.now(), reset: siege, cap };
+    }
+  }
   ch.seen = Date.now();
   current = key;
   save();
@@ -148,7 +190,7 @@ function sorted(rows) {
 }
 
 function render() {
-  if (state.prefs.tab === "content") {
+  if (state.prefs.tab !== "roster") {
     renderContent();
     return;
   }
@@ -211,10 +253,31 @@ const CONTENT = [
   // since the reset). Kept per character, shown as the server's total.
   { name: "duty", id: 0, scope: "server", ofChars: true, cap: 5, add: 5, every: "daily", used: true },
   { name: "ascension", id: 80000001, scope: "char", cap: 3, add: 3, every: "weekly" },
+  // From the passages' timers (see the character event): 0/3 on Nully with
+  // three, 2/3 on Nullception with one, as the game showed (2026-10-25).
+  { name: "corridors", id: "abyss:corridors", scope: "char", cap: 3, add: 3, every: "weekly", used: true, siege: true },
   // The game's tooltip: 14/14 (+3), +14 a week, applied per server; the
   // only 14+3 entry in the list (2026-10-24).
   { name: "dungeon", id: 101, scope: "server", cap: 14, add: 14, every: "weekly" },
 ];
+
+// The Other tab: weekly limits from the shop and the crafting window. id:
+// "shop:<item>" or "craft:<recipe>" (as the meter names them, 2026-10-25:
+// Buy Rift Stones 0 to 1 as one was bought; the server's Odyle Energy craft
+// 1, 2, 3 and the character's 0 to 1, as the game showed 3/16 and 1/4).
+const OTHER = [
+  { name: "odyleCraft", id: "craft:32070001", scope: "server", cap: 16, add: 16, every: "weekly", used: true },
+  { name: "odyleCraft", id: "craft:32070002", scope: "char", cap: 4, add: 4, every: "weekly", used: true },
+  { name: "buyOdyle", id: "shop:100134", scope: "char", cap: 20, add: 20, every: "weekly", used: true },
+  { name: "buyRift", id: "shop:100135", scope: "char", cap: 7, add: 7, every: "weekly", used: true },
+  // The game's own: 1534 Kinah and 50659 Abyss Points of 2,000,000 as it
+  // showed them (2026-10-25). The Abyss limit comes with the points.
+  { name: "kinah", id: "kinah:today", scope: "char", cap: 1_000_000, add: 0, every: "daily", used: true },
+  { name: "abyss", id: "abyss:week", scope: "char", cap: 2_000_000, add: 0, every: "weekly", used: true, capFromGame: true },
+];
+const PASSAGES = [10000001, 10000002, 10000003];
+// A server's side, as its id says: 1xxx Elyos, 2xxx Asmodian.
+const sideOf = (serverId) => ({ 1: "elyos", 2: "asmodian" })[String(serverId ?? "")[0]];
 
 // The recharges between two times: daily or weekly resets passed.
 function resetsBetween(every, from, to) {
@@ -228,7 +291,11 @@ function resetsBetween(every, from, to) {
 // game last said and the recharges since (a daily reset back to its cap).
 function countNow(c, seen, now) {
   if (!seen) return null;
-  const passed = resetsBetween(c.every, seen.at, now);
+  // Past a siege the corridors may or may not have reset: not known until
+  // the game says again.
+  if (c.siege && seen.reset && now >= seen.reset) return null;
+  // The shop says when its count resets; else the game's daily or weekly.
+  const passed = seen.reset ? (now >= seen.reset ? 1 : 0) : resetsBetween(c.every, seen.at, now);
   const [was, extra] = seen.v;
   // Taken today: none again after a reset.
   if (c.used) {
@@ -242,6 +309,8 @@ function countNow(c, seen, now) {
 
 function renderContent() {
   const now = Date.now();
+  const other = state.prefs.tab === "other";
+  const list = other ? OTHER : CONTENT;
   const table = $(".contentTable");
   // The server and characters of who is playing, else of the last played.
   const chars = Object.entries(state.chars).map(([key, ch]) => ({ key, ch }));
@@ -274,13 +343,18 @@ function renderContent() {
     th.title = t.yourTime(clock(at));
     group.append(th);
     tbody.append(group);
-    for (const c of CONTENT.filter((x) => x.every === every)) {
+    const rows = list.filter((x) => x.every === every);
+    if (!rows.length) {
+      group.remove();
+      continue;
+    }
+    for (const c of rows) {
       const tr = el("tr");
       const name = el("td");
       name.append(el("div", "cName", t.names[c.name]));
       const meta = el("div", "cMeta");
       meta.append(el("span", `scope ${c.scope}`, c.scope === "char" ? t.perChar : t.serverWide),
-        el("span", null, c.used ? t.perDay(c.cap) : t.capLine(c.cap, c.add, every === "weekly")));
+        el("span", null, c.siege ? t.perSiege(c.cap) : c.used ? (every === "weekly" ? t.perWeek(fmt.format(c.cap)) : t.perDay(fmt.format(c.cap))) : t.capLine(c.cap, c.add, every === "weekly")));
       name.append(meta);
       tr.append(name);
       const shared = c.ofChars ? sumOfChars(c, mine, now) : state.servers[serverId ?? ""]?.counts?.[c.id];
@@ -291,9 +365,10 @@ function renderContent() {
   }
   table.replaceChildren(thead, tbody);
   // Meters before 2.0.78 send no counts: say so rather than only "?".
-  const any = chars.some(({ ch }) => ch.counts && Object.keys(ch.counts).length)
-    || Object.values(state.servers).some((s) => s.counts && Object.keys(s.counts).length);
-  $(".placeholder").textContent = any ? t.placeholder : t.placeholderNone;
+  const ids = new Set(list.map((x) => String(x.id)));
+  const has = (counts) => counts && Object.keys(counts).some((id) => ids.has(id));
+  const any = chars.some(({ ch }) => has(ch.counts)) || Object.values(state.servers).some((s) => has(s.counts));
+  $(".placeholder").textContent = other ? (any ? t.otherNote : t.otherNone) : any ? t.placeholder : t.placeholderNone;
 }
 
 // A server's total of a count kept per character (Daily Duty): each one's
@@ -310,10 +385,11 @@ function sumOfChars(c, chars, now) {
 // A count: left / cap (+extra), a bar, and when it next recharges. "?" when
 // the game hasn't said it yet (or its entry isn't known).
 function cellOf(c, seen, at, now, cls = "") {
+  if (seen?.cap >= 0 && (seen.cap > 0 || c.siege)) c = { ...c, cap: seen.cap };
   const td = el("td", `cell ${cls}`.trim());
   const est = countNow(c, seen, now);
   const value = el("div", `cellValue${est ? "" : " unknownValue"}`);
-  value.append(el("b", null, est ? `${est.gained || est.reset ? "≈" : ""}${est.left}` : "?"), el("span", "of", ` / ${c.cap}`));
+  value.append(el("b", null, est ? `${est.gained || est.reset ? "≈" : ""}${fmt.format(est.left)}` : "?"), el("span", "of", ` / ${fmt.format(c.cap)}`));
   if (est?.extra && !c.used) value.append(el("span", "extra", ` +${est.extra}`));
   const bar = el("div", "bar");
   if (est) {
@@ -323,15 +399,18 @@ function cellOf(c, seen, at, now, cls = "") {
     grown.style.width = `${Math.min(100, (est.gained / c.cap) * 100)}%`;
     bar.append(fill, grown);
   }
+  const next = seen?.reset && seen.reset > now ? seen.reset : at;
   const note = c.used
-    ? (est?.full ? t.allDone : t.doneToday(span(at - now)))
+    ? (c.siege ? (est && seen.reset > now ? t.untilSiege(span(seen.reset - now)) : "")
+      : est?.full ? t.allDone : c.id === 0 ? t.doneToday(span(at - now)) : c.every === "daily" ? t.usedToday(span(next - now)) : t.usedWeek(span(next - now)))
     : est?.full ? t.full : t.plusIn(c.add, span(at - now));
   td.append(value, bar, el("div", `cellNote${est?.full ? " isFull" : ""}`, note));
   if (est?.full) td.classList.add("full");
   td.title = !est
-    ? (c.id == null ? t.tipUnknownRecord : t.tipNotSeen)
+    ? (c.id == null ? t.tipUnknownRecord : c.siege ? (seen ? t.tipAfterSiege : t.tipCorridorsUnknown) : t.tipNotSeen)
     : c.used
-      ? (est.reset ? t.tipDutyReset(seen.v[0]) : t.tipDutyToday(est.left, seen.v[1], ago(seen.at, now)))
+      ? (c.id !== 0 ? (est.reset ? t.tipUsedReset(seen.v[0]) : c.id.startsWith("shop:") || c.id.startsWith("craft:") ? t.tipUsed(est.left, ago(seen.at, now)) : t.tipSaid(ago(seen.at, now), 0))
+        : est.reset ? t.tipDutyReset(seen.v[0]) : t.tipDutyToday(est.left, seen.v[1], ago(seen.at, now)))
     : est.gained
       ? t.tipGained(est.left - est.gained, ago(seen.at, now), est.gained, est.extra)
       : t.tipSaid(ago(seen.at, now), est.extra);
@@ -339,9 +418,10 @@ function cellOf(c, seen, at, now, cls = "") {
 }
 
 function showTab(tab) {
-  state.prefs.tab = tab === "content" ? "content" : "roster";
-  document.body.classList.toggle("tab-content", state.prefs.tab === "content");
-  $(".contentView").hidden = state.prefs.tab !== "content";
+  state.prefs.tab = ["content", "other"].includes(tab) ? tab : "roster";
+  const table = state.prefs.tab !== "roster";
+  document.body.classList.toggle("tab-content", table);
+  $(".contentView").hidden = !table;
   for (const b of document.querySelectorAll(".tabs button")) b.setAttribute("aria-selected", String(b.dataset.tab === state.prefs.tab));
   render();
 }
@@ -472,7 +552,8 @@ $(".sort").addEventListener("change", (e) => {
 // The page's fixed words (index.html), in the meter's language.
 function applyLanguage() {
   document.documentElement.lang = lang;
-  for (const b of document.querySelectorAll(".tabs button")) b.textContent = b.dataset.tab === "content" ? t.tabContent : t.tabRoster;
+  const tabs = { roster: t.tabRoster, content: t.tabContent, other: t.tabOther };
+  for (const b of document.querySelectorAll(".tabs button")) b.textContent = tabs[b.dataset.tab];
   $(".refillLabel").textContent = t.nextRefill;
   $(".search").placeholder = t.search;
   $(".sort").title = t.order;

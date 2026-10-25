@@ -29,6 +29,10 @@ move it to a second monitor: it never hides by itself.
   completed today (n / 5; the game's own n/5 counts the taken ones, done or
   not: those are in the tooltip), added up over your characters on the
   server, back to 0 at the daily reset.
+  Abyss Corridors done per character, out of the corridors your side
+  holds since the last Artifact Siege (up to 3; your side from the server
+  id), from the Abyss passages' usage timers the game lists at each login;
+  after the next siege `?` until the game says again.
 - **Recharges while you are away are estimates** (`≈`, striped), up to the
   cap. From the game's tooltips: Nightmare +2 a day (cap 14), Shugo +3 a day
   (cap 21), Ascension Trial +3 a week (cap 3), Daily Dungeon 14 a week.
@@ -37,6 +41,13 @@ move it to a second monitor: it never hides by itself.
   game behaved), and that Daily Dungeon is the game's entry 101 (the only
   14 + 3 in the list).
 
+- **Other** tab: the week's limits, as the game last said once the shop or
+  the crafting window has opened on a character (Wednesday 07:00 UTC
+  reset): Odyle Energy crafts (16 a week on the server, 4 per character),
+  Buy Odyle Energy (20) and Buy Rift Stones (7) per character; and from
+  each login, the Kinah gained today (1,000,000 a day) and the week's Abyss
+  Points with the limit the game sends.
+
 ## What it reads
 
 No decoders. Only the meter's `character` event (`events:character`): name,
@@ -44,7 +55,8 @@ server, class and level, and from meter 2.0.78 on combat power, gear score
 and Odyle energy (basic and charged). On older meters the roster shows the
 characters without those. The Content counts (`contentCounts`) come from
 the same event from meter 2.0.78 on; without them the Content tab shows
-`?`.
+`?`. The Other tab's (`shopLimits`, `crafts`, `kinahToday`, `abyssPoints`, `contentTimes`, `abyssSiege`) come from meter 2.0.78
+on.
 
 Server names: `servers.js`, from the meter's own list.
 

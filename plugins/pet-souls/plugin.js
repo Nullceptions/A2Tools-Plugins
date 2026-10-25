@@ -863,9 +863,9 @@ a2.on("decoded:npc-spawn", (d, meta) => {
   field.spawn(d, readAt(meta));
   queueNearby();
 });
+// Any entity leaving (players too): only a monster the map shows redraws it.
 a2.on("decoded:npc-gone", (d) => {
-  field.gone(d);
-  queueNearby();
+  if (field.gone(d)) queueNearby();
 });
 a2.on("decoded:map-load", (d, meta) => {
   field.mapLoad(d, readAt(meta));
@@ -876,18 +876,18 @@ a2.on("decoded:map-load", (d, meta) => {
   }
   queueNearby();
 });
-// A record about a player itself, or one of its own effects landing on it
-// (Hidden Cube Finder's checks).
-const aboutItself = (d) => d.target === d.source && d.one === 1 && d.p === 1 && d.q === 0;
-// The meter passes on only records whose source is you ("self").
+// A record about you (kind 11), or one of your effects landing on you (kind
+// 13: 4 more bytes before q, as Hidden Cube Finder reads it). One decoder
+// reads both as kind 11 lays them out, so each record comes once: in a kind
+// 13, x holds q in its top byte and y and z hold its x and y (its height
+// isn't read; the map doesn't use it). The meter passes on only records
+// whose source is you ("self").
 a2.on("decoded:own-position", (d, meta) => {
-  if (!aboutItself(d) || d.kind !== 0x11) return;
-  field.here(d, readAt(meta));
-  queueNearby();
-});
-a2.on("decoded:own-effect", (d, meta) => {
-  if (!aboutItself(d) || d.kind !== 0x13) return;
-  field.here(d, readAt(meta));
+  if (d.target !== d.source || d.one !== 1 || d.p !== 1) return;
+  const at = readAt(meta);
+  if (d.kind === 0x11 && d.q === 0) field.here(d, at);
+  else if (d.kind === 0x13 && d.x >>> 24 === 0) field.here({ x: d.y, y: d.z, z: 0 }, at);
+  else return;
   queueNearby();
 });
 // A mantra goes with you (ends 02): a Chanter's position once a second.

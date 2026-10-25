@@ -6,7 +6,7 @@
   "author": "A2 Tools",
   "description": "Souls still needed to raise each pet, from the game's own pet data, where each pet's souls drop, and the monsters around you that drop them.",
   "permissions": ["storage", "events:character", "window", "widgets", "decoder:pet-list", "decoder:soul-gained", "decoder:level-up",
-    "decoder:npc-spawn", "decoder:npc-gone", "decoder:player-spawn", "decoder:map-load", "decoder:own-position", "decoder:own-effect", "decoder:any-position", "decoder:any-effect", "decoder:self-record", "decoder:mantra-tick", "decoder:teleport"],
+    "decoder:npc-spawn", "decoder:npc-gone", "decoder:map-load", "decoder:own-position", "decoder:own-effect", "decoder:mantra-tick", "decoder:teleport"],
   "decoders": [
     {
       "name": "pet-list",
@@ -45,15 +45,6 @@
     },
     { "name": "npc-gone", "opcode": "42 36", "fields": [ { "name": "entity", "type": "varint" } ] },
     {
-      "name": "player-spawn",
-      "opcode": "45 36",
-      "fields": [
-        { "name": "entity", "type": "varint" }, { "name": "a", "type": "varint" }, { "name": "b", "type": "varint" }, { "name": "look", "type": "varint" },
-        { "type": "skip:1" }, { "name": "nameBytes", "type": "list", "count": "u8", "fields": [ { "type": "skip:1" } ] }, { "type": "skip:8" },
-        { "name": "x", "type": "u32" }, { "name": "y", "type": "u32" }, { "name": "z", "type": "u32" }
-      ]
-    },
-    {
       "name": "map-load",
       "opcode": "21 36",
       "fields": [
@@ -81,25 +72,6 @@
         { "name": "x", "type": "u32" }, { "name": "y", "type": "u32" }, { "name": "z", "type": "u32" }
       ]
     },
-    {
-      "name": "any-position",
-      "opcode": "2A 38",
-      "fields": [
-        { "name": "source", "type": "varint" }, { "name": "one", "type": "u8" }, { "name": "kind", "type": "u8" }, { "name": "seq", "type": "varint" },
-        { "type": "skip:20" }, { "name": "target", "type": "varint" }, { "name": "p", "type": "u8" }, { "name": "q", "type": "u8" },
-        { "name": "x", "type": "u32" }, { "name": "y", "type": "u32" }, { "name": "z", "type": "u32" }
-      ]
-    },
-    {
-      "name": "any-effect",
-      "opcode": "2A 38",
-      "fields": [
-        { "name": "source", "type": "varint" }, { "name": "one", "type": "u8" }, { "name": "kind", "type": "u8" }, { "name": "seq", "type": "varint" },
-        { "type": "skip:20" }, { "name": "target", "type": "varint" }, { "name": "p", "type": "u8" }, { "type": "skip:4" }, { "name": "q", "type": "u8" },
-        { "name": "x", "type": "u32" }, { "name": "y", "type": "u32" }, { "name": "z", "type": "u32" }
-      ]
-    },
-    { "name": "self-record", "opcode": "33 36", "immediate": true, "fields": [ { "name": "entity", "type": "varint" } ] },
     {
       "name": "mantra-tick",
       "opcode": "2B 38",

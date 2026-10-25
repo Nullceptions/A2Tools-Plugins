@@ -17,11 +17,67 @@ a2.on("widget", (scene) => {
     map.setZoom(scene.zoom);
   }
   $(".title").textContent = scene.title || "Around you";
+  label(scene.labels || {});
   where.textContent = scene.where || "";
   where.title = scene.whereTitle || "";
   where.className = `where ${scene.whereClass || ""}`.trim();
   $(".count").textContent = scene.count || "";
   map.set(scene);
+  reportArea();
+});
+
+// The page's words in the meter's language, as the window sends them.
+function label(t) {
+  const set = (sel, title, text) => {
+    const node = $(sel);
+    if (!node) return;
+    if (title) node.title = title;
+    if (text) node.textContent = text;
+  };
+  set(".bar", t.drag);
+  set(".size", t.bigger);
+  set(".dock", t.backIn);
+  set(".zoomIn", t.zoomIn);
+  set(".zoomOut", t.zoomOut);
+  set(".follow", t.back);
+  set(".minimap", t.mapTip);
+  set(".mapCredit", null, t.credit);
+  if (t.mapLabel) $(".minimap").setAttribute("aria-label", t.mapLabel);
+}
+
+// What takes the mouse (CONTRIBUTING: only what is drawn). Unlocked, the
+// whole panel: its bar moves the widget, and the map pans and zooms. Locked,
+// only its buttons: the map is something to look at, and clicks on it go
+// through to the game like the plugin's other locked widgets.
+let lastArea = "";
+function reportArea() {
+  const several = typeof a2.widget.areas === "function";
+  if (!several && typeof a2.widget.area !== "function") return;
+  const parts = locked ? [...document.querySelectorAll(".bar button, .mapButtons button:not([hidden]), .mapCredit")] : [$(".pop")];
+  const boxes = parts.map((el) => el.getBoundingClientRect()).filter((r) => r.width && r.height).map((r) => ({
+    x: Math.max(0, Math.floor(r.left)),
+    y: Math.max(0, Math.floor(r.top)),
+    width: Math.ceil(r.right - Math.max(0, Math.floor(r.left))),
+    height: Math.ceil(r.bottom - Math.max(0, Math.floor(r.top))),
+  }));
+  let payload = boxes;
+  if (!several) {
+    // Older meters take one box: around the buttons, else the panel.
+    const all = boxes.reduce((a, b) => (a ? {
+      x: Math.min(a.x, b.x), y: Math.min(a.y, b.y),
+      width: Math.max(a.x + a.width, b.x + b.width) - Math.min(a.x, b.x),
+      height: Math.max(a.y + a.height, b.y + b.height) - Math.min(a.y, b.y),
+    } : b), null);
+    payload = all || { x: 0, y: 0, width: 1, height: 1 };
+  }
+  const key = JSON.stringify(payload);
+  if (key === lastArea) return;
+  lastArea = key;
+  (several ? a2.widget.areas(payload) : a2.widget.area(payload)).catch(() => {});
+}
+addEventListener("resize", () => {
+  lastArea = "";
+  reportArea();
 });
 
 // The bar moves the widget (unlocked); its buttons don't.
@@ -29,6 +85,7 @@ let locked = false;
 a2.on("locked", (on) => {
   locked = !!on;
   document.body.classList.toggle("locked", locked);
+  reportArea();
 });
 // Heard on the page and placed by where the press is, not by its target: a
 // pointer the map still held would send the press there, and the widget
@@ -47,5 +104,6 @@ $(".size").addEventListener("click", () => a2.widget.post({ size: true }).catch(
 $(".dock").addEventListener("click", () => a2.widget.post({ close: true }).catch(() => {}));
 
 a2.ready();
+reportArea();
 // Ask for the scene: the window sends one as it changes, and at once on this.
 a2.widget.post({ hello: true }).catch(() => {});

@@ -987,6 +987,23 @@ select option, select optgroup { background: var(--a2-panel, #0e1420); color: #f
 .mapButtons button[hidden] {
   display: none;
 }
+/* Where the pictures and spawns come from, next to the map. */
+.mapCredit {
+  position: absolute;
+  right: 4px;
+  bottom: 3px;
+  padding: 0 4px;
+  border-radius: 3px;
+  background: rgba(20, 22, 30, 0.6);
+  color: rgba(232, 226, 208, 0.7);
+  font-size: 9px;
+  line-height: 14px;
+  text-decoration: none;
+}
+.mapCredit:hover {
+  color: #e8e2d0;
+  text-decoration: underline;
+}
 .mapNote {
   position: absolute;
   inset: 0;

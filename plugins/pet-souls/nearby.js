@@ -11,20 +11,14 @@
 // - `2a 38` a record about you as an effect of your own lands on you
 //   (fighting, mounting, gliding: 6 in a minute of moving, 2026-10-25), and
 //   `2b 38` your mantras ticking on you once a second (both as Hidden Cube
-//   Finder reads them). Running alone sends nothing.
+//   Finder reads them). Running alone sends nothing. The meter passes on only
+//   your own ("self"), once it knows which entity is you: from the game's
+//   record about you (at login and each map change, a few seconds after the
+//   map loads), or a while after it started mid-session.
 // - `23 36` a teleport: a 0, 5 bytes, where it put you.
-// - Which entity is you: the meter passes on only your own `2a 38` / `2b 38`
-//   ("self"), but only once it knows you, which took it 15 s and more after
-//   it started (from a kill's loot record), and what came before is gone. So
-//   every player's `2a 38` comes unfiltered too, the last position of each is
-//   kept, and you are known from the first of: the meter's own records, the
-//   game's self record (`33 36`, entity first: at login and each map change),
-//   or the record that lands where a teleport or map load put you.
-// - `45 36` a player coming into range, and again every 20 s or so while
-//   there (as Lugi Finder reads it).
-// While only walking, where you are is guessed from what comes into view:
-// monsters first appear 10 to 33 m from you as you move (median 24 m), players
-// 8 to 21 m, mostly ahead. Their middle, moved back toward where you were
+// Only your own position is read, never another player's. While only walking, where you are is guessed from the monsters
+// coming into view: they first appear 10 to 33 m from you as you move
+// (median 24 m), mostly ahead. Their middle, moved back toward where you were
 // last known, is within about 20 to 30 m (as Shugo.GG's map says of its own).
 // Monsters' own moves (`1c 37`, a few a second) aren't followed: they stay by
 // their spawn unless they are fighting you, and the meter keeps every event
@@ -51,12 +45,6 @@
   // within 31 m three times in four (55 m without this rule).
   const REACH_M = 60;
   const REACH_M_PER_S = 15;
-  // A player not heard from this long comes into view again when heard.
-  const PLAYER_GONE_MS = 30_000;
-  // The record about you lands where a teleport or map load put you: within
-  // this far, this soon after.
-  const LANDED_M = 3;
-  const LANDED_MS = 10_000;
 
   const toFloat = (u) => {
     const view = new DataView(new ArrayBuffer(4));
@@ -80,30 +68,7 @@
       this.npcs = new Map(); // entity -> { entity, npc, pos, at }
       this.me = null; // { pos, at }
       this.mapId = null;
-      this.arrivals = []; // { pos, at }: monsters and players coming into view
-      this.players = new Map(); // entity -> last heard
-      this.meId = null; // your entity, once known
-      this.meUnsure = false; // after a map load: your entity may have changed
-      this.candidates = new Map(); // entity -> { pos, at }: each player's last record about itself
-      this.landed = null; // { pos, at }: where a teleport or map load put you
-    }
-    // Your entity is this one: its last record says where you are.
-    isMe(entity) {
-      if (entity == null) return;
-      this.meUnsure = false;
-      if (entity === this.meId) return;
-      this.meId = entity;
-      const last = this.candidates.get(entity);
-      if (last && (!this.me || last.at > this.me.at)) this.#placed(last.pos, last.at);
-    }
-    // A record a player sent about itself (any player's, unfiltered).
-    record(entity, d, at) {
-      const pos = position(d);
-      if (!pos) return;
-      this.candidates.set(entity, { pos, at });
-      if (this.candidates.size > 300) for (const [e, c] of this.candidates) if (at - c.at > 60_000) this.candidates.delete(e);
-      if ((this.meId == null || this.meUnsure) && this.landed && at - this.landed.at <= LANDED_MS && metres(pos, this.landed.pos) <= LANDED_M) this.isMe(entity);
-      if (entity === this.meId) this.#placed(pos, at);
+      this.arrivals = []; // { pos, at }: monsters coming into view
     }
     #arrived(pos, at) {
       this.arrivals = this.arrivals.filter((a) => at - a.at <= ARRIVALS_MS);
@@ -115,14 +80,6 @@
       if (!this.npcs.has(d.entity)) this.#arrived(pos, at);
       this.npcs.set(d.entity, { entity: d.entity, npc: d.npc, pos, at });
     }
-    player(d, at) {
-      const pos = position(d);
-      if (!pos) return;
-      const heard = this.players.get(d.entity);
-      if (heard == null || at - heard > PLAYER_GONE_MS) this.#arrived(pos, at);
-      this.players.set(d.entity, at);
-      if (this.players.size > 500) for (const [e, t] of this.players) if (at - t > PLAYER_GONE_MS) this.players.delete(e);
-    }
     gone(d) {
       this.npcs.delete(d.entity);
     }
@@ -130,37 +87,21 @@
     #left(at) {
       for (const [entity, n] of this.npcs) if (n.at < at - MOVE_KEEP_MS) this.npcs.delete(entity);
       this.arrivals = this.arrivals.filter((a) => a.at >= at - MOVE_KEEP_MS);
-      this.players.clear();
     }
     mapLoad(d, at) {
       this.#left(at);
       if (d.map > 0) this.mapId = d.map;
       const pos = position(d);
       this.me = pos ? { pos, at } : null;
-      // Your entity changes with the map: the next self record, the meter or
-      // the record where you land says which it is now.
-      this.meUnsure = true;
-      this.#landedAt(pos, at);
     }
     teleport(d, at) {
       const pos = position(d);
       if (!pos) return;
       this.#left(at);
       this.me = { pos, at };
-      this.#landedAt(pos, at);
-    }
-    // Who is there already is you (the record may come first).
-    #landedAt(pos, at) {
-      if (!pos) return;
-      this.landed = { pos, at };
-      if (this.meId != null && !this.meUnsure) return;
-      for (const [entity, c] of this.candidates) {
-        if (Math.abs(c.at - at) <= LANDED_MS && metres(c.pos, pos) <= LANDED_M) return this.isMe(entity);
-      }
     }
     // A record the meter passed on as yours.
-    here(d, at, entity) {
-      if (entity != null) this.isMe(entity);
+    here(d, at) {
       const pos = position(d);
       if (pos) this.#placed(pos, at);
     }

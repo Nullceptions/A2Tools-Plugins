@@ -32,7 +32,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(os.path.dirname(HERE))
 PLUGIN = os.path.join(REPO, "plugins", "pet-souls")
 CACHE = os.path.join(HERE, "cache")
-UA = "A2Tools Pet Soul Tracker map build (personal use)"
+UA = "A2Tools Pet Soul Tracker map build"
 GROUPS = {"elyos", "asmodian", "abyss"}
 
 
@@ -116,13 +116,14 @@ def main():
     # The pictures as <img> tags in the page: on Linux the meter inlines only
     # the files the page's HTML names (WebKitGTK refuses a plugin frame's own
     # requests), so a picture loaded from script never comes.
-    # In both pages that draw the map: the window and the pop-out.
+    # In both pages that draw the map: the window and the pop-out. Lazy: only
+    # the map you are on is loaded (minimap.js asks for it).
     for name in ("index.html", "widget.html"):
         page = os.path.join(PLUGIN, name)
         with open(page, encoding="utf-8") as f:
             html = f.read()
         start, end = "<!-- map pictures -->", "<!-- /map pictures -->"
-        tags = "".join(f'\n      <img class="mapPic" data-map="{i}" src="maps/{i}.webp" alt="" />' for i in maps)
+        tags = "".join(f'\n      <img class="mapPic" data-map="{i}" src="maps/{i}.webp" alt="" loading="lazy" />' for i in maps)
         html = re.sub(re.escape(start) + ".*?" + re.escape(end), start + tags + "\n      " + end, html, flags=re.S)
         with open(page, "w", encoding="utf-8") as f:
             f.write(html)

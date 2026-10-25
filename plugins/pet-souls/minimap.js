@@ -2,8 +2,9 @@
 // "Around you" and in the pop-out (widget.html), which gets what to draw from
 // the window as a scene:
 //   { mapId, you: { pos, at, estimated } or null, wanted: [{ pos, colour }],
-//     others: [pos] (drawn grey), spawnColours: { npcId: colour } }
-// The page needs maps.js and the map pictures as <img class="mapPic">.
+//     others: [pos] (drawn grey), spawnColours: { npcId: colour },
+//     labels: { compass: [N, E, S, W], noMapYet, noPicture } in the meter's language }
+// The page needs maps.js and the map pictures as <img class="mapPic" loading="lazy">.
 (() => {
   // Metres per screen pixel, zoomed in to out.
   const ZOOMS = [0.5, 1, 2, 4, 8, 16];
@@ -17,7 +18,7 @@
       this.els = els;
       this.zoom = ZOOMS.includes(Number(zoom)) ? Number(zoom) : 2;
       this.onZoom = onZoom;
-      this.scene = { mapId: null, you: null, wanted: [], others: [], spawnColours: {} };
+      this.scene = { mapId: null, you: null, wanted: [], others: [], spawnColours: {}, labels: {} };
       // Where it looks: following you (or the monsters in range, or the
       // map's middle) until it is dragged.
       this.follow = true;
@@ -90,13 +91,16 @@
 
     // The pictures are <img> tags in the page (the build writes them): on
     // Linux the meter inlines the files a page names and refuses any it asks
-    // for later. The webview drops the decoded pixels of an image not on
-    // screen, and a canvas drawing it then got nothing until it was decoded
-    // again (a grey moment), so the map shown is kept decoded, as an
-    // ImageBitmap (one at a time: 16 MB each).
+    // for later. They are lazy, so only the map you are on is loaded and
+    // decoded: asked for here (WebKitGTK and Chromium both leave a hidden
+    // lazy picture alone until then, an inlined one too). The webview drops
+    // the decoded pixels of an image not on screen, and a canvas drawing it
+    // then got nothing until it was decoded again (a grey moment), so the
+    // map shown is kept decoded, as an ImageBitmap (one at a time: 16 MB each).
     #picture(id) {
       const img = PET_MAPS[id] && document.querySelector(`img.mapPic[data-map="${Number(id)}"]`);
       if (!img) return null;
+      if (img.loading === "lazy") img.loading = "eager";
       const decoded = this.decoded;
       if (decoded.id === id && decoded.bitmap) return decoded.bitmap;
       if (decoded.pending !== id && typeof createImageBitmap === "function") {
@@ -156,7 +160,7 @@
       ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
       ctx.fillStyle = "#1a1f29";
       ctx.fillRect(0, 0, w, h);
-      const { mapId: id, you, wanted, others, spawnColours } = this.scene;
+      const { mapId: id, you, wanted, others, spawnColours, labels = {} } = this.scene;
       const info = PET_MAPS[id];
       if (this.follow || !this.center) {
         const live = wanted.length ? wanted.map((n) => n.pos) : others;
@@ -181,8 +185,8 @@
       if (note) {
         note.hidden = !!picture;
         note.textContent = !id
-          ? "The map shows after your next teleport or zone change"
-          : info ? "" : "No map picture for this place";
+          ? labels.noMapYet || "The map shows after your next teleport or zone change"
+          : info ? "" : labels.noPicture || "No map picture for this place";
       }
 
       const dot = ([x, y], r, fill, stroke, width = 1) => {
@@ -236,7 +240,8 @@
       ctx.font = "700 10px system-ui, sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
-      for (const [label, x, y] of [["N", w / 2, 9], ["S", w / 2, h - 9], ["W", 9, h / 2], ["E", w - 9, h / 2]]) {
+      const [north, east, south, west] = labels.compass?.length === 4 ? labels.compass : ["N", "E", "S", "W"];
+      for (const [label, x, y] of [[north, w / 2, 9], [south, w / 2, h - 9], [west, 9, h / 2], [east, w - 9, h / 2]]) {
         dot([x, y], 7.5, "rgba(20, 22, 30, 0.75)");
         ctx.fillStyle = "#e8e2d0";
         ctx.fillText(label, x, y + 0.5);

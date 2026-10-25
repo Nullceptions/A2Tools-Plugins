@@ -37,7 +37,11 @@ move it to a second monitor: it never hides by itself.
   the Abyss or open its map, else from A2Tools' copy of them. With neither
   (offline, before any Abyss visit), all three corridors count and the
   weekly reset (Wednesday 07:00 UTC) stands in for the siege: an estimate.
-  A side holding none of the artifacts shows `—`.
+  A side holding none of the artifacts shows `—`; an artifact no side
+  holds counts as closed to both (as far as known). With no timer on any
+  passage, "all used" and "not handed out yet" (until the first Abyss
+  visit after a siege) look the same: unless a passage had time left since
+  the siege, the count shows `≈0`.
 - **Recharges while you are away are estimates** (`≈`, striped), up to the
   cap. A count is as the game last said it, from when it last changed: the
   meter sends its last values with every update, so an old count isn't

@@ -117,6 +117,14 @@ a2.on("character", (c) => {
     const time = (id) => Number(Array.isArray(times[id]) ? times[id][0] : times[id]);
     const states = PASSAGES.map((id) => (time(id) > 0 ? "left" : Array.isArray(counts[id]) ? "used" : null));
     if (!states.includes(null)) ch.passages = states;
+    // One with time left: the passages were handed out for the holding
+    // that lasts until the next siege (or, not known, the weekly reset).
+    // Refreshed every 5 minutes at most, so a repeated event writes nothing.
+    const until = state.servers[ch.serverId ?? ""]?.siege?.next;
+    const left = ch.passagesLeft;
+    if (states.includes("left") && (!left || left.until !== until || Date.now() - left.at > 300_000)) {
+      ch.passagesLeft = { at: Date.now(), until };
+    }
   }
   corridors(ch);
   // Seen now: kept fresh every 30 s while playing (below), so an event alone
@@ -145,11 +153,15 @@ function keepSiege(serverId, d) {
   render();
 }
 a2.on("abyss", (d) => keepSiege(state.chars[current]?.serverId, d));
-// The site's copy, for a server not seen in the Abyss yet this session.
-const asked = new Set();
+// The site's copy, for a server not seen in the Abyss yet this session, or
+// once the siege known has passed: asked again after 10 minutes at most.
+const asked = new Map();
 function askSiege(serverId) {
-  if (!serverId || asked.has(serverId) || typeof a2.abyssSiege !== "function") return;
-  asked.add(serverId);
+  if (!serverId || typeof a2.abyssSiege !== "function") return;
+  const siege = state.servers[serverId]?.siege;
+  if (siege?.next > Date.now() && asked.has(serverId)) return;
+  if (Date.now() - (asked.get(serverId) || 0) < 600_000) return;
+  asked.set(serverId, Date.now());
   a2.abyssSiege(serverId).then((d) => {
     if (!d || (state.servers[serverId]?.siege?.at || 0) > (Number(d.observedAt) || 0) * 1000) return;
     keepSiege(serverId, d);
@@ -160,25 +172,33 @@ function askSiege(serverId) {
 // only the ones it holds, so the limit is how many, and done is how many of
 // those have no time left. No time on any is all used, or the passages not
 // handed out yet (on the first Abyss visit after a siege): all done only
-// after times were seen since that siege. Without the siege known, all three
-// count and the week's reset stands in for it (an estimate).
+// when one had time left in this holding, else a guess of none done (≈0)
+// that the next look at the passages, or a siege arriving, rewrites.
+// Without the siege known, all three count and the week's reset stands in
+// for it (an estimate). An artifact no side holds closes its corridor to
+// both (as far as known); one the meter can't name doesn't.
 function corridors(ch) {
   const states = ch.passages;
   if (!states) return;
   askSiege(ch.serverId);
+  const now = Date.now();
   const siege = state.servers[ch.serverId ?? ""]?.siege;
   const side = sideOf(ch.serverId);
   const holders = siege?.holders || {};
-  const ours = PASSAGES.map((_, k) => !side || !holders[1001 + k] || holders[1001 + k] === side);
+  const ours = PASSAGES.map((_, k) => {
+    const h = holders[1001 + k];
+    return !side || !h || h === side || String(h).startsWith("unknown");
+  });
   const cap = ours.filter(Boolean).length;
   const done = states.filter((st, k) => ours[k] && st === "used").length;
   const prev = ch.counts?.["abyss:corridors"];
-  const samePeriod = prev && (prev.reset ? Date.now() < prev.reset : !resetsBetween("weekly", prev.at, Date.now()));
+  const inPeriod = (x) => x && (x.until ?? x.reset ? now < (x.until ?? x.reset) : !resetsBetween("weekly", x.at, now));
   // None held: nothing to run, whatever the timers say.
-  if (cap === 0 || done < cap || samePeriod) {
-    ch.counts ||= {};
-    ch.counts["abyss:corridors"] = kept(prev, { v: [done, 0], at: Date.now(), reset: siege?.next, cap });
-  }
+  const sure = cap === 0 || done < cap || inPeriod(ch.passagesLeft) || (!prev?.guess && inPeriod(prev));
+  ch.counts ||= {};
+  ch.counts["abyss:corridors"] = sure
+    ? kept(prev, { v: [done, 0], at: now, reset: siege?.next, cap })
+    : kept(prev, { v: [0, 0], at: now, reset: siege?.next, cap, guess: true });
 }
 
 a2.on("game", ({ running }) => {
@@ -348,6 +368,8 @@ function countNow(c, seen, now) {
   // Past a siege the corridors may or may not have reset: not known until
   // the game says again.
   if (c.siege && seen.reset && now >= seen.reset) return null;
+  // No time on any passage and none seen this holding: likely none done.
+  if (seen.guess) return { left: 0, extra: 0, gained: 0, full: false, reset: true };
   // The shop says when its count resets; else the game's daily or weekly.
   const passed = seen.reset ? (now >= seen.reset ? 1 : 0) : resetsBetween(c.every, seen.at, now);
   const [was, extra] = seen.v;
@@ -646,6 +668,10 @@ function applyLanguage() {
         save();
       }
     }
+    // The siege known passed: the site's next one (askSiege waits 10 min
+    // between asks).
+    const playing = state.chars[current];
+    if (playing && state.servers[playing.serverId ?? ""]?.siege?.next <= Date.now()) askSiege(playing.serverId);
     if (!document.querySelector(".remove.confirm")) render();
   }, 30_000);
 })();

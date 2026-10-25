@@ -1,5 +1,7 @@
 // Pet Soul Tracker: souls still needed to raise each pet, and where each
 // pet's souls drop (sources.js, from the game's own data; click a pet to see them).
+// "Around you" is a map of where the monsters that drop a soul for a pet below
+// level 3 spawn, with you and the monsters in range on it (maps.js, nearby.js).
 //
 // The game sends every pet's level and soul points once, at login (decoder
 // "pet-list"), then each soul as it is picked up ("soul-gained") and each
@@ -42,6 +44,23 @@ const els = {
   farmPopup: document.querySelector(".farmPopup"),
   farmAfter: document.querySelector(".farmAfter"),
   hideAfter: document.querySelector(".hideAfterSelect"),
+  controls: document.querySelector(".controls"),
+  nearby: document.querySelector(".nearby"),
+  nearbyWhere: document.querySelector(".nearbyWhere"),
+  nearbyOn: document.querySelector(".nearbyOn"),
+  allNpcs: document.querySelector(".allNpcsBox"),
+  nearbyTitle: document.querySelector(".nearbyTitle"),
+  nearbyCount: document.querySelector(".nearbyCount"),
+  minimap: document.querySelector(".minimap"),
+  zoomIn: document.querySelector(".zoomIn"),
+  zoomOut: document.querySelector(".zoomOut"),
+  follow: document.querySelector(".follow"),
+  mapNote: document.querySelector(".mapNote"),
+  mapBox: document.querySelector(".mapBox"),
+  popOut: document.querySelector(".popOut"),
+  popIn: document.querySelector(".popIn"),
+  poppedNote: document.querySelector(".poppedNote"),
+  nearbyList: document.querySelector(".nearbyList"),
 };
 
 // farmed: each pet given a soul below level 3, by when (the farming pop-up).
@@ -53,7 +72,7 @@ let language = "en";
 let openId = null; // the pet whose sources are shown
 // How the list is sorted, and whether maxed pets show; kept across restarts.
 // hiddenRegions: null until the user picks; until then the other side's maps hide.
-let prefs = { sort: "left", desc: false, hideMax: true, genus: "", level: "", pinned: [], hiddenRegions: null, scale: 1, filtersOpen: false, chestOnly: false, layout: "cards", farmPopup: false, hideAfter: 20 };
+let prefs = { sort: "left", desc: false, hideMax: true, genus: "", level: "", pinned: [], hiddenRegions: null, scale: 1, filtersOpen: false, chestOnly: false, layout: "cards", farmPopup: false, hideAfter: 20, nearby: true, allNpcs: false, mapZoom: 2, popZoom: 2, popSize: 1, mapPopped: false };
 // Text size: the whole page scaled, spacing and controls with the text. 100%
 // is BASE_ZOOM, a little larger than the stylesheet's own sizes.
 const SCALES = [0.9, 1, 1.1, 1.25, 1.5];
@@ -203,6 +222,7 @@ function petOf(id) {
 }
 
 function render() {
+  renderNearby();
   const ids = new Set([...Object.keys(state.levels), ...Object.keys(state.points)]);
   // Special pets come at their highest level and take no souls, so they are
   // left out, as are pets only found on maps not open yet (the game lists
@@ -379,12 +399,14 @@ function fitFarm() {
 function showFarm() {
   view = "farm";
   document.body.classList.add("farmOnly");
+  els.farmList.before(els.nearby);
   render();
 }
 function showFull() {
   if (view === "full") return;
   view = "full";
   document.body.classList.remove("farmOnly");
+  els.controls.after(els.nearby);
   if (canFit()) win.fit().catch(() => {});
   render();
 }
@@ -412,6 +434,285 @@ for (const type of ["pointerdown", "keydown", "wheel"]) {
   document.addEventListener(type, () => { usedAt = Date.now(); }, { passive: true });
 }
 document.addEventListener("pointermove", () => { hoveredAt = Date.now(); }, { passive: true });
+
+// ---- Around you: a map of where the souls you need are ---------------------
+//
+// The map is the game's world map with every spawn of the monsters that drop
+// a soul for a pet below level 3 (maps.js, from aion2timers.com), you on it,
+// and the monsters in range as the game sends them (nearby.js), which sit on
+// those spawns. Your own position only comes now and then: as your effects
+// land on you (fighting, mounting, gliding: 6 in a minute of running,
+// mounting and flying, 2026-10-25), a Chanter's mantras once a second, never
+// for running alone. So "you" can lag: the header says how old it is. The
+// monsters are placed by the game's own positions, whatever yours.
+const field = new PetNearby.Field();
+// Each NPC id's drops (its name, level and the pets it drops souls for), and
+// each map's name, from sources.js.
+const NPC_DROPS = {};
+const MAP_NAMES = {};
+for (const [pet, src] of Object.entries(PET_SOURCES)) {
+  for (const d of src.drops) {
+    if (d.mapId && d.map) MAP_NAMES[d.mapId] ||= d.map;
+    if (!d.npcId) continue;
+    const n = (NPC_DROPS[d.npcId] ||= { npc: d.npc, level: d.level, pets: [] });
+    if (!n.pets.includes(pet)) n.pets.push(pet);
+  }
+}
+// Older than this, the header says how old your position is.
+const STALE_MS = 15_000;
+const NEARBY_ROWS = 4;
+const GENUS_COLOURS = { cogni: "#b99bff", fera: "#ff9f66", natura: "#74d99a", varian: "#5cc9e6" };
+// Metres per screen pixel, zoomed in to out.
+const ZOOMS = [0.5, 1, 2, 4, 8, 16];
+// A pet still to raise: below level 3, not special.
+const needs = (pet) => PET_GENUS[pet] !== "special" && !PET_SOURCES[pet]?.unreleased && (state.levels[pet] || 0) < MAX_LEVEL;
+// The pets still to raise that a monster drops souls for, fewest souls left first.
+const neededFrom = (npc) => (NPC_DROPS[npc]?.pets || []).filter(needs).map(petOf).sort((a, b) => a.left - b.left);
+const colourOf = (pets) => GENUS_COLOURS[pets[0]?.genus] || "#8fc2ff";
+const agoText = (ms) => {
+  const s = Math.round(ms / 1000);
+  return s < 60 ? `${s} s` : s < 3600 ? `${Math.round(s / 60)} min` : `${Math.round(s / 3600)} h`;
+};
+
+// The map shown: the one the game said it loaded, else (the meter started
+// mid-session) the one whose spawns list the monsters in range.
+function currentMap() {
+  if (field.mapId) return field.mapId;
+  const votes = {};
+  for (const n of field.npcs.values()) {
+    for (const [id, spawns] of Object.entries(PET_SPAWNS)) if (spawns[n.npc]) votes[id] = (votes[id] || 0) + 1;
+  }
+  const best = Object.entries(votes).sort((a, b) => b[1] - a[1])[0];
+  return best ? Number(best[0]) : null;
+}
+// The map itself (minimap.js), in the window; the pop-out draws its own from
+// the same scene.
+const minimap = new PetMiniMap.MiniMap(
+  { canvas: els.minimap, zoomIn: els.zoomIn, zoomOut: els.zoomOut, follow: els.follow, note: els.mapNote },
+  { zoom: prefs.mapZoom, onZoom: (zoom) => { prefs.mapZoom = zoom; savePrefs(); } },
+);
+
+let nearbyTimer = 0;
+// Redrawn at most 5 times a second, however many records come.
+function queueNearby() {
+  if (nearbyTimer) return;
+  nearbyTimer = setTimeout(() => {
+    nearbyTimer = 0;
+    renderNearby();
+  }, 200);
+}
+let nearbyShape = "";
+let nearbyLive = { wanted: [], others: [] };
+function renderNearby() {
+  const on = prefs.nearby !== false;
+  els.nearby.hidden = !on;
+  // The pop-out keeps going with the window's map turned off.
+  if (!on && !popOpen) return;
+  const now = Date.now();
+  // Every monster in range, with its distance from you when you are known.
+  const you = field.where(now);
+  const me = you?.pos;
+  const live = [...field.npcs.values()].map((n) => (me ? { ...n, m: PetNearby.metres(me, n.pos), deg: PetNearby.bearing(me, n.pos) } : n));
+  if (me) live.sort((a, b) => a.m - b.m);
+  const wanted = [];
+  const others = [];
+  for (const n of live) {
+    const pets = neededFrom(n.npc);
+    if (pets.length) wanted.push({ ...n, pets });
+    else others.push(n);
+  }
+  nearbyLive = { wanted, others };
+  const id = currentMap();
+  els.nearbyTitle.textContent = id ? (MAP_NAMES[id] ? text(MAP_NAMES[id]) : PET_MAPS[id]?.name || "Around you") : "Around you";
+  // Exact, estimated from what came into view, or old.
+  const stale = !!you && !you.estimated && now - you.at > STALE_MS;
+  els.nearbyWhere.textContent = !you ? "position not known yet"
+    : you.estimated ? "≈ position estimated"
+    : stale ? `position ${agoText(now - you.at)} old` : "";
+  els.nearbyWhere.title = you?.estimated
+    ? "Guessed from the monsters and players coming into view, within about 20 to 30 m. Fight, dodge or use a skill on yourself to make it exact"
+    : "";
+  els.nearbyWhere.classList.toggle("stale", stale || !you);
+  els.nearbyWhere.classList.toggle("estimated", !!you?.estimated);
+  // How many spawns on this map drop a soul you need, and how many are in range.
+  let spawns = 0;
+  for (const [npc, points] of Object.entries(PET_SPAWNS[id] || {})) if (neededFrom(npc).length) spawns += points.length / 2;
+  els.nearbyCount.textContent = `${spawns.toLocaleString(language)} spawn${spawns === 1 ? "" : "s"} · ${wanted.length} in range`;
+  // What the map draws, here and in the pop-out.
+  const spawnColours = {};
+  for (const npc of Object.keys(PET_SPAWNS[id] || {})) {
+    const pets = neededFrom(npc);
+    if (pets.length) spawnColours[npc] = colourOf(pets);
+  }
+  const scene = {
+    mapId: id,
+    you: you ? { pos: you.pos, at: you.at, estimated: !!you.estimated } : null,
+    wanted: wanted.map((n) => ({ pos: n.pos, colour: colourOf(n.pets) })),
+    others: prefs.allNpcs ? others.map((n) => n.pos) : [],
+    spawnColours,
+    title: els.nearbyTitle.textContent,
+    where: els.nearbyWhere.textContent,
+    whereTitle: els.nearbyWhere.title,
+    whereClass: stale || !you ? "stale" : you.estimated ? "estimated" : "",
+    count: els.nearbyCount.textContent,
+  };
+  lastScene = scene;
+  sendPop(scene);
+  els.mapBox.hidden = popOpen;
+  els.poppedNote.hidden = !popOpen;
+  els.popOut.hidden = popOpen || !canPop();
+  minimap.set(scene);
+
+  // One row per kind of monster in range, nearest first: its name and level,
+  // how many, the pets it drops souls for with the souls each still needs,
+  // and the way.
+  const kinds = new Map();
+  for (const n of wanted) {
+    const k = kinds.get(n.npc);
+    if (k) k.count += 1;
+    else kinds.set(n.npc, { ...n, count: 1 });
+  }
+  const rows = [...kinds.values()].slice(0, NEARBY_ROWS).map((k) => {
+    const drop = NPC_DROPS[k.npc];
+    const li = el("li");
+    li.style.setProperty("--g", colourOf(k.pets));
+    const who = el("span", "who");
+    who.append(el("i", "dot"), el("span", "npcName", text(drop.npc)));
+    if (drop.level) who.append(el("small", "", `Lv ${drop.level}`));
+    if (k.count > 1) who.append(el("small", "", `×${k.count}`));
+    const dist = el("span", "dist", k.m != null ? `${Math.round(k.m)} m ${PetNearby.compass(k.deg)}` : "");
+    const souls = el("span", "for", `for ${listOf(k.pets.map((p) => `${p.name} (${p.left} to Lv 3)`))}`);
+    souls.title = souls.textContent;
+    li.append(who, dist, souls);
+    return li;
+  });
+  if (!rows.length) {
+    rows.push(el("li", "none", spawns
+      ? "No monster in range drops a soul you need. The dots are where they spawn."
+      : "No monster on this map drops a soul you need."));
+  }
+  els.nearbyList.replaceChildren(...rows);
+  // The farming pop-up follows its height.
+  const shape = `${rows.length}`;
+  if (shape !== nearbyShape) {
+    nearbyShape = shape;
+    fitFarm();
+  }
+}
+
+// ---- The pop-out: the map in a window of its own (a widget, meter 2.0.68 on)
+//
+// The widget (widget.html) draws the same map from the scene sent to it, a
+// few times a second; it can be dragged anywhere by its bar and locked with
+// the plugin's other widgets. Its size steps through POP_SIZES; × puts the
+// map back in this window.
+const POP = "map";
+const POP_SIZES = [[300, 270], [380, 340], [480, 420], [600, 520], [760, 660]];
+const canPop = () => !!(a2.widgets && typeof a2.widgets.open === "function");
+const popSize = () => POP_SIZES[Math.max(0, Math.min(POP_SIZES.length - 1, Number(prefs.popSize) || 1))];
+let popOpen = false;
+async function popOut() {
+  if (!canPop()) return;
+  const [width, height] = popSize();
+  popOpen = await a2.widgets.open(POP, { width, height }).then(() => true, () => false);
+  if (!popOpen) return;
+  prefs.mapPopped = true;
+  savePrefs();
+  renderNearby();
+}
+function popIn() {
+  if (popOpen) a2.widgets.close(POP).catch(() => {});
+  popOpen = false;
+  prefs.mapPopped = false;
+  savePrefs();
+  renderNearby();
+  fitFarm();
+}
+function sendPop(scene) {
+  if (!popOpen) return;
+  a2.widgets.send(POP, { ...scene, zoom: prefs.popZoom }).catch(() => {});
+}
+let lastScene = null;
+a2.on("widget-message", (msg) => {
+  if (msg?.name !== POP) return;
+  const d = msg.data || {};
+  if (d.hello && lastScene) sendPop(lastScene);
+  if (d.zoom != null) {
+    prefs.popZoom = d.zoom;
+    savePrefs();
+  }
+  if (d.size != null) {
+    prefs.popSize = (Number(prefs.popSize ?? 1) + 1) % POP_SIZES.length;
+    savePrefs();
+    popOut();
+  }
+  if (d.close) popIn();
+});
+els.popOut.addEventListener("click", popOut);
+els.popIn.addEventListener("click", popIn);
+
+// When the meter says when it read a record, that; else now.
+const readAt = (meta) => (Number(meta?.at) > 0 ? Math.min(Number(meta.at), Date.now()) : Date.now());
+a2.on("decoded:npc-spawn", (d, meta) => {
+  field.spawn(d, readAt(meta));
+  queueNearby();
+});
+// Players only say where you are, as they come into view.
+a2.on("decoded:player-spawn", (d, meta) => {
+  field.player(d, readAt(meta));
+  queueNearby();
+});
+a2.on("decoded:npc-gone", (d) => {
+  field.gone(d);
+  queueNearby();
+});
+a2.on("decoded:map-load", (d, meta) => {
+  field.mapLoad(d, readAt(meta));
+  queueNearby();
+});
+// A record about a player itself, or one of its own effects landing on it
+// (Hidden Cube Finder's checks).
+const aboutItself = (d) => d.target === d.source && d.one === 1 && d.p === 1 && d.q === 0;
+// The meter passes on only records whose source is you ("self"), once it
+// knows you; the same records come for every player unfiltered, so you show
+// as soon as the plugin knows which entity is you (nearby.js).
+a2.on("decoded:own-position", (d, meta) => {
+  if (!aboutItself(d) || d.kind !== 0x11) return;
+  field.here(d, readAt(meta), d.source);
+  queueNearby();
+});
+a2.on("decoded:own-effect", (d, meta) => {
+  if (!aboutItself(d) || d.kind !== 0x13) return;
+  field.here(d, readAt(meta), d.source);
+  queueNearby();
+});
+a2.on("decoded:any-position", (d, meta) => {
+  if (!aboutItself(d) || d.kind !== 0x11) return;
+  field.record(d.source, d, readAt(meta));
+  queueNearby();
+});
+a2.on("decoded:any-effect", (d, meta) => {
+  if (!aboutItself(d) || d.kind !== 0x13) return;
+  field.record(d.source, d, readAt(meta));
+  queueNearby();
+});
+// The game's record about you, at login and each map change: your entity.
+a2.on("decoded:self-record", (d) => {
+  field.isMe(d.entity);
+  queueNearby();
+});
+// A mantra goes with you (ends 02): a Chanter's position once a second.
+a2.on("decoded:mantra-tick", (d, meta) => {
+  if (d.target !== d.source || d.kind !== 0x13 || d.q !== 2) return;
+  field.here(d, readAt(meta), d.source);
+  queueNearby();
+});
+a2.on("decoded:teleport", (d, meta) => {
+  // Entity 0: you being teleported, not another entity's update.
+  if (d.flag !== 0) return;
+  field.teleport(d, readAt(meta));
+  queueNearby();
+});
 
 // ---- The layouts: how each pet's row is drawn (Settings → Layout) --------
 
@@ -948,6 +1249,17 @@ els.hideAfter.addEventListener("change", () => {
   prefs.hideAfter = Number(els.hideAfter.value);
   savePrefs();
 });
+els.nearbyOn.addEventListener("change", () => {
+  prefs.nearby = els.nearbyOn.checked;
+  savePrefs();
+  renderNearby();
+  fitFarm();
+});
+els.allNpcs.addEventListener("change", () => {
+  prefs.allNpcs = els.allNpcs.checked;
+  savePrefs();
+  renderNearby();
+});
 els.toFull.addEventListener("click", showFull);
 els.toFarm.addEventListener("click", () => {
   poppedAt = Date.now();
@@ -995,6 +1307,9 @@ els.head.addEventListener("click", (e) => {
   els.chestOnly.checked = !!prefs.chestOnly;
   els.farmPopup.checked = !!prefs.farmPopup;
   els.farmAfter.hidden = !prefs.farmPopup;
+  els.nearbyOn.checked = prefs.nearby !== false;
+  minimap.setZoom(prefs.mapZoom);
+  els.allNpcs.checked = !!prefs.allNpcs;
   if (!canFit()) {
     els.farmPopup.disabled = true;
     els.farmPopup.parentElement.title = "Needs meter 2.0.65 or later";
@@ -1008,6 +1323,10 @@ els.head.addEventListener("click", (e) => {
   await a2.ready();
   // The "farming" mark wears off without an event to redraw it.
   setInterval(() => { if (state.lastGain) render(); }, 60_000);
+  // The map popped out last time comes back out.
+  if (prefs.mapPopped) popOut();
+  // How old your position is, as it ages.
+  setInterval(() => { if (field.me || field.arrivals.length) queueNearby(); }, 1000);
   // Without a character from the meter, show the last one tracked.
   queued(async () => { if (!key) await show(await fallbackKey()); });
 })();

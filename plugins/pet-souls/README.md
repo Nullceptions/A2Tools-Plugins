@@ -34,6 +34,18 @@ A pet levels up as soon as its souls reach what its level needs, and its count s
 
 **☆** pins a pet to the top of the list (★). The pet you last picked up a soul for comes next, marked "farming", for 30 minutes after that soul.
 
+## Around you
+
+A map at the top shows where the souls you still need are: the game's world map of the map you're on, north up, with every spawn of the monsters that drop a soul for a pet below level 3 as small dots in that pet's genus colour, and you on it. The monsters in range, as the game sends them, show larger and ringed on their spawns, and under the map the nearest kinds (up to four): name, level, how many, how far and which way, and the pets they drop souls for with the souls each still needs. **All monsters** adds every other monster in range as grey dots. The header names the map and counts the spawns you need on it and how many are in range.
+
+Drag the map to look around (⌖ or a double-click goes back to you); the wheel or **+** / **−** zooms, from 0.5 to 16 m a pixel. In the farming pop-up the map comes along, above the pets being farmed. **Show the map** under Filters turns it off.
+
+**Pop out** (the arrow-out button in the map's header) puts the map in a small window of its own, always on top, which you can drag anywhere by its bar and lock with the plugin's other widgets (meter 2.0.68 or later). Its own zoom, drag and follow work as in the window; the size button steps it through five sizes, from 300 × 270 to 760 × 660, and **×** puts the map back in the Pet Soul Tracker window. It stays popped out across restarts, and keeps going while the tracker's window is hidden.
+
+The game sends each monster as it comes into range and as it goes, after a kill or as it leaves your range, so those are placed exactly. Your own position is exact when you fight, dodge, mount, glide or use a skill on yourself, every second under a Chanter's mantra, at a teleport and as a map loads. Running alone sends none: then the monsters and players coming into view place you within about 20 to 30 m (**≈ position estimated**, a dashed circle) until the next exact one, and with nothing coming into view the header says how old your position is. You show without waiting for the meter to know which character is you: the game's own record about you, or where a teleport or map load puts you, tells the plugin. Started mid-session, before a map has loaded, the map is the one whose spawns match the monsters in range.
+
+The map pictures and spawn points come from [aion2timers.com](https://www.aion2timers.com/map/)'s interactive map (`tools/pet-maps/build.py` builds `maps/` and `maps.js` from it): the open-world maps and Reshanta, 2048 px each. Their positions are the game's world units, the same as the game sends; spawns seen in game sit within a few metres of theirs.
+
 ## Where souls drop
 
 Click a pet to see where its souls come from: the monsters that drop them (level, drop chance, zone and map, number of spawns, nearest Kibelisk), the one with the most spawns first, and the chests that hold them. Click it again to close.

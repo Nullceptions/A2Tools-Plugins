@@ -3,3 +3,4 @@ __pycache__/
 # Never commit a signing key.
 *.pem
 *.key
+tools/pet-maps/cache/

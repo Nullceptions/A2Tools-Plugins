@@ -46,4 +46,9 @@ characters without those. The Content counts (`contentCounts`) come from
 the same event from meter 2.0.78 on; without them the Content tab shows
 `?`.
 
-Server names: `servers.js`, the English names from the meter's own list.
+Server names: `servers.js`, from the meter's own list.
+
+In the meter's ten languages (`i18n.js`), following its language setting.
+Content and class names are the game's own where the meter's tables have
+them; "Daily Duty" and "Daily Dungeon" are translated and may differ from
+the game's wording.

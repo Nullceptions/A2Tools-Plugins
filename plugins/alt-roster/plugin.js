@@ -4,19 +4,25 @@
 // likely is now (≈), until the game says again.
 const { CAPS, nextRefill, estimate, fullAt, EVERY } = globalThis.RosterLogic;
 const SERVERS = globalThis.ROSTER_SERVERS || {};
+const UI = globalThis.ROSTER_UI;
 const $ = (sel, root = document) => root.querySelector(sel);
 
-// The meter names classes in Korean.
+// The page's words in the meter's language (i18n.js), English until it says.
+let lang = "en";
+let t = UI.en;
+
+// The meter names classes in Korean: each one's place in the words' class
+// list, and its colour.
 const CLASSES = {
-  "검성": ["Gladiator", "#e0a04a"],
-  "수호성": ["Templar", "#7fa7d9"],
-  "궁성": ["Ranger", "#7cc46a"],
-  "살성": ["Assassin", "#c46ad1"],
-  "마도성": ["Sorcerer", "#e06a6a"],
-  "치유성": ["Cleric", "#f0d36a"],
-  "정령성": ["Spiritmaster", "#6ad1c4"],
-  "호법성": ["Chanter", "#d18f6a"],
-  "권성": ["Fighter", "#a3a3a3"],
+  "검성": [0, "#e0a04a"],
+  "수호성": [1, "#7fa7d9"],
+  "살성": [2, "#c46ad1"],
+  "궁성": [3, "#7cc46a"],
+  "마도성": [4, "#e06a6a"],
+  "정령성": [5, "#6ad1c4"],
+  "치유성": [6, "#f0d36a"],
+  "호법성": [7, "#d18f6a"],
+  "권성": [8, "#a3a3a3"],
 };
 
 // chars: { "<name>@<server>": { name, serverId, class, level, cp, gs,
@@ -87,30 +93,40 @@ a2.on("game", ({ running }) => {
   render();
 });
 a2.on("compact", (on) => document.body.classList.toggle("compact", !!on));
+a2.on("language", (code) => {
+  const c = String(code || "");
+  lang = UI[c] ? c : UI[c.split("-")[0]] ? c.split("-")[0] : "en";
+  t = UI[lang];
+  fmt = new Intl.NumberFormat(lang);
+  applyLanguage();
+  render();
+});
 
 // ── Drawing ────────────────────────────────────────────────────────────────
-const fmt = new Intl.NumberFormat("en");
+let fmt = new Intl.NumberFormat("en");
 function span(ms) {
   const m = Math.max(0, Math.round(ms / 60_000));
-  if (m >= 1440) return `${Math.floor(m / 1440)}d ${Math.floor((m % 1440) / 60)}h`;
-  if (m >= 60) return `${Math.floor(m / 60)}h ${m % 60}m`;
-  return `${m}m`;
+  const u = t.units;
+  if (m >= 1440) return `${Math.floor(m / 1440)}${u.d}${u.sep}${Math.floor((m % 1440) / 60)}${u.h}`;
+  if (m >= 60) return `${Math.floor(m / 60)}${u.h}${u.sep}${m % 60}${u.m}`;
+  return `${m}${u.m}`;
 }
 function ago(at, now) {
   const m = Math.round((now - at) / 60_000);
-  if (m < 2) return "just now";
-  if (m < 60) return `${m}m ago`;
-  if (m < 48 * 60) return `${Math.round(m / 60)}h ago`;
-  return `${Math.round(m / 1440)}d ago`;
+  const u = t.units;
+  if (m < 2) return t.justNow;
+  if (m < 60) return t.ago(`${m}${u.m}`);
+  if (m < 48 * 60) return t.ago(`${Math.round(m / 60)}${u.h}`);
+  return t.ago(`${Math.round(m / 1440)}${u.d}`);
 }
-const clock = (t) => new Date(t).toLocaleString([], { weekday: "short", hour: "2-digit", minute: "2-digit" });
+const clock = (at) => new Date(at).toLocaleString(lang, { weekday: "short", hour: "2-digit", minute: "2-digit" });
 const el = (tag, cls, text) => {
   const n = document.createElement(tag);
   if (cls) n.className = cls;
   if (text != null) n.textContent = text;
   return n;
 };
-const serverName = (id) => SERVERS[id] || (id ? `Server ${id}` : "");
+const serverName = (id) => SERVERS[lang]?.[id] || SERVERS.en?.[id] || (id ? t.serverN(id) : "");
 
 // Each character's numbers as they likely are now.
 function view(key, ch, now) {
@@ -141,26 +157,26 @@ function render() {
   const next = nextRefill(now);
   const done = 100 - ((next - now) / EVERY) * 100;
   $(".dialFill").style.strokeDasharray = `${done} 100`;
-  $(".refillIn").textContent = `in ${span(next - now)}`;
-  $(".refillIn").title = `At ${clock(next)}, your time`;
+  $(".refillIn").textContent = t.in(span(next - now));
+  $(".refillIn").title = t.atYourTime(clock(next));
   const daily = nextDaily(now);
   const weekly = nextWeekly(now);
   $(".resets").replaceChildren(
-    resetChip("Daily reset", daily, now),
-    resetChip("Weekly reset", weekly, now),
+    resetChip(t.dailyReset, daily, now),
+    resetChip(t.weeklyReset, weekly, now),
   );
 
   const q = $(".search").value.trim().toLowerCase();
   const all = Object.entries(state.chars).map(([key, ch]) => view(key, ch, now));
   const rows = sorted(all.filter((r) => !q || `${r.ch.name} ${serverName(r.ch.serverId)}`.toLowerCase().includes(q)));
-  $(".count").textContent = all.length ? `${rows.length === all.length ? "" : `${rows.length} of `}${all.length} character${all.length === 1 ? "" : "s"}` : "";
+  $(".count").textContent = all.length ? t.count(rows.length, all.length) : "";
 
   // Full: each refill until they spend some is lost.
   const capped = all.filter((r) => r.est?.full && !r.playing);
   $(".capped").hidden = !capped.length;
   if (capped.length) {
     $(".capped").replaceChildren(
-      el("strong", null, "Full: the next refill is lost"),
+      el("strong", null, t.cappedTitle),
       ...capped.map((r) => el("span", "cappedName", r.ch.name)),
     );
   }
@@ -169,11 +185,9 @@ function render() {
   list.replaceChildren(...rows.map(rowOf));
   const empty = $(".empty");
   empty.hidden = rows.length > 0;
-  empty.textContent = all.length ? "No character matches." : "Log in to a character and it shows up here. Each one you play is kept.";
+  empty.textContent = all.length ? t.noMatch : t.empty;
   const anyStats = all.some((r) => r.ch.cp || r.ch.gs || r.ch.energy);
-  $(".foot").textContent = all.length && !anyStats
-    ? "Combat power, gear score and energy need meter 2.0.78 or newer."
-    : "≈ estimated: +15 basic energy every 3 h while away. The cap is 560, or 840 with a membership: click a cap to switch.";
+  $(".foot").textContent = all.length && !anyStats ? t.footOld : t.foot;
 }
 
 // ── Content ────────────────────────────────────────────────────────────────
@@ -187,18 +201,19 @@ function render() {
 // Daily Duty (id 0) is no entry of the game's: the meter reads the Daily
 // Duty board, [completed, taken] today. Only completed is shown (taken but
 // not done isn't progress); it counts up: "used".
+// name: its key among the words' names.
 const CONTENT = [
-  { name: "Nightmare", id: 4, scope: "char", cap: 14, add: 2, every: "daily" },
-  { name: "Shugo Festival", id: 1, scope: "server", cap: 21, add: 3, every: "daily" },
-  { name: "Invasion", id: 8, scope: "server", cap: 7, add: 1, every: "daily" },
+  { name: "nightmare", id: 4, scope: "char", cap: 14, add: 2, every: "daily" },
+  { name: "shugo", id: 1, scope: "server", cap: 21, add: 3, every: "daily" },
+  { name: "invasion", id: 8, scope: "server", cap: 7, add: 1, every: "daily" },
   // The limit is the server's, the sum of each character's today: each has
   // its own board (the meter sends the one logged in, 0 for one not used
   // since the reset). Kept per character, shown as the server's total.
-  { name: "Daily Duty", id: 0, scope: "server", ofChars: true, cap: 5, add: 5, every: "daily", used: true },
-  { name: "Ascension Trial", id: 80000001, scope: "char", cap: 3, add: 3, every: "weekly" },
+  { name: "duty", id: 0, scope: "server", ofChars: true, cap: 5, add: 5, every: "daily", used: true },
+  { name: "ascension", id: 80000001, scope: "char", cap: 3, add: 3, every: "weekly" },
   // The game's tooltip: 14/14 (+3), +14 a week, applied per server; the
   // only 14+3 entry in the list (2026-10-24).
-  { name: "Daily Dungeon", id: 101, scope: "server", cap: 14, add: 14, every: "weekly" },
+  { name: "dungeon", id: 101, scope: "server", cap: 14, add: 14, every: "weekly" },
 ];
 
 // The recharges between two times: daily or weekly resets passed.
@@ -236,13 +251,13 @@ function renderContent() {
     .sort((a, b) => (b.key === current) - (a.key === current) || a.ch.name.localeCompare(b.ch.name));
 
   const head = el("tr");
-  head.append(el("th", null, "Content"));
-  const server = el("th", "serverCol", "Server");
-  server.append(el("span", "colSub", serverName(serverId) || "all characters"));
+  head.append(el("th", null, t.content));
+  const server = el("th", "serverCol", t.server);
+  server.append(el("span", "colSub", serverName(serverId) || t.allChars));
   head.append(server);
   for (const { key, ch } of mine) {
     const th = el("th", null, ch.name);
-    th.append(el("span", "colSub", key === current && gameRunning ? "playing" : ch.seen ? `seen ${ago(ch.seen, now)}` : ""));
+    th.append(el("span", "colSub", key === current && gameRunning ? t.playing : ch.seen ? t.seenAgo(ago(ch.seen, now)) : ""));
     head.append(th);
   }
   const thead = el("thead");
@@ -253,19 +268,19 @@ function renderContent() {
   for (const every of ["daily", "weekly"]) {
     const at = every === "daily" ? nextDaily(now) : nextWeekly(now);
     const group = el("tr", "group");
-    const th = el("th", null, every === "daily" ? "Daily recharge" : "Weekly recharge");
+    const th = el("th", null, every === "daily" ? t.dailyRecharge : t.weeklyRecharge);
     th.colSpan = cols;
-    th.append(el("span", "when", `in ${span(at - now)}`));
-    th.title = `${clock(at)}, your time`;
+    th.append(el("span", "when", t.in(span(at - now))));
+    th.title = t.yourTime(clock(at));
     group.append(th);
     tbody.append(group);
     for (const c of CONTENT.filter((x) => x.every === every)) {
       const tr = el("tr");
       const name = el("td");
-      name.append(el("div", "cName", c.name));
+      name.append(el("div", "cName", t.names[c.name]));
       const meta = el("div", "cMeta");
-      meta.append(el("span", `scope ${c.scope}`, c.scope === "char" ? "PER CHARACTER" : "SERVER-WIDE"),
-        el("span", null, c.used ? `${c.cap} a day` : `cap ${c.cap} · +${c.add} a ${every === "daily" ? "day" : "week"}`));
+      meta.append(el("span", `scope ${c.scope}`, c.scope === "char" ? t.perChar : t.serverWide),
+        el("span", null, c.used ? t.perDay(c.cap) : t.capLine(c.cap, c.add, every === "weekly")));
       name.append(meta);
       tr.append(name);
       const shared = c.ofChars ? sumOfChars(c, mine, now) : state.servers[serverId ?? ""]?.counts?.[c.id];
@@ -278,9 +293,7 @@ function renderContent() {
   // Meters before 2.0.78 send no counts: say so rather than only "?".
   const any = chars.some(({ ch }) => ch.counts && Object.keys(ch.counts).length)
     || Object.values(state.servers).some((s) => s.counts && Object.keys(s.counts).length);
-  $(".placeholder").textContent = any
-    ? "As the game last said, per character or shared on the server. ≈ recharged since (estimated). +N: extra from recharge items."
-    : "The counts need meter 2.0.78 or newer; then log in to each character once. Caps and recharge times are real.";
+  $(".placeholder").textContent = any ? t.placeholder : t.placeholderNone;
 }
 
 // A server's total of a count kept per character (Daily Duty): each one's
@@ -311,19 +324,17 @@ function cellOf(c, seen, at, now, cls = "") {
     bar.append(fill, grown);
   }
   const note = c.used
-    ? (est?.full ? "all done" : `done today · new in ${span(at - now)}`)
-    : est?.full ? "full" : `+${c.add} in ${span(at - now)}`;
+    ? (est?.full ? t.allDone : t.doneToday(span(at - now)))
+    : est?.full ? t.full : t.plusIn(c.add, span(at - now));
   td.append(value, bar, el("div", `cellNote${est?.full ? " isFull" : ""}`, note));
   if (est?.full) td.classList.add("full");
   td.title = !est
-    ? (c.id == null ? "The game's record for this isn't known yet" : "Not seen yet: log in to this character")
+    ? (c.id == null ? t.tipUnknownRecord : t.tipNotSeen)
     : c.used
-      ? (est.reset
-        ? `${seen.v[0]} completed before the reset; none since, as far as known`
-        : `${est.left} completed today on your characters, ${seen.v[1]} taken (the game's n/5 counts taken), as of ${ago(seen.at, now)}`)
+      ? (est.reset ? t.tipDutyReset(seen.v[0]) : t.tipDutyToday(est.left, seen.v[1], ago(seen.at, now)))
     : est.gained
-      ? `${est.left - est.gained} when last seen (${ago(seen.at, now)}), +${est.gained} recharged since${est.extra ? `; ${est.extra} extra` : ""}`
-      : `As the game said ${ago(seen.at, now)}${est.extra ? `; ${est.extra} extra (recharge items)` : ""}`;
+      ? t.tipGained(est.left - est.gained, ago(seen.at, now), est.gained, est.extra)
+      : t.tipSaid(ago(seen.at, now), est.extra);
   return td;
 }
 
@@ -344,7 +355,7 @@ $(".tabs").addEventListener("click", (e) => {
 function resetChip(label, at, now) {
   const chip = el("span", "chip");
   chip.append(el("span", "chipLabel", label), el("span", "chipValue", span(at - now)));
-  chip.title = `${clock(at)}, your time`;
+  chip.title = t.yourTime(clock(at));
   return chip;
 }
 // The game's resets: 07:00 UTC daily, Wednesday 07:00 UTC weekly.
@@ -367,27 +378,28 @@ function rowOf(r) {
   li.dataset.key = r.key;
   if (playing) li.classList.add("playing");
   if (est?.full) li.classList.add("full");
-  const [className, color] = CLASSES[ch.class] || [null, "#8a93a6"];
+  const [classAt, color] = CLASSES[ch.class] || [null, "#8a93a6"];
+  const className = classAt == null ? null : t.classes[classAt];
   li.style.setProperty("--c", color);
 
   const who = el("div", "who");
   const badge = el("span", "badge", (className || ch.name).slice(0, 1).toUpperCase());
-  badge.title = className || "Class not known yet";
+  badge.title = className || t.classUnknown;
   const names = el("div", "names");
   const nameLine = el("div", "name", ch.name);
-  if (playing) nameLine.append(el("span", "now", "playing"));
-  const sub = [className, ch.level ? `Lv ${ch.level}` : null, serverName(ch.serverId)].filter(Boolean).join(" · ");
+  if (playing) nameLine.append(el("span", "now", t.playing));
+  const sub = [className, ch.level ? t.lv(ch.level) : null, serverName(ch.serverId)].filter(Boolean).join(" · ");
   names.append(nameLine, el("div", "sub", sub));
-  if (!playing && ch.seen) names.append(el("div", "seen", `played ${ago(ch.seen, now)}`));
+  if (!playing && ch.seen) names.append(el("div", "seen", t.playedAgo(ago(ch.seen, now))));
   const remove = el("button", "remove", "×");
   remove.type = "button";
-  remove.title = "Remove from the roster (it comes back when you play it)";
+  remove.title = t.removeTip;
   who.append(badge, names, remove);
 
   const cp = el("div", `num cp${ch.cp ? "" : " none"}`, ch.cp ? fmt.format(ch.cp) : "—");
-  cp.dataset.label = "Combat";
+  cp.dataset.label = t.colCombat;
   const gs = el("div", `num gs${ch.gs ? "" : " none"}`, ch.gs ? fmt.format(ch.gs) : "—");
-  gs.dataset.label = "Gear";
+  gs.dataset.label = t.colGear;
 
   const energy = el("div", "energy");
   if (est) {
@@ -395,7 +407,7 @@ function rowOf(r) {
     const value = el("span", "energyValue", `${est.gained ? "≈" : ""}${fmt.format(est.basic)}`);
     const cap = el("button", "cap", `/ ${ch.cap}`);
     cap.type = "button";
-    cap.title = "The cap: 840 with a membership, 560 without. Click to switch.";
+    cap.title = t.capTip;
     top.append(value, cap);
     const bar = el("div", "bar");
     const seenPart = el("span", "barSeen");
@@ -405,22 +417,22 @@ function rowOf(r) {
     bar.append(seenPart, grownPart);
     energy.append(top, bar);
     energy.title = est.gained
-      ? `${ch.energy.basic} when last seen (${ago(ch.energy.at, now)}), about +${est.gained} since`
-      : `As the game said ${ago(ch.energy.at, now)}`;
+      ? t.energyGained(ch.energy.basic, ago(ch.energy.at, now), est.gained)
+      : t.energySaid(ago(ch.energy.at, now));
   } else {
     energy.append(el("span", "unknown", "—"));
-    energy.title = "Not seen yet: log in to this character";
+    energy.title = t.tipNotSeen;
   }
 
   const charged = el("div", `num charged${est ? "" : " none"}`, est ? fmt.format(est.charged) : "—");
-  charged.dataset.label = "Charged";
+  charged.dataset.label = t.colCharged;
   const fullIn = el("div", "num fullIn");
   if (!est) fullIn.append(el("span", "unknown", "—"));
-  else if (est.full) fullIn.append(el("span", "isFull", "Full"));
+  else if (est.full) fullIn.append(el("span", "isFull", t.fullLabel));
   else {
     fullIn.append(el("span", null, span(full - now)), el("span", "fullWhen", clock(full)));
   }
-  fullIn.dataset.label = "Full in";
+  fullIn.dataset.label = t.colFullIn;
 
   li.append(who, cp, gs, energy, charged, fullIn);
   return li;
@@ -445,7 +457,7 @@ $(".list").addEventListener("click", (e) => {
       render();
     } else {
       button.classList.add("confirm");
-      button.textContent = "Remove?";
+      button.textContent = t.removeConfirm;
       setTimeout(() => render(), 3000);
     }
   }
@@ -456,6 +468,18 @@ $(".sort").addEventListener("change", (e) => {
   save();
   render();
 });
+
+// The page's fixed words (index.html), in the meter's language.
+function applyLanguage() {
+  document.documentElement.lang = lang;
+  for (const b of document.querySelectorAll(".tabs button")) b.textContent = b.dataset.tab === "content" ? t.tabContent : t.tabRoster;
+  $(".refillLabel").textContent = t.nextRefill;
+  $(".search").placeholder = t.search;
+  $(".sort").title = t.order;
+  for (const o of $(".sort").options) o.textContent = t.sort[o.value] ?? o.textContent;
+  const cols = [t.colChar, t.colCombat, t.colGear, t.colBasic, t.colCharged, t.colFullIn];
+  document.querySelectorAll(".head span").forEach((s, i) => (s.textContent = cols[i] ?? s.textContent));
+}
 
 // ── Start ──────────────────────────────────────────────────────────────────
 (async () => {

@@ -5,9 +5,10 @@
 //   01 38  you used a skill: its id (a variant of the skill, e.g. 14060010 for
 //          base 14060000; the base is the cooldown's group).
 //   47 38  cooldowns: a list of (group, ms left). One entry when something
-//          changed a cooldown (a reset reads 0); every group at once now and
-//          then. The game works the cooldown out itself, with your cooldown
-//          reduction, so nothing says it when a skill is used.
+//          changed a cooldown (a reset reads 0), the first of them after a
+//          use giving the whole cooldown; for some classes every group at
+//          once now and then. The game works the cooldown out itself, with
+//          your cooldown reduction, so nothing says it when a skill is used.
 //   2A 38 / 2B 38 / 2C 38  a buff on you added, changed, removed.
 //
 // So a skill's cooldown starts from the game's base time (skills.js), and is
@@ -69,7 +70,11 @@ let prefs = { ...DEFAULTS };
 // What each character shows: { cls, skills: { g: opts }, buffs: { a: opts },
 // learned: { g: ms } }, by "name@server".
 let charKey = "?";
-let mine = { cls: null, skills: {}, buffs: {}, learned: {} };
+let mine = { cls: null, skills: {}, buffs: {}, learned: {}, learnedV: 2 };
+// Times learnt before 0.1.6 are dropped once: one early use could set a
+// time far too short, and an early use only ever lowers it again.
+const LEARNED_V = 2;
+const fresh = (m) => (m.learnedV === LEARNED_V ? m : { ...m, learned: {}, learnedV: LEARNED_V });
 
 const save = () => a2.storage.set("prefs", prefs).catch(() => {});
 // The storage key of a character's setup. The meter takes only letters,
@@ -142,7 +147,7 @@ async function loadCharacter(c) {
   // whose server just became known what was set up meanwhile.
   const carried = (charKey === "?" || sameCharacter) && !stored ? mine : null;
   charKey = key;
-  mine = { cls: null, skills: {}, buffs: {}, learned: {}, ...(stored || carried || {}) };
+  mine = fresh({ cls: null, skills: {}, buffs: {}, learned: {}, ...(stored || carried || {}) });
   takeClass(c);
   live.cd.clear();
   live.buffs.clear();
@@ -161,16 +166,24 @@ const live = {
   unsure: new Set(),
   changed: new Set(), // groups whose cooldown something changed since use
   samples: new Map(), // group -> the last few measured cooldowns
+  early: new Map(), // group -> the last early use's gap, not yet seen twice
   buffs: new Map(), // instance -> { a, skill, start, end }
   clock: null, // the server's clock minus ours (buff ends are in its time)
 };
 
-// How far measured cooldowns are below base: the median ratio.
+// How far measured cooldowns are below base: the median ratio, one per base
+// time (the least reduced of those). An Elementalist's four 15 s summons run
+// 12.9 s, more reduced than the rest (Curse 9.3 of 10, Corrode 41.85 of 45):
+// counted four times they set every other skill's time 7% too short.
 function reduction() {
-  const r = Object.entries(mine.learned)
-    .map(([g, ms]) => ms / (SKILLS.get(Number(g))?.cd || 0))
-    .filter((x) => Number.isFinite(x) && x > 0 && x <= 1.2)
-    .sort((a, b) => a - b);
+  const byBase = new Map();
+  for (const [g, ms] of Object.entries(mine.learned)) {
+    const base = SKILLS.get(Number(g))?.cd || 0;
+    const x = ms / base;
+    if (!Number.isFinite(x) || x <= 0 || x > 1.2) continue;
+    byBase.set(base, Math.max(byBase.get(base) || 0, x));
+  }
+  const r = [...byBase.values()].sort((a, b) => a - b);
   return r.length ? r[Math.floor(r.length / 2)] : 1;
 }
 const cooldownOf = (g) => mine.learned[g] || Math.round((SKILLS.get(g)?.cd || 0) * reduction());
@@ -194,13 +207,19 @@ function onSkill(data, at) {
   // rarely measured from a full list). Not when something changed or reset
   // it meanwhile, and only from half the base up: a skill with charges is
   // used again at once.
+  // Twice alike, though: once is no cooldown (an Elementalist's Curse, 9.3 s,
+  // came again after 7.1 s once in 33 minutes, and showed 7.1 s from then on).
   const before = live.used.get(g);
   const due = live.cd.get(g)?.end;
   if (before && due && at < due - 1000 && !live.changed.has(g) && !live.unsure.has(g)) {
     const gap = Math.round((at - before) / 50) * 50;
     if (gap >= s.cd * 0.5 && gap < cooldownOf(g)) {
-      mine.learned[g] = gap;
-      renderSkills();
+      const was = live.early.get(g);
+      live.early.set(g, gap);
+      if (was && Math.abs(gap - was) <= Math.max(300, gap * 0.05)) {
+        mine.learned[g] = Math.max(gap, was);
+        renderSkills();
+      }
     }
   }
   live.used.set(g, at);
@@ -222,22 +241,27 @@ function onCooldowns(data, at) {
     if (!SKILLS.has(g)) continue;
     const was = live.cd.get(g);
     const used = live.used.get(g);
+    const first = !live.changed.has(g);
     if (!ms) {
       if (was && was.end > at) live.cd.set(g, { ...was, end: at });
       if (used) live.unsure.add(g);
     } else {
-      // More left than it had: used again without a word.
-      if (was && at + ms > was.end + 1000) live.unsure.add(g);
+      // More left than it had: used again without a word. Not the first
+      // entry since a use, within the base time of it: what it had was
+      // only the estimate (an Ancient Spirit's 82.5 s against 77.4 s).
+      const fits = first && used && at + ms <= used + SKILLS.get(g).cd * 1.2;
+      if (was && at + ms > was.end + 1000 && !fits) live.unsure.add(g);
       const start = was && was.end > at && !live.unsure.has(g) ? was.start : at + ms - Math.max(ms, cooldownOf(g));
       live.cd.set(g, { start, end: at + ms });
     }
-    if (!all) {
-      live.changed.add(g);
-      continue;
-    }
-    // A full list: what is left, plus the time since it was used, is its
-    // cooldown, when nothing changed it and it wasn't used again unseen.
-    if (!ms || !used || live.changed.has(g) || live.unsure.has(g) || at - used > 10 * 60_000) continue;
+    // A full list, or a group's first entry since its use: what is left,
+    // plus the time since it was used, is its cooldown, when nothing changed
+    // it and it wasn't used again unseen. An Elementalist's lists come one
+    // group to a frame (its five summons, each proc that takes 1 s off
+    // them), and the first after a cast always read the whole cooldown
+    // (12.9 s of 15, 82.5 s of 90: 678 of 678 in a 50-minute capture).
+    if (!all) live.changed.add(g);
+    if (!first || !ms || !used || live.unsure.has(g) || at - used > 10 * 60_000) continue;
     const total = at - used + ms;
     const base = SKILLS.get(g).cd;
     if (total < base * 0.15 || total > base * 1.2) continue;
@@ -691,7 +715,7 @@ a2.on("widget-message", ({ data }) => {
   const before = await a2.storage.get(charStoreKey("?")).catch(() => null);
   // Only while no character has come yet: the meter can name one before this
   // read returns, and its own setup stands then.
-  if (before && typeof before === "object" && charKey === "?") mine = { ...mine, ...before };
+  if (before && typeof before === "object" && charKey === "?") mine = fresh({ ...mine, ...before });
   els.lock.checked = await a2.widgets.locked().catch(() => false);
   renderAll();
   a2.ready();

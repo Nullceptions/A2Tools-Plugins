@@ -12,6 +12,8 @@ a2.on("widget", (d) => {
   // The game's FPS, when asked for (undefined: not shown).
   fpsEl.hidden = d.fps === undefined;
   fpsEl.textContent = typeof d.fps === "number" ? `${d.fps} fps` : "– fps";
+  // Green from 60, amber from 30, red below: what most games and overlays use.
+  fpsEl.dataset.state = typeof d.fps !== "number" ? "none" : d.fps >= 60 ? "good" : d.fps >= 30 ? "fair" : "poor";
   if (d.scale) document.documentElement.style.setProperty("--scale", String(d.scale));
   pill.classList.toggle("bare", d.background === false);
   pill.classList.toggle("noBars", d.bars === false);

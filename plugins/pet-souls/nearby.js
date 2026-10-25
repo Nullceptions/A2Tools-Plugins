@@ -45,6 +45,12 @@
   const ARRIVALS_MIN = 2;
   // Arrivals come mostly ahead of you: their middle is moved back this far.
   const BACK_M = 15;
+  // An arrival farther from where you were last known than this (60 m, and
+  // 15 m for every second since: faster than flying) isn't one around you.
+  // Scored on 33 gaps in captures of 2026-10-19 and -25, the estimate came
+  // within 31 m three times in four (55 m without this rule).
+  const REACH_M = 60;
+  const REACH_M_PER_S = 15;
   // A player not heard from this long comes into view again when heard.
   const PLAYER_GONE_MS = 30_000;
   // The record about you lands where a teleport or map load put you: within
@@ -169,7 +175,8 @@
     where(now) {
       const me = this.me;
       if (me && now - me.at <= EXACT_MS) return { ...me, estimated: false };
-      const recent = this.arrivals.filter((a) => (!me || a.at > me.at) && now - a.at <= ARRIVALS_MS);
+      const recent = this.arrivals.filter((a) => (!me || a.at > me.at) && now - a.at <= ARRIVALS_MS
+        && (!me || metres(a.pos, me.pos) <= REACH_M + (REACH_M_PER_S * (a.at - me.at)) / 1000));
       if (recent.length < ARRIVALS_MIN) return me ? { ...me, estimated: false } : null;
       const mid = [0, 1, 2].map((i) => recent.reduce((s, a) => s + a.pos[i], 0) / recent.length);
       let pos = mid;

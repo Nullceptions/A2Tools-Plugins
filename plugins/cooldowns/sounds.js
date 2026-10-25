@@ -106,9 +106,18 @@ let audio = null;
 // The notes still sounding, so a mute can cut them off.
 const sounding = new Set();
 
+// The player's Volume setting (0-100 %) as a gain: squared, so the slider
+// follows how loud it sounds (half way is about half as loud).
+const volumeGain = (percent) => Math.pow(Math.max(0, Math.min(100, Number(percent) || 0)) / 100, 2);
+let soundVolume = 1;
+function setSoundVolume(percent) {
+  soundVolume = volumeGain(percent ?? 100);
+  if (output) output.master.gain.value = soundVolume;
+}
+
 // The way out: every sound goes through one limiter, so a loud one comes out
-// dense instead of clipping (the quiet ones never reach it), and a reverb the
-// notes send to by their "wet".
+// dense instead of clipping (the quiet ones never reach it), then the
+// volume; and a reverb the notes send to by their "wet".
 let output = null;
 function outputs(ctx) {
   if (output) return output;
@@ -118,7 +127,9 @@ function outputs(ctx) {
   limiter.ratio.value = 20;
   limiter.attack.value = 0.001;
   limiter.release.value = 0.12;
-  limiter.connect(ctx.destination);
+  const master = ctx.createGain();
+  master.gain.value = soundVolume;
+  limiter.connect(master).connect(ctx.destination);
   // A small hall: stereo noise dying away over 1.8 s.
   const reverb = ctx.createConvolver();
   const length = Math.floor(ctx.sampleRate * 1.8);
@@ -131,7 +142,7 @@ function outputs(ctx) {
   const reverbLevel = ctx.createGain();
   reverbLevel.gain.value = 0.5;
   reverb.connect(reverbLevel).connect(limiter);
-  output = { limiter, reverb };
+  output = { limiter, reverb, master };
   return output;
 }
 

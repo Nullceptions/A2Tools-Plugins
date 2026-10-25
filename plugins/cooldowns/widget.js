@@ -3,7 +3,7 @@
 // settings.
 const grid = document.querySelector(".grid");
 let locked = false;
-let look = { size: 42, direction: "right", opacity: 1, numbers: true, readyGlow: true };
+let look = { size: 42, direction: "right", opacity: 1, numbers: true, readyGlow: true, ring: false };
 let slots = [];
 const nodes = new Map(); // key -> { el, slot, wasCooling }
 
@@ -19,6 +19,7 @@ function build() {
   document.documentElement.style.setProperty("--gap", `${Math.round(look.size * 0.08) + 2}px`);
   grid.className = `grid ${look.direction}`;
   document.body.classList.toggle("noNumbers", !look.numbers);
+  document.body.classList.toggle("ringMode", !!look.ring);
   // Out of combat the icons fade, unless they are unlocked to be placed.
   grid.style.opacity = look.away && locked ? "0" : String(look.opacity ?? 1);
   const keep = new Set(slots.map((s) => s.key));
@@ -33,18 +34,18 @@ function build() {
     if (!n) {
       const el = document.createElement("div");
       el.className = "slot";
-      for (const c of ["sweep", "bar", "num cdNum", "num buffNum"]) {
+      for (const c of ["art", "sweep", "ring", "bar", "num cdNum", "num buffNum"]) {
         const part = document.createElement(c.startsWith("num") ? "span" : "div");
         part.className = c;
         el.append(part);
       }
-      n = { el, wasCooling: false };
+      n = { el, art: el.querySelector(".art"), wasCooling: false, filter: "" };
       nodes.set(s.key, n);
     }
     n.slot = s;
     // From icons.js: on Linux a file path set from a script shows nothing.
     const url = s.icon && window.COOLDOWN_ICONS?.[s.icon];
-    n.el.style.backgroundImage = url ? `url("${url}")` : "";
+    n.art.style.backgroundImage = url ? `url("${url}")` : "";
     grid.append(n.el);
   }
   tick();
@@ -71,10 +72,29 @@ function tick() {
     } else {
       cdNum.textContent = "";
     }
+    // How much of the buff is left, 0-1: the bar, or the ring around the
+    // icon, drains with it.
+    let left = 1;
     if (buffing) {
       const total = Math.max(1, s.buffEnd - s.buffStart);
-      el.style.setProperty("--w", `${Math.min(100, ((s.buffEnd - now) / total) * 100)}%`);
+      left = Math.max(0, Math.min(1, (s.buffEnd - now) / total));
+      el.style.setProperty("--w", `${left * 100}%`);
+      el.style.setProperty("--r", `${left * 360}deg`);
       el.querySelector(".buffNum").textContent = fmt(s.buffEnd - now);
+    }
+    // A buff kept on screen while it isn't on you: near black. With the
+    // ring, a buff's own icon dims and greys as it runs out.
+    const off = s.buff && !buffing;
+    el.classList.toggle("off", off);
+    const fade = 1 - left;
+    const filter = off
+      ? "grayscale(1) brightness(0.3)"
+      : look.ring && s.buff && buffing
+        ? `grayscale(${(fade * 0.85).toFixed(2)}) brightness(${(1 - fade * 0.55).toFixed(2)})`
+        : "";
+    if (filter !== n.filter) {
+      n.filter = filter;
+      n.art.style.filter = filter;
     }
     // Ready again: a flash.
     if (n.wasCooling && !cooling && look.readyGlow && !el.hidden) {

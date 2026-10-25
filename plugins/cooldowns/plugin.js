@@ -57,6 +57,39 @@ const skillName = (g) => nameOf(SKILLS.get(g)?.n) || String(g);
 const buffName = (a) => nameOf(DATA.buffNames?.[DATA.buffs?.[a]?.t]) || `#${a}`;
 const buffIcon = (a) => DATA.buffs?.[a]?.icon || "";
 
+// The buffs your class's skills put on you (selfbuffs.js), listed on the
+// Buffs tab before they have ever been on you. A buff comes in many ids (one
+// per skill level or variant, one name and icon): it is kept, shown and
+// alerted under the first, so ticking it once covers every rank.
+const SELF = window.COOLDOWN_SELF_BUFFS || {};
+const FAMILY = new Map(); // abnormal id -> the id its buff goes by
+const SELF_SKILL = new Map(); // that id -> the skill (group) giving it
+for (const list of Object.values(SELF)) {
+  for (const [g, ids] of list) {
+    const key = FAMILY.get(ids[0]) ?? ids[0];
+    for (const a of ids) if (!FAMILY.has(a)) FAMILY.set(a, key);
+    if (g && !SELF_SKILL.has(key)) SELF_SKILL.set(key, g);
+  }
+}
+const buffKey = (a) => FAMILY.get(a) ?? a;
+const classBuffs = (cls) => [...new Set((SELF[cls] || []).map(([, ids]) => buffKey(ids[0])))];
+// A setup's buffs under the ids they go by: before 0.2.0 each rank of a buff
+// was a row of its own. The row under the id itself wins, then a shown one.
+function byFamily(buffs) {
+  const out = {};
+  const own = new Set();
+  for (const [id, o] of Object.entries(buffs || {})) {
+    const a = Number(id);
+    const key = buffKey(a);
+    const had = out[key];
+    if (!had || a === key || (o.show && !had.show && !own.has(key))) {
+      out[key] = { ...o, seen: Math.max(o.seen || 0, had?.seen || 0) || undefined };
+      if (a === key) own.add(key);
+    }
+  }
+  return out;
+}
+
 // ---- Settings ----------------------------------------------------------
 
 // The look and the alerts, for every character.
@@ -65,6 +98,10 @@ const DEFAULTS = {
   layout: "combined", size: "42", direction: "right", perLine: 10, opacity: 100,
   numbers: true, readyGlow: true, sound: "chime", voice: false, lead: 3,
   combatOnly: false, combatAfter: 10,
+  // 0.2.0: how a buff's time left shows ("bar": the green bar and border;
+  // "ring": the border drains as a ring, the icon dims as it runs out), the
+  // alerts' volume (%) and the voice ("": the first in the meter's language).
+  buffStyle: "bar", volume: 100, voiceName: "",
 };
 let prefs = { ...DEFAULTS };
 // What each character shows: { cls, skills: { g: opts }, buffs: { a: opts },
@@ -74,7 +111,7 @@ let mine = { cls: null, skills: {}, buffs: {}, learned: {}, learnedV: 2 };
 // Times learnt before 0.1.6 are dropped once: one early use could set a
 // time far too short, and an early use only ever lowers it again.
 const LEARNED_V = 2;
-const fresh = (m) => (m.learnedV === LEARNED_V ? m : { ...m, learned: {}, learnedV: LEARNED_V });
+const fresh = (m) => ({ ...(m.learnedV === LEARNED_V ? m : { ...m, learned: {}, learnedV: LEARNED_V }), buffs: byFamily(m.buffs) });
 
 const save = () => a2.storage.set("prefs", prefs).catch(() => {});
 // The storage key of a character's setup. The meter takes only letters,
@@ -291,13 +328,19 @@ function onBuffAdded(d, at) {
   // Its start in the server's clock is the end less its length: now, for a
   // buff just added.
   live.clock = end - length - at;
-  const a = Number(d.abnormal);
+  const a = buffKey(Number(d.abnormal));
   const skill = d.flags & 2 ? groupOf(Number(d.skill)) : null;
   live.buffs.set(d.instance, { a, skill, start: at, end: end - live.clock });
   // Only the buffs the game shows (skills.js has those): the rest are its
   // own markers, with no name or icon.
   if (!mine.buffs[a] && DATA.buffs?.[a]) {
     mine.buffs[a] = { show: false, seen: Date.now() };
+    if (skill) mine.buffs[a].skill = skill;
+    saveMine();
+    if (tab === "buffs") renderBuffs();
+  } else if (mine.buffs[a] && !mine.buffs[a].seen) {
+    // A class buff ticked before it came: had now.
+    mine.buffs[a].seen = Date.now();
     if (skill) mine.buffs[a].skill = skill;
     saveMine();
     if (tab === "buffs") renderBuffs();
@@ -310,7 +353,7 @@ function onBuffChanged(d, at) {
   const b = live.buffs.get(d.instance);
   const end = Number(d.end) - live.clock;
   if (b) b.end = end;
-  else live.buffs.set(d.instance, { a: Number(d.abnormal), skill: null, start: at, end });
+  else live.buffs.set(d.instance, { a: buffKey(Number(d.abnormal)), skill: null, start: at, end });
   changed();
 }
 
@@ -324,21 +367,31 @@ function onBuffRemoved(d, at) {
 // ---- The icons -------------------------------------------------------------
 
 // The slots each widget shows: skills in the order of the class's list, then
-// buffs by when they were first seen.
+// buffs by when they were first seen (or ticked). A buff set to keep showing
+// stays, greyed, while it isn't on you.
+const buffOrder = (a) => mine.buffs[a].seen || mine.buffs[a].added || 0;
 function slots() {
   const now = Date.now();
   const skills = [];
   const buffs = [];
   const onSkill = new Map(); // group -> its buff, for "both"
+  const onBuff = new Map(); // a shown buff -> the one of it lasting longest
   for (const b of live.buffs.values()) {
     if (b.end <= now) continue;
     const o = mine.buffs[b.a];
     if (o?.show) {
-      buffs.push({ key: `b${b.a}`, icon: buffIcon(b.a), buffStart: b.start, buffEnd: b.end });
+      const cur = onBuff.get(b.a);
+      if (!cur || cur.end < b.end) onBuff.set(b.a, b);
     } else if (prefs.ownBuffs && b.skill && (!o || o.show !== false || o.skill)) {
       const cur = onSkill.get(b.skill);
       if (!cur || cur.end < b.end) onSkill.set(b.skill, b);
     }
+  }
+  const shown = Object.keys(mine.buffs).map(Number).filter((a) => mine.buffs[a].show && DATA.buffs?.[a]);
+  for (const a of shown.sort((x, y) => buffOrder(x) - buffOrder(y) || x - y)) {
+    const b = onBuff.get(a);
+    if (!b && !mine.buffs[a].always) continue;
+    buffs.push({ key: `b${a}`, icon: buffIcon(a), buff: true, always: !!mine.buffs[a].always, buffStart: b?.start || 0, buffEnd: b?.end || 0 });
   }
   const order = (LISTED[mine.cls] || []).map((s) => s.g);
   for (const g of order) {
@@ -410,7 +463,7 @@ async function placeWidgets() {
 function send() {
   if (!openNow.size) return;
   const { skills, buffs } = slots();
-  const look = { size: Number(prefs.size), direction: prefs.direction, perLine: prefs.perLine, opacity: prefs.opacity / 100, numbers: prefs.numbers, readyGlow: prefs.readyGlow, away };
+  const look = { size: Number(prefs.size), direction: prefs.direction, perLine: prefs.perLine, opacity: prefs.opacity / 100, numbers: prefs.numbers, readyGlow: prefs.readyGlow, ring: prefs.buffStyle === "ring", away };
   if (openNow.has("bar")) a2.widgets.send("bar", { look, slots: [...skills, ...buffs] }).catch(() => {});
   if (openNow.has("skills")) a2.widgets.send("skills", { look, slots: skills }).catch(() => {});
   if (openNow.has("buffs")) a2.widgets.send("buffs", { look, slots: buffs }).catch(() => {});
@@ -431,15 +484,63 @@ function changed() {
 
 // ---- Alerts ------------------------------------------------------------
 
-function speak(text) {
-  if (!prefs.voice || !text || !window.speechSynthesis) return;
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = lang;
-  const voice = speechSynthesis.getVoices().find((v) => v.lang && v.lang.toLowerCase().startsWith(lang.toLowerCase().split("-")[0]));
-  if (voice) u.voice = voice;
-  speechSynthesis.speak(u);
+// The computer's voices come a moment after the page opens (voiceschanged):
+// read before then, the list was empty and the first names were spoken by
+// the system's default voice, whatever its language.
+const synth = window.speechSynthesis || null;
+let voices = [];
+function loadVoices() {
+  voices = synth?.getVoices?.() || [];
+  fillVoices();
 }
-const ding = () => prefs.sound !== "off" && typeof playSound === "function" && playSound(prefs.sound);
+// A voice in the meter's language: for Traditional Chinese the Taiwan and
+// Hong Kong voices, for Simplified the others.
+const TRAD = /^zh[-_](tw|hk|mo|hant)/i;
+function inLanguage(v) {
+  const base = lang.split("-")[0].toLowerCase();
+  const vl = (v.lang || "").toLowerCase();
+  if (!vl.startsWith(base)) return false;
+  if (base !== "zh") return true;
+  return lang === "zh-Hant" ? TRAD.test(vl) : !TRAD.test(vl);
+}
+const sameBase = (v) => (v.lang || "").toLowerCase().startsWith(lang.split("-")[0].toLowerCase());
+function pickVoice() {
+  if (prefs.voiceName) {
+    const v = voices.find((x) => x.voiceURI === prefs.voiceName || x.name === prefs.voiceName);
+    if (v) return v;
+  }
+  return voices.find(inLanguage) || voices.find(sameBase) || null;
+}
+// What is waiting to be said: at most two, so names that come together are
+// all heard but a burst of them never runs on long after (an entry whose end
+// never came goes after 10 s).
+const saying = new Map(); // utterance -> when queued
+function say(text) {
+  if (!synth || !text || prefs.volume <= 0) return;
+  const now = Date.now();
+  for (const [u, at] of saying) if (now - at > 10_000) saying.delete(u);
+  if (saying.size >= 2) {
+    synth.cancel();
+    saying.clear();
+  }
+  const u = new SpeechSynthesisUtterance(text);
+  const voice = pickVoice();
+  if (voice) u.voice = voice;
+  u.lang = voice?.lang || lang;
+  u.rate = 1;
+  u.pitch = 1;
+  u.volume = volumeGain(prefs.volume);
+  u.onend = u.onerror = () => saying.delete(u);
+  saying.set(u, now);
+  synth.speak(u);
+}
+const speak = (text) => prefs.voice && say(text);
+const ding = () => prefs.sound !== "off" && prefs.volume > 0 && typeof playSound === "function" && playSound(prefs.sound);
+// A name to try a voice on: the first skill shown, or the word "Skills".
+const sample = () => {
+  const g = (LISTED[mine.cls] || []).find((s) => mine.skills[s.g]?.show)?.g;
+  return g ? skillName(g) : words.skills;
+};
 
 // What has alerted, so each alerts once: "g:<end>", "b:<instance>:<end>".
 const alerted = new Set();
@@ -483,6 +584,7 @@ const els = {
   layout: $(".layout"), size: $(".size"), direction: $(".direction"), perLine: $(".perLine"), opacity: $(".opacity"),
   numbers: $(".numbers"), readyGlow: $(".readyGlow"), sound: $(".sound"), voice: $(".voice"), lead: $(".lead"),
   combatOnly: $(".combatOnly"), combatAfter: $(".combatAfter"),
+  buffStyle: $(".buffStyle"), volume: $(".volume"), voiceName: $(".voiceName"),
 };
 let tab = "skills";
 let openRow = null;
@@ -498,6 +600,22 @@ function translate() {
     ...[...SOUND_ORDER, "off"].map((v) => Object.assign(document.createElement("option"), { value: v, textContent: v === "off" ? words.none : names[v] })),
   );
   els.sound.value = prefs.sound;
+  fillVoices();
+}
+
+// The voices: the automatic one first, then the meter's language's, then
+// the rest, each by name. A saved voice not listed (uninstalled, or not
+// loaded yet) keeps its place, so the choice isn't lost.
+function fillVoices() {
+  const el = els.voiceName;
+  if (!el) return;
+  const opt = (value, text) => Object.assign(document.createElement("option"), { value, textContent: text });
+  const byName = (x, y) => x.name.localeCompare(y.name);
+  const others = voices.filter((v) => !inLanguage(v)).sort((x, y) => (x.lang || "").localeCompare(y.lang || "") || byName(x, y));
+  const options = [opt("", words.voiceDefault), ...[...voices.filter(inLanguage).sort(byName), ...others].map((v) => opt(v.voiceURI || v.name, `${v.name} (${v.lang})`))];
+  if (prefs.voiceName && !options.some((o) => o.value === prefs.voiceName)) options.push(opt(prefs.voiceName, prefs.voiceName));
+  el.replaceChildren(...options);
+  el.value = prefs.voiceName;
 }
 
 const seconds = (ms) => {
@@ -599,24 +717,33 @@ function renderSkills() {
 function renderBuffs() {
   const list = $(".buffList");
   const filter = $(".buffFilter").value.trim().toLowerCase();
-  const ids = Object.keys(mine.buffs)
-    .map(Number)
+  // The buffs you've had, latest first, then your class's own not had yet
+  // (and any ticked before they came), by name.
+  const had = Object.keys(mine.buffs).map(Number).filter((a) => mine.buffs[a].seen);
+  const rest = [...new Set([...Object.keys(mine.buffs).map(Number), ...classBuffs(mine.cls)])].filter((a) => !mine.buffs[a]?.seen);
+  const ids = [
+    ...had.sort((x, y) => mine.buffs[y].seen - mine.buffs[x].seen),
+    ...rest.sort((x, y) => buffName(x).localeCompare(buffName(y))),
+  ]
     .filter((a) => DATA.buffs?.[a])
-    .filter((a) => !filter || buffName(a).toLowerCase().includes(filter))
-    .sort((x, y) => (mine.buffs[y].seen || 0) - (mine.buffs[x].seen || 0));
+    .filter((a) => !filter || buffName(a).toLowerCase().includes(filter));
   list.replaceChildren(
     ...ids.map((a) => {
-      const o = mine.buffs[a];
+      const o = mine.buffs[a] || {};
+      const skill = o.skill || SELF_SKILL.get(a);
       const set = (key, value) => {
-        mine.buffs[a] = { ...mine.buffs[a], [key]: value };
+        // A class buff not had yet gets its row on its first change.
+        const was = mine.buffs[a] || { show: false, added: Date.now(), ...(SELF_SKILL.has(a) ? { skill: SELF_SKILL.get(a) } : {}) };
+        mine.buffs[a] = { ...was, [key]: value };
         saveMine();
         if (key === "show") placeWidgets();
         else changed();
       };
       return row({
-        id: `b${a}`, icon: buffIcon(a), name: buffName(a), time: o.skill ? skillName(o.skill) : "",
+        id: `b${a}`, icon: buffIcon(a), name: buffName(a), time: skill ? skillName(skill) : "",
         shown: o.show, onShow: (on) => set("show", on),
         options: [
+          check(words.optBuffAlways, o.always, (v) => set("always", v)),
           check(words.optBuffSound, o.sound, (v) => set("sound", v)),
           check(words.optBuffVoice, o.voice, (v) => set("voice", v)),
         ],
@@ -658,12 +785,15 @@ for (const [key, el] of Object.entries(els)) {
     if (key === "perLine") v = Math.max(1, Math.min(20, Math.round(Number(v)) || DEFAULTS.perLine));
     if (key === "lead") v = Math.max(1, Math.min(30, Math.round(Number(v)) || DEFAULTS.lead));
     if (key === "combatAfter") v = Math.max(3, Math.min(120, Math.round(Number(v)) || DEFAULTS.combatAfter));
-    if (key === "opacity") v = Number(v);
+    if (key === "opacity" || key === "volume") v = Number(v);
     prefs[key] = v;
     if (el.type === "number") el.value = v;
     save();
     if (["show", "layout", "size", "direction", "perLine"].includes(key)) placeWidgets();
-    else if (key === "ownBuffs" || key === "opacity" || key === "numbers" || key === "readyGlow") send();
+    else if (["ownBuffs", "opacity", "numbers", "readyGlow", "buffStyle"].includes(key)) send();
+    if (key === "volume") setSoundVolume(v);
+    // A voice picked is heard at once.
+    if (key === "voiceName") say(sample());
     if (key === "combatOnly" || key === "combatAfter") {
       showCombatAfter();
       checkAway();
@@ -674,11 +804,18 @@ els.lock.addEventListener("change", () => a2.widgets.lock(els.lock.checked).catc
 $(".test").addEventListener("click", (e) => {
   e.preventDefault();
   ding();
-  const voiceWas = prefs.voice;
-  prefs.voice = true;
-  if (voiceWas) speak(words.skills);
-  prefs.voice = voiceWas;
+  speak(sample());
 });
+// The volume, heard where the slider is let go.
+els.volume.addEventListener("change", () => {
+  ding();
+  speak(sample());
+});
+if (synth) {
+  loadVoices();
+  if (typeof synth.addEventListener === "function") synth.addEventListener("voiceschanged", loadVoices);
+  else synth.onvoiceschanged = loadVoices;
+}
 
 // ---- The meter -------------------------------------------------------------
 
@@ -712,6 +849,7 @@ a2.on("widget-message", ({ data }) => {
 (async () => {
   const stored = await a2.storage.get("prefs").catch(() => null);
   if (stored && typeof stored === "object") prefs = { ...DEFAULTS, ...stored };
+  setSoundVolume(prefs.volume);
   const before = await a2.storage.get(charStoreKey("?")).catch(() => null);
   // Only while no character has come yet: the meter can name one before this
   // read returns, and its own setup stands then.

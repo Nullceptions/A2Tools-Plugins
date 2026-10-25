@@ -142,3 +142,5 @@ input[type="number"] { width: 56px; text-align: right; }
 .btn:hover { background: rgba(255, 255, 255, 0.14); }
 input[type="checkbox"] { color-scheme: dark; width: 16px; height: 16px; margin: 0; accent-color: var(--a2-accent, #5fbf87); flex: none; }
 input[type="range"] { accent-color: var(--a2-accent, #5fbf87); width: 140px; }
+/* The voices' names are long: the list takes what the row leaves. */
+.voiceName { min-width: 0; max-width: 62%; text-overflow: ellipsis; }

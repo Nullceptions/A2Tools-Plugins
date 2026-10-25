@@ -1,5 +1,6 @@
 /* The icons: a dark sweep and the seconds while a skill cools down, a green
-   bar and its seconds while a buff lasts. */
+   bar and its seconds while a buff lasts (or, in ring mode, a green ring
+   round the icon that drains, the icon dimming as it runs out). */
 :root { --s: 42px; --gap: 5px; }
 html, body {
   margin: 0;
@@ -29,8 +30,14 @@ html, body {
   flex: none;
   border-radius: calc(var(--s) * 0.14);
   overflow: hidden;
-  background: #10161f center / cover no-repeat;
+  background: #10161f;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.8), 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+.art {
+  position: absolute;
+  inset: 0;
+  background: center / cover no-repeat;
+  transition: filter 0.3s;
 }
 .slot[hidden] { display: none; }
 body:not(.locked) .slot { cursor: grab; }
@@ -68,6 +75,21 @@ body:not(.locked) .slot { cursor: grab; }
 .slot:not(.buffing) .bar,
 .slot:not(.buffing) .buffNum { display: none; }
 .slot.buffing { box-shadow: 0 0 0 2px #5fd08a, 0 2px 6px rgba(0, 0, 0, 0.5); }
+/* Ring mode: the border is the time left, from the top, clockwise. */
+.ring {
+  display: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: max(2px, calc(var(--s) * 0.07));
+  background: conic-gradient(#5fd08a var(--r, 0deg), rgba(0, 0, 0, 0.6) 0);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+.ringMode .slot.buffing .ring { display: block; }
+.ringMode .slot.buffing .bar { display: none; }
+.ringMode .slot.buffing { box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.8), 0 0 5px rgba(95, 208, 138, 0.55), 0 2px 6px rgba(0, 0, 0, 0.5); }
 .noNumbers .num { display: none; }
 .slot.flash::after {
   content: "";

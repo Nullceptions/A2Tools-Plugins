@@ -3,9 +3,9 @@
 Your skill cooldowns and buffs as icons you place anywhere over the game, in the spirit of NotMeter's Combat Assist.
 
 - **Skills:** every skill of your class with a cooldown. Turn on the ones to show; with "Add skills as you use them" on, each one you use turns itself on. A dark sweep and the seconds left run over each icon while it cools down; it flashes when ready. Click a skill for its options: keep it showing when ready, a sound when ready, its name spoken when ready.
-- **Buffs:** every buff you've had. Show any as its own icon (a green bar and its seconds); a buff from one of your skills shows on that skill's icon too. Options: a sound or its name spoken just before it ends.
-- **Look:** one bar or skills and buffs apart, icon size, the way it grows, icons per line, opacity, seconds, the flash.
-- **Alerts:** the sound, spoken names (your computer's voices), how long before a buff ends to warn.
+- **Buffs:** every buff you've had, and your class's own buffs from the start (those its skills put on you, `selfbuffs.js`). Show any as its own icon; a buff from one of your skills shows on that skill's icon too. Options: keep it showing (greyed, near black) while it isn't on you, a sound or its name spoken just before it ends. A buff's ranks and variants (one name, one icon) are one row.
+- **Look:** one bar or skills and buffs apart, icon size, the way it grows, icons per line, opacity, a buff's time left (a green bar, or a green ring round the icon that drains while the icon dims and greys as it runs out), seconds, the flash.
+- **Alerts:** the sound, its volume (for the spoken names too), spoken names and the voice (any of your computer's voices; Default is the first in the meter's language), how long before a buff ends to warn. Names that come together are queued, two at most.
 - Settings are per character.
 
 ## Where the times come from
@@ -26,7 +26,10 @@ A skill starts at the game's base time (Skill table `NeedCoolTime`, shown with â
 
 ```
 python tools/cooldowns/build_skills.py --tables <extractor>/Output/AION2/Content/Data/Table
+python tools/cooldowns/build_self_buffs.py --tables <extractor>/Output/AION2/Content/Data/Table
 ```
+
+`selfbuffs.js` (the second, after `skills.js`) lists the buffs each class's skills put on yourself: a class skill's effects (Skill `SkillEffectTimeDataList`) aimed at yourself or at friends (SkillEffectFilter `Self`, or friendly), whose SkillEffect rows apply an abnormal (`Abnormal`, `Abnormal_True`: the third value), kept to the buffs `skills.js` has; a passive's own skills count too.
 
 ## Not yet
 

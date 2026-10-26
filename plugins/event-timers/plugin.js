@@ -1069,6 +1069,22 @@ function render() {
 // One alert's settings: on or off, its two times, when fought (world
 // bosses), and its own sound, repeats and icon (pins.js). Opened in place
 // under its line in Your alerts.
+// A note on the Dimensional Invasion's alert: the game lists it every hour
+// at :30, and that is what the timer shows; some players sometimes get none
+// (a game bug, 0.6.6 took those hours out and 0.6.12 put them back).
+const INVASION_NOTE = {
+  en: "Every hour at :30, as the game schedules it. Sometimes it doesn't appear for some players: that's a game bug, not a change to the schedule.",
+  ko: "게임 일정대로 매시 30분에 열립니다. 가끔 일부 플레이어에게 나타나지 않는 경우가 있는데, 일정 변경이 아니라 게임 버그입니다.",
+  ja: "ゲームのスケジュールどおり毎時30分に始まります。一部のプレイヤーに現れないことがありますが、スケジュールの変更ではなくゲームの不具合です。",
+  de: "Jede Stunde um :30, wie das Spiel es plant. Manchmal erscheint sie bei manchen Spielern nicht: ein Fehler im Spiel, keine Änderung des Zeitplans.",
+  fr: "Toutes les heures à :30, comme le prévoit le jeu. Il arrive qu'elle n'apparaisse pas pour certains joueurs : c'est un bug du jeu, pas un changement d'horaire.",
+  es: "Cada hora a las :30, según el horario del juego. A veces no aparece para algunos jugadores: es un error del juego, no un cambio de horario.",
+  pt: "Toda hora às :30, como o jogo programa. Às vezes não aparece para alguns jogadores: é um bug do jogo, não uma mudança de horário.",
+  ru: "Каждый час в :30, по расписанию игры. Иногда у некоторых игроков оно не появляется: это ошибка игры, а не изменение расписания.",
+  "zh-Hant": "依遊戲排程，每小時 30 分開啟。有時部分玩家看不到它出現：這是遊戲的錯誤，不是排程變更。",
+  "zh-Hans": "按游戏排程，每小时 30 分开启。有时部分玩家看不到它出现：这是游戏的错误，不是排程变更。",
+};
+
 function alertEditor(id, label) {
   const words = ui();
   const a = aui();
@@ -1138,7 +1154,14 @@ function alertEditor(id, label) {
     head.append(on, name);
     // Its own sound, repeats and icon, under its times (pins.js).
     if (typeof pinControls === "function") leads.append(pinControls(id));
-    li.append(head, leads);
+    li.append(head);
+    if (id.startsWith("invasion")) {
+      const note = document.createElement("p");
+      note.className = "note alertNote";
+      note.textContent = INVASION_NOTE[language] || INVASION_NOTE.en;
+      li.append(note);
+    }
+    li.append(leads);
     return li;
 }
 

@@ -1108,3 +1108,5 @@ body.alertOnly .openFull:hover {
    leaves; Test voice on the right. */
 .setting .voiceName { min-width: 0; text-overflow: ellipsis; }
 .voiceTestRow { justify-content: flex-end; }
+/* An alert's own note (the Dimensional Invasion's), under its name. */
+.alertNote { margin: 2px 0 6px 24px; font-size: 11.5px; }

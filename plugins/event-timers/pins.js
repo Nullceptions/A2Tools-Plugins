@@ -304,7 +304,8 @@ function checkFights(now, announce) {
     const key = fieldAlertKey(id);
     if (gameRunning === false && Number(prefs.closedLeads[key] ?? defaultClosed()) < 0) continue;
     const b = fieldBosses().find((x) => `field:${x.id}` === id);
-    announce(id, p.foughtMsg(b ? text(b.name) : id, Math.round(Number(t.hp))), key);
+    announce(id, p.foughtMsg(b ? text(b.name) : id, Math.round(Number(t.hp))), key,
+      b && typeof SPOKEN === "object" ? [SPOKEN.name(b.name), SPOKEN.fought] : undefined);
   }
 }
 

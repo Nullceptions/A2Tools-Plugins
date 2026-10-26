@@ -439,6 +439,16 @@ const ui = () => ({ ...(UI[language] || UI.en), ...(MORE_UI[language] || MORE_UI
 const aui = () => ALERT_UI[language] || ALERT_UI.en;
 const rui = () => ROW_UI[language] || ROW_UI.en;
 const text = (k) => EVENT_TEXT[k]?.[language] ?? EVENT_TEXT[k]?.en ?? k;
+// The built-in voice's lines (kokoro.js, made by tools/voices/make_voice.py
+// from these words: change both): a name, then what it is doing, in English.
+const SPOKEN = {
+  name: (k) => EVENT_TEXT[k]?.en ?? null,
+  soon: (n) => (n === 1 ? "in 1 minute" : `in ${n} minutes`),
+  now: "is starting",
+  bossSoon: (n) => (n === 1 ? "back in 1 minute" : `back in ${n} minutes`),
+  bossNow: "is back",
+  fought: "is being fought, go join!",
+};
 
 // A boss's nearest teleport (teleports.js, from the game's map data), shown
 // on hover: in its row and on its icon. One line per spawn point, for the
@@ -1508,14 +1518,14 @@ function soundAlert(key) {
 let voice = null;
 voice = typeof makeVoices === "function" ? makeVoices({ lang: () => language, prefs: () => prefs, onChange: () => renderVoice() }) : null;
 const speakTimers = new Set();
-function speakAlert(message, key) {
+function speakAlert(message, key, parts) {
   if (!prefs.speak || !voice?.available || !message) return;
   const own = typeof alertSound === "function" ? alertSound(key) : { sound: prefs.sound };
   const wait = own.sound === "off" || typeof soundLength !== "function" ? 0 : Math.min(1500, soundLength(own.sound) * 1000);
   const said = String(message).replace(/\s*[(（][^)）]*[)）]/g, "");
   const timer = setTimeout(() => {
     speakTimers.delete(timer);
-    voice.say(said);
+    voice.say(said, parts);
   }, wait);
   speakTimers.add(timer);
 }
@@ -1664,10 +1674,11 @@ function checkAlerts(now) {
   // window as it is (pins.js).
   // As its icon (pins.js): the sound, and the icon shakes or glows; or as a
   // banner in this window. `key` is the alert whose settings apply.
-  const announce = (id, message, key = id) => {
+  // `parts`: the line in English, for the built-in voice.
+  const announce = (id, message, key = id, parts) => {
     if (typeof pinnedIconOnly === "function" && pinnedIconOnly(id)) soundAlert(key);
     else alertBanner(message, { key });
-    speakAlert(message, key);
+    speakAlert(message, key, parts);
   };
   const tz = timeZone();
   const a = aui();
@@ -1695,7 +1706,8 @@ function checkAlerts(now) {
       const next = nextOf(ev, tz || "UTC", lastCheck + minutes * 60_000 - 1);
       if (next && due(`${ev.id}+${minutes}`, next.start, minutes)) {
         const name = text(ev.name);
-        announce(ev.id, minutes ? a.soon(name, minutes) : a.now(name));
+        announce(ev.id, minutes ? a.soon(name, minutes) : a.now(name), ev.id,
+          [SPOKEN.name(ev.name), minutes ? SPOKEN.soon(minutes) : SPOKEN.now]);
       }
     }
   }
@@ -1710,7 +1722,8 @@ function checkAlerts(now) {
     for (const minutes of alsoAtStart(lead)) {
       if (due(`${id}+${minutes}`, t.nextSpawn * 1000, minutes)) {
         const name = text(b.name);
-        announce(id, minutes ? words.bossSoon(name, minutes) : words.bossNow(name), own ? id : ALL_FIELD);
+        announce(id, minutes ? words.bossSoon(name, minutes) : words.bossNow(name), own ? id : ALL_FIELD,
+          [SPOKEN.name(b.name), minutes ? SPOKEN.bossSoon(minutes) : SPOKEN.bossNow]);
       }
     }
   }
@@ -1801,18 +1814,23 @@ const sampleAlert = () => {
   const ev = scheduled("event")[0];
   return aui().soon(ev ? text(ev.name) : "Shugo Festival", defaultLead());
 };
+const sampleParts = () => {
+  const ev = scheduled("event")[0];
+  const lead = defaultLead();
+  return [ev ? SPOKEN.name(ev.name) : "Shugo Festival", lead ? SPOKEN.soon(lead) : SPOKEN.now];
+};
 const testAlert = () => {
   const message = sampleAlert();
   // Alerts as icons: a sample icon, as a real one comes (pins.js).
   if (typeof testIcon === "function" && typeof pinnedIconOnly === "function" && pinnedIconOnly()) {
     testIcon();
-    speakAlert(message, null);
+    speakAlert(message, null, sampleParts());
     return;
   }
   // The banner is at the top of the window: bring it into view.
   window.scrollTo({ top: 0 });
   alertBanner(message, { preview: true });
-  speakAlert(message, null);
+  speakAlert(message, null, sampleParts());
 };
 // Test Alert: one alert as a real one comes (picking a sound plays it).
 els.testAlert.addEventListener("click", testAlert);
@@ -1837,7 +1855,7 @@ els.speak.addEventListener("change", () => {
   prefs.speak = els.speak.checked;
   savePrefs();
   renderVoice();
-  if (prefs.speak) voice?.say(sampleAlert());
+  if (prefs.speak) voice?.say(sampleAlert(), sampleParts());
   else stopSpeaking();
 });
 els.voiceType.addEventListener("change", () => {
@@ -1850,16 +1868,16 @@ els.voiceType.addEventListener("change", () => {
 els.voiceName.addEventListener("change", () => {
   prefs.voiceName = els.voiceName.value;
   savePrefs();
-  voice?.say(sampleAlert());
+  voice?.say(sampleAlert(), sampleParts());
 });
 els.voiceRate.addEventListener("change", () => {
   prefs.voiceRate = Number(els.voiceRate.value) || 1;
   savePrefs();
-  voice?.say(sampleAlert());
+  voice?.say(sampleAlert(), sampleParts());
 });
 els.testVoice.addEventListener("click", () => {
   stopSpeaking();
-  voice?.say(sampleAlert());
+  voice?.say(sampleAlert(), sampleParts());
 });
 els.repeat.addEventListener("change", () => {
   prefs.repeat = Number(els.repeat.value);

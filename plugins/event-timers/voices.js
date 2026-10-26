@@ -93,16 +93,191 @@ function voiceLabel(v, uiLang) {
 const VOICE_RATES = [0.75, 1, 1.25, 1.5, 1.75, 2];
 const VOICE_TYPES = ["any", "female", "male"];
 
+// The built-in voice (kokoro.js): every line the plugin can say, in English,
+// made with Kokoro, for computers with no voices of their own (Linux: the
+// meter's web view has no speech). Its value in the Voice list, and its name.
+const KOKORO = "kokoro";
+const KOKORO_LABEL = {
+  en: "Built-in (Kokoro, English)", ko: "내장 (Kokoro, 영어)", ja: "内蔵（Kokoro、英語）", de: "Eingebaut (Kokoro, Englisch)",
+  fr: "Intégrée (Kokoro, anglais)", es: "Integrada (Kokoro, inglés)", pt: "Integrada (Kokoro, inglês)",
+  ru: "Встроенный (Kokoro, английский)", "zh-Hant": "內建（Kokoro，英語）", "zh-Hans": "内置（Kokoro，英语）",
+};
+
+// Faster or slower at the same pitch (WSOLA): 30 ms windows laid half over
+// each other, each taken from where it best continues the last, within 10 ms
+// of where the speed puts it. The search looks at every 4th sample, so a
+// line takes a few milliseconds.
+function voiceStretch(ctx, buffer, rate) {
+  const x = buffer.getChannelData(0);
+  const sr = buffer.sampleRate;
+  const N = Math.round(sr * 0.03) & ~1;
+  const H = N / 2; // output hop
+  const tol = Math.round(sr * 0.01);
+  const frames = Math.max(1, Math.floor((x.length / rate - N) / H) + 1);
+  const y = new Float32Array((frames - 1) * H + N);
+  const win = new Float32Array(N);
+  for (let i = 0; i < N; i++) win[i] = 0.5 - 0.5 * Math.cos((2 * Math.PI * i) / N);
+  let prev = 0; // input start of the last frame
+  for (let k = 0; k < frames; k++) {
+    let pos = Math.round(k * H * rate);
+    if (k > 0) {
+      // The last frame's natural continuation, matched against candidates.
+      const want = prev + H;
+      let best = 0;
+      let bestScore = -Infinity;
+      for (let d = -tol; d <= tol; d += 4) {
+        const p = pos + d;
+        if (p < 0 || p + H > x.length || want + H > x.length) continue;
+        let s = 0;
+        for (let i = 0; i < H; i += 4) s += x[want + i] * x[p + i];
+        if (s > bestScore) {
+          bestScore = s;
+          best = d;
+        }
+      }
+      pos = Math.max(0, pos + best);
+    }
+    for (let i = 0; i < N && pos + i < x.length; i++) y[k * H + i] += x[pos + i] * win[i];
+    prev = pos;
+  }
+  const out = ctx.createBuffer(1, y.length, sr);
+  out.copyToChannel(y, 0);
+  return out;
+}
+
+// The built-in voice's player: a line is one clip or several said one after
+// the other ("Shugo Festival", "in 5 minutes"), through Web Audio (the page
+// may load no audio files, so the clips are decoded from their bytes). The
+// same queue as the computer's voices: the one playing and two waiting at
+// most.
+function makeBuiltInVoice(clips, prefs) {
+  const context = () => {
+    // sounds.js' context when it's there: one for the page.
+    if (typeof audio !== "undefined") {
+      audio ||= new AudioContext();
+      if (audio.state !== "running") audio.resume().catch(() => {});
+      return audio;
+    }
+    makeBuiltInVoice.ctx ||= new AudioContext();
+    return makeBuiltInVoice.ctx;
+  };
+  const decoded = new Map(); // English text -> Promise<AudioBuffer | null>
+  const decode = (text) => {
+    if (!decoded.has(text)) {
+      const bytes = Uint8Array.from(atob(clips[text]), (c) => c.charCodeAt(0));
+      decoded.set(text, context().decodeAudioData(bytes.buffer).catch(() => null));
+    }
+    return decoded.get(text);
+  };
+  const lines = new Map(); // "rate|text|text" -> AudioBuffer
+  // The clips joined, with a short pause between, at the speed picked.
+  const line = async (parts, rate) => {
+    const key = `${rate}|${parts.join("|")}`;
+    if (lines.has(key)) return lines.get(key);
+    const buffers = await Promise.all(parts.map(decode));
+    if (buffers.some((b) => !b)) return null;
+    const sr = buffers[0].sampleRate;
+    const gap = Math.round(sr * 0.05);
+    const out = context().createBuffer(1, buffers.reduce((n, b) => n + b.length, 0) + gap * (buffers.length - 1), sr);
+    let at = 0;
+    for (const b of buffers) {
+      out.copyToChannel(b.getChannelData(0), 0, at);
+      at += b.length + gap;
+    }
+    const said = rate === 1 ? out : voiceStretch(context(), out, rate);
+    if (lines.size > 100) lines.clear();
+    lines.set(key, said);
+    return said;
+  };
+  const MAX_WAITING = 2;
+  const waiting = [];
+  let playing = null; // { node, until }
+  const stop = () => {
+    waiting.length = 0;
+    const p = playing;
+    playing = null;
+    // A line still being made has no node yet: next() sees it was cut off.
+    if (p?.node) {
+      p.node.onended = null;
+      try {
+        p.node.stop();
+      } catch {
+        /* not started yet */
+      }
+    }
+  };
+  const next = async () => {
+    const parts = waiting.shift();
+    if (!parts) return;
+    const p = prefs();
+    const rate = VOICE_RATES.includes(Number(p.voiceRate)) ? Number(p.voiceRate) : 1;
+    const slot = { node: null, until: Date.now() + 5000 };
+    playing = slot;
+    let buffer = null;
+    try {
+      buffer = await line(parts, rate);
+    } catch {
+      buffer = null;
+    }
+    if (playing !== slot) return; // cut off while it was made
+    if (!buffer) {
+      playing = null;
+      return next();
+    }
+    const ctx = context();
+    const node = ctx.createBufferSource();
+    node.buffer = buffer;
+    const gain = ctx.createGain();
+    gain.gain.value = typeof volumeGain === "function" ? volumeGain(p.volume ?? 100) : 1;
+    node.connect(gain).connect(ctx.destination);
+    slot.node = node;
+    // A line whose end never comes (the audio output stopped) holds no one up.
+    slot.until = Date.now() + buffer.duration * 1000 + 1000;
+    node.onended = () => {
+      if (playing !== slot) return;
+      playing = null;
+      setTimeout(next, 60);
+    };
+    node.start();
+  };
+  const say = (parts) => {
+    if (playing && Date.now() > playing.until) {
+      const p = playing;
+      playing = null;
+      if (p.node) p.node.onended = null;
+    }
+    waiting.push(parts);
+    while (waiting.length > MAX_WAITING) waiting.shift();
+    if (!playing) next();
+  };
+  return { say, stop, has: (parts) => parts.every((t) => t && clips[t]) };
+}
+
 // The voices for a plugin. `lang()` is the meter's language; `prefs()` gives
 // { voiceName, voiceType, voiceRate, volume }; `onChange()` runs when the
 // computer's voices arrive (a moment after the page opens: read before then
 // the list is empty, and the first words came in the system's default voice,
 // whatever its language).
+//
+// The built-in voice (window.KOKORO_CLIPS, kokoro.js) speaks when chosen, or
+// when the computer has none. On Windows the list is empty for a moment after
+// the page opens, so "none" counts only once it has come or 1.5 s have
+// passed; meanwhile the computer's default voice speaks.
 function makeVoices({ lang, prefs, onChange }) {
   const synth = window.speechSynthesis || null;
   let all = [];
+  const clips = window.KOKORO_CLIPS || {};
+  const builtIn = Object.keys(clips).length ? makeBuiltInVoice(clips, prefs) : null;
+  let settled = false;
+  setTimeout(() => {
+    settled = true;
+    if (builtIn && !all.length) onChange?.();
+  }, 1500);
+  const usesBuiltIn = () => !!builtIn && (prefs().voiceName === KOKORO || !synth || (settled && !all.length));
   const typeOf = () => (VOICE_TYPES.includes(prefs().voiceType) ? prefs().voiceType : "any");
   const fits = (v) => typeOf() === "any" || voiceGender(v) === typeOf();
+  // The built-in voice is Kokoro's af_heart: female.
+  const builtInFits = () => typeOf() !== "male";
   const byName = (x, y) => x.name.localeCompare(y.name);
   // The meter's language's voices first, then the rest by language, each by
   // name; only those of the type picked.
@@ -114,7 +289,7 @@ function makeVoices({ lang, prefs, onChange }) {
   };
   const saved = () => {
     const name = prefs().voiceName;
-    return name ? all.find((x) => x.voiceURI === name || x.name === name) || null : null;
+    return name && name !== KOKORO ? all.find((x) => x.voiceURI === name || x.name === name) || null : null;
   };
   // The voice chosen; with "Default", the first of the type picked in the
   // meter's language, else any in it.
@@ -126,12 +301,14 @@ function makeVoices({ lang, prefs, onChange }) {
     return typed.find((x) => voiceInLanguage(x, l)) || typed.find((x) => voiceSameBase(x, l))
       || all.find((x) => voiceInLanguage(x, l)) || all.find((x) => voiceSameBase(x, l)) || null;
   };
-  // The Voice list: Default first. A saved voice not listed (uninstalled,
-  // not loaded yet) keeps its place, so the choice isn't lost.
+  // The Voice list: Default first, then the built-in voice. A saved voice
+  // not listed (uninstalled, not loaded yet) keeps its place, so the choice
+  // isn't lost.
   const fill = (select, defaultText) => {
     if (!select) return;
     const opt = (value, text) => Object.assign(document.createElement("option"), { value, textContent: text });
-    const options = [opt("", defaultText), ...list().map((v) => opt(v.voiceURI || v.name, voiceLabel(v, lang())))];
+    const own = builtIn && builtInFits() ? [opt(KOKORO, `${KOKORO_LABEL[lang()] || KOKORO_LABEL.en} ♀`)] : [];
+    const options = [opt("", defaultText), ...own, ...list().map((v) => opt(v.voiceURI || v.name, voiceLabel(v, lang())))];
     const name = prefs().voiceName || "";
     if (name && !options.some((o) => o.value === name)) {
       const v = saved();
@@ -142,6 +319,7 @@ function makeVoices({ lang, prefs, onChange }) {
   };
   // Whether the saved voice is of the type picked (or unknown yet).
   const savedFits = () => {
+    if (prefs().voiceName === KOKORO) return builtInFits();
     const v = saved();
     return !v || fits(v);
   };
@@ -192,6 +370,7 @@ function makeVoices({ lang, prefs, onChange }) {
     synth.speak(u);
   };
   const stop = () => {
+    builtIn?.stop();
     if (!synth) return;
     waiting.length = 0;
     clearTimeout(nextTimer);
@@ -202,9 +381,17 @@ function makeVoices({ lang, prefs, onChange }) {
       synth.cancel();
     }
   };
-  const say = (text) => {
+  // `parts`: the line in English, as the built-in voice's clips (["Shugo
+  // Festival", "in 5 minutes"]); `text` alone when it is one. A line the
+  // built-in voice has no clips for goes to the computer's voices, if any.
+  const say = (text, parts) => {
     const p = prefs();
-    if (!synth || !text || Number(p.volume ?? 100) <= 0) return;
+    if (!text || Number(p.volume ?? 100) <= 0) return;
+    if (usesBuiltIn()) {
+      const en = parts || [text];
+      if (builtIn.has(en)) return builtIn.say(en);
+    }
+    if (!synth) return;
     waiting.push(text);
     // Nothing playing: start now (waiting a tick let a burst push out its own first line).
     if (!current && Date.now() - cancelledAt >= AFTER_CANCEL_MS) next();
@@ -215,6 +402,7 @@ function makeVoices({ lang, prefs, onChange }) {
   };
   const load = () => {
     all = synth?.getVoices?.() || [];
+    if (all.length) settled = true;
     onChange?.();
   };
   if (synth) {
@@ -222,5 +410,5 @@ function makeVoices({ lang, prefs, onChange }) {
     if (typeof synth.addEventListener === "function") synth.addEventListener("voiceschanged", load);
     else synth.onvoiceschanged = load;
   }
-  return { available: !!synth, say, stop, pick, fill, savedFits };
+  return { available: !!synth || !!builtIn, say, stop, pick, fill, savedFits };
 }

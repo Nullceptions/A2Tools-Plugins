@@ -579,13 +579,19 @@ function changed() {
 // then. What is waiting to be said is two at most, so names that come
 // together are all heard but a burst of them never runs on long after.
 let voice = null;
-const say = (text) => voice?.say(text);
-const speak = (text) => prefs.voice && say(text);
+// `en`: the name in English, the built-in voice's clip (kokoro.js).
+const say = (text, en) => voice?.say(text, en ? [en] : undefined);
+const speak = (text, en) => prefs.voice && say(text, en);
 const ding = () => prefs.sound !== "off" && prefs.volume > 0 && typeof playSound === "function" && playSound(prefs.sound);
 // A name to try a voice on: the first skill shown, or the word "Skills".
+const sampleSkill = () => (LISTED[mine.cls] || []).find((s) => mine.skills[s.g]?.show)?.g;
 const sample = () => {
-  const g = (LISTED[mine.cls] || []).find((s) => mine.skills[s.g]?.show)?.g;
+  const g = sampleSkill();
   return g ? skillName(g) : words.skills;
+};
+const sampleEn = () => {
+  const g = sampleSkill();
+  return g ? SKILLS.get(g)?.n?.en : "Skills";
 };
 
 // What has alerted, so each alerts once: "g:<end>", "b:<instance>:<end>".
@@ -601,7 +607,7 @@ setInterval(() => {
     any = true;
     const o = mine.skills[g];
     if (o?.sound) ding();
-    if (o?.voice) speak(skillName(g));
+    if (o?.voice) speak(skillName(g), SKILLS.get(g)?.n?.en);
   }
   const lead = prefs.lead * 1000;
   for (const [instance, b] of live.buffs) {
@@ -615,7 +621,7 @@ setInterval(() => {
     alerted.add(key);
     const o = mine.buffs[b.a];
     if (o?.sound) ding();
-    if (o?.voice) speak(buffName(b.a));
+    if (o?.voice) speak(buffName(b.a), DATA.buffNames?.[DATA.buffs?.[b.a]?.t]?.en);
   }
   if (alerted.size > 500) alerted.clear();
   checkAway();
@@ -848,7 +854,7 @@ for (const [key, el] of Object.entries(els)) {
       fillVoices();
     }
     // A voice or speed picked is heard at once.
-    if (key === "voiceName" || key === "voiceRate") say(sample());
+    if (key === "voiceName" || key === "voiceRate") say(sample(), sampleEn());
     if (key === "combatOnly" || key === "combatAfter") {
       showCombatAfter();
       checkAway();
@@ -859,17 +865,17 @@ els.lock.addEventListener("change", () => a2.widgets.lock(els.lock.checked).catc
 $(".test").addEventListener("click", (e) => {
   e.preventDefault();
   ding();
-  speak(sample());
+  speak(sample(), sampleEn());
 });
 // The volume, heard where the slider is let go.
 els.volume.addEventListener("change", () => {
   ding();
-  speak(sample());
+  speak(sample(), sampleEn());
 });
 $(".testVoice").addEventListener("click", (e) => {
   e.preventDefault();
   voice?.stop();
-  say(sample());
+  say(sample(), sampleEn());
 });
 voice = makeVoices({ lang: () => lang, prefs: () => prefs, onChange: () => fillVoices() });
 fillVoices();

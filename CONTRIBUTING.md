@@ -88,7 +88,7 @@ The meter also styles your page's selects, checkboxes, radio buttons, sliders an
 
 ## Decoders
 
-A decoder turns one game packet (by its two-byte opcode) into numbers. It reads only what it names, and only from the player's own game data.
+A decoder turns one game packet (by its two-byte opcode) into numbers. It reads only what it names, and only from the player's own game data (or monsters' and bosses', see below).
 
 ```json
 { "name": "soul-gained", "opcode": "0D 90",
@@ -100,6 +100,16 @@ Field types: `u8 u16 u32 u64 i32 varint`, `skip:N`, and `list` (with a `count` o
 `"self": "<field>"` (plugin API 2) names a number field that holds an entity id: the meter passes the event on only when that entity is the player's own character. Use it to tell "I did this" without ever seeing anyone else.
 
 With `events:character`, a plugin's events reach it half a second after they are read, stamped with the character: at login the game sends some data (the pet list) just before the record saying who is playing. `"immediate": true` on a decoder skips that wait, for records that never come at login, such as a soul picked up; it never overtakes an earlier event of the plugin that is still waiting. Meters up to 2.0.63 ignore it and hold the event as before, so it needs no new `apiVersion`.
+
+### Monsters' and bosses' data
+
+A plugin that needs it may read monsters' and bosses' casts and buffs (NPC data), for example `09 38` (a cast starts), `02 38` (a skill goes off), `2A 38` / `2C 38` (a buff added / removed), without `"self"`. These records come for every entity, players too, so the plugin must:
+
+- keep only what its own table of NPC skill and buff ids names, and ignore the rest at once;
+- never store, show or send on another player's id, casts or buffs, nor keep an entity id longer than it needs to tell which boss it is;
+- read no other player's data in any other way (names, gear, damage, positions): that stays forbidden.
+
+For accessibility plugins the boundary is what the game itself shows or plays: a boss's line, its cast bar, the buff on it and its time, a mechanic's colour or animation. Such a plugin may put that into words, sound or big text. It must not predict what the game doesn't show (a hidden timer, the next skill, who will be targeted), reveal hidden information, or act for the player.
 
 ## Plugin API versions
 

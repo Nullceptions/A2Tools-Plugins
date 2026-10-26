@@ -1,0 +1,92 @@
+{
+  "_comment": [
+    "Hand-checked boss mechanics, merged into plugins/boss-telegraph/bosses.js by build.py.",
+    "Each one only puts into words what the game already shows a sighted player: the boss's",
+    "line, its cast bar, the colour it glows and the buff icon on it with its time.",
+    "trigger: cast (09 38, the cast bar starts), use (02 38, the skill goes off) or abnormal",
+    "(2A 38, a buff lands on the boss). phase: the buff the boss gets from it and how long it",
+    "lasts; when it ends (2C 38, or its length runs out) the plugin says 'safe' (words.safe).",
+    "lead: ms from the trigger to when it hits, shown while the call is up (0: no countdown).",
+    "Confirmed in captures 2026-10-26 (tools/boss-telegraph/README in the plugin's README)."
+  ],
+  "dungeons": {
+    "_comment": "NPCs the meter's npcs table gives no dungeon: NpcName -> Dungeon id (seen there in captures)",
+    "M_PD_EleKing_01_001": 600072
+  },
+  "words": {
+    "safe": {
+      "en": "Safe to attack", "ko": "다시 공격하세요", "ja": "攻撃再開", "de": "Wieder angreifen",
+      "fr": "Vous pouvez attaquer", "es": "Ya puedes atacar", "pt": "Pode atacar", "ru": "Можно атаковать",
+      "zh-Hant": "可以攻擊了", "zh-Hans": "可以攻击了"
+    }
+  },
+  "mechanics": [
+    {
+      "key": "thamon-violet",
+      "boss": "M_PD_BakronIsland_Tamon_01_001",
+      "trigger": "cast", "id": 1604670,
+      "call": {
+        "en": "Purple — stop magic attacks", "ko": "보라색 — 마법 공격 중지", "ja": "紫 — 魔法攻撃をやめて",
+        "de": "Lila — keine Magieangriffe", "fr": "Violet — arrêtez la magie", "es": "Morado — deja los ataques mágicos",
+        "pt": "Roxo — pare os ataques mágicos", "ru": "Фиолетовый — без магических атак",
+        "zh-Hant": "紫色 — 停止魔法攻擊", "zh-Hans": "紫色 — 停止魔法攻击"
+      },
+      "phase": {
+        "abnormal": 16046701, "ms": 10000,
+        "label": {
+          "en": "Stop magic", "ko": "마법 중지", "ja": "魔法停止", "de": "Keine Magie", "fr": "Pas de magie",
+          "es": "Sin magia", "pt": "Sem magia", "ru": "Без магии", "zh-Hant": "停止魔法", "zh-Hans": "停止魔法"
+        }
+      }
+    },
+    {
+      "key": "thamon-red",
+      "boss": "M_PD_BakronIsland_Tamon_01_001",
+      "trigger": "cast", "id": 1604660,
+      "call": {
+        "en": "Red — stop physical attacks", "ko": "빨간색 — 물리 공격 중지", "ja": "赤 — 物理攻撃をやめて",
+        "de": "Rot — keine physischen Angriffe", "fr": "Rouge — arrêtez les attaques physiques", "es": "Rojo — deja los ataques físicos",
+        "pt": "Vermelho — pare os ataques físicos", "ru": "Красный — без физических атак",
+        "zh-Hant": "紅色 — 停止物理攻擊", "zh-Hans": "红色 — 停止物理攻击"
+      },
+      "phase": {
+        "abnormal": 16046601, "ms": 10000,
+        "label": {
+          "en": "Stop physical", "ko": "물리 중지", "ja": "物理停止", "de": "Nicht physisch", "fr": "Pas de physique",
+          "es": "Sin físicos", "pt": "Sem físico", "ru": "Без физ. атак", "zh-Hant": "停止物理", "zh-Hans": "停止物理"
+        }
+      }
+    },
+    {
+      "key": "lakshmi-reflect",
+      "boss": "M_PD_Draupnir_NagaElite_01",
+      "trigger": "cast", "id": 1605910,
+      "call": {
+        "en": "Reflect — stop attacking", "ko": "반사 — 공격 중지", "ja": "反射 — 攻撃をやめて",
+        "de": "Reflexion — nicht angreifen", "fr": "Renvoi — arrêtez d'attaquer", "es": "Reflejo — deja de atacar",
+        "pt": "Reflexão — pare de atacar", "ru": "Отражение — не атакуйте",
+        "zh-Hant": "反射 — 停止攻擊", "zh-Hans": "反射 — 停止攻击"
+      },
+      "phase": {
+        "abnormal": 16059101, "ms": 8000,
+        "label": {
+          "en": "Stop attacking", "ko": "공격 중지", "ja": "攻撃停止", "de": "Nicht angreifen", "fr": "N'attaquez pas",
+          "es": "No ataques", "pt": "Não ataque", "ru": "Не атакуйте", "zh-Hant": "停止攻擊", "zh-Hans": "停止攻击"
+        }
+      }
+    },
+    {
+      "key": "vakron-jump",
+      "boss": "M_PD_EleKing_01_001",
+      "trigger": "use", "ids": [1604390, 1604393],
+      "_ids": "1604390 normal, 1604393 easy: one skill (SkillString_NPC_1604390), no cast time",
+      "waves": true,
+      "_waves": "03 38 for the same skill: the staff's waves, +1.7, +3.4 and +5.1 s after it (4 of 4 uses, 2026-10-26); a short beep on each, on by default",
+      "_known_not_called": "Vakron's other casts, no boss line in the tables (2026-10-26): 1604410 Skill06 2.0 s cast (heavy, 15 s cooldown), 1604380 Skill03 thorns 2.167 s, 1604400 Skill05 1.333 s, 1604370 Skill02 1.0 s",
+      "call": {
+        "en": "Jump!", "ko": "점프!", "ja": "ジャンプ！", "de": "Springen!", "fr": "Sautez !", "es": "¡Salta!",
+        "pt": "Pule!", "ru": "Прыгайте!", "zh-Hant": "跳！", "zh-Hans": "跳！"
+      }
+    }
+  ]
+}

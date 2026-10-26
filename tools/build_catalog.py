@@ -107,7 +107,7 @@ def check(folder):
     total = 0
     for path in sorted(p for p in folder.rglob("*") if p.is_file()):
         rel = path.relative_to(folder).as_posix()
-        if rel in SKIP or rel == ".unpublished":
+        if rel in SKIP or rel in (".unpublished", ".test"):
             continue
         if not all(PART.match(part) and part not in {".", ".."} for part in rel.split("/")) or len(rel) > 128:
             fail(name, f"file name {rel!r}: letters, digits, '.', '-' and '_' only")
@@ -136,20 +136,28 @@ def main():
     folders = sorted(p for p in PLUGINS.iterdir() if p.is_dir())
     # A folder with an `.unpublished` file is checked but kept out of the
     # catalog: a plugin still in the works, used locally in developer mode.
+    # A folder with a `.test` file goes into the test catalog (test/index.json,
+    # signed the same way): meters from 2.0.78 install it by id, and don't
+    # list it until installed; older meters never see it.
     entries = []
+    tests = []
     for folder in folders:
         entry = check(folder)
         if (folder / ".unpublished").exists():
             print(f"--  {entry['id']} {entry['version']}  (unpublished: not in the catalog)")
+        elif (folder / ".test").exists():
+            tests.append(entry)
         else:
             entries.append(entry)
     for e in entries:
         print(f"ok  {e['id']} {e['version']}  ({len(e['files'])} files)")
+    for e in tests:
+        print(f"ok  {e['id']} {e['version']}  ({len(e['files'])} files, test)")
     if len(sys.argv) < 2:
         return
     dist = Path(sys.argv[1])
     shutil.rmtree(dist, ignore_errors=True)
-    for e in entries:
+    for e in entries + tests:
         for rel in e["files"]:
             target = dist / e["id"] / e["version"] / rel
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -157,6 +165,11 @@ def main():
     catalog = {"format": 1, "plugins": entries}
     (dist / "index.json").write_text(json.dumps(catalog, ensure_ascii=False, indent=1, sort_keys=True) + "\n", encoding="utf-8")
     print(f"wrote {dist}/index.json")
+    if tests:
+        (dist / "test").mkdir(parents=True, exist_ok=True)
+        test_catalog = {"format": 1, "plugins": tests}
+        (dist / "test" / "index.json").write_text(json.dumps(test_catalog, ensure_ascii=False, indent=1, sort_keys=True) + chr(10), encoding="utf-8")
+        print(f"wrote {dist}/test/index.json")
 
 
 if __name__ == "__main__":

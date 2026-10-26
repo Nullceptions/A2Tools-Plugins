@@ -52,12 +52,16 @@ jobs:
           test -n "$PLUGIN_SIGNING_KEY" || { echo "::error::PLUGIN_SIGNING_KEY is not set"; exit 1; }
           umask 077
           printf '%s\n' "$PLUGIN_SIGNING_KEY" > "$RUNNER_TEMP/key.pem"
-          openssl pkeyutl -sign -inkey "$RUNNER_TEMP/key.pem" -rawin -in dist/index.json \
-            | od -An -v -tx1 | tr -d ' \n' > dist/index.json.sig
-          # Check it with the public half, as the meter will.
           openssl pkey -in "$RUNNER_TEMP/key.pem" -pubout > "$RUNNER_TEMP/pub.pem"
-          xxd -r -p dist/index.json.sig > "$RUNNER_TEMP/sig.bin"
-          openssl pkeyutl -verify -pubin -inkey "$RUNNER_TEMP/pub.pem" -rawin -in dist/index.json -sigfile "$RUNNER_TEMP/sig.bin"
+          # The catalog, and the test catalog when there is one (meters from
+          # 2.0.78 read it); each checked with the public half, as the meter will.
+          for index in dist/index.json dist/test/index.json; do
+            [ -f "$index" ] || continue
+            openssl pkeyutl -sign -inkey "$RUNNER_TEMP/key.pem" -rawin -in "$index" \
+              | od -An -v -tx1 | tr -d ' \n' > "$index.sig"
+            xxd -r -p "$index.sig" > "$RUNNER_TEMP/sig.bin"
+            openssl pkeyutl -verify -pubin -inkey "$RUNNER_TEMP/pub.pem" -rawin -in "$index" -sigfile "$RUNNER_TEMP/sig.bin"
+          done
           echo "Public key (hex): $(openssl pkey -in "$RUNNER_TEMP/key.pem" -pubout -outform DER | tail -c 32 | od -An -v -tx1 | tr -d ' \n')"
           rm -f "$RUNNER_TEMP/key.pem"
 
@@ -115,9 +119,10 @@ jobs:
               --body "$f" --content-type application/octet-stream               --cache-control "public, max-age=31536000, immutable, no-transform" >/dev/null
             echo "uploaded plugins/$f"
           done
-          for f in index.json.sig index.json; do
+          for f in test/index.json.sig test/index.json index.json.sig index.json; do
+            [ -f "$f" ] || continue
             aws s3api put-object --endpoint-url "$R2_ENDPOINT" --bucket "$BUCKET" --key "plugins/$f" \
-              --body "$f" --content-type "$([ "$f" = index.json ] && echo application/json || echo text/plain)"               --cache-control "no-cache" >/dev/null
+              --body "$f" --content-type "$(case "$f" in *.json) echo application/json;; *) echo text/plain;; esac)"               --cache-control "no-cache" >/dev/null
             echo "uploaded plugins/$f"
           done
 

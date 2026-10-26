@@ -70,7 +70,7 @@ Every name in a pet's sources (monsters, zones, maps, Kibelisks, chests) shows i
 - `window`: show the window when you pick up a soul for a pet you are farming, fitted to that list, and hide it again (only with **Pop up while farming** on).
 - `decoder:npc-spawn`, `decoder:npc-gone`: the monsters coming into and leaving your range, for the map.
 - `decoder:map-load`, `decoder:teleport`: the map you're on and where it or a teleport puts you.
-- `decoder:own-position`, `decoder:own-effect`, `decoder:mantra-tick`: your own position, from your effects landing on you and your mantras (filtered to you by the meter).
+- `decoder:own-position`, `decoder:mantra-tick`: your own position, from your effects landing on you and your mantras (filtered to you by the meter).
 - `widgets`: the popped-out map.
 - `storage`: save the counts (with the last 200 changes per server, to trace a count that drifts from the game's), your pet names, the sort order, pins, region choice, filters, layout and the pets you are farming on this computer.
 

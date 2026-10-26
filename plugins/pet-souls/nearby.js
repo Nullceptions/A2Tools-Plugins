@@ -8,6 +8,8 @@
 //   kill, and as it leaves your range (345 of 386 spawns in one capture).
 // - `21 36` a map loading: a number, the map id (sources.js's mapId), 8
 //   bytes, where you arrive.
+// - `41 36` also brings players' spirits and ground spells (292xxxx), left
+//   out; `42 36` any entity going, players too.
 // - `2a 38` a record about you as an effect of your own lands on you
 //   (fighting, mounting, gliding: 6 in a minute of moving, 2026-10-25), and
 //   `2b 38` your mantras ticking on you once a second (both as Hidden Cube
@@ -46,6 +48,11 @@
   const REACH_M = 60;
   const REACH_M_PER_S = 15;
 
+  // A player's spirit or ground spell: every NPC a player's skill spawns is
+  // 2920011-2921399 (the meter's player_summon_npcs.json, from the game's
+  // NpcData), and no soul comes from one. Left out of the map and of the
+  // arrivals that place you (they appear by their player, not by you).
+  const playerSummon = (npc) => npc >= 2_920_000 && npc < 2_930_000;
   const toFloat = (u) => {
     const view = new DataView(new ArrayBuffer(4));
     view.setUint32(0, u >>> 0, true);
@@ -76,12 +83,13 @@
     }
     spawn(d, at) {
       const pos = position(d);
-      if (!pos || !(d.npc > 0)) return;
+      if (!pos || !(d.npc > 0) || playerSummon(d.npc)) return;
       if (!this.npcs.has(d.entity)) this.#arrived(pos, at);
       this.npcs.set(d.entity, { entity: d.entity, npc: d.npc, pos, at });
     }
+    // Whether it was one of the monsters around.
     gone(d) {
-      this.npcs.delete(d.entity);
+      return this.npcs.delete(d.entity);
     }
     // You moved far: who was around is gone, but for what came with you.
     #left(at) {

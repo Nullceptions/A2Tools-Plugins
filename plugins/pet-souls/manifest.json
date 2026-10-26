@@ -1,12 +1,12 @@
 {
   "id": "pet-souls",
   "name": "Pet Soul Tracker",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "apiVersion": 2,
   "author": "A2 Tools",
   "description": "Souls still needed to raise each pet, from the game's own pet data, where each pet's souls drop, and the monsters around you that drop them.",
   "permissions": ["storage", "events:character", "window", "widgets", "decoder:pet-list", "decoder:soul-gained", "decoder:level-up",
-    "decoder:npc-spawn", "decoder:npc-gone", "decoder:map-load", "decoder:own-position", "decoder:own-effect", "decoder:mantra-tick", "decoder:teleport"],
+    "decoder:npc-spawn", "decoder:npc-gone", "decoder:map-load", "decoder:own-position", "decoder:mantra-tick", "decoder:teleport"],
   "decoders": [
     {
       "name": "pet-list",
@@ -59,16 +59,6 @@
       "fields": [
         { "name": "source", "type": "varint" }, { "name": "one", "type": "u8" }, { "name": "kind", "type": "u8" }, { "name": "seq", "type": "varint" },
         { "type": "skip:20" }, { "name": "target", "type": "varint" }, { "name": "p", "type": "u8" }, { "name": "q", "type": "u8" },
-        { "name": "x", "type": "u32" }, { "name": "y", "type": "u32" }, { "name": "z", "type": "u32" }
-      ]
-    },
-    {
-      "name": "own-effect",
-      "opcode": "2A 38",
-      "self": "source",
-      "fields": [
-        { "name": "source", "type": "varint" }, { "name": "one", "type": "u8" }, { "name": "kind", "type": "u8" }, { "name": "seq", "type": "varint" },
-        { "type": "skip:20" }, { "name": "target", "type": "varint" }, { "name": "p", "type": "u8" }, { "type": "skip:4" }, { "name": "q", "type": "u8" },
         { "name": "x", "type": "u32" }, { "name": "y", "type": "u32" }, { "name": "z", "type": "u32" }
       ]
     },

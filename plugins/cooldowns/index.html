@@ -80,14 +80,20 @@
       </label>
       <label class="row"><span data-t="volume">Volume</span><input type="range" class="volume" min="0" max="100" step="5" /></label>
       <label class="switch"><span data-t="voice">Say names out loud</span><input type="checkbox" class="voice" /></label>
+      <label class="row"><span data-t="voiceType">Voice type</span><select class="voiceType"></select></label>
       <label class="row"><span data-t="voicePick">Voice</span><select class="voiceName"></select></label>
+      <label class="row"><span data-t="voiceRate">Speed</span>
+        <span class="inline"><select class="voiceRate"></select><button type="button" class="btn testVoice" data-t="testVoice">Test voice</button></span>
+      </label>
       <p class="note" data-t="voiceNote">Uses your computer's voices, in the meter's language when it has one.</p>
+      <p class="note" data-t="genderNote">Female and male are told by a voice's name: those it can't tell are listed under Any only.</p>
       <label class="row"><span data-t="lead">Warn before a buff ends</span><span class="num"><input type="number" class="lead" min="1" max="30" step="1" /> s</span></label>
       <p class="note" data-t="alertNote">Pick which skills and buffs alert you on their tabs: click one to see its options.</p>
     </section>
 
     <script src="/_sdk/a2.js"></script>
     <script src="sounds.js"></script>
+    <script src="voices.js"></script>
     <script src="skills.js"></script>
     <script src="selfbuffs.js"></script>
     <script src="icons.js"></script>

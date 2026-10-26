@@ -105,6 +105,9 @@ const DEFAULTS = {
   // "ring": the border drains as a ring, the icon dims as it runs out), the
   // alerts' volume (%) and the voice ("": the first in the meter's language).
   buffStyle: "bar", volume: 100, voiceName: "",
+  // 0.2.1: the Voice list's type ("any", "female", "male": voices.js) and
+  // the voice's speed.
+  voiceType: "any", voiceRate: 1,
 };
 let prefs = { ...DEFAULTS };
 // What each character shows: { cls, skills: { g: opts }, buffs: { a: opts },
@@ -571,56 +574,12 @@ function changed() {
 
 // ---- Alerts ------------------------------------------------------------
 
-// The computer's voices come a moment after the page opens (voiceschanged):
-// read before then, the list was empty and the first names were spoken by
-// the system's default voice, whatever its language.
-const synth = window.speechSynthesis || null;
-let voices = [];
-function loadVoices() {
-  voices = synth?.getVoices?.() || [];
-  fillVoices();
-}
-// A voice in the meter's language: for Traditional Chinese the Taiwan and
-// Hong Kong voices, for Simplified the others.
-const TRAD = /^zh[-_](tw|hk|mo|hant)/i;
-function inLanguage(v) {
-  const base = lang.split("-")[0].toLowerCase();
-  const vl = (v.lang || "").toLowerCase();
-  if (!vl.startsWith(base)) return false;
-  if (base !== "zh") return true;
-  return lang === "zh-Hant" ? TRAD.test(vl) : !TRAD.test(vl);
-}
-const sameBase = (v) => (v.lang || "").toLowerCase().startsWith(lang.split("-")[0].toLowerCase());
-function pickVoice() {
-  if (prefs.voiceName) {
-    const v = voices.find((x) => x.voiceURI === prefs.voiceName || x.name === prefs.voiceName);
-    if (v) return v;
-  }
-  return voices.find(inLanguage) || voices.find(sameBase) || null;
-}
-// What is waiting to be said: at most two, so names that come together are
-// all heard but a burst of them never runs on long after (an entry whose end
-// never came goes after 10 s).
-const saying = new Map(); // utterance -> when queued
-function say(text) {
-  if (!synth || !text || prefs.volume <= 0) return;
-  const now = Date.now();
-  for (const [u, at] of saying) if (now - at > 10_000) saying.delete(u);
-  if (saying.size >= 2) {
-    synth.cancel();
-    saying.clear();
-  }
-  const u = new SpeechSynthesisUtterance(text);
-  const voice = pickVoice();
-  if (voice) u.voice = voice;
-  u.lang = voice?.lang || lang;
-  u.rate = 1;
-  u.pitch = 1;
-  u.volume = volumeGain(prefs.volume);
-  u.onend = u.onerror = () => saying.delete(u);
-  saying.set(u, now);
-  synth.speak(u);
-}
+// The computer's voices (voices.js), set up with the page below: they come
+// a moment after it opens (voiceschanged), and the Voice list is filled again
+// then. What is waiting to be said is two at most, so names that come
+// together are all heard but a burst of them never runs on long after.
+let voice = null;
+const say = (text) => voice?.say(text);
 const speak = (text) => prefs.voice && say(text);
 const ding = () => prefs.sound !== "off" && prefs.volume > 0 && typeof playSound === "function" && playSound(prefs.sound);
 // A name to try a voice on: the first skill shown, or the word "Skills".
@@ -672,6 +631,7 @@ const els = {
   numbers: $(".numbers"), readyGlow: $(".readyGlow"), sound: $(".sound"), voice: $(".voice"), lead: $(".lead"),
   combatOnly: $(".combatOnly"), combatAfter: $(".combatAfter"),
   buffStyle: $(".buffStyle"), volume: $(".volume"), voiceName: $(".voiceName"),
+  voiceType: $(".voiceType"), voiceRate: $(".voiceRate"),
 };
 let tab = "skills";
 let openRow = null;
@@ -690,19 +650,18 @@ function translate() {
   fillVoices();
 }
 
-// The voices: the automatic one first, then the meter's language's, then
-// the rest, each by name. A saved voice not listed (uninstalled, or not
-// loaded yet) keeps its place, so the choice isn't lost.
+// The voices (voices.js): Default first, then the meter's language's, then
+// the rest, each by name, only those of the type picked. A saved voice not
+// listed (uninstalled, or not loaded yet) keeps its place, so the choice
+// isn't lost.
 function fillVoices() {
-  const el = els.voiceName;
-  if (!el) return;
-  const opt = (value, text) => Object.assign(document.createElement("option"), { value, textContent: text });
-  const byName = (x, y) => x.name.localeCompare(y.name);
-  const others = voices.filter((v) => !inLanguage(v)).sort((x, y) => (x.lang || "").localeCompare(y.lang || "") || byName(x, y));
-  const options = [opt("", words.voiceDefault), ...[...voices.filter(inLanguage).sort(byName), ...others].map((v) => opt(v.voiceURI || v.name, `${v.name} (${v.lang})`))];
-  if (prefs.voiceName && !options.some((o) => o.value === prefs.voiceName)) options.push(opt(prefs.voiceName, prefs.voiceName));
-  el.replaceChildren(...options);
-  el.value = prefs.voiceName;
+  if (!voice || !els.voiceName) return;
+  const opt = (value, text) => Object.assign(document.createElement("option"), { value: String(value), textContent: text });
+  els.voiceType.replaceChildren(...VOICE_TYPES.map((t) => opt(t, words.voiceTypes[t])));
+  els.voiceType.value = VOICE_TYPES.includes(prefs.voiceType) ? prefs.voiceType : "any";
+  els.voiceRate.replaceChildren(...VOICE_RATES.map((r) => opt(r, `${r.toLocaleString(lang)}×`)));
+  els.voiceRate.value = String(VOICE_RATES.includes(Number(prefs.voiceRate)) ? Number(prefs.voiceRate) : 1);
+  voice.fill(els.voiceName, words.voiceDefault);
 }
 
 const seconds = (ms) => {
@@ -873,15 +832,23 @@ for (const [key, el] of Object.entries(els)) {
     if (key === "perLine") v = Math.max(1, Math.min(20, Math.round(Number(v)) || DEFAULTS.perLine));
     if (key === "lead") v = Math.max(1, Math.min(30, Math.round(Number(v)) || DEFAULTS.lead));
     if (key === "combatAfter") v = Math.max(3, Math.min(120, Math.round(Number(v)) || DEFAULTS.combatAfter));
-    if (key === "opacity" || key === "volume") v = Number(v);
+    if (key === "opacity" || key === "volume" || key === "voiceRate") v = Number(v);
     prefs[key] = v;
     if (el.type === "number") el.value = v;
     save();
     if (["show", "layout", "size", "direction", "perLine"].includes(key)) placeWidgets();
     else if (["ownBuffs", "opacity", "numbers", "readyGlow", "buffStyle"].includes(key)) send();
     if (key === "volume") setSoundVolume(v);
-    // A voice picked is heard at once.
-    if (key === "voiceName") say(sample());
+    // A voice of the other type gives way to the first of this one.
+    if (key === "voiceType") {
+      if (voice && !voice.savedFits()) {
+        prefs.voiceName = "";
+        save();
+      }
+      fillVoices();
+    }
+    // A voice or speed picked is heard at once.
+    if (key === "voiceName" || key === "voiceRate") say(sample());
     if (key === "combatOnly" || key === "combatAfter") {
       showCombatAfter();
       checkAway();
@@ -899,11 +866,13 @@ els.volume.addEventListener("change", () => {
   ding();
   speak(sample());
 });
-if (synth) {
-  loadVoices();
-  if (typeof synth.addEventListener === "function") synth.addEventListener("voiceschanged", loadVoices);
-  else synth.onvoiceschanged = loadVoices;
-}
+$(".testVoice").addEventListener("click", (e) => {
+  e.preventDefault();
+  voice?.stop();
+  say(sample());
+});
+voice = makeVoices({ lang: () => lang, prefs: () => prefs, onChange: () => fillVoices() });
+fillVoices();
 
 // ---- The meter -------------------------------------------------------------
 

@@ -53,6 +53,17 @@ const els = {
   volumeLabel: $(".volumeLabel"),
   volume: $(".volume"),
   repeat: $(".repeat"),
+  speak: $(".speak"),
+  speakLabel: $(".speakLabel"),
+  voiceTypeLabel: $(".voiceTypeLabel"),
+  voiceType: $(".voiceType"),
+  voicePickLabel: $(".voicePickLabel"),
+  voiceName: $(".voiceName"),
+  voiceRateLabel: $(".voiceRateLabel"),
+  voiceRate: $(".voiceRate"),
+  testVoice: $(".testVoice"),
+  voiceNote: $(".voiceNote"),
+  voiceRows: [...document.querySelectorAll(".voiceRow")],
   pop: $(".pop"),
   popLabel: $(".popLabel"),
   alsoAtStart: $(".alsoAtStart"),
@@ -360,6 +371,41 @@ const ROW_UI = {
         settings: "此提醒的设置", settingsOff: "开启提醒后即可设置" },
 };
 
+// Spoken alerts' settings (voices.js).
+const VOICE_UI = {
+  en: { speak: "Speak alerts", voiceType: "Voice type", voice: "Voice", voiceDefault: "Default", speed: "Speed", testVoice: "Test voice",
+        types: { any: "Any", female: "Female", male: "Male" },
+        note: "Uses your computer's voices. Female and male are told by a voice's name: those it can't tell are listed under Any only." },
+  ko: { speak: "알림 읽어 주기", voiceType: "음성 종류", voice: "음성", voiceDefault: "기본", speed: "속도", testVoice: "음성 테스트",
+        types: { any: "모두", female: "여성", male: "남성" },
+        note: "컴퓨터의 음성을 사용합니다. 여성/남성은 음성 이름으로 구분하며, 구분할 수 없는 음성은 '모두'에만 표시됩니다." },
+  ja: { speak: "通知を読み上げ", voiceType: "声の種類", voice: "音声", voiceDefault: "既定", speed: "速さ", testVoice: "音声をテスト",
+        types: { any: "すべて", female: "女性", male: "男性" },
+        note: "PCの音声を使います。女性・男性は音声の名前から判断し、判断できない音声は「すべて」にのみ表示されます。" },
+  de: { speak: "Alarme vorlesen", voiceType: "Stimmtyp", voice: "Stimme", voiceDefault: "Standard", speed: "Tempo", testVoice: "Stimme testen",
+        types: { any: "Alle", female: "Weiblich", male: "Männlich" },
+        note: "Nutzt die Stimmen Ihres Computers. Weiblich und männlich werden am Namen einer Stimme erkannt: Stimmen ohne Zuordnung stehen nur unter „Alle“." },
+  fr: { speak: "Lire les alertes à voix haute", voiceType: "Type de voix", voice: "Voix", voiceDefault: "Par défaut", speed: "Vitesse", testVoice: "Tester la voix",
+        types: { any: "Toutes", female: "Féminine", male: "Masculine" },
+        note: "Utilise les voix de votre ordinateur. Féminine ou masculine se devine au nom de la voix : celles qu'on ne peut pas classer ne figurent que sous « Toutes »." },
+  es: { speak: "Leer las alertas en voz alta", voiceType: "Tipo de voz", voice: "Voz", voiceDefault: "Predeterminada", speed: "Velocidad", testVoice: "Probar voz",
+        types: { any: "Todas", female: "Femenina", male: "Masculina" },
+        note: "Usa las voces de tu ordenador. Femenina o masculina se deduce del nombre de la voz: las que no se pueden clasificar solo aparecen en «Todas»." },
+  pt: { speak: "Falar os alertas", voiceType: "Tipo de voz", voice: "Voz", voiceDefault: "Padrão", speed: "Velocidade", testVoice: "Testar voz",
+        types: { any: "Todas", female: "Feminina", male: "Masculina" },
+        note: "Usa as vozes do seu computador. Feminina ou masculina é deduzido do nome da voz: as que não dá para classificar aparecem só em “Todas”." },
+  ru: { speak: "Озвучивать оповещения", voiceType: "Тип голоса", voice: "Голос", voiceDefault: "По умолчанию", speed: "Скорость", testVoice: "Проверить голос",
+        types: { any: "Любой", female: "Женский", male: "Мужской" },
+        note: "Голоса вашего компьютера. Женский или мужской определяется по названию голоса; те, что определить нельзя, есть только в «Любой»." },
+  "zh-Hant": { speak: "朗讀提醒", voiceType: "語音類型", voice: "語音", voiceDefault: "預設", speed: "語速", testVoice: "測試語音",
+        types: { any: "全部", female: "女聲", male: "男聲" },
+        note: "使用電腦的語音。女聲或男聲依語音名稱判斷，無法判斷的語音只列在「全部」。" },
+  "zh-Hans": { speak: "朗读提醒", voiceType: "语音类型", voice: "语音", voiceDefault: "默认", speed: "语速", testVoice: "测试语音",
+        types: { any: "全部", female: "女声", male: "男声" },
+        note: "使用电脑的语音。女声或男声依语音名称判断，无法判断的语音只列在“全部”。" },
+};
+const vui = () => VOICE_UI[language] || VOICE_UI.en;
+
 let language = "en";
 let character = null;
 // Whether AION2 is open, as the meter tells it; null on meters that don't
@@ -376,10 +422,13 @@ let gameRunning = null;
 // lastServer: the last character's server, kept for when nobody is logged in.
 // alsoAtStart: an alert with a lead goes off again as its event starts.
 // folded: the Bosses tab's sections folded away ({ scheduled, field }).
-// volume: the alerts' loudness, 0-100 %.
+// volume: the alerts' loudness, 0-100 %, the spoken ones' too.
+// speak: alerts also said out loud (voices.js), in voiceName ("": the first
+// of voiceType, "any" / "female" / "male", in the meter's language), at
+// voiceRate.
 let prefs = { region: "auto", hidden: [], alerts: {}, leads: {}, closedLeads: {}, sound: "chime", repeat: 1, volume: 100, pop: false,
   tab: "events", display: "system", lastServer: 0, scale: 1, defaultLead: DEFAULT_LEAD, defaultClosedLead: DEFAULT_CLOSED_LEAD,
-  alertColor: "orange", alsoAtStart: false, folded: {} };
+  alertColor: "orange", alsoAtStart: false, folded: {}, speak: false, voiceName: "", voiceType: "any", voiceRate: 1 };
 // The world boss timers: { server, bosses, at, error }, from the feed and the
 // player's own map, the newest report of each boss kept.
 let feed = null;
@@ -627,6 +676,7 @@ function renderStatic() {
   els.repeat.value = String(prefs.repeat);
   els.pop.checked = !!prefs.pop;
   els.alsoAtStart.checked = !!prefs.alsoAtStart;
+  renderVoice();
   renderTabs();
   renderAlerts();
   if (typeof renderPinLock === "function") renderPinLock();
@@ -1416,6 +1466,47 @@ function soundAlert(key) {
   els.mute.hidden = false;
   play();
 }
+// Spoken alerts (voices.js): the alert's line said after its sound's first
+// play, without the HP in brackets. The computer's voices come a moment
+// after the page opens, and the Voice list is filled again then.
+let voice = null;
+voice = typeof makeVoices === "function" ? makeVoices({ lang: () => language, prefs: () => prefs, onChange: () => renderVoice() }) : null;
+const speakTimers = new Set();
+function speakAlert(message, key) {
+  if (!prefs.speak || !voice?.available || !message) return;
+  const own = typeof alertSound === "function" ? alertSound(key) : { sound: prefs.sound };
+  const wait = own.sound === "off" || typeof soundLength !== "function" ? 0 : Math.min(1500, soundLength(own.sound) * 1000);
+  const said = String(message).replace(/\s*[(（][^)）]*[)）]/g, "");
+  const timer = setTimeout(() => {
+    speakTimers.delete(timer);
+    voice.say(said);
+  }, wait);
+  speakTimers.add(timer);
+}
+function stopSpeaking() {
+  for (const t of speakTimers) clearTimeout(t);
+  speakTimers.clear();
+  voice?.stop();
+}
+function renderVoice() {
+  if (!voice) return;
+  const v = vui();
+  els.speakLabel.textContent = v.speak;
+  els.voiceTypeLabel.textContent = v.voiceType;
+  els.voicePickLabel.textContent = v.voice;
+  els.voiceRateLabel.textContent = v.speed;
+  els.testVoice.textContent = v.testVoice;
+  els.voiceNote.textContent = v.note;
+  els.speak.checked = !!prefs.speak;
+  els.speak.disabled = !voice.available;
+  els.voiceType.replaceChildren(...VOICE_TYPES.map((t) => option(t, v.types[t])));
+  els.voiceType.value = VOICE_TYPES.includes(prefs.voiceType) ? prefs.voiceType : "any";
+  els.voiceRate.replaceChildren(...VOICE_RATES.map((r) => option(r, `${r.toLocaleString(language)}×`)));
+  els.voiceRate.value = String(VOICE_RATES.includes(Number(prefs.voiceRate)) ? Number(prefs.voiceRate) : 1);
+  voice.fill(els.voiceName, v.voiceDefault);
+  for (const row of els.voiceRows) row.hidden = !prefs.speak || !voice.available;
+}
+
 // Meters before plugin API 2 have no a2.window: the option then does nothing.
 const windowApi = () => (a2.window && typeof a2.window.show === "function" ? a2.window : null);
 // With the option on: shown while an alert's banner is up; otherwise hidden
@@ -1520,6 +1611,7 @@ function alertBanner(message, { preview = false, key = null } = {}) {
 els.mute.addEventListener("click", () => {
   stopSound();
   stopSounds();
+  stopSpeaking();
 });
 els.dismiss.addEventListener("click", clearBanner);
 
@@ -1539,6 +1631,7 @@ function checkAlerts(now) {
   const announce = (id, message, key = id) => {
     if (typeof pinnedIconOnly === "function" && pinnedIconOnly(id)) soundAlert(key);
     else alertBanner(message, { key });
+    speakAlert(message, key);
   };
   const tz = timeZone();
   const a = aui();
@@ -1668,16 +1761,22 @@ els.sound.addEventListener("change", () => {
   playSound(prefs.sound);
 });
 // A sample alert, as a real one would come: banner, flash, sound and repeats.
+const sampleAlert = () => {
+  const ev = scheduled("event")[0];
+  return aui().soon(ev ? text(ev.name) : "Shugo Festival", defaultLead());
+};
 const testAlert = () => {
+  const message = sampleAlert();
   // Alerts as icons: a sample icon, as a real one comes (pins.js).
   if (typeof testIcon === "function" && typeof pinnedIconOnly === "function" && pinnedIconOnly()) {
     testIcon();
+    speakAlert(message, null);
     return;
   }
   // The banner is at the top of the window: bring it into view.
   window.scrollTo({ top: 0 });
-  const ev = scheduled("event")[0];
-  alertBanner(aui().soon(ev ? text(ev.name) : "Shugo Festival", defaultLead()), { preview: true });
+  alertBanner(message, { preview: true });
+  speakAlert(message, null);
 };
 // Test Alert: one alert as a real one comes (picking a sound plays it).
 els.testAlert.addEventListener("click", testAlert);
@@ -1696,6 +1795,35 @@ els.volume.addEventListener("input", () => {
 });
 els.volume.addEventListener("change", () => {
   if (prefs.sound !== "off") playSound(prefs.sound);
+});
+// Spoken alerts: on or off, the voice's type, the voice, its speed.
+els.speak.addEventListener("change", () => {
+  prefs.speak = els.speak.checked;
+  savePrefs();
+  renderVoice();
+  if (prefs.speak) voice?.say(sampleAlert());
+  else stopSpeaking();
+});
+els.voiceType.addEventListener("change", () => {
+  prefs.voiceType = els.voiceType.value;
+  // A voice of the other type gives way to the first of this one.
+  if (voice && !voice.savedFits()) prefs.voiceName = "";
+  savePrefs();
+  renderVoice();
+});
+els.voiceName.addEventListener("change", () => {
+  prefs.voiceName = els.voiceName.value;
+  savePrefs();
+  voice?.say(sampleAlert());
+});
+els.voiceRate.addEventListener("change", () => {
+  prefs.voiceRate = Number(els.voiceRate.value) || 1;
+  savePrefs();
+  voice?.say(sampleAlert());
+});
+els.testVoice.addEventListener("click", () => {
+  stopSpeaking();
+  voice?.say(sampleAlert());
 });
 els.repeat.addEventListener("change", () => {
   prefs.repeat = Number(els.repeat.value);

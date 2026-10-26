@@ -173,6 +173,31 @@ const UI = {
   },
 };
 
+// The words added in 0.2.1: the Voice list's type, the voice's speed.
+const VOICE_WORDS = {
+  en: { voiceType: "Voice type", voiceRate: "Speed", testVoice: "Test voice", voiceTypes: { any: "Any", female: "Female", male: "Male" },
+        genderNote: "Female and male are told by a voice's name: those it can't tell are listed under Any only." },
+  ko: { voiceType: "음성 종류", voiceRate: "속도", testVoice: "음성 테스트", voiceTypes: { any: "모두", female: "여성", male: "남성" },
+        genderNote: "여성/남성은 음성 이름으로 구분하며, 구분할 수 없는 음성은 '모두'에만 표시됩니다." },
+  ja: { voiceType: "声の種類", voiceRate: "速さ", testVoice: "音声をテスト", voiceTypes: { any: "すべて", female: "女性", male: "男性" },
+        genderNote: "女性・男性は音声の名前から判断し、判断できない音声は「すべて」にのみ表示されます。" },
+  de: { voiceType: "Stimmtyp", voiceRate: "Tempo", testVoice: "Stimme testen", voiceTypes: { any: "Alle", female: "Weiblich", male: "Männlich" },
+        genderNote: "Weiblich und männlich werden am Namen einer Stimme erkannt: Stimmen ohne Zuordnung stehen nur unter „Alle“." },
+  fr: { voiceType: "Type de voix", voiceRate: "Vitesse", testVoice: "Tester la voix", voiceTypes: { any: "Toutes", female: "Féminine", male: "Masculine" },
+        genderNote: "Féminine ou masculine se devine au nom de la voix : celles qu'on ne peut pas classer ne figurent que sous « Toutes »." },
+  es: { voiceType: "Tipo de voz", voiceRate: "Velocidad", testVoice: "Probar voz", voiceTypes: { any: "Todas", female: "Femenina", male: "Masculina" },
+        genderNote: "Femenina o masculina se deduce del nombre de la voz: las que no se pueden clasificar solo aparecen en «Todas»." },
+  pt: { voiceType: "Tipo de voz", voiceRate: "Velocidade", testVoice: "Testar voz", voiceTypes: { any: "Todas", female: "Feminina", male: "Masculina" },
+        genderNote: "Feminina ou masculina é deduzido do nome da voz: as que não dá para classificar aparecem só em “Todas”." },
+  ru: { voiceType: "Тип голоса", voiceRate: "Скорость", testVoice: "Проверить голос", voiceTypes: { any: "Любой", female: "Женский", male: "Мужской" },
+        genderNote: "Женский или мужской определяется по названию голоса; те, что определить нельзя, есть только в «Любой»." },
+  "zh-Hant": { voiceType: "語音類型", voiceRate: "語速", testVoice: "測試語音", voiceTypes: { any: "全部", female: "女聲", male: "男聲" },
+        genderNote: "女聲或男聲依語音名稱判斷，無法判斷的語音只列在「全部」。" },
+  "zh-Hans": { voiceType: "语音类型", voiceRate: "语速", testVoice: "测试语音", voiceTypes: { any: "全部", female: "女声", male: "男声" },
+        genderNote: "女声或男声依语音名称判断，无法判断的语音只列在“全部”。" },
+};
+for (const [code, w] of Object.entries(VOICE_WORDS)) Object.assign(UI[code], w);
+
 // The alert sounds offered (sounds.js), and their names.
 const SOUND_ORDER = ["chime", "bell", "ping", "soft", "crystal", "marimba", "kalimba", "sonar"];
 const SOUND_NAMES = {

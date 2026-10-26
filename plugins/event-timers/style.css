@@ -1103,3 +1103,8 @@ body.alertOnly .openFull:hover {
   pointer-events: none;
 }
 .tpTip[hidden] { display: none; }
+
+/* Spoken alerts: the voices' names are long, the list takes what the row
+   leaves; Test voice on the right. */
+.setting .voiceName { min-width: 0; text-overflow: ellipsis; }
+.voiceTestRow { justify-content: flex-end; }

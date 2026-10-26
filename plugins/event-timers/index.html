@@ -46,6 +46,12 @@
         <label class="setting"><span class="soundLabel">Sound</span> <select class="sound"></select></label>
         <label class="setting"><span class="volumeLabel">Volume</span> <input type="range" class="volume" min="0" max="100" step="5" /></label>
         <label class="setting"><span class="repeatLabel">Repeat</span> <select class="repeat"></select></label>
+        <label class="setting popRow"><span class="speakLabel">Speak alerts</span> <input type="checkbox" class="speak switch" role="switch" /></label>
+        <label class="setting voiceRow"><span class="voiceTypeLabel">Voice type</span> <select class="voiceType"></select></label>
+        <label class="setting voiceRow"><span class="voicePickLabel">Voice</span> <select class="voiceName"></select></label>
+        <label class="setting voiceRow"><span class="voiceRateLabel">Speed</span> <select class="voiceRate"></select></label>
+        <div class="setting voiceRow voiceTestRow"><button type="button" class="btn testVoice">Test voice</button></div>
+        <p class="note voiceRow voiceNote"></p>
         <label class="setting colorRow"><span class="colorLabel">Alert colour</span> <select class="colorSelect"></select></label>
         <div class="defaultsBox">
           <div class="defaultsNote">Default times for new alerts</div>
@@ -76,6 +82,7 @@
     <script src="schedule.js"></script>
     <script src="teleports.js"></script>
     <script src="sounds.js"></script>
+    <script src="voices.js"></script>
     <script src="plugin.js"></script>
     <script src="pins.js"></script>
     <script src="anchor.js"></script>

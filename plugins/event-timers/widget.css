@@ -88,7 +88,25 @@ body.locked .pin { cursor: default; }
 .pin.running .badge { --ring: #5fe08a; }
 .glyph { font-size: 15px; letter-spacing: 0.5px; text-shadow: 0 1px 2px #000; }
 .art { width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 1px 1px #000); }
-.art[hidden], .glyph[hidden] { display: none; }
+.art[hidden], .glyph[hidden], .tp[hidden] { display: none; }
+/* The nearest teleport's number: a chip on the ring's lower right, in the
+   ring's colour, over the HP ring when there is one. */
+.tp {
+  position: absolute;
+  right: -7px;
+  bottom: -5px;
+  z-index: 1;
+  min-width: 11px;
+  padding: 0 3px;
+  border-radius: 8px;
+  background: rgba(12, 16, 26, 0.95);
+  box-shadow: 0 0 0 1.5px var(--ring);
+  color: #fff;
+  font: 700 10px/14px "Segoe UI", system-ui, sans-serif;
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+}
 /* Countdown and name wrap onto a second line rather than being cut short. */
 .time, .name {
   max-width: 78px;

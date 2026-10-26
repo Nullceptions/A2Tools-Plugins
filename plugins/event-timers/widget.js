@@ -22,7 +22,7 @@ const initials = (name) => {
 function makePin() {
   const pin = document.createElement("div");
   pin.className = "pin";
-  pin.innerHTML = '<div class="badge"><img class="art" alt="" hidden /><span class="glyph"></span></div>'
+  pin.innerHTML = '<div class="badge"><img class="art" alt="" hidden /><span class="glyph"></span><span class="tp" hidden></span></div>'
     + '<div class="time"></div><div class="sub"></div><div class="name"></div>';
   return pin;
 }
@@ -43,6 +43,10 @@ function renderPin(pin, d) {
   art.hidden = !src;
   glyph.hidden = !!src;
   glyph.textContent = d.glyph || initials(d.name);
+  // The nearest teleport's number, on the ring (Settings: Teleport number on icon).
+  const tp = pin.querySelector(".tp");
+  tp.textContent = d.tp || "";
+  tp.hidden = !d.tp;
   pin.querySelector(".time").textContent = d.countdown || "";
   sub.textContent = d.sub || "";
   // A world boss's HP: the ring drains from the top as it falls.

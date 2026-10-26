@@ -478,6 +478,19 @@ const teleportTip = (id) => {
   if (!lines.length) return "";
   return lines.length === 1 ? `${u.label}: ${lines[0]}` : `${u.label}:\n${lines.join("\n")}`;
 };
+// The teleport list's numbers for a boss, on its icon: the player's side
+// only (none before the side is known), each spawn point's once, nearest
+// first; up to two, "3/5", and "3/5+" past that.
+const teleportBadge = (id) => {
+  const spots = typeof TELEPORTS === "object" ? TELEPORTS[id] : null;
+  const side = serverSide();
+  if (!spots?.length || !side) return "";
+  const nums = [];
+  for (const t of spots.map((s) => s[side]).filter((t) => t?.tp != null).sort((a, b) => a.dist - b.dist)) {
+    if (!nums.includes(t.tp)) nums.push(t.tp);
+  }
+  return nums.slice(0, 2).join("/") + (nums.length > 2 ? "+" : "");
+};
 const savePrefs = () => a2.storage.set("prefs", prefs).catch(() => {});
 const defaultLead = () => (LEADS.includes(Number(prefs.defaultLead)) ? Number(prefs.defaultLead) : DEFAULT_LEAD);
 const defaultClosed = () => {

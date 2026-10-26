@@ -9,7 +9,7 @@ const STALE_MS = 5_000;
 // The sound at most this often, however many members drop at once.
 const SOUND_GAP_MS = 1_500;
 // volume: every sound's loudness, 0-100 %.
-const prefs = { line: 60, sound: "voice", volume: 100 };
+const prefs = { line: 60, sound: "voice", volume: 100, showWindow: true };
 // Your own sound, as the file's bytes in base64 and its name.
 let own = null; // { name, data }
 // Most a file may be: the plugin's storage holds 1 MB.
@@ -55,7 +55,9 @@ function alert() {
     // Shown for the alert: hidden again once everyone is healed, unless the
     // window was in use.
     hideAfterAlert = now - lastUse > 60_000;
-    a2.window?.show().catch(() => {});
+    // Off: the sound alone. Showing the window can take the game's focus on
+    // some Linux desktops, so a player there may want it off (#112).
+    if (prefs.showWindow) a2.window?.show().catch(() => {});
   }
 }
 
@@ -211,6 +213,10 @@ $(".volume").addEventListener("input", (e) => {
 // Heard where the slider is let go.
 $(".volume").addEventListener("change", () => playSound(prefs.sound));
 $(".test").addEventListener("click", () => playSound(prefs.sound));
+$(".showWindow").addEventListener("change", (e) => {
+  prefs.showWindow = e.target.checked;
+  a2.storage.set("prefs", prefs).catch(() => {});
+});
 a2.on("compact", (on) => document.body.classList.toggle("compact", !!on));
 
 (async () => {
@@ -220,6 +226,7 @@ a2.on("compact", (on) => document.body.classList.toggle("compact", !!on));
   $(".line").value = String(prefs.line);
   $(".sound").value = prefs.sound;
   $(".volume").value = String(prefs.volume);
+  $(".showWindow").checked = prefs.showWindow !== false;
   showOwn();
   update();
   a2.ready();

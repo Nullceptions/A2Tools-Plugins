@@ -145,21 +145,35 @@ function makeVoices({ lang, prefs, onChange }) {
     const v = saved();
     return !v || fits(v);
   };
-  // What is waiting to be said: at most two, so lines that come together are
-  // all heard but a burst of them never runs on long after (an entry whose
-  // end never came goes after 10 s).
-  const saying = new Map();
-  const stop = () => {
-    if (!synth) return;
-    synth.cancel();
-    saying.clear();
+  // One line at a time, in the plugin's own queue: speechSynthesis gets the
+  // next only once the last has ended, so the normal path never calls
+  // cancel(). WebView2 clips or drops the line spoken right after a cancel,
+  // and a cancel before every new line chopped lines mid-word. At most two
+  // wait (a burst never runs on long after; the oldest waiting goes, never
+  // the one being said). A line whose end never comes (WebView2 sometimes
+  // sends none) is let go after about as long as it could take.
+  const MAX_WAITING = 2;
+  const GAP_MS = 60;            // between lines
+  const AFTER_CANCEL_MS = 150;  // before the first line after a cancel
+  const waiting = [];
+  let current = null;           // kept referenced: Chromium can lose the end of an utterance it collects
+  let watchdog = 0;
+  let nextTimer = 0;
+  let cancelledAt = 0;
+  const done = (u) => {
+    if (u !== current) return;
+    current = null;
+    clearTimeout(watchdog);
+    schedule(GAP_MS);
   };
-  const say = (text) => {
+  const schedule = (ms) => {
+    clearTimeout(nextTimer);
+    nextTimer = setTimeout(next, Math.max(ms, cancelledAt + AFTER_CANCEL_MS - Date.now(), 0));
+  };
+  const next = () => {
+    if (!synth || current || !waiting.length) return;
+    const text = waiting.shift();
     const p = prefs();
-    if (!synth || !text || Number(p.volume ?? 100) <= 0) return;
-    const now = Date.now();
-    for (const [u, at] of saying) if (now - at > 10_000) saying.delete(u);
-    if (saying.size >= 2) stop();
     const u = new SpeechSynthesisUtterance(text);
     const voice = pick();
     if (voice) u.voice = voice;
@@ -168,9 +182,36 @@ function makeVoices({ lang, prefs, onChange }) {
     u.rate = VOICE_RATES.includes(rate) ? rate : 1;
     u.pitch = 1;
     u.volume = typeof volumeGain === "function" ? volumeGain(p.volume ?? 100) : 1;
-    u.onend = u.onerror = () => saying.delete(u);
-    saying.set(u, now);
+    u.onend = u.onerror = () => done(u);
+    current = u;
+    // Speech runs about 12 characters a second at rate 1: double that, plus
+    // the voice's start-up. If the engine is still talking then, the next
+    // line only queues behind it.
+    watchdog = setTimeout(() => done(u), 1500 + (text.length * 85) / u.rate);
+    if (synth.paused) synth.resume();
     synth.speak(u);
+  };
+  const stop = () => {
+    if (!synth) return;
+    waiting.length = 0;
+    clearTimeout(nextTimer);
+    clearTimeout(watchdog);
+    if (current || synth.speaking || synth.pending) {
+      current = null;
+      cancelledAt = Date.now();
+      synth.cancel();
+    }
+  };
+  const say = (text) => {
+    const p = prefs();
+    if (!synth || !text || Number(p.volume ?? 100) <= 0) return;
+    waiting.push(text);
+    // Nothing playing: start now (waiting a tick let a burst push out its own first line).
+    if (!current && Date.now() - cancelledAt >= AFTER_CANCEL_MS) next();
+    else {
+      while (waiting.length > MAX_WAITING) waiting.shift();
+      if (!current) schedule(0);
+    }
   };
   const load = () => {
     all = synth?.getVoices?.() || [];

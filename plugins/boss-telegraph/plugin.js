@@ -60,8 +60,13 @@ function pickVoice() {
   }
   return voices.find(inLanguage) || voices.find(sameBase) || null;
 }
-// The built-in voice: chosen, or the computer has none.
-const builtIn = () => hasClips && (prefs.voiceName === KOKORO || !synth || !voices.length);
+// The built-in voice: chosen, or the computer has none. On Windows the list
+// is empty for a moment after the page opens, so "none" counts only once it
+// has come (voiceschanged) or 1.5 s have passed; meanwhile the computer's
+// default voice speaks.
+let voicesSettled = false;
+setTimeout(() => { voicesSettled = true; }, 1500);
+const builtIn = () => hasClips && (prefs.voiceName === KOKORO || !synth || (voicesSettled && !voices.length));
 const volumeGain = (percent) => Math.pow(Math.max(0, Math.min(100, Number(percent) || 0)) / 100, 2);
 
 // What is waiting to be said: two at most. A new mechanic ("high") cuts off
@@ -133,7 +138,8 @@ function sayBuiltIn(text, prio) {
 function stopPlaying() {
   const p = playing;
   playing = null;
-  if (p) {
+  // A clip still decoding has no node yet: playNext sees it was cut off.
+  if (p?.node) {
     p.node.onended = null;
     try {
       p.node.stop();
@@ -487,7 +493,7 @@ els.volume.addEventListener("change", () => say(words.preview));
 $(".lock").addEventListener("change", (e) => a2.widgets.lock(e.target.checked).catch(() => {}));
 if (synth) {
   loadVoices();
-  if (typeof synth.addEventListener === "function") synth.addEventListener("voiceschanged", loadVoices);
+  if (typeof synth.addEventListener === "function") synth.addEventListener("voiceschanged", () => { voicesSettled = true; loadVoices(); });
   else synth.onvoiceschanged = loadVoices;
 }
 setInterval(() => engine.tick(), 100);

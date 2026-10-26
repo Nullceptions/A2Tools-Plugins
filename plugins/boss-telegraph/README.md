@@ -6,7 +6,7 @@ An accessibility plugin, asked for by Nyx, a visually impaired player. Some boss
 - **Call style:** the short call and the boss's line, the short call only, or the boss's line only.
 - **Bosses:** every boss and mechanic can be turned off, grouped by dungeon. Vakron's jump can beep on each wave.
 - **Look:** text size (32 to 80 px), text, "safe" and background colours (yellow on black by default; **High contrast colours** puts them back), background opacity. **Big text on screen** off: spoken only. **Lock in place**: clicks go through to the game.
-- **Voice:** volume (for the beep too), voice (any of your computer's voices; Default is the first in the meter's language), speech speed. Calls that come together queue, two at most; a new mechanic cuts off a boss's line still being read.
+- **Voice:** volume (for the beep too), voice (any of your computer's voices, or **Built-in**; Default is the first in the meter's language), speech speed. A computer with no voices (Linux) uses the built-in voice: every line in English, made with [Kokoro](https://huggingface.co/hexgrad/Kokoro-82M) (voice `af_heart`; the model and its voices are Apache 2.0) by `tools/boss-telegraph/voice.py`. Calls that come together queue, two at most; a new mechanic cuts off a boss's line still being read.
 - **Test** plays a made-up purple phase: the call, a 5 s countdown, "Safe to attack".
 
 ## What it does and doesn't do
@@ -49,6 +49,8 @@ python tools/boss-telegraph/build.py --tables <extractor>/Output/AION2/Content/D
 ```
 
 It keeps NpcBehaviorCase rows of named bosses whose Casting, SkillUse or Abnormal event always (Prob 10000) plays an on-screen line, with the cast time from Skill and the names and lines in ten languages (Traditional Chinese from the TW client, Simplified made from it with OpenCC). Run it again after a patch and bump the version.
+
+`voice.js` (the built-in voice) is built from `bosses.js` by `tools/boss-telegraph/voice.py` (Kokoro, Python 3.10 to 3.12, ffmpeg with libopus): run it after `build.py`.
 
 ## A mechanic missing or wrong?
 

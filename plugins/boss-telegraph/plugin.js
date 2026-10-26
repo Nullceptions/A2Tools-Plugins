@@ -26,11 +26,21 @@ const save = () => a2.storage.set("prefs", prefs).catch(() => {});
 // ---- The voice ---------------------------------------------------------
 
 // The computer's voices come a moment after the page opens (voiceschanged).
+// With none (Linux: the meter's web view has no speech), the built-in voice
+// speaks: every line in English, made with Kokoro (voice.js).
 const synth = window.speechSynthesis || null;
+const KOKORO = "kokoro";
+const CLIPS = window.BOSS_VOICE || {};
+const hasClips = Object.keys(CLIPS).length > 0;
+// Each text in every language, to its English (the clips' keys).
+const toEnglish = new Map();
+for (const t of DATA.texts) if (t && t.en) for (const s of Object.values(t)) if (s) toEnglish.set(s, t.en);
+for (const w of Object.values(UI)) if (w.preview) toEnglish.set(w.preview, UI.en.preview);
 let voices = [];
 function loadVoices() {
   voices = synth?.getVoices?.() || [];
   fillVoices();
+  showVoiceNote();
 }
 // A voice in the meter's language: for Traditional Chinese the Taiwan and
 // Hong Kong voices, for Simplified the others.
@@ -50,6 +60,13 @@ function pickVoice() {
   }
   return voices.find(inLanguage) || voices.find(sameBase) || null;
 }
+// The built-in voice: chosen, or the computer has none. On Windows the list
+// is empty for a moment after the page opens, so "none" counts only once it
+// has come (voiceschanged) or 1.5 s have passed; meanwhile the computer's
+// default voice speaks.
+let voicesSettled = false;
+setTimeout(() => { voicesSettled = true; }, 1500);
+const builtIn = () => hasClips && (prefs.voiceName === KOKORO || !synth || (voicesSettled && !voices.length));
 const volumeGain = (percent) => Math.pow(Math.max(0, Math.min(100, Number(percent) || 0)) / 100, 2);
 
 // What is waiting to be said: two at most. A new mechanic ("high") cuts off
@@ -57,7 +74,9 @@ const volumeGain = (percent) => Math.pow(Math.max(0, Math.min(100, Number(percen
 // matters now is heard now; a line that comes while two wait is dropped.
 const saying = new Map(); // utterance -> { at, prio }
 function say(text, prio = "high") {
-  if (!synth || !text || prefs.volume <= 0) return;
+  if (!text || prefs.volume <= 0) return;
+  if (builtIn()) return sayBuiltIn(text, prio);
+  if (!synth) return;
   const now = Date.now();
   for (const [u, s] of saying) if (now - s.at > 15_000) saying.delete(u);
   const lowWaiting = [...saying.values()].some((s) => s.prio === "low");
@@ -79,12 +98,141 @@ function say(text, prio = "high") {
   synth.speak(u);
 }
 
-// A wave's beep: short, high, at the volume.
+// The built-in voice, through Web Audio (the page may load no audio files,
+// so the clips are decoded from their bytes), with the same queue: the one
+// playing and one waiting, a "high" one cutting off a "low" one or a backlog.
 let audio = null;
+const context = () => {
+  audio ||= new (window.AudioContext || window.webkitAudioContext)();
+  if (audio.state !== "running") audio.resume().catch(() => {});
+  return audio;
+};
+const decoded = new Map(); // English text -> Promise<AudioBuffer>
+const stretched = new Map(); // "rate|text" -> AudioBuffer
+let playing = null; // { node, prio, until }
+let waiting = []; // [{ text, prio }]
+function clip(text) {
+  const en = CLIPS[text] ? text : toEnglish.get(text);
+  if (!en || !CLIPS[en]) return null;
+  if (!decoded.has(en)) {
+    const bytes = Uint8Array.from(atob(CLIPS[en]), (c) => c.charCodeAt(0));
+    decoded.set(en, context().decodeAudioData(bytes.buffer));
+  }
+  return { en, buffer: decoded.get(en) };
+}
+function sayBuiltIn(text, prio) {
+  if (!clip(text)) return;
+  // A clip whose end never came (the audio output stopped) holds no one up.
+  if (playing && Date.now() > playing.until) stopPlaying();
+  const lowWaiting = (playing && playing.prio === "low") || waiting.some((w) => w.prio === "low");
+  const count = (playing ? 1 : 0) + waiting.length;
+  if (prio === "high" && (count >= 2 || lowWaiting)) {
+    waiting = [];
+    stopPlaying();
+  } else if (prio === "low" && count >= 2) {
+    return;
+  }
+  waiting.push({ text, prio });
+  if (!playing) playNext();
+}
+function stopPlaying() {
+  const p = playing;
+  playing = null;
+  // A clip still decoding has no node yet: playNext sees it was cut off.
+  if (p?.node) {
+    p.node.onended = null;
+    try {
+      p.node.stop();
+    } catch {
+      /* not started yet */
+    }
+  }
+}
+async function playNext() {
+  const next = waiting.shift();
+  if (!next) return;
+  const c = clip(next.text);
+  const rate = Number(prefs.rate) || 1;
+  const slot = { node: null, prio: next.prio, until: Date.now() + 5000 };
+  playing = slot;
+  let buffer;
+  try {
+    buffer = await c.buffer;
+    if (rate !== 1) {
+      const key = `${rate}|${c.en}`;
+      if (!stretched.has(key)) stretched.set(key, stretch(context(), buffer, rate));
+      buffer = stretched.get(key);
+    }
+  } catch {
+    buffer = null;
+  }
+  if (playing !== slot) return; // cut off while it decoded
+  if (!buffer) {
+    playing = null;
+    return playNext();
+  }
+  const ctx = context();
+  const node = ctx.createBufferSource();
+  node.buffer = buffer;
+  const gain = ctx.createGain();
+  gain.gain.value = volumeGain(prefs.volume);
+  node.connect(gain).connect(ctx.destination);
+  slot.node = node;
+  slot.until = Date.now() + (buffer.duration * 1000) + 1000;
+  node.onended = () => {
+    if (playing === slot) playing = null;
+    playNext();
+  };
+  node.start();
+}
+
+// Faster or slower at the same pitch (WSOLA): 30 ms windows laid half over
+// each other, each taken from where it best continues the last, within 10 ms
+// of where the speed puts it. The search looks at every 4th sample, so a
+// clip takes a few milliseconds.
+function stretch(ctx, buffer, rate) {
+  const x = buffer.getChannelData(0);
+  const sr = buffer.sampleRate;
+  const N = Math.round(sr * 0.03) & ~1;
+  const H = N / 2; // output hop
+  const tol = Math.round(sr * 0.01);
+  const frames = Math.max(1, Math.floor((x.length / rate - N) / H) + 1);
+  const y = new Float32Array((frames - 1) * H + N);
+  const win = new Float32Array(N);
+  for (let i = 0; i < N; i++) win[i] = 0.5 - 0.5 * Math.cos((2 * Math.PI * i) / N);
+  let prev = 0; // input start of the last frame
+  for (let k = 0; k < frames; k++) {
+    let pos = Math.round(k * H * rate);
+    if (k > 0) {
+      // The last frame's natural continuation, matched against candidates.
+      const want = prev + H;
+      let best = 0;
+      let bestScore = -Infinity;
+      for (let d = -tol; d <= tol; d += 4) {
+        const p = pos + d;
+        if (p < 0 || p + H > x.length || want + H > x.length) continue;
+        let s = 0;
+        for (let i = 0; i < H; i += 4) s += x[want + i] * x[p + i];
+        if (s > bestScore) {
+          bestScore = s;
+          best = d;
+        }
+      }
+      pos = Math.max(0, pos + best);
+    }
+    for (let i = 0; i < N && pos + i < x.length; i++) y[k * H + i] += x[pos + i] * win[i];
+    prev = pos;
+  }
+  const out = ctx.createBuffer(1, y.length, sr);
+  out.copyToChannel(y, 0);
+  return out;
+}
+
+// A wave's beep: short, high, at the volume.
 function beep() {
   if (prefs.volume <= 0) return;
   try {
-    audio ||= new (window.AudioContext || window.webkitAudioContext)();
+    const audio = context();
     const t = audio.currentTime;
     const osc = audio.createOscillator();
     const gain = audio.createGain();
@@ -161,7 +309,10 @@ function translate() {
   }
   for (const el of document.querySelectorAll("[data-tp]")) el.placeholder = words[el.dataset.tp] || el.placeholder;
   fillVoices();
-  $(".voiceNote").textContent = synth ? words.voiceNote : words.noVoices;
+  showVoiceNote();
+}
+function showVoiceNote() {
+  $(".voiceNote").textContent = synth && voices.length ? words.voiceNote : words.noVoices;
 }
 
 // The voices: the automatic one first, then the meter's language's, then the
@@ -171,7 +322,7 @@ function fillVoices() {
   const opt = (value, text) => Object.assign(document.createElement("option"), { value, textContent: text });
   const byName = (x, y) => x.name.localeCompare(y.name);
   const others = voices.filter((v) => !inLanguage(v)).sort((x, y) => (x.lang || "").localeCompare(y.lang || "") || byName(x, y));
-  const options = [opt("", words.voiceDefault), ...[...voices.filter(inLanguage).sort(byName), ...others].map((v) => opt(v.voiceURI || v.name, `${v.name} (${v.lang})`))];
+  const options = [opt("", words.voiceDefault), ...(hasClips ? [opt(KOKORO, words.voiceKokoro)] : []), ...[...voices.filter(inLanguage).sort(byName), ...others].map((v) => opt(v.voiceURI || v.name, `${v.name} (${v.lang})`))];
   if (prefs.voiceName && !options.some((o) => o.value === prefs.voiceName)) options.push(opt(prefs.voiceName, prefs.voiceName));
   el.replaceChildren(...options);
   el.value = prefs.voiceName;
@@ -342,7 +493,7 @@ els.volume.addEventListener("change", () => say(words.preview));
 $(".lock").addEventListener("change", (e) => a2.widgets.lock(e.target.checked).catch(() => {}));
 if (synth) {
   loadVoices();
-  if (typeof synth.addEventListener === "function") synth.addEventListener("voiceschanged", loadVoices);
+  if (typeof synth.addEventListener === "function") synth.addEventListener("voiceschanged", () => { voicesSettled = true; loadVoices(); });
   else synth.onvoiceschanged = loadVoices;
 }
 setInterval(() => engine.tick(), 100);

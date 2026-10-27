@@ -63,18 +63,5 @@
     "ru": "Пространственное вторжение снова каждый час в :30.",
     "zh-Hant": "次元入侵再次於每小時 30 分出現。",
     "zh-Hans": "次元入侵再次于每小时 30 分出现。"
-  },
-  {
-    "version": "0.6.11",
-    "en": "Teleport number on icon: a boss's nearest teleport, on its icon.",
-    "ko": "아이콘에 텔레포트 번호: 보스와 가장 가까운 텔레포트를 아이콘에 표시합니다.",
-    "ja": "アイコンにテレポート番号：ボスに最も近いテレポートをアイコンに表示します。",
-    "de": "Teleportnummer am Symbol: der nächste Teleport eines Bosses, auf seinem Symbol.",
-    "fr": "Numéro de téléport sur l'icône : le téléport le plus proche d'un boss, sur son icône.",
-    "es": "Número de teletransporte en el icono: el más cercano a un jefe, en su icono.",
-    "pt": "Número do teleporte no ícone: o teleporte mais próximo de um chefe, no ícone dele.",
-    "ru": "Номер телепорта на значке: ближайший к боссу телепорт, прямо на значке.",
-    "zh-Hant": "圖示上的傳送點編號：首領最近的傳送點，顯示在圖示上。",
-    "zh-Hans": "图标上的传送点编号：首领最近的传送点，显示在图标上。"
   }
 ]

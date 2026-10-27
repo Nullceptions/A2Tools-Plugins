@@ -217,6 +217,8 @@ def main():
                 c["lead"] = m["lead"]
             if m.get("waves"):
                 c["waves"] = True
+            if m.get("mark"):
+                c["mark"] = m["mark"]
             if m.get("phase"):
                 ph = m["phase"]
                 a = abnormals.get(ph["abnormal"])
@@ -290,6 +292,8 @@ def main():
             o["phase"] = {"a": ph["a"], "ms": ph["ms"], "label": ref(ph["label"]), **({"n": ref(ph["n"])} if ph.get("n") else {})}
         if c.get("waves"):
             o["waves"] = True
+        if c.get("mark"):
+            o["mark"] = c["mark"]
         if c.get("bind"):
             o["bind"] = True
         out_calls.append(o)

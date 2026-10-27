@@ -22,7 +22,7 @@ It knows only the bosses in its list (`bosses.js`). A boss or a mechanic that is
 | Thamon (Vakron Sky Island) | cast 1604670 "Surging violet!" (1.79 s) | Purple — stop magic attacks | boss buff 16046701 Mysterious Roar, 10 s: "Stop magic", then "Safe to attack" |
 | Thamon | cast 1604660 "Burn! Burn!!" (1.79 s) | Red — stop physical attacks | boss buff 16046601 Cry of Life, 10 s: "Stop physical", then "Safe to attack" |
 | Vakron | skill 1604390 (normal) / 1604393 (easy), no cast time | Jump! | a beep on each of its three waves (+1.7, +3.4, +5.1 s) |
-| Talisra of the Void (Transcendence) | skill 1801730 (her dark spear shown) / 1801735 (her light spear shown) | Dark spear / Light spear | after "With this spear forged of light and dark", she shows three spears one at a time, 2 s apart, then throws them in that order: each called as it is shown, so the order is heard before the throws |
+| Talisra of the Void (Transcendence) | skill 1801730 (her dark spear shown) / 1801735 (her light spear shown) | Dark / Light | after "With this spear forged of light and dark" she shows the order of her three pulses, one spear at a time, 2 s apart (stand in the dark or light shield for each pulse, in that order): each word said as it is shown, and the callout reads the whole order (Dark → Dark → Light) for 12 s |
 | Phantasmal Lakshmi (Draupnir) | cast 1605910 (0.73 s) | Reflect — stop attacking | boss buff 16059101 Damage Reflection, 8 s: "Stop attacking", then "Safe to attack" |
 
 Confirmed in captures on 2026-10-26 (Talisra: 2026-10-27, one spear phase: dark, dark, light). Not called: Bakarma's per-player debuffs 18006910 to 18006914 (2 s; their meaning is not known yet), and Vakron's other casts without a line (1604410, 1604400, 1604370).

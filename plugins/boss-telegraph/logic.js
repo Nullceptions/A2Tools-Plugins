@@ -24,6 +24,8 @@
   const WAVE_GAP_MS = 400; // a wave's several projectiles: one beep
   const WAVES_FOR_MS = 8000; // waves heard this long after their skill
   const BIND_MS = 30 * 60 * 1000;
+  const MARK_GAP_MS = 6000; // a sign this long after the last starts a new order
+  const ORDER_SHOW_MS = 12000; // the order stays up while it plays out
 
   function create(data, hooks) {
     const D = data;
@@ -51,6 +53,7 @@
     const phases = new Map(); // "entity:instance" -> { call, end, item }
     const waveFrom = new Map(); // "entity:skill" -> { call, at, last }
     const lastCall = new Map(); // call.k -> at
+    const orders = new Map(); // "entity:mark" -> { words, at }
     let items = []; // on the widget: { id, kind, text, sub, end, until }
     let seq = 0;
 
@@ -115,9 +118,26 @@
       if (items.length !== n) hooks.show(items);
     }
 
+    // An order the boss shows one sign at a time (Talisra's spears: Dark,
+    // Dark, Light), then plays out: each sign said as it comes, the callout
+    // the order so far, up until it has played out.
+    function mark(c, entity, at) {
+      const key = `${entity}:${c.mark}`;
+      const was = orders.get(key);
+      const order = was && at - was.at < MARK_GAP_MS ? was : { words: [] };
+      order.words.push(T(c.act));
+      order.at = at;
+      orders.set(key, order);
+      if (orders.size > 20) for (const [k, o] of orders) if (at - o.at > 60_000) orders.delete(k);
+      lastCall.set(c.k, at);
+      hooks.say(T(c.act), "high");
+      show({ key: `m:${c.mark}:${entity}`, kind: "call", text: order.words.join(" → "), sub: "", end: 0, until: at + ORDER_SHOW_MS });
+    }
+
     function fire(c, entity, at) {
       const fresh = now() - at <= STALE_MS;
       if (!fresh) return;
+      if (c.mark) return mark(c, entity, at);
       const w = words(c);
       lastCall.set(c.k, at);
       for (let i = 0; i < w.say.length; i++) if (w.say[i]) hooks.say(w.say[i], i === 0 ? "high" : "low");

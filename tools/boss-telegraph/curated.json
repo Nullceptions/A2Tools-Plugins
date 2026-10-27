@@ -92,20 +92,23 @@
       "key": "talisra-dark-spear",
       "boss": "M_PD_Arkanis_Thalythra_01",
       "trigger": "use", "id": 1801730,
+      "mark": "talisra-spears",
+      "_mark": "Each spear shown is one word of the order: said as shown, and the callout reads the whole order so far (Dark → Dark → Light)",
       "_how": "After 'With this spear forged of light and dark' (1801720) she shows the spears' order one at a time, 2 s apart: Skill10_Black (1801730) or Skill10_Blue (1801735); then throws them in that order (1801743, 1801751, 1801766, about 2 s apart from 2 s after the last shown). Black, Black, Blue in report 95G2AR (2026-10-27, 02:16:06 to 02:16:17); the game picks the order anew each time",
       "call": {
-        "en": "Dark spear", "ko": "어둠의 창", "ja": "闇の槍", "de": "Dunkler Speer", "fr": "Lance sombre",
-        "es": "Lanza oscura", "pt": "Lança sombria", "ru": "Тёмное копьё", "zh-Hant": "暗之槍", "zh-Hans": "暗之枪"
+        "en": "Dark", "ko": "어둠", "ja": "闇", "de": "Dunkel", "fr": "Ombre",
+        "es": "Oscuridad", "pt": "Escuridão", "ru": "Тьма", "zh-Hant": "暗", "zh-Hans": "暗"
       }
     },
     {
       "key": "talisra-light-spear",
       "boss": "M_PD_Arkanis_Thalythra_01",
       "trigger": "use", "id": 1801735,
+      "mark": "talisra-spears",
       "_how": "See talisra-dark-spear: Skill10_Blue, the light one",
       "call": {
-        "en": "Light spear", "ko": "빛의 창", "ja": "光の槍", "de": "Heller Speer", "fr": "Lance de lumière",
-        "es": "Lanza de luz", "pt": "Lança de luz", "ru": "Светлое копьё", "zh-Hant": "光之槍", "zh-Hans": "光之枪"
+        "en": "Light", "ko": "빛", "ja": "光", "de": "Licht", "fr": "Lumière",
+        "es": "Luz", "pt": "Luz", "ru": "Свет", "zh-Hant": "光", "zh-Hans": "光"
       }
     }
   ]

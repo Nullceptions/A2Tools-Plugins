@@ -249,7 +249,22 @@
       }
     }
 
+    // ▶ on a call in the list: that call as a fight would bring it (its
+    // words, the player's own if set, its countdown), and its phase after,
+    // shortened to 5 s, then "safe". Ignores the call being ticked off.
+    function preview(k) {
+      const c = D.calls.find((x) => x.k === k);
+      if (!c) return;
+      const at = now();
+      fire(c, -1, at);
+      if (c.phase) {
+        lastCall.set(c.k, at);
+        setTimeout(() => startPhase(c, -1, -1, now(), 5000), Math.min(c.lead || 1800, 3000));
+      }
+    }
+
     return {
+      preview,
       cast: (d, at) => trigger("cast", d, at),
       use: (d, at) => trigger("use", d, at),
       wave,

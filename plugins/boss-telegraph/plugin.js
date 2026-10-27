@@ -386,7 +386,21 @@ function callRow(c) {
   pen.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>';
   pen.title = words.custom;
   pen.setAttribute("aria-label", words.custom);
-  row.append(box, what, pen, tags);
+  // ▶: hear and see this call now, as in a fight.
+  const play = document.createElement("button");
+  play.type = "button";
+  play.className = "pen play";
+  play.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.2-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></svg>';
+  play.title = words.previewCall;
+  play.setAttribute("aria-label", words.previewCall);
+  play.addEventListener("click", (e) => {
+    e.preventDefault();
+    engine.preview(c.k);
+  });
+  const buttons = document.createElement("span");
+  buttons.className = "buttons";
+  buttons.append(play, pen);
+  row.append(box, what, buttons, tags);
   li.append(row);
 
   // ✎ opens a box for the player's own words: said and shown instead.

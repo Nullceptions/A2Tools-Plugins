@@ -158,6 +158,8 @@ select option { background: var(--a2-panel, #0e1420); color: #fff; }
   border-color: rgba(255, 255, 255, 0.12);
   cursor: pointer;
 }
+.call .buttons { display: flex; gap: 6px; }
+.pen.play { color: var(--a2-accent, #8fc2ff); }
 .pen:hover, .pen.isOpen { color: #fff; background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.16); }
 .pen.isSet { color: var(--a2-accent, #8fc2ff); border-color: color-mix(in srgb, var(--a2-accent, #8fc2ff) 55%, transparent); }
 .pen:focus-visible, .ownBox .clear:focus-visible { outline: 2px solid var(--a2-accent, #8fc2ff); outline-offset: 1px; }

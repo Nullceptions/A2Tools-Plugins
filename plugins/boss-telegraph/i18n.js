@@ -21,6 +21,7 @@ const UI = {
     customHint: "Said and shown instead of this call, whatever the call style. Empty: the default. The built-in English voice has only its own words: yours are said by your computer's voice.",
     styleNote: "Short call: the colour or what to do, with its countdown, without the boss's line.",
     callOffNote: "Unticking a call turns it off completely, its countdown too. To keep it but hear less, set Call style to Short call, or give it your own words with ✎.",
+    previewCall: "Play this call",
   },
   ko: {
     enabled: "알림 켜기", showWidget: "화면에 큰 글자", showWidgetNote: "끄면 음성만.", lock: "위치 고정",
@@ -42,6 +43,7 @@ const UI = {
     customHint: "알림 방식과 관계없이 이 알림 대신 읽고 표시합니다. 비우면 기본값입니다. 내장 영어 음성에는 기본 문구만 있어, 직접 정한 문구는 컴퓨터 음성이 읽습니다.",
     styleNote: "짧은 안내: 보스 대사 없이 색 또는 할 일과 남은 시간만.",
     callOffNote: "알림의 체크를 끄면 남은 시간까지 완전히 꺼집니다. 알림은 두고 덜 들으려면 알림 방식을 짧은 안내(으)로 하거나 ✎로 내 문구를 정하세요.",
+    previewCall: "이 알림 재생",
   },
   ja: {
     enabled: "コールアウトを有効", showWidget: "画面に大きな文字", showWidgetNote: "オフ：音声のみ。", lock: "位置を固定",
@@ -63,6 +65,7 @@ const UI = {
     customHint: "呼びかけの形式にかかわらず、この呼びかけの代わりに読み上げて表示します。空欄で既定。内蔵の英語音声は既定の言葉だけなので、自分の言葉はPCの音声が読みます。",
     styleNote: "短いコール：ボスのセリフなしで、色やすべきことと残り時間だけ。",
     callOffNote: "呼びかけのチェックを外すと、残り時間も含めて完全にオフになります。残したまま聞く量を減らすには、呼びかけの形式を「短いコール」にするか、✎で自分の言葉にしてください。",
+    previewCall: "この呼びかけを再生",
   },
   de: {
     enabled: "Ansagen an", showWidget: "Großer Text im Bild", showWidgetNote: "Aus: nur gesprochen.", lock: "Fixieren",
@@ -84,6 +87,7 @@ const UI = {
     customHint: "Wird statt dieses Rufs gesagt und gezeigt, egal welcher Rufstil. Leer: die Vorgabe. Die eingebaute englische Stimme kennt nur ihre eigenen Worte: deine sagt die Stimme deines Computers.",
     styleNote: "Kurze Ansage: die Farbe oder was zu tun ist, mit Countdown, ohne den Satz des Bosses.",
     callOffNote: "Ein abgehakter Ruf ist ganz aus, auch sein Countdown. Um ihn zu behalten, aber weniger zu hören: Rufstil auf Kurze Ansage stellen oder ihm mit ✎ eigene Worte geben.",
+    previewCall: "Diesen Ruf abspielen",
   },
   fr: {
     enabled: "Annonces activées", showWidget: "Grand texte à l'écran", showWidgetNote: "Désactivé : annonces vocales seules.", lock: "Verrouiller",
@@ -105,6 +109,7 @@ const UI = {
     customHint: "Dits et affichés à la place de cet appel, quel que soit le style. Vide : le défaut. La voix anglaise intégrée n'a que ses propres mots : les vôtres sont dits par la voix de l'ordinateur.",
     styleNote: "Annonce courte : la couleur ou quoi faire, avec son compte à rebours, sans la réplique du boss.",
     callOffNote: "Décocher un appel le coupe entièrement, compte à rebours compris. Pour le garder en entendant moins : Style d'appel sur Annonce courte, ou vos propres mots avec ✎.",
+    previewCall: "Jouer cet appel",
   },
   es: {
     enabled: "Avisos activados", showWidget: "Texto grande en pantalla", showWidgetNote: "Desactivado: solo por voz.", lock: "Fijar",
@@ -126,6 +131,7 @@ const UI = {
     customHint: "Se dicen y muestran en lugar de este aviso, sea cual sea el estilo. Vacío: lo predeterminado. La voz inglesa integrada solo tiene sus propias palabras: las tuyas las dice la voz del ordenador.",
     styleNote: "Aviso corto: el color o qué hacer, con su cuenta atrás, sin la frase del jefe.",
     callOffNote: "Desmarcar un aviso lo apaga del todo, también su cuenta atrás. Para mantenerlo y oír menos: Estilo en Aviso corto, o dale tus propias palabras con ✎.",
+    previewCall: "Reproducir este aviso",
   },
   pt: {
     enabled: "Avisos ligados", showWidget: "Texto grande na tela", showWidgetNote: "Desligado: só por voz.", lock: "Travar posição",
@@ -147,6 +153,7 @@ const UI = {
     customHint: "Ditas e mostradas no lugar deste aviso, seja qual for o estilo. Vazio: o padrão. A voz inglesa integrada só tem as próprias palavras: as suas são ditas pela voz do computador.",
     styleNote: "Aviso curto: a cor ou o que fazer, com a contagem, sem a fala do chefe.",
     callOffNote: "Desmarcar um aviso o desliga por completo, contagem incluída. Para mantê-lo e ouvir menos: Estilo em Aviso curto, ou suas próprias palavras com ✎.",
+    previewCall: "Tocar este aviso",
   },
   ru: {
     enabled: "Оповещения включены", showWidget: "Крупный текст на экране", showWidgetNote: "Выкл.: только голосом.", lock: "Закрепить",
@@ -168,6 +175,7 @@ const UI = {
     customHint: "Произносятся и показываются вместо этого сигнала при любом стиле. Пусто: по умолчанию. Встроенный английский голос знает только свои слова: ваши говорит голос компьютера.",
     styleNote: "Короткая подсказка: цвет или что делать и отсчёт, без реплики босса.",
     callOffNote: "Снятая галочка выключает сигнал полностью, вместе с отсчётом. Чтобы оставить его, но слышать меньше: стиль «Короткая подсказка» или свои слова через ✎.",
+    previewCall: "Воспроизвести сигнал",
   },
   "zh-Hant": {
     enabled: "開啟提示", showWidget: "畫面大字", showWidgetNote: "關閉時只用語音。", lock: "鎖定位置",
@@ -189,6 +197,7 @@ const UI = {
     customHint: "無論提示風格為何，都改為朗讀並顯示此文字。留空：預設。內建英語語音只有預設文字：自訂文字由電腦語音朗讀。",
     styleNote: "簡短提示：只有顏色或該做什麼和倒數，沒有首領台詞。",
     callOffNote: "取消勾選會完全關閉此提示，包括倒數。想保留但少聽一些：把提示風格設為「簡短提示」，或用 ✎ 改成自訂文字。",
+    previewCall: "播放此提示",
   },
   "zh-Hans": {
     enabled: "开启提示", showWidget: "屏幕大字", showWidgetNote: "关闭时只用语音。", lock: "锁定位置",
@@ -210,5 +219,6 @@ const UI = {
     customHint: "无论提示风格如何，都改为朗读并显示此文字。留空：默认。内置英语语音只有默认文字：自定义文字由电脑语音朗读。",
     styleNote: "简短提示：只有颜色或该做什么和倒计时，没有首领台词。",
     callOffNote: "取消勾选会完全关闭此提示，包括倒计时。想保留但少听一些：把提示风格设为“简短提示”，或用 ✎ 改成自定义文字。",
+    previewCall: "播放此提示",
   },
 };

@@ -5,6 +5,8 @@ globalThis.RECAP_UI = {
   en: {
     tabLast: "Last death", tabHistory: "History", tabTally: "Tally", tabSettings: "Settings",
     assistedBy: "Assisted by", assists: (n) => (n === 1 ? "+1 assist" : `+${n} assists`),
+    showAll: (n) => `Show all ${n}`, showFewer: "Show fewer",
+    popupSize: "Popup size", textSize: "Window text size", textNormal: "Normal", textLarge: "Large", textLarger: "Larger",
     killedBy: "Killed by", noLegion: "no legion", serverN: (id) => `Server ${id}`, lv: (n) => `Lv ${n}`,
     cp: "Combat power", gs: "Gear score", damage: "Damage", hits: "Hits", fight: "Fight", dps: "DPS", dmg: "dmg",
     seconds: (s) => `${s} s`, skills: "Their skills", hitCount: (n) => (n === 1 ? "1 hit" : `${n} hits`),
@@ -24,6 +26,8 @@ globalThis.RECAP_UI = {
   ko: {
     tabLast: "최근 사망", tabHistory: "기록", tabTally: "집계", tabSettings: "설정",
     assistedBy: "도운 플레이어", assists: (n) => `어시스트 +${n}`,
+    showAll: (n) => `${n}명 모두 보기`, showFewer: "접기",
+    popupSize: "알림 크기", textSize: "창 글자 크기", textNormal: "보통", textLarge: "크게", textLarger: "더 크게",
     killedBy: "처치한 플레이어", noLegion: "레기온 없음", serverN: (id) => `서버 ${id}`, lv: (n) => `Lv ${n}`,
     cp: "전투력", gs: "장비 점수", damage: "피해", hits: "타격", fight: "전투 시간", dps: "DPS", dmg: "피해",
     seconds: (s) => `${s}초`, skills: "상대의 스킬", hitCount: (n) => `${n}회`,
@@ -43,6 +47,8 @@ globalThis.RECAP_UI = {
   ja: {
     tabLast: "直近の死亡", tabHistory: "履歴", tabTally: "集計", tabSettings: "設定",
     assistedBy: "アシスト", assists: (n) => `アシスト +${n}`,
+    showAll: (n) => `全${n}人を表示`, showFewer: "折りたたむ",
+    popupSize: "通知のサイズ", textSize: "画面の文字サイズ", textNormal: "標準", textLarge: "大", textLarger: "特大",
     killedBy: "倒した相手", noLegion: "レギオンなし", serverN: (id) => `サーバー ${id}`, lv: (n) => `Lv ${n}`,
     cp: "戦闘力", gs: "装備スコア", damage: "ダメージ", hits: "ヒット数", fight: "戦闘時間", dps: "DPS", dmg: "ダメージ",
     seconds: (s) => `${s}秒`, skills: "相手のスキル", hitCount: (n) => `${n}ヒット`,
@@ -62,6 +68,8 @@ globalThis.RECAP_UI = {
   de: {
     tabLast: "Letzter Tod", tabHistory: "Verlauf", tabTally: "Statistik", tabSettings: "Einstellungen",
     assistedBy: "Mitgeholfen haben", assists: (n) => `+${n} Assist${n === 1 ? "" : "s"}`,
+    showAll: (n) => `Alle ${n} zeigen`, showFewer: "Weniger zeigen",
+    popupSize: "Hinweisgröße", textSize: "Textgröße im Fenster", textNormal: "Normal", textLarge: "Groß", textLarger: "Größer",
     killedBy: "Getötet von", noLegion: "keine Legion", serverN: (id) => `Server ${id}`, lv: (n) => `St. ${n}`,
     cp: "Kampfkraft", gs: "Ausrüstungswert", damage: "Schaden", hits: "Treffer", fight: "Kampf", dps: "DPS", dmg: "Schaden",
     seconds: (s) => `${s} s`, skills: "Ihre Fertigkeiten", hitCount: (n) => `${n} Treffer`,
@@ -81,6 +89,8 @@ globalThis.RECAP_UI = {
   fr: {
     tabLast: "Dernière mort", tabHistory: "Historique", tabTally: "Bilan", tabSettings: "Réglages",
     assistedBy: "Avec l'aide de", assists: (n) => `+${n} assistance${n === 1 ? "" : "s"}`,
+    showAll: (n) => `Afficher les ${n}`, showFewer: "Afficher moins",
+    popupSize: "Taille de la notification", textSize: "Taille du texte de la fenêtre", textNormal: "Normale", textLarge: "Grande", textLarger: "Plus grande",
     killedBy: "Tué par", noLegion: "sans légion", serverN: (id) => `Serveur ${id}`, lv: (n) => `Niv. ${n}`,
     cp: "Puissance de combat", gs: "Score d'équipement", damage: "Dégâts", hits: "Coups", fight: "Combat", dps: "DPS", dmg: "dégâts",
     seconds: (s) => `${s} s`, skills: "Ses compétences", hitCount: (n) => (n === 1 ? "1 coup" : `${n} coups`),
@@ -100,6 +110,8 @@ globalThis.RECAP_UI = {
   es: {
     tabLast: "Última muerte", tabHistory: "Historial", tabTally: "Recuento", tabSettings: "Ajustes",
     assistedBy: "Con ayuda de", assists: (n) => `+${n} asistencia${n === 1 ? "" : "s"}`,
+    showAll: (n) => `Mostrar los ${n}`, showFewer: "Mostrar menos",
+    popupSize: "Tamaño del aviso", textSize: "Tamaño del texto de la ventana", textNormal: "Normal", textLarge: "Grande", textLarger: "Más grande",
     killedBy: "Te mató", noLegion: "sin legión", serverN: (id) => `Servidor ${id}`, lv: (n) => `Nv. ${n}`,
     cp: "Poder de combate", gs: "Puntuación de equipo", damage: "Daño", hits: "Golpes", fight: "Combate", dps: "DPS", dmg: "daño",
     seconds: (s) => `${s} s`, skills: "Sus habilidades", hitCount: (n) => (n === 1 ? "1 golpe" : `${n} golpes`),
@@ -119,6 +131,8 @@ globalThis.RECAP_UI = {
   pt: {
     tabLast: "Última morte", tabHistory: "Histórico", tabTally: "Contagem", tabSettings: "Configurações",
     assistedBy: "Com ajuda de", assists: (n) => `+${n} assistência${n === 1 ? "" : "s"}`,
+    showAll: (n) => `Mostrar todos os ${n}`, showFewer: "Mostrar menos",
+    popupSize: "Tamanho do aviso", textSize: "Tamanho do texto da janela", textNormal: "Normal", textLarge: "Grande", textLarger: "Maior",
     killedBy: "Morto por", noLegion: "sem legião", serverN: (id) => `Servidor ${id}`, lv: (n) => `Nv. ${n}`,
     cp: "Poder de combate", gs: "Pontuação de equipamento", damage: "Dano", hits: "Golpes", fight: "Luta", dps: "DPS", dmg: "dano",
     seconds: (s) => `${s} s`, skills: "Habilidades dele", hitCount: (n) => (n === 1 ? "1 golpe" : `${n} golpes`),
@@ -138,6 +152,8 @@ globalThis.RECAP_UI = {
   ru: {
     tabLast: "Последняя смерть", tabHistory: "История", tabTally: "Итоги", tabSettings: "Настройки",
     assistedBy: "При поддержке", assists: (n) => `помощников: +${n}`,
+    showAll: (n) => `Показать всех (${n})`, showFewer: "Свернуть",
+    popupSize: "Размер уведомления", textSize: "Размер текста в окне", textNormal: "Обычный", textLarge: "Крупный", textLarger: "Ещё крупнее",
     killedBy: "Убийца", noLegion: "без легиона", serverN: (id) => `Сервер ${id}`, lv: (n) => `Ур. ${n}`,
     cp: "Боевая мощь", gs: "Очки снаряжения", damage: "Урон", hits: "Удары", fight: "Бой", dps: "DPS", dmg: "урона",
     seconds: (s) => `${s} с`, skills: "Его умения", hitCount: (n) => `ударов: ${n}`,
@@ -157,6 +173,8 @@ globalThis.RECAP_UI = {
   "zh-Hans": {
     tabLast: "最近一次死亡", tabHistory: "历史", tabTally: "统计", tabSettings: "设置",
     assistedBy: "协助者", assists: (n) => `+${n} 协助`,
+    showAll: (n) => `显示全部 ${n} 人`, showFewer: "收起",
+    popupSize: "提示大小", textSize: "窗口文字大小", textNormal: "正常", textLarge: "大", textLarger: "更大",
     killedBy: "击杀者", noLegion: "无军团", serverN: (id) => `服务器 ${id}`, lv: (n) => `Lv ${n}`,
     cp: "战斗力", gs: "装备分数", damage: "伤害", hits: "命中", fight: "战斗时间", dps: "DPS", dmg: "伤害",
     seconds: (s) => `${s} 秒`, skills: "对方的技能", hitCount: (n) => `${n} 次`,
@@ -176,6 +194,8 @@ globalThis.RECAP_UI = {
   "zh-Hant": {
     tabLast: "最近一次死亡", tabHistory: "歷史", tabTally: "統計", tabSettings: "設定",
     assistedBy: "協助者", assists: (n) => `+${n} 協助`,
+    showAll: (n) => `顯示全部 ${n} 人`, showFewer: "收合",
+    popupSize: "提示大小", textSize: "視窗文字大小", textNormal: "正常", textLarge: "大", textLarger: "更大",
     killedBy: "擊殺者", noLegion: "無軍團", serverN: (id) => `伺服器 ${id}`, lv: (n) => `Lv ${n}`,
     cp: "戰鬥力", gs: "裝備分數", damage: "傷害", hits: "命中", fight: "戰鬥時間", dps: "DPS", dmg: "傷害",
     seconds: (s) => `${s} 秒`, skills: "對方的技能", hitCount: (n) => `${n} 次`,

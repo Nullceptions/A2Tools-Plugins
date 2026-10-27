@@ -15,13 +15,16 @@ const el = (tag, cls, text) => {
 };
 const L = globalThis.RecapLogic;
 
-const DEFAULTS = { style: "toast", hideAfter: 10, size: "1" };
+const DEFAULTS = { style: "toast", hideAfter: 10, size: "1", textSize: "1" };
 let prefs = { ...DEFAULTS };
 let history = [];
 let tab = "last";
 let tallyBy = "player";
 // The death the Last death tab shows (an index into history).
 let shown = 0;
+// Assists listed before the "Show all" bar; and whether it is open.
+const ASSISTS_SHOWN = 5;
+let assistsOpen = false;
 let lang = "en";
 let words = RECAP_UI.en;
 let popupTimer = null;
@@ -53,6 +56,11 @@ function translate() {
 }
 
 // ----- The window -----
+
+// The window's text, larger for a screen where it reads small.
+const applyTextSize = () => {
+  document.documentElement.style.zoom = String(Number(prefs.textSize) || 1);
+};
 
 function stat(label, value, cls) {
   const box = el("div", "stat");
@@ -110,7 +118,7 @@ function renderLast() {
   for (const s of h.skills) {
     const row = el("div", "skill");
     const line = el("div", "skillLine");
-    line.append(el("span", null, s.name || `#${s.id}`), el("span", "muted", `${num(s.damage)} · ${words.hitCount(s.hits)}`));
+    line.append(el("span", null, s.name || `#${s.id}`), el("span", "skillNum", `${num(s.damage)} · ${words.hitCount(s.hits)}`));
     const bar = el("div", "bar");
     const fill = el("div", "fill");
     fill.style.width = `${Math.round((s.damage / top) * 100)}%`;
@@ -124,7 +132,7 @@ function renderLast() {
   if (assists.length) {
     const box = el("div", "assists");
     box.append(el("div", "label", words.assistedBy));
-    for (const a of assists) {
+    for (const a of assistsOpen ? assists : assists.slice(0, ASSISTS_SHOWN)) {
       const row = el("div", "assist");
       const img = el("img", "rowIcon");
       if (classIcon(a.class)) img.src = classIcon(a.class);
@@ -134,8 +142,22 @@ function renderLast() {
         el("div", "rowName", a.name || "?"),
         el("div", "rowSub", [className(a.class), a.level ? words.lv(a.level) : "", typeof a.cp === "number" ? `${words.cp} ${L.cpText(a.cp, lang)}` : ""].filter(Boolean).join(" · ")),
       );
-      row.append(img, text, el("div", "rowRight", `${num(a.damage)} · ${words.hitCount(a.hits)}`));
+      const right = el("div", "rowRight");
+      right.append(el("div", "rowNum", num(a.damage)), el("div", null, words.hitCount(a.hits)));
+      row.append(img, text, right);
       box.append(row);
+    }
+    // The rest behind a bar.
+    if (assists.length > ASSISTS_SHOWN) {
+      const more = el("button", "moreBar", assistsOpen ? words.showFewer : words.showAll(assists.length));
+      more.type = "button";
+      more.setAttribute("aria-expanded", String(assistsOpen));
+      more.addEventListener("click", () => {
+        assistsOpen = !assistsOpen;
+        renderLast();
+        $(".moreBar")?.focus();
+      });
+      box.append(more);
     }
     view.append(box);
   }
@@ -161,10 +183,11 @@ function renderHistory() {
     const text = el("div", "rowText");
     text.append(el("div", "rowName", h.name), el("div", "rowSub", subline(h)));
     const right = el("div", "rowRight");
-    right.append(el("div", "cpText", L.cpText(h.cp, lang)), el("div", "muted", when(h.at)));
+    right.append(el("div", "rowNum cpText", L.cpText(h.cp, lang)), el("div", null, when(h.at)));
     b.append(img, text, right);
     b.addEventListener("click", () => {
       shown = i;
+      assistsOpen = false;
       setTab("last");
     });
     item.append(b);
@@ -192,7 +215,7 @@ function renderTally() {
     text.append(el("div", "rowName", title));
     if (sub) text.append(el("div", "rowSub", sub));
     const right = el("div", "rowRight");
-    right.append(el("div", "count", words.deaths(g.count)), el("div", "muted", words.last(when(g.last))));
+    right.append(el("div", "count", words.deaths(g.count)), el("div", null, words.last(when(g.last))));
     if (tallyBy === "player" && classIcon(h.class)) {
       const img = el("img", "rowIcon");
       img.src = classIcon(h.class);
@@ -220,7 +243,7 @@ function setTab(name) {
 // ----- The popup -----
 
 // Each style's size at scale 1 (CSS px), with room for its shadow.
-const POPUP_SIZE = { toast: [452, 132], banner: [716, 232], strip: [700, 64] };
+const POPUP_SIZE = { toast: [476, 144], banner: [716, 244], strip: [760, 68] };
 
 function popupData(h) {
   return {
@@ -246,7 +269,10 @@ function popupData(h) {
     times: words.times(L.timesBy(history, h)),
     topSkill: h.skills[0] ? `${h.skills[0].name || `#${h.skills[0].id}`} ${num(h.skills[0].damage)}` : "",
     assists: (h.assists || []).length ? words.assists(h.assists.length) : "",
-    assistNames: (h.assists || []).length ? `${words.assistedBy}: ${h.assists.map((a) => a.name || "?").join(", ")}` : "",
+    // The popup names four at most, then how many more.
+    assistNames: (h.assists || []).length
+      ? `${words.assistedBy}: ${h.assists.slice(0, 4).map((a) => a.name || "?").join(", ")}${h.assists.length > 4 ? ` +${h.assists.length - 4}` : ""}`
+      : "",
   };
 }
 
@@ -281,6 +307,7 @@ a2.on("deathRecap", async (recap) => {
   history = L.add(history, recap);
   if (history.length === before) return;
   shown = 0;
+  assistsOpen = false;
   await a2.storage.set("history", history).catch(() => {});
   render();
   showPopup(history[0]);
@@ -306,11 +333,12 @@ for (const b of document.querySelectorAll(".tallyBy button")) {
     renderTally();
   });
 }
-for (const key of ["style", "hideAfter", "size"]) {
+for (const key of ["style", "hideAfter", "size", "textSize"]) {
   $(`.${key}`).addEventListener("change", async () => {
     prefs[key] = key === "hideAfter" ? Number($(`.${key}`).value) : $(`.${key}`).value;
     await a2.storage.set("prefs", prefs).catch(() => {});
     if (prefs.style === "off") closePopup();
+    applyTextSize();
   });
 }
 $(".test").addEventListener("click", () => {
@@ -348,6 +376,8 @@ $(".clear").addEventListener("click", async () => {
   $(".style").value = prefs.style;
   $(".hideAfter").value = String(prefs.hideAfter);
   $(".size").value = String(prefs.size);
+  $(".textSize").value = String(prefs.textSize);
+  applyTextSize();
   translate();
   setTab("last");
   a2.ready();

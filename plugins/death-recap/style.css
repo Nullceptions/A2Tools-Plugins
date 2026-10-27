@@ -1,20 +1,31 @@
+/* Solid colours, not translucent white: text blended into a see-through
+   window loses its sharpness. Each is at least 7:1 on the panel (#0e1420)
+   and the tiles on it (WCAG 2.2 AA asks 4.5:1): --text 15.9:1, --text-2
+   12.6:1, --text-3 9.0:1, --red 7.9:1. */
+:root {
+  --text: #f2f6fb;
+  --text-2: #d3dce6;
+  --text-3: #b8c4d2;
+  --red: #ff9b9b;
+}
 html, body {
   margin: 0;
   background: transparent;
-  color: #e9f0f8;
-  font: 13px/1.4 "Segoe UI", system-ui, sans-serif;
+  color: var(--text);
+  font: 14px/1.45 "Segoe UI", system-ui, sans-serif;
+  text-rendering: optimizeLegibility;
 }
 body { padding: 10px 14px 14px; }
 [hidden] { display: none !important; }
-.muted, .note, .label { color: rgba(233, 240, 248, 0.68); }
-.note { font-size: 12px; margin: 6px 0; }
-.empty { color: rgba(233, 240, 248, 0.75); margin: 18px 0 6px; }
+.muted, .note, .label { color: var(--text-3); }
+.note { font-size: 13px; margin: 6px 0; }
+.empty { color: var(--text-2); margin: 18px 0 6px; }
 
 /* Tabs */
 .tabs { display: flex; gap: 4px; margin-bottom: 12px; flex-wrap: wrap; }
 .tabs button, .tallyBy button {
   font: inherit;
-  color: rgba(233, 240, 248, 0.75);
+  color: var(--text-2);
   background: none;
   border: 0;
   border-radius: 6px;
@@ -34,18 +45,18 @@ button:focus-visible, select:focus-visible { outline: 2px solid var(--a2-accent,
 .head { display: flex; gap: 12px; align-items: center; }
 .classIcon { width: 60px; height: 60px; flex: 0 0 auto; }
 .who { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
-.killedBy { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #ef8a8a; }
+.killedBy { font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--red); }
 .name, .score .value {
   font-family: "Bahnschrift", "Segoe UI", sans-serif;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
 .name { font-size: 26px; line-height: 1.1; overflow-wrap: anywhere; }
-.sub { color: rgba(233, 240, 248, 0.78); }
-.when { font-size: 12px; color: rgba(233, 240, 248, 0.62); }
+.sub { color: var(--text-2); }
+.when { font-size: 13px; color: var(--text-3); }
 .scores { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .score { display: flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 8px 10px; }
-.score .label { font-size: 12px; }
+.score .label { font-size: 13px; }
 .score .value { font-size: 20px; }
 .scoreIcon { height: 30px; width: auto; }
 /* The game's colours: combat power cyan, as its icon; gear score ivory. */
@@ -59,17 +70,30 @@ button:focus-visible, select:focus-visible { outline: 2px solid var(--a2-accent,
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
-.stat .label { font-size: 11px; }
+.stat .label { font-size: 13px; }
 .stat .value { font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; }
 .skills { display: flex; flex-direction: column; gap: 7px; }
-.skills .label { font-size: 12px; }
+.skills .label { font-size: 13px; }
 .skillLine { display: flex; justify-content: space-between; gap: 8px; }
 .bar { height: 4px; border-radius: 2px; background: rgba(255, 255, 255, 0.08); margin-top: 3px; }
 .fill { height: 4px; border-radius: 2px; background: var(--a2-accent, #8fc2ff); }
 
 /* Assists */
 .assists { display: flex; flex-direction: column; gap: 4px; }
-.assists .label { font-size: 12px; }
+.assists .label { font-size: 13px; }
+.skillNum { color: var(--text-2); font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.moreBar {
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--a2-accent, #8fc2ff);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 8px;
+  min-height: 32px;
+  cursor: pointer;
+}
+.moreBar:hover { background: rgba(255, 255, 255, 0.08); }
 .assist { display: flex; align-items: center; gap: 10px; padding: 4px 8px; border-radius: 8px; background: rgba(255, 255, 255, 0.04); }
 
 /* History and tallies */
@@ -93,9 +117,11 @@ button:focus-visible, select:focus-visible { outline: 2px solid var(--a2-accent,
 .rowIcon { width: 32px; height: 32px; flex: 0 0 auto; }
 .rowText { flex: 1 1 auto; min-width: 0; }
 .rowName { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.rowSub { font-size: 12px; color: rgba(233, 240, 248, 0.68); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.rowRight { text-align: right; font-size: 12px; flex: 0 0 auto; }
-.count { font-weight: 600; font-size: 13px; }
+.rowSub { font-size: 13px; color: var(--text-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rowRight { text-align: right; font-size: 13px; flex: 0 0 auto; color: var(--text-2); }
+/* A row's number (damage, combat power, deaths): what the eye looks for. */
+.rowNum { font-size: 14px; font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; }
+.count { font-weight: 600; font-size: 14px; color: var(--text); }
 .tallyBy { display: flex; gap: 4px; margin-bottom: 10px; flex-wrap: wrap; }
 
 /* Settings */

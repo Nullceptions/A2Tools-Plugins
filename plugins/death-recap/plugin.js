@@ -68,16 +68,17 @@ function stat(label, value, cls) {
   return box;
 }
 
-// A combat power or gear score tile, with the game's icon.
-function scoreTile(kind, value) {
-  const tile = el("div", `score ${kind}`);
+// Combat power or gear score with the game's icon, the words for screen
+// readers and on hover.
+function score(kind, value) {
+  const label = kind === "cp" ? words.cp : words.gs;
+  const box = el("span", `score ${kind}`);
+  box.title = label;
   const icon = el("img", "scoreIcon");
   icon.src = `icons/${kind}.png`;
   icon.alt = "";
-  const text = el("div");
-  text.append(el("div", "label", kind === "cp" ? words.cp : words.gs), el("div", "value", value));
-  tile.append(icon, text);
-  return tile;
+  box.append(icon, el("span", "visuallyHidden", `${label} `), el("span", "value", value));
+  return box;
 }
 
 function renderLast() {
@@ -106,7 +107,8 @@ function renderLast() {
   head.append(who);
 
   const scores = el("div", "scores");
-  scores.append(scoreTile("cp", L.cpText(h.cp, lang)), scoreTile("gs", num(h.gs)));
+  scores.append(score("cp", L.cpText(h.cp, lang)), score("gs", num(h.gs)));
+  who.insertBefore(scores, who.lastChild);
 
   const fight = el("div", "fight");
   fight.append(stat(words.damage, num(h.damage)), stat(words.hits, num(h.hits)), stat(words.fight, fightText(h.durationMs)), stat(words.dps, num(h.dps)));
@@ -126,7 +128,7 @@ function renderLast() {
     row.append(line, bar);
     skills.append(row);
   }
-  view.append(head, scores, fight);
+  view.append(head, fight);
   // The others who damaged you in that fight.
   const assists = h.assists || [];
   if (assists.length) {
@@ -140,10 +142,12 @@ function renderLast() {
       const text = el("div", "rowText");
       text.append(
         el("div", "rowName", a.name || "?"),
-        el("div", "rowSub", [className(a.class), a.level ? words.lv(a.level) : "", typeof a.cp === "number" ? `${words.cp} ${L.cpText(a.cp, lang)}` : ""].filter(Boolean).join(" · ")),
+        el("div", "rowSub", [a.legion, serverName(a.serverId), className(a.class), a.level ? words.lv(a.level) : ""].filter(Boolean).join(" · ")),
       );
       const right = el("div", "rowRight");
       right.append(el("div", "rowNum", num(a.damage)), el("div", null, words.hitCount(a.hits)));
+      // Their combat power beside their name, as the killer's: icon and number.
+      if (typeof a.cp === "number") text.firstChild.append(score("cp", L.cpText(a.cp, lang)));
       row.append(img, text, right);
       box.append(row);
     }

@@ -24,7 +24,7 @@
     dps: r.dps ?? null,
     skills: (r.skills || []).slice(0, MAX_SKILLS).map((s) => ({ id: s.id, name: s.name || null, damage: s.damage, hits: s.hits })),
     assists: (r.assists || []).slice(0, MAX_ASSISTS).map((a) => ({
-      name: a.name || null, class: a.class || null, level: a.level ?? null, gs: a.gearScore ?? null, cp: a.combatPower ?? null, damage: a.damage || 0, hits: a.hits || 0,
+      name: a.name || null, legion: a.legion || null, serverId: a.serverId ?? null, class: a.class || null, level: a.level ?? null, gs: a.gearScore ?? null, cp: a.combatPower ?? null, damage: a.damage || 0, hits: a.hits || 0,
     })),
   });
 

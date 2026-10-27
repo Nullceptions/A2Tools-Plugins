@@ -54,11 +54,16 @@ button:focus-visible, select:focus-visible { outline: 2px solid var(--a2-accent,
 .name { font-size: 26px; line-height: 1.1; overflow-wrap: anywhere; }
 .sub { color: var(--text-2); }
 .when { font-size: 13px; color: var(--text-3); }
-.scores { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-.score { display: flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 8px 10px; }
-.score .label { font-size: 13px; }
-.score .value { font-size: 20px; }
-.scoreIcon { height: 30px; width: auto; }
+/* Combat power and gear score on one line under the name. */
+.scores { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 2px 0; }
+.score { display: inline-flex; align-items: center; gap: 6px; }
+.score .value { font-size: 18px; }
+.scoreIcon { height: 22px; width: auto; }
+.assist .rowName { display: flex; align-items: center; gap: 10px; }
+.assist .score { margin: 0; font-weight: 600; }
+.assist .score .value { font-size: 14px; }
+.assist .scoreIcon { height: 16px; }
+.visuallyHidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 /* The game's colours: combat power cyan, as its icon; gear score ivory. */
 .score.cp .value, .cpText { color: #4fe8f2; }
 .score.gs .value { color: #f1e9d6; }

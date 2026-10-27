@@ -269,6 +269,7 @@ function popupData(h) {
     times: words.times(L.timesBy(history, h)),
     topSkill: h.skills[0] ? `${h.skills[0].name || `#${h.skills[0].id}`} ${num(h.skills[0].damage)}` : "",
     assists: (h.assists || []).length ? words.assists(h.assists.length) : "",
+    hideLabel: words.hide,
     // The popup names four at most, then how many more.
     assistNames: (h.assists || []).length
       ? `${words.assistedBy}: ${h.assists.slice(0, 4).map((a) => a.name || "?").join(", ")}${h.assists.length > 4 ? ` +${h.assists.length - 4}` : ""}`
@@ -320,6 +321,10 @@ a2.on("deathRecap", async (recap) => {
   showPopup(history[0]);
 });
 a2.on("widget-message", async ({ data }) => {
+  if (data?.dismiss) {
+    await closePopup();
+    return;
+  }
   if (data?.hello) {
     if (popupNow) a2.widgets.send("popup", popupNow).catch(() => {});
     return;

@@ -12,6 +12,8 @@ a2.on("widget", (d) => {
   icon.hidden = !d.icon;
   if (d.icon) icon.src = d.icon;
   icon.alt = d.className || "";
+  $(".dismiss").setAttribute("aria-label", d.hideLabel || "Hide");
+  $(".dismiss").title = d.hideLabel || "Hide";
   $(".killedBy").textContent = d.killedBy;
   $(".name").textContent = d.name;
   // The strip has the least room: level and legion only.
@@ -40,8 +42,13 @@ addEventListener("resize", reportArea);
 
 const DRAG_PX = 4;
 let press = null;
+// The X: hide it now, without opening the window.
+$(".dismiss").addEventListener("click", (e) => {
+  e.stopPropagation();
+  a2.widget.post({ dismiss: true }).catch(() => {});
+});
 card.addEventListener("mousedown", (e) => {
-  if (e.button !== 0) return;
+  if (e.button !== 0 || e.target.closest(".dismiss")) return;
   e.preventDefault();
   press = { x: e.screenX, y: e.screenY };
 });

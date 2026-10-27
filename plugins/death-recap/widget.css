@@ -25,6 +25,28 @@ body { display: flex; align-items: center; justify-content: center; }
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
   cursor: pointer;
 }
+.card { position: relative; }
+/* The X, top right: 24 px to hit, a ring on focus. */
+.dismiss {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #b8c4d2;
+  cursor: pointer;
+}
+.dismiss:hover { background: rgba(255, 255, 255, 0.1); color: #f2f6fb; }
+.dismiss:focus-visible { outline: 2px solid #8fc2ff; outline-offset: 1px; }
+.card[data-style="banner"] .dismiss { top: 8px; right: 8px; }
+.card[data-style="strip"] .dismiss { position: static; flex: 0 0 auto; order: 99; margin-right: -8px; }
+.card[data-style="toast"] { padding-right: 34px; }
 .body { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
 .killedBy { font-size: 12.5px; font-weight: 600; color: #ff9b9b; }
 .name { font-family: "Bahnschrift", "Segoe UI", sans-serif; font-weight: 600; font-size: 19px; }

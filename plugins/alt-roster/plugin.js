@@ -71,7 +71,12 @@ a2.on("character", (c) => {
   if (e && Number.isFinite(e.basic) && Number.isFinite(e.charged)) {
     ch.energy = kept(ch.energy, { basic: e.basic, charged: e.charged, at: Date.now() });
     // Over 560 can only be with a membership.
-    if (e.basic > CAPS[1]) ch.cap = CAPS[0];
+    if (e.basic > CAPS[1]) {
+      ch.cap = CAPS[0];
+      ch.memberAt = Date.now();
+      // The game's own word over a cap set by hand.
+      ch.capSet = false;
+    }
   }
   // Content counts (meters that send them): each kept with the character or
   // its server, as the content is counted.
@@ -244,11 +249,27 @@ const el = (tag, cls, text) => {
 };
 const serverName = (id) => SERVERS[lang]?.[id] || SERVERS.en?.[id] || (id ? t.serverN(id) : "");
 
+// A membership is the account's, not a character's: once any character has
+// been seen over 560, every one fills to 840 (#121: one at 840/840, two on
+// the same server still counted to 560, the third "full" two days late).
+// The evidence holds a month, as long as a membership runs, and each
+// sighting over 560 renews it; a character seen at 840 before this counts
+// from its last reading.
+const MEMBER_KEEP_MS = 31 * 24 * 60 * 60 * 1000;
+const memberSince = (ch) => ch.memberAt || (ch.cap === CAPS[0] ? ch.energy?.at || 0 : 0);
+function capFor(ch, now) {
+  // Set by hand (a click on its cap): the player's word.
+  if (ch.capSet) return ch.cap;
+  const latest = Math.max(0, ...Object.values(state.chars).map(memberSince));
+  return latest && now - latest <= MEMBER_KEEP_MS ? CAPS[0] : ch.cap ?? CAPS[1];
+}
+
 // Each character's numbers as they likely are now.
 function view(key, ch, now) {
-  const est = estimate(ch.energy, now, ch.cap);
-  const full = fullAt(ch.energy, ch.cap);
-  return { key, ch, est, full, playing: key === current && gameRunning };
+  const cap = capFor(ch, now);
+  const est = estimate(ch.energy, now, cap);
+  const full = fullAt(ch.energy, cap);
+  return { key, ch, cap, est, full, playing: key === current && gameRunning };
 }
 
 function sorted(rows) {
@@ -534,7 +555,7 @@ function nextWeekly(now) {
 }
 
 function rowOf(r) {
-  const { ch, est, full, playing } = r;
+  const { ch, cap: capOf, est, full, playing } = r;
   const now = Date.now();
   const li = el("li", "row");
   li.dataset.key = r.key;
@@ -567,15 +588,15 @@ function rowOf(r) {
   if (est) {
     const top = el("div", "energyTop");
     const value = el("span", "energyValue", `${est.gained ? "≈" : ""}${fmt.format(est.basic)}`);
-    const cap = el("button", "cap", `/ ${ch.cap}`);
+    const cap = el("button", "cap", `/ ${capOf}`);
     cap.type = "button";
     cap.title = t.capTip;
     top.append(value, cap);
     const bar = el("div", "bar");
     const seenPart = el("span", "barSeen");
-    seenPart.style.width = `${Math.min(100, (ch.energy.basic / ch.cap) * 100)}%`;
+    seenPart.style.width = `${Math.min(100, (ch.energy.basic / capOf) * 100)}%`;
     const grownPart = el("span", "barGrown");
-    grownPart.style.width = `${Math.min(100, (est.gained / ch.cap) * 100)}%`;
+    grownPart.style.width = `${Math.min(100, (est.gained / capOf) * 100)}%`;
     bar.append(seenPart, grownPart);
     energy.append(top, bar);
     energy.title = est.gained
@@ -607,7 +628,9 @@ $(".list").addEventListener("click", (e) => {
   const ch = state.chars[li.dataset.key];
   if (!ch) return;
   if (e.target.closest(".cap")) {
-    ch.cap = ch.cap === CAPS[0] ? CAPS[1] : CAPS[0];
+    // From what it shows now (the account's 840 too), to the other.
+    ch.cap = capFor(ch, Date.now()) === CAPS[0] ? CAPS[1] : CAPS[0];
+    ch.capSet = true;
     save();
     render();
   } else if (e.target.closest(".remove")) {

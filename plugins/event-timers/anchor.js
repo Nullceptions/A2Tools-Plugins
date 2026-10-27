@@ -275,21 +275,38 @@ async function anchorShow(wanted) {
   frameBusy = true;
   try {
     const cells = [...wanted.values()].map((e) => e.data);
+    // Nothing to show and not being placed: no frame at all, so nothing on
+    // screen can take a click from the game. Its empty space let clicks
+    // through only where the window manager honours the meter's input
+    // region (Hirai, CachyOS KDE, 2026-10-27: an invisible anchor caught
+    // them). Its last layout is kept, so it comes back where it was.
+    if (!cells.length && !placing()) {
+      if (frameOpen) {
+        frameOpen = false;
+        await a2.widgets.close(ANCHOR).catch(() => {});
+      }
+      return true;
+    }
     const layout = frameLayout(cells.some((c) => c.showName));
     const size = { width: layout.width, height: layout.height };
     const same = frameSize && frameSize.width === size.width && frameSize.height === size.height
       && frameSize.grip.x === layout.grip.x && frameSize.grip.y === layout.grip.y;
     if (!frameOpen || !same) {
       // The grip stays where the player left it while the frame resizes
-      // around it (it moves within the frame with the grid's direction).
-      const before = frameOpen && frameSize && canMove() ? await a2.widgets.where(ANCHOR).catch(() => null) : null;
+      // around it (it moves within the frame with the grid's direction),
+      // and when it opens again at another size after being closed: the
+      // frame opens at its last top left, so its new grip is put where the
+      // old one was.
+      const wasOpen = frameOpen;
+      const before = wasOpen && frameSize && canMove() ? await a2.widgets.where(ANCHOR).catch(() => null) : null;
       frameOpen = await a2.widgets.open(ANCHOR, size).then(() => true, () => false);
       if (!frameOpen) return true;
-      if (before && frameSize.grip) {
+      const at = before || (!wasOpen && frameSize && !same && canMove() ? await a2.widgets.where(ANCHOR).catch(() => null) : null);
+      if (at && frameSize.grip) {
         const scale = (typeof devicePixelRatio === "number" && devicePixelRatio > 0) ? devicePixelRatio : 1;
-        const x = Math.round(before.x + (frameSize.grip.x - layout.grip.x) * scale);
-        const y = Math.round(before.y + (frameSize.grip.y - layout.grip.y) * scale);
-        if (x !== before.x || y !== before.y) await a2.widgets.place(ANCHOR, { x, y }).catch(() => {});
+        const x = Math.round(at.x + (frameSize.grip.x - layout.grip.x) * scale);
+        const y = Math.round(at.y + (frameSize.grip.y - layout.grip.y) * scale);
+        if (x !== at.x || y !== at.y) await a2.widgets.place(ANCHOR, { x, y }).catch(() => {});
       }
       frameSize = { ...size, grip: layout.grip };
     }

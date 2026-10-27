@@ -1,0 +1,41 @@
+[
+  {
+    "version": "0.2.3",
+    "en": "A built-in English voice (Kokoro), so names are spoken even on a PC with no voices, such as Linux.",
+    "ko": "내장 영어 음성(Kokoro): 음성이 없는 PC(예: Linux)에서도 이름을 읽어 줍니다.",
+    "ja": "内蔵の英語音声（Kokoro）：音声のないPC（Linuxなど）でも名前を読み上げます。",
+    "de": "Eine eingebaute englische Stimme (Kokoro): Namen werden auch auf PCs ohne Stimmen gesprochen, etwa unter Linux.",
+    "fr": "Une voix anglaise intégrée (Kokoro) : les noms sont dits même sur un PC sans voix, comme sous Linux.",
+    "es": "Una voz inglesa integrada (Kokoro): los nombres se dicen incluso en un PC sin voces, como en Linux.",
+    "pt": "Uma voz inglesa integrada (Kokoro): os nomes são falados mesmo num PC sem vozes, como no Linux.",
+    "ru": "Встроенный английский голос (Kokoro): названия звучат даже на ПК без голосов, например в Linux.",
+    "zh-Hant": "內建英語語音（Kokoro）：即使電腦沒有語音（例如 Linux）也能唸出名稱。",
+    "zh-Hans": "内置英语语音（Kokoro）：即使电脑没有语音（例如 Linux）也能念出名称。"
+  },
+  {
+    "version": "0.2.2",
+    "en": "Spoken names come one at a time, without stutters or cut-offs.",
+    "ko": "읽어 주는 이름이 끊기거나 겹치지 않고 하나씩 나옵니다.",
+    "ja": "読み上げが途切れたり重なったりせず、一つずつ流れます。",
+    "de": "Gesprochene Namen kommen nacheinander, ohne Stocken oder Abbrechen.",
+    "fr": "Les noms sont dits un par un, sans hachures ni coupures.",
+    "es": "Los nombres se dicen de uno en uno, sin cortes ni tartamudeos.",
+    "pt": "Os nomes são falados um de cada vez, sem cortes nem engasgos.",
+    "ru": "Названия звучат по одному, без запинок и обрывов.",
+    "zh-Hant": "唸出的名稱一次一個，不再斷斷續續或被截斷。",
+    "zh-Hans": "念出的名称一次一个，不再断断续续或被截断。"
+  },
+  {
+    "version": "0.2.0",
+    "en": "Your class's buffs listed from the start, held skills and charges, a volume and a voice picker.",
+    "ko": "직업 버프가 처음부터 표시되고, 차지 스킬과 충전 횟수, 음량, 음성 선택이 추가되었습니다.",
+    "ja": "職業のバフが最初から表示され、ため技とチャージ、音量、音声の選択を追加しました。",
+    "de": "Die Buffs deiner Klasse von Anfang an, gehaltene Skills und Ladungen, eine Lautstärke und eine Stimmauswahl.",
+    "fr": "Les buffs de votre classe listés dès le départ, compétences maintenues et charges, un volume et un choix de voix.",
+    "es": "Las mejoras de tu clase desde el principio, habilidades cargadas y cargas, volumen y selector de voz.",
+    "pt": "Os buffs da sua classe desde o início, habilidades carregadas e cargas, volume e seletor de voz.",
+    "ru": "Баффы класса сразу в списке, удерживаемые умения и заряды, громкость и выбор голоса.",
+    "zh-Hant": "職業增益從一開始就列出，新增蓄力技能與充能次數、音量與語音選擇。",
+    "zh-Hans": "职业增益从一开始就列出，新增蓄力技能与充能次数、音量与语音选择。"
+  }
+]

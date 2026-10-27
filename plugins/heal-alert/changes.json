@@ -1,0 +1,28 @@
+[
+  {
+    "version": "1.2.3",
+    "en": "The alert can be the sound alone, and it has a volume.",
+    "ko": "알림을 소리만으로 설정할 수 있고, 음량도 조절됩니다.",
+    "ja": "通知を音だけにでき、音量も調整できます。",
+    "de": "Der Alarm kann nur ein Ton sein, mit eigener Lautstärke.",
+    "fr": "L'alerte peut n'être qu'un son, avec son volume.",
+    "es": "El aviso puede ser solo el sonido, con su volumen.",
+    "pt": "O alerta pode ser só o som, com volume ajustável.",
+    "ru": "Оповещение может быть только звуком, с регулировкой громкости.",
+    "zh-Hant": "提醒可以只用聲音，並可調整音量。",
+    "zh-Hans": "提醒可以只用声音，并可调整音量。"
+  },
+  {
+    "version": "1.2.0",
+    "en": "For Clerics: a voice and a banner when a party member drops under 60% HP.",
+    "ko": "치유성 전용: 파티원의 HP가 60% 아래로 떨어지면 음성과 배너로 알려 줍니다.",
+    "ja": "治癒星向け：パーティーメンバーのHPが60%を下回ると音声とバナーで知らせます。",
+    "de": "Für Kleriker: eine Stimme und ein Banner, wenn ein Gruppenmitglied unter 60 % LP fällt.",
+    "fr": "Pour les Clercs : une voix et une bannière quand un membre du groupe passe sous 60 % de PV.",
+    "es": "Para Clérigos: una voz y un aviso cuando un miembro del grupo baja del 60 % de PV.",
+    "pt": "Para Clérigos: uma voz e um aviso quando um membro do grupo cai abaixo de 60% de PV.",
+    "ru": "Для Целителей: голос и баннер, когда у члена группы меньше 60% здоровья.",
+    "zh-Hant": "治癒星專用：隊友 HP 低於 60% 時以語音與橫幅提醒。",
+    "zh-Hans": "治愈星专用：队友 HP 低于 60% 时以语音与横幅提醒。"
+  }
+]

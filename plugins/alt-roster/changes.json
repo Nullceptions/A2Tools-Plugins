@@ -1,0 +1,41 @@
+[
+  {
+    "version": "1.4.2",
+    "en": "A membership's 840 energy cap now counts for every character, not only those seen above 560.",
+    "ko": "멤버십의 840 에너지 상한이 560을 넘은 캐릭터뿐 아니라 모든 캐릭터에 적용됩니다.",
+    "ja": "メンバーシップのエネルギー上限840が、560を超えたキャラクターだけでなく全キャラクターに適用されます。",
+    "de": "Das Energielimit 840 einer Mitgliedschaft gilt jetzt für alle Charaktere, nicht nur für die über 560 gesehenen.",
+    "fr": "Le plafond d'énergie de 840 d'un abonnement compte désormais pour tous les personnages, pas seulement ceux vus au-dessus de 560.",
+    "es": "El límite de energía de 840 de una membresía cuenta ahora para todos los personajes, no solo los vistos por encima de 560.",
+    "pt": "O limite de energia de 840 de uma assinatura agora vale para todos os personagens, não só os vistos acima de 560.",
+    "ru": "Предел энергии 840 по подписке теперь действует для всех персонажей, а не только для замеченных выше 560.",
+    "zh-Hant": "會員的 840 能量上限現在適用於所有角色，不只是曾超過 560 的角色。",
+    "zh-Hans": "会员的 840 能量上限现在适用于所有角色，不只是曾超过 560 的角色。"
+  },
+  {
+    "version": "1.4.1",
+    "en": "Abyss Corridors follow a siege that comes later, and the caps note is clearer.",
+    "ko": "어비스 회랑이 나중에 열리는 공성전을 따르고, 상한 안내가 더 명확해졌습니다.",
+    "ja": "アビス回廊が後から来る攻城戦に合わせて更新され、上限の説明が分かりやすくなりました。",
+    "de": "Die Abyss-Korridore folgen einer späteren Belagerung, und der Hinweis zu den Limits ist klarer.",
+    "fr": "Les Corridors de l'Abysse suivent un siège plus tardif, et la note sur les plafonds est plus claire.",
+    "es": "Los Corredores del Abismo siguen un asedio posterior, y la nota sobre los límites es más clara.",
+    "pt": "Os Corredores do Abismo acompanham um cerco posterior, e a nota sobre os limites está mais clara.",
+    "ru": "Коридоры Бездны учитывают более позднюю осаду, а пояснение о пределах стало понятнее.",
+    "zh-Hant": "深淵迴廊會跟隨之後的攻城戰，上限說明也更清楚。",
+    "zh-Hans": "深渊回廊会跟随之后的攻城战，上限说明也更清楚。"
+  },
+  {
+    "version": "1.4.0",
+    "en": "A new Other tab, and the Abyss Corridors each character has left.",
+    "ko": "새 '기타' 탭과 캐릭터별 남은 어비스 회랑이 추가되었습니다.",
+    "ja": "新しい「その他」タブと、キャラクターごとの残りアビス回廊を追加しました。",
+    "de": "Ein neuer Tab „Sonstiges“ und die verbleibenden Abyss-Korridore jedes Charakters.",
+    "fr": "Un nouvel onglet Autre, et les Corridors de l'Abysse restants de chaque personnage.",
+    "es": "Una nueva pestaña Otros y los Corredores del Abismo que le quedan a cada personaje.",
+    "pt": "Uma nova aba Outros e os Corredores do Abismo restantes de cada personagem.",
+    "ru": "Новая вкладка «Прочее» и оставшиеся Коридоры Бездны каждого персонажа.",
+    "zh-Hant": "新增「其他」分頁，以及每個角色剩餘的深淵迴廊。",
+    "zh-Hans": "新增“其他”标签页，以及每个角色剩余的深渊回廊。"
+  }
+]

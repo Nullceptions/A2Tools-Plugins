@@ -1,0 +1,28 @@
+[
+  {
+    "version": "0.1.2",
+    "en": "A volume for its alerts.",
+    "ko": "알림 음량 설정이 추가되었습니다.",
+    "ja": "通知の音量を設定できます。",
+    "de": "Eine Lautstärke für die Alarme.",
+    "fr": "Un volume pour ses alertes.",
+    "es": "Un volumen para sus avisos.",
+    "pt": "Um volume para os alertas.",
+    "ru": "Громкость оповещений.",
+    "zh-Hant": "提醒音量可調整。",
+    "zh-Hans": "提醒音量可调整。"
+  },
+  {
+    "version": "0.1.0",
+    "en": "No repeated alerts for a mantra you switched off, and every word translated.",
+    "ko": "직접 끈 진언에는 알림이 반복되지 않으며, 모든 문구가 번역되었습니다.",
+    "ja": "オフにしたマントラの通知は繰り返されず、すべての文言を翻訳しました。",
+    "de": "Keine wiederholten Alarme für ein ausgeschaltetes Mantra, und jedes Wort übersetzt.",
+    "fr": "Plus d'alertes répétées pour un mantra désactivé, et chaque mot traduit.",
+    "es": "Sin avisos repetidos para un mantra apagado, y cada palabra traducida.",
+    "pt": "Sem alertas repetidos para um mantra desligado, e cada palavra traduzida.",
+    "ru": "Без повторных оповещений о выключенной мантре, и все надписи переведены.",
+    "zh-Hant": "關閉的真言不再重複提醒，所有文字皆已翻譯。",
+    "zh-Hans": "关闭的真言不再重复提醒，所有文字皆已翻译。"
+  }
+]

@@ -32,7 +32,7 @@ PART = re.compile(r"^[A-Za-z0-9._-]+$")
 # What a plugin may ship: its page, scripts, styles, data and images.
 ALLOWED = {".html", ".js", ".css", ".json", ".png", ".jpg", ".jpeg", ".webp", ".svg", ".gif", ".md", ".txt"}
 # Not shipped to players (still reviewed in the repo).
-SKIP = {"README.md"}
+SKIP = {"README.md", "changes.json"}
 # feed:boss-timers: the shared field boss timers (a2.bossTimers, the bossMap
 # event; meter 2.0.65). A meter without it simply has no a2.bossTimers.
 # "widgets": small windows of the plugin's own (a2.widgets, meter 2.0.68).
@@ -62,6 +62,47 @@ def check_decoders(name, fields, depth=1):
             if field.get("count") not in {"u8", "u16", "u32", "varint"}:
                 fail(name, "a list needs a count of u8, u16, u32 or varint")
             check_decoders(name, field.get("fields", []), depth + 1)
+
+
+# What's new: a plugin's changes.json, each recent version's notes per
+# language, newest first, shown by the meter in the update prompt and
+# Settings → Plugins (2.0.81 on; older meters ignore it). It goes into the
+# catalog, not the plugin's files, so notes can be written or corrected
+# without a new version of the plugin.
+LANGS = {"en", "ko", "ja", "de", "fr", "es", "pt", "ru", "zh-Hant", "zh-Hans"}
+MAX_CHANGES = 5
+MAX_NOTE = 300
+
+
+def version_key(v):
+    return tuple(int(x) for x in v.split("."))
+
+
+def check_changes(name, folder, manifest):
+    path = folder / "changes.json"
+    changes = json.loads(path.read_text(encoding="utf-8")) if path.is_file() else []
+    if not isinstance(changes, list) or len(changes) > MAX_CHANGES:
+        fail(name, f"changes: a list of at most {MAX_CHANGES} versions")
+    last = None
+    for c in changes:
+        if not isinstance(c, dict) or not VERSION.match(str(c.get("version", ""))):
+            fail(name, "changes: each needs a version like 1.2.3")
+        v = version_key(c["version"])
+        if v > version_key(manifest["version"]):
+            fail(name, f"changes: {c['version']} is newer than the plugin's version")
+        if last is not None and v >= last:
+            fail(name, "changes: newest first, each version once")
+        last = v
+        if not str(c.get("en", "")).strip():
+            fail(name, f"changes {c['version']}: needs an English note (en)")
+        for key, text in c.items():
+            if key == "version":
+                continue
+            if key not in LANGS:
+                fail(name, f"changes {c['version']}: unknown language {key!r}")
+            if not isinstance(text, str) or not text.strip() or len(text) > MAX_NOTE:
+                fail(name, f"changes {c['version']} {key}: a note of 1 to {MAX_NOTE} characters")
+    return changes
 
 
 def check(folder):
@@ -103,6 +144,8 @@ def check(folder):
             if decoder["self"] not in numbers:
                 fail(name, f"decoder {decoder.get('name')}: \"self\" must name one of its number fields")
 
+    changes = check_changes(name, folder, manifest)
+
     files = {}
     total = 0
     for path in sorted(p for p in folder.rglob("*") if p.is_file()):
@@ -129,6 +172,8 @@ def check(folder):
         "source": f"https://github.com/taengu/A2Tools-Plugins/tree/main/plugins/{name}",
         "files": files,
     }
+    if changes:
+        entry["changes"] = changes
     return entry
 
 

@@ -1,0 +1,28 @@
+[
+  {
+    "version": "1.1.2",
+    "en": "A volume for its alerts.",
+    "ko": "알림 음량 설정이 추가되었습니다.",
+    "ja": "通知の音量を設定できます。",
+    "de": "Eine Lautstärke für die Alarme.",
+    "fr": "Un volume pour ses alertes.",
+    "es": "Un volumen para sus avisos.",
+    "pt": "Um volume para os alertas.",
+    "ru": "Громкость оповещений.",
+    "zh-Hant": "提醒音量可調整。",
+    "zh-Hans": "提醒音量可调整。"
+  },
+  {
+    "version": "1.1.0",
+    "en": "Dailies, weeklies and one-time goals for each character, ticked by hand.",
+    "ko": "캐릭터별 일일·주간·일회성 목표를 직접 체크합니다.",
+    "ja": "キャラクターごとのデイリー・ウィークリー・一度きりの目標を手でチェックできます。",
+    "de": "Tägliche, wöchentliche und einmalige Ziele pro Charakter, von Hand abgehakt.",
+    "fr": "Quotidiennes, hebdomadaires et objectifs uniques par personnage, cochés à la main.",
+    "es": "Diarias, semanales y metas únicas por personaje, marcadas a mano.",
+    "pt": "Diárias, semanais e metas únicas por personagem, marcadas à mão.",
+    "ru": "Ежедневные, еженедельные и разовые цели для каждого персонажа, отмечаемые вручную.",
+    "zh-Hant": "每個角色的每日、每週與一次性目標，手動勾選。",
+    "zh-Hans": "每个角色的每日、每周与一次性目标，手动勾选。"
+  }
+]

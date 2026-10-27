@@ -1,0 +1,28 @@
+[
+  {
+    "version": "0.2.1",
+    "en": "The FPS coloured by how good it is, with the colours' limits in Settings.",
+    "ko": "FPS가 상태에 따라 색으로 표시되고, 색 기준은 설정에서 바꿀 수 있습니다.",
+    "ja": "FPSを状態に応じて色分けし、色の基準は設定で変更できます。",
+    "de": "Die FPS nach Güte eingefärbt, die Grenzen der Farben in den Einstellungen.",
+    "fr": "Les FPS colorés selon leur qualité, avec les seuils des couleurs dans les réglages.",
+    "es": "Los FPS coloreados según lo buenos que son, con los límites de color en los ajustes.",
+    "pt": "Os FPS coloridos conforme a qualidade, com os limites das cores nas configurações.",
+    "ru": "FPS окрашиваются по качеству, пороги цветов — в настройках.",
+    "zh-Hant": "FPS 依好壞上色，顏色門檻可在設定中調整。",
+    "zh-Hans": "FPS 按好坏上色，颜色门槛可在设置中调整。"
+  },
+  {
+    "version": "0.2.0",
+    "en": "The game's FPS beside the ping.",
+    "ko": "핑 옆에 게임 FPS가 표시됩니다.",
+    "ja": "Pingの横にゲームのFPSを表示します。",
+    "de": "Die FPS des Spiels neben dem Ping.",
+    "fr": "Les FPS du jeu à côté du ping.",
+    "es": "Los FPS del juego junto al ping.",
+    "pt": "Os FPS do jogo ao lado do ping.",
+    "ru": "FPS игры рядом с пингом.",
+    "zh-Hant": "Ping 旁顯示遊戲 FPS。",
+    "zh-Hans": "Ping 旁显示游戏 FPS。"
+  }
+]

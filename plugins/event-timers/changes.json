@@ -1,0 +1,67 @@
+[
+  {
+    "version": "0.6.16",
+    "en": "The anchor's window closes while it shows nothing, so it never catches your clicks.",
+    "ko": "앵커에 표시할 것이 없으면 창이 닫혀 클릭을 가로채지 않습니다.",
+    "ja": "アンカーに表示するものがない間はウィンドウが閉じ、クリックを奪いません。",
+    "de": "Das Fenster des Ankers schließt sich, solange es nichts zeigt, und fängt so keine Klicks ab.",
+    "fr": "La fenêtre de l'ancre se ferme quand elle n'affiche rien, et ne capte donc plus vos clics.",
+    "es": "La ventana del ancla se cierra mientras no muestra nada, así que no atrapa tus clics.",
+    "pt": "A janela da âncora fecha enquanto não mostra nada, e não captura seus cliques.",
+    "ru": "Окно якоря закрывается, пока ему нечего показать, и не перехватывает щелчки.",
+    "zh-Hant": "錨點沒有內容時視窗會關閉，不會攔截你的點擊。",
+    "zh-Hans": "锚点没有内容时窗口会关闭，不会拦截你的点击。"
+  },
+  {
+    "version": "0.6.15",
+    "en": "Each row of icons in the grid lines up, even when a name takes two lines.",
+    "ko": "이름이 두 줄이어도 격자의 각 행 아이콘이 나란히 정렬됩니다.",
+    "ja": "名前が2行になっても、グリッドの各行のアイコンがそろいます。",
+    "de": "Jede Symbolzeile im Raster ist bündig, auch wenn ein Name zwei Zeilen braucht.",
+    "fr": "Chaque rangée d'icônes de la grille est alignée, même quand un nom tient sur deux lignes.",
+    "es": "Cada fila de iconos de la cuadrícula queda alineada, aunque un nombre ocupe dos líneas.",
+    "pt": "Cada linha de ícones da grade fica alinhada, mesmo quando um nome ocupa duas linhas.",
+    "ru": "Значки в каждом ряду сетки выровнены, даже если имя занимает две строки.",
+    "zh-Hant": "網格每一列的圖示都會對齊，即使名稱佔兩行。",
+    "zh-Hans": "网格每一行的图标都会对齐，即使名称占两行。"
+  },
+  {
+    "version": "0.6.14",
+    "en": "A built-in English voice (Kokoro), so alerts are spoken even on a PC with no voices, such as Linux.",
+    "ko": "내장 영어 음성(Kokoro): 음성이 없는 PC(예: Linux)에서도 알림을 읽어 줍니다.",
+    "ja": "内蔵の英語音声（Kokoro）：音声のないPC（Linuxなど）でも通知を読み上げます。",
+    "de": "Eine eingebaute englische Stimme (Kokoro): Alarme werden auch auf PCs ohne Stimmen gesprochen, etwa unter Linux.",
+    "fr": "Une voix anglaise intégrée (Kokoro) : les alertes sont dites même sur un PC sans voix, comme sous Linux.",
+    "es": "Una voz inglesa integrada (Kokoro): los avisos se dicen incluso en un PC sin voces, como en Linux.",
+    "pt": "Uma voz inglesa integrada (Kokoro): os alertas são falados mesmo num PC sem vozes, como no Linux.",
+    "ru": "Встроенный английский голос (Kokoro): оповещения звучат даже на ПК без голосов, например в Linux.",
+    "zh-Hant": "內建英語語音（Kokoro）：即使電腦沒有語音（例如 Linux）也能唸出提醒。",
+    "zh-Hans": "内置英语语音（Kokoro）：即使电脑没有语音（例如 Linux）也能念出提醒。"
+  },
+  {
+    "version": "0.6.12",
+    "en": "The Dimensional Invasion every hour at :30 again.",
+    "ko": "차원 침공이 다시 매시 30분에 표시됩니다.",
+    "ja": "次元侵攻が再び毎時30分に表示されます。",
+    "de": "Die Dimensionsinvasion wieder jede Stunde um :30.",
+    "fr": "L'Invasion dimensionnelle de nouveau toutes les heures à :30.",
+    "es": "La Invasión dimensional de nuevo cada hora a las :30.",
+    "pt": "A Invasão Dimensional de novo a cada hora aos :30.",
+    "ru": "Пространственное вторжение снова каждый час в :30.",
+    "zh-Hant": "次元入侵再次於每小時 30 分出現。",
+    "zh-Hans": "次元入侵再次于每小时 30 分出现。"
+  },
+  {
+    "version": "0.6.11",
+    "en": "Teleport number on icon: a boss's nearest teleport, on its icon.",
+    "ko": "아이콘에 텔레포트 번호: 보스와 가장 가까운 텔레포트를 아이콘에 표시합니다.",
+    "ja": "アイコンにテレポート番号：ボスに最も近いテレポートをアイコンに表示します。",
+    "de": "Teleportnummer am Symbol: der nächste Teleport eines Bosses, auf seinem Symbol.",
+    "fr": "Numéro de téléport sur l'icône : le téléport le plus proche d'un boss, sur son icône.",
+    "es": "Número de teletransporte en el icono: el más cercano a un jefe, en su icono.",
+    "pt": "Número do teleporte no ícone: o teleporte mais próximo de um chefe, no ícone dele.",
+    "ru": "Номер телепорта на значке: ближайший к боссу телепорт, прямо на значке.",
+    "zh-Hant": "圖示上的傳送點編號：首領最近的傳送點，顯示在圖示上。",
+    "zh-Hans": "图标上的传送点编号：首领最近的传送点，显示在图标上。"
+  }
+]

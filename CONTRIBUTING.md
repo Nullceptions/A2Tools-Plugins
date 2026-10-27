@@ -18,9 +18,19 @@ plugins/my-plugin/
   *.js *.css      its scripts and styles (no inline scripts: script-src 'self')
   *.json *.png …  data and images
   README.md       for reviewers and players (not shipped)
+  changes.json    What's new: each recent version's notes (not shipped; goes into the catalog)
 ```
 
 Allowed file types: `.html .js .css .json .png .jpg .jpeg .webp .svg .gif .md .txt`. A plugin can be at most 8 MB.
+
+`changes.json` says what each recent version added, shown to players in the meter's update prompt and in Settings → Plugins (meter 2.0.81 on). Newest first, at most 5 versions, none newer than the manifest's; English required, the other languages (`ko ja de fr es pt ru zh-Hant zh-Hans`) optional, each note at most 300 characters. It goes into the signed catalog, not the plugin's files, so a note can be added or corrected without a new version:
+
+```json
+[
+  { "version": "1.1.0", "en": "A volume for its alerts.", "de": "Eine Lautstärke für die Alarme." },
+  { "version": "1.0.0", "en": "First version." }
+]
+```
 
 `manifest.json`:
 

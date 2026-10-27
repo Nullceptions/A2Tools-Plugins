@@ -15,7 +15,7 @@ const el = (tag, cls, text) => {
 };
 const L = globalThis.RecapLogic;
 
-const DEFAULTS = { style: "toast", hideAfter: 10, size: "1", textSize: "1" };
+const DEFAULTS = { style: "toast", hideAfter: 10, size: "1" };
 let prefs = { ...DEFAULTS };
 let history = [];
 let tab = "last";
@@ -57,10 +57,6 @@ function translate() {
 
 // ----- The window -----
 
-// The window's text, larger for a screen where it reads small.
-const applyTextSize = () => {
-  document.documentElement.style.zoom = String(Number(prefs.textSize) || 1);
-};
 
 function stat(label, value, cls) {
   const box = el("div", "stat");
@@ -337,12 +333,11 @@ for (const b of document.querySelectorAll(".tallyBy button")) {
     renderTally();
   });
 }
-for (const key of ["style", "hideAfter", "size", "textSize"]) {
+for (const key of ["style", "hideAfter", "size"]) {
   $(`.${key}`).addEventListener("change", async () => {
     prefs[key] = key === "hideAfter" ? Number($(`.${key}`).value) : $(`.${key}`).value;
     await a2.storage.set("prefs", prefs).catch(() => {});
     if (prefs.style === "off") closePopup();
-    applyTextSize();
   });
 }
 $(".test").addEventListener("click", () => {
@@ -380,8 +375,6 @@ $(".clear").addEventListener("click", async () => {
   $(".style").value = prefs.style;
   $(".hideAfter").value = String(prefs.hideAfter);
   $(".size").value = String(prefs.size);
-  $(".textSize").value = String(prefs.textSize);
-  applyTextSize();
   translate();
   setTab("last");
   a2.ready();

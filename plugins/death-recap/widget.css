@@ -6,7 +6,7 @@ html, body {
   overflow: hidden;
   background: transparent;
   color: #f2f6fb;
-  font: 14px/1.4 "Segoe UI", system-ui, sans-serif;
+  font: 13.5px/1.4 "Segoe UI", system-ui, sans-serif;
   text-rendering: optimizeLegibility;
   user-select: none;
 }
@@ -26,17 +26,17 @@ body { display: flex; align-items: center; justify-content: center; }
   cursor: pointer;
 }
 .body { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
-.killedBy { font-size: 13px; font-weight: 600; color: #ff9b9b; }
+.killedBy { font-size: 12.5px; font-weight: 600; color: #ff9b9b; }
 .name { font-family: "Bahnschrift", "Segoe UI", sans-serif; font-weight: 600; font-size: 19px; }
-.sub { font-size: 13px; color: #d3dce6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sub { font-size: 12.5px; color: #d3dce6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .stats { font-weight: 500; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; white-space: nowrap; }
 .stats img { height: 18px; width: auto; vertical-align: middle; margin-right: 4px; }
 .cp { color: #4fe8f2; }
 .gs { color: #f1e9d6; }
-.extra { font-size: 13px; color: #b8c4d2; }
+.extra { font-size: 12.5px; color: #b8c4d2; }
 .stats b { font-weight: 700; }
 .extra:empty, .assistCount:empty { display: none; }
-.assistCount { font-size: 13px; font-weight: 600; color: #ff9b9b; }
+.assistCount { font-size: 12.5px; font-weight: 600; color: #ff9b9b; }
 
 /* B: the corner toast. */
 .card[data-style="toast"] { width: 460px; padding: 12px 14px; border-radius: 10px; border-color: rgba(239, 138, 138, 0.45); }

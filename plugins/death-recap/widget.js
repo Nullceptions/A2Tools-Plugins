@@ -24,7 +24,8 @@ a2.on("widget", (d) => {
   $(".damage").textContent = `${d.damage} ${d.dmg}`;
   $(".dps").textContent = `${d.dps} DPS`;
   $(".fight").textContent = d.fight;
-  $(".extra").textContent = d.style === "banner" ? [d.times, d.topSkill].filter(Boolean).join(" · ") : "";
+  $(".extra").textContent = d.style === "banner" ? [d.assistNames, d.times].filter(Boolean).join(" · ") : d.style === "toast" ? d.assists || "" : "";
+  $(".assistCount").textContent = d.style === "strip" ? d.assists || "" : "";
   card.hidden = false;
   reportArea();
 });

@@ -118,7 +118,28 @@ function renderLast() {
     row.append(line, bar);
     skills.append(row);
   }
-  view.append(head, scores, fight, skills);
+  view.append(head, scores, fight);
+  // The others who damaged you in that fight.
+  const assists = h.assists || [];
+  if (assists.length) {
+    const box = el("div", "assists");
+    box.append(el("div", "label", words.assistedBy));
+    for (const a of assists) {
+      const row = el("div", "assist");
+      const img = el("img", "rowIcon");
+      if (classIcon(a.class)) img.src = classIcon(a.class);
+      img.alt = className(a.class);
+      const text = el("div", "rowText");
+      text.append(
+        el("div", "rowName", a.name || "?"),
+        el("div", "rowSub", [className(a.class), a.level ? words.lv(a.level) : "", typeof a.cp === "number" ? `${words.cp} ${L.cpText(a.cp, lang)}` : ""].filter(Boolean).join(" · ")),
+      );
+      row.append(img, text, el("div", "rowRight", `${num(a.damage)} · ${words.hitCount(a.hits)}`));
+      box.append(row);
+    }
+    view.append(box);
+  }
+  view.append(skills);
 }
 
 function renderHistory() {
@@ -199,7 +220,7 @@ function setTab(name) {
 // ----- The popup -----
 
 // Each style's size at scale 1 (CSS px), with room for its shadow.
-const POPUP_SIZE = { toast: [452, 112], banner: [716, 212], strip: [660, 64] };
+const POPUP_SIZE = { toast: [452, 132], banner: [716, 232], strip: [700, 64] };
 
 function popupData(h) {
   return {
@@ -224,6 +245,8 @@ function popupData(h) {
     fightLabel: words.fight,
     times: words.times(L.timesBy(history, h)),
     topSkill: h.skills[0] ? `${h.skills[0].name || `#${h.skills[0].id}`} ${num(h.skills[0].damage)}` : "",
+    assists: (h.assists || []).length ? words.assists(h.assists.length) : "",
+    assistNames: (h.assists || []).length ? `${words.assistedBy}: ${h.assists.map((a) => a.name || "?").join(", ")}` : "",
   };
 }
 
@@ -248,6 +271,7 @@ async function showPopup(h) {
 const SAMPLE = {
   at: Date.now(), name: "NotYourSnack", serverId: 2304, legion: "DISSONATA", class: "gladiator", level: 45, gs: 2783, cp: 170738,
   damage: 22042, hits: 13, durationMs: 1898, dps: 11613, skills: [{ id: 11440000, name: "Upward Strike", damage: 6436, hits: 1 }],
+  assists: [{ name: "Tewy", class: "ranger", level: 45, gs: 2690, cp: 152300, damage: 8120, hits: 6 }],
 };
 
 // ----- Events -----

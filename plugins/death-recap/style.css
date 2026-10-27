@@ -67,6 +67,11 @@ button:focus-visible, select:focus-visible { outline: 2px solid var(--a2-accent,
 .bar { height: 4px; border-radius: 2px; background: rgba(255, 255, 255, 0.08); margin-top: 3px; }
 .fill { height: 4px; border-radius: 2px; background: var(--a2-accent, #8fc2ff); }
 
+/* Assists */
+.assists { display: flex; flex-direction: column; gap: 4px; }
+.assists .label { font-size: 12px; }
+.assist { display: flex; align-items: center; gap: 10px; padding: 4px 8px; border-radius: 8px; background: rgba(255, 255, 255, 0.04); }
+
 /* History and tallies */
 .history, .tallyList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
 .deathRow, .tallyRow {

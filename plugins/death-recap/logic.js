@@ -5,6 +5,8 @@
   const MAX_DEATHS = 2000;
   // Skills kept per death.
   const MAX_SKILLS = 5;
+  // Assists kept per death.
+  const MAX_ASSISTS = 10;
 
   // What is kept of the meter's recap (a2.on("deathRecap")).
   const entryOf = (r) => ({
@@ -21,6 +23,9 @@
     durationMs: r.durationMs ?? null,
     dps: r.dps ?? null,
     skills: (r.skills || []).slice(0, MAX_SKILLS).map((s) => ({ id: s.id, name: s.name || null, damage: s.damage, hits: s.hits })),
+    assists: (r.assists || []).slice(0, MAX_ASSISTS).map((a) => ({
+      name: a.name || null, class: a.class || null, level: a.level ?? null, gs: a.gearScore ?? null, cp: a.combatPower ?? null, damage: a.damage || 0, hits: a.hits || 0,
+    })),
   });
 
   // The history with a recap added, newest first: unless it is one already

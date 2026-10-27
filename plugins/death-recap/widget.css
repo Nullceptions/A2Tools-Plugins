@@ -31,7 +31,8 @@ body { display: flex; align-items: center; justify-content: center; }
 .cp { color: #4fe8f2; }
 .gs { color: #f1e9d6; }
 .extra { font-size: 12px; color: rgba(233, 240, 248, 0.62); }
-.extra:empty { display: none; }
+.extra:empty, .assistCount:empty { display: none; }
+.assistCount { font-size: 12px; color: #ef8a8a; }
 
 /* B: the corner toast. */
 .card[data-style="toast"] { width: 440px; padding: 12px 14px; border-radius: 10px; border-color: rgba(239, 138, 138, 0.45); }

@@ -12,8 +12,8 @@
       <p class="note sub" data-t="showWidgetNote">Off: spoken only.</p>
       <label class="switch"><span data-t="lock">Lock in place</span><input type="checkbox" class="lock" /></label>
       <div class="row">
-        <span data-t="style">Call style</span>
-        <select class="style">
+        <span data-t="style" id="styleLabel">Call style</span>
+        <select class="style" aria-labelledby="styleLabel">
           <option value="both" data-t="styleBoth">Short call and the boss's line</option>
           <option value="act" data-t="styleAct">Short call</option>
           <option value="line" data-t="styleLine">The boss's line</option>
@@ -23,12 +23,12 @@
       <button type="button" class="btn test" data-t="test">Test</button>
     </header>
     <nav class="tabs" role="tablist">
-      <button type="button" class="tab isActive" role="tab" data-tab="bosses" data-t="bosses">Bosses</button>
-      <button type="button" class="tab" role="tab" data-tab="look" data-t="look">Look</button>
-      <button type="button" class="tab" role="tab" data-tab="voice" data-t="voice">Voice</button>
+      <button type="button" class="tab isActive" role="tab" aria-selected="true" aria-controls="pane-bosses" id="tab-bosses" data-tab="bosses" data-t="bosses">Bosses</button>
+      <button type="button" class="tab" role="tab" aria-selected="false" aria-controls="pane-look" id="tab-look" data-tab="look" data-t="look">Look</button>
+      <button type="button" class="tab" role="tab" aria-selected="false" aria-controls="pane-voice" id="tab-voice" data-tab="voice" data-t="voice">Voice</button>
     </nav>
 
-    <section class="pane" data-pane="bosses">
+    <section class="pane" data-pane="bosses" id="pane-bosses" role="tabpanel" aria-labelledby="tab-bosses">
       <div class="inline wide">
         <input type="search" class="filter" data-tp="filter" placeholder="Filter" />
         <button type="button" class="btn allOn" data-t="allOn">All on</button>
@@ -40,7 +40,15 @@
       <p class="note"><a href="https://github.com/taengu/A2Tools-Plugins/issues" data-t="report">A mechanic missing or wrong? Report it here.</a></p>
     </section>
 
-    <section class="pane" data-pane="look" hidden>
+    <section class="pane" data-pane="look" id="pane-look" role="tabpanel" aria-labelledby="tab-look" hidden>
+      <label class="row"><span data-t="menuSize">Text size in this window</span>
+        <select class="menuSize">
+          <option value="1" data-t="menuNormal">Normal</option>
+          <option value="1.25" data-t="large">Large</option>
+          <option value="1.5" data-t="menuLarger">Larger</option>
+          <option value="1.75" data-t="menuLargest">Largest</option>
+        </select>
+      </label>
       <label class="row"><span data-t="size">Text size</span>
         <select class="size">
           <option value="32" data-t="small">Small</option>
@@ -57,7 +65,7 @@
       <p class="note" data-t="help">Unlocked, drag the text anywhere. Double-click it to open this window.</p>
     </section>
 
-    <section class="pane" data-pane="voice" hidden>
+    <section class="pane" data-pane="voice" id="pane-voice" role="tabpanel" aria-labelledby="tab-voice" hidden>
       <label class="row"><span data-t="volume">Volume</span><input type="range" class="volume" min="0" max="100" step="5" /></label>
       <label class="row"><span data-t="voicePick">Voice</span><select class="voiceName"></select></label>
       <label class="row"><span data-t="rate">Speech speed</span>

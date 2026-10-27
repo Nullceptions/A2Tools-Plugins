@@ -9,6 +9,8 @@ const DEFAULTS = {
   size: "60", fg: "#ffff00", safe: "#66ff66", bg: "#000000", bgOpacity: 85,
   volume: 100, voiceName: "", rate: "1",
   offBoss: {}, offCall: {}, waves: {}, custom: {},
+  // This window's own text size (Look): the whole page scaled, for reduced vision.
+  menuSize: "1",
 };
 let prefs = { ...DEFAULTS };
 let lang = "en";
@@ -301,7 +303,15 @@ const els = {
   enabled: $(".enabled"), widget: $(".widget"), style: $(".style"),
   size: $(".size"), fg: $(".fg"), safe: $(".safe"), bg: $(".bg"), bgOpacity: $(".bgOpacity"),
   volume: $(".volume"), voiceName: $(".voiceName"), rate: $(".rate"),
+  menuSize: $(".menuSize"),
 };
+// The page at the size picked: zoom scales text, controls and spacing alike,
+// so nothing overlaps or is cut off at 175%.
+const MENU_SIZES = ["1", "1.25", "1.5", "1.75"];
+function sizeMenu() {
+  const z = MENU_SIZES.includes(String(prefs.menuSize)) ? Number(prefs.menuSize) : 1;
+  document.body.style.zoom = String(z);
+}
 
 function translate() {
   document.documentElement.lang = lang;
@@ -337,6 +347,7 @@ function showPrefs() {
     else el.value = String(prefs[key]);
   }
   els.voiceName.value = prefs.voiceName;
+  sizeMenu();
 }
 
 // What a call is, in the list: a card with its short call (if curated) over
@@ -353,6 +364,7 @@ function callRow(c) {
     if (box.checked) delete prefs.offCall[c.k];
     else prefs.offCall[c.k] = true;
     li.classList.toggle("isOff", !box.checked);
+    offTag.hidden = box.checked;
     save();
   });
   const what = document.createElement("span");
@@ -379,6 +391,10 @@ function callRow(c) {
   if (c.t === "abnormal" && T(c.n)) tags.append(tag(T(c.n)));
   if (c.lead) tags.append(tag(`${(c.lead / 1000).toFixed(1).replace(/\.0$/, "")} s`));
   if (c.act) tags.append(tag(words.tagCall, "isCall"));
+  // Off said in words, not only by the card fading.
+  const offTag = tag(words.tagOff, "isOffTag");
+  offTag.hidden = box.checked;
+  tags.append(offTag);
   const pen = document.createElement("button");
   pen.type = "button";
   pen.className = "pen";
@@ -536,7 +552,10 @@ function renderBosses() {
 
 for (const b of document.querySelectorAll(".tab")) {
   b.addEventListener("click", () => {
-    for (const x of document.querySelectorAll(".tab")) x.classList.toggle("isActive", x === b);
+    for (const x of document.querySelectorAll(".tab")) {
+      x.classList.toggle("isActive", x === b);
+      x.setAttribute("aria-selected", String(x === b));
+    }
     for (const p of document.querySelectorAll(".pane")) p.hidden = p.dataset.pane !== b.dataset.tab;
   });
 }
@@ -566,6 +585,7 @@ for (const [key, el] of Object.entries(els)) {
     if (key === "volume" || key === "bgOpacity") v = Number(v);
     prefs[key] = v;
     save();
+    if (key === "menuSize") return sizeMenu();
     if (key === "enabled" || key === "widget" || key === "size") placeWidget();
     else send();
     if (key === "enabled" && !v) engine.clear();

@@ -1,0 +1,123 @@
+html, body {
+  margin: 0;
+  background: transparent;
+  color: #e9f0f8;
+  font: 13px/1.4 "Segoe UI", system-ui, sans-serif;
+}
+body { padding: 10px 14px 14px; }
+[hidden] { display: none !important; }
+.muted, .note, .label { color: rgba(233, 240, 248, 0.68); }
+.note { font-size: 12px; margin: 6px 0; }
+.empty { color: rgba(233, 240, 248, 0.75); margin: 18px 0 6px; }
+
+/* Tabs */
+.tabs { display: flex; gap: 4px; margin-bottom: 12px; flex-wrap: wrap; }
+.tabs button, .tallyBy button {
+  font: inherit;
+  color: rgba(233, 240, 248, 0.75);
+  background: none;
+  border: 0;
+  border-radius: 6px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.tabs button:hover, .tallyBy button:hover { background: rgba(255, 255, 255, 0.06); }
+.tabs button[aria-selected="true"], .tallyBy button[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--a2-accent, #8fc2ff) 18%, transparent);
+  color: var(--a2-accent, #8fc2ff);
+  font-weight: 600;
+}
+button:focus-visible, select:focus-visible { outline: 2px solid var(--a2-accent, #8fc2ff); outline-offset: 1px; }
+
+/* Last death */
+.view[data-view="last"] { display: flex; flex-direction: column; gap: 14px; }
+.head { display: flex; gap: 12px; align-items: center; }
+.classIcon { width: 60px; height: 60px; flex: 0 0 auto; }
+.who { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.killedBy { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #ef8a8a; }
+.name, .score .value {
+  font-family: "Bahnschrift", "Segoe UI", sans-serif;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.name { font-size: 26px; line-height: 1.1; overflow-wrap: anywhere; }
+.sub { color: rgba(233, 240, 248, 0.78); }
+.when { font-size: 12px; color: rgba(233, 240, 248, 0.62); }
+.scores { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.score { display: flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 8px 10px; }
+.score .label { font-size: 12px; }
+.score .value { font-size: 20px; }
+.scoreIcon { height: 30px; width: auto; }
+/* The game's colours: combat power cyan, as its icon; gear score ivory. */
+.score.cp .value, .cpText { color: #4fe8f2; }
+.score.gs .value { color: #f1e9d6; }
+.fight {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  padding: 10px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.stat .label { font-size: 11px; }
+.stat .value { font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.skills { display: flex; flex-direction: column; gap: 7px; }
+.skills .label { font-size: 12px; }
+.skillLine { display: flex; justify-content: space-between; gap: 8px; }
+.bar { height: 4px; border-radius: 2px; background: rgba(255, 255, 255, 0.08); margin-top: 3px; }
+.fill { height: 4px; border-radius: 2px; background: var(--a2-accent, #8fc2ff); }
+
+/* History and tallies */
+.history, .tallyList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.deathRow, .tallyRow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  border: 0;
+}
+.deathRow { cursor: pointer; }
+.deathRow:hover { background: rgba(255, 255, 255, 0.08); }
+.rowIcon { width: 32px; height: 32px; flex: 0 0 auto; }
+.rowText { flex: 1 1 auto; min-width: 0; }
+.rowName { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rowSub { font-size: 12px; color: rgba(233, 240, 248, 0.68); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rowRight { text-align: right; font-size: 12px; flex: 0 0 auto; }
+.count { font-weight: 600; font-size: 13px; }
+.tallyBy { display: flex; gap: 4px; margin-bottom: 10px; flex-wrap: wrap; }
+
+/* Settings */
+.settings .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 34px; }
+.buttons { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
+.buttons button {
+  font: inherit;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 6px;
+  padding: 5px 12px;
+  cursor: pointer;
+}
+.buttons button:hover { background: rgba(255, 255, 255, 0.14); }
+.buttons .danger { border-color: rgba(239, 138, 138, 0.5); }
+select {
+  color-scheme: dark;
+  appearance: none;
+  -webkit-appearance: none;
+  min-height: 26px;
+  padding: 3px 26px 3px 8px;
+  font: inherit;
+  color: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='white' stroke-opacity='.7' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 9px center / 10px 6px;
+  cursor: pointer;
+}
+select option { background: var(--a2-panel, #0e1420); color: #fff; }

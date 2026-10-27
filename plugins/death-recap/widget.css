@@ -1,0 +1,68 @@
+/* The popup, in three styles; --scale is the player's size. */
+:root { --scale: 1; }
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+  color: #e9f0f8;
+  font: 13px/1.35 "Segoe UI", system-ui, sans-serif;
+  user-select: none;
+}
+body { display: flex; align-items: center; justify-content: center; }
+[hidden] { display: none !important; }
+.card {
+  zoom: var(--scale);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(14, 20, 32, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+.body { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.killedBy { font-size: 12px; color: #ef8a8a; }
+.name { font-family: "Bahnschrift", "Segoe UI", sans-serif; font-weight: 600; font-size: 19px; }
+.sub { font-size: 12px; color: rgba(233, 240, 248, 0.75); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stats { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; white-space: nowrap; }
+.stats img { height: 18px; width: auto; vertical-align: middle; margin-right: 4px; }
+.cp { color: #4fe8f2; }
+.gs { color: #f1e9d6; }
+.extra { font-size: 12px; color: rgba(233, 240, 248, 0.62); }
+.extra:empty { display: none; }
+
+/* B: the corner toast. */
+.card[data-style="toast"] { width: 440px; padding: 12px 14px; border-radius: 10px; border-color: rgba(239, 138, 138, 0.45); }
+.card[data-style="toast"] .classIcon { width: 52px; height: 52px; }
+.card[data-style="toast"] .fight::before { content: "· "; }
+
+/* C: the centre banner. */
+.card[data-style="banner"] {
+  width: 700px;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 24px;
+  text-align: center;
+  background: rgba(10, 12, 18, 0.9);
+  border: 0;
+  border-top: 2px solid #ef8a8a;
+  border-bottom: 2px solid #ef8a8a;
+  border-radius: 0;
+}
+.card[data-style="banner"] .classIcon { width: 46px; height: 46px; }
+.card[data-style="banner"] .body { align-items: center; gap: 6px; }
+.card[data-style="banner"] .title { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.card[data-style="banner"] .killedBy { letter-spacing: 0.24em; text-transform: uppercase; }
+.card[data-style="banner"] .name { font-size: 32px; line-height: 1; }
+.card[data-style="banner"] .sub { font-size: 14px; }
+.card[data-style="banner"] .stats { gap: 22px; font-size: 16px; justify-content: center; }
+
+/* D: the slim strip. */
+.card[data-style="strip"] { padding: 6px 16px 6px 8px; border-radius: 999px; gap: 10px; }
+.card[data-style="strip"] .classIcon { width: 28px; height: 28px; }
+.card[data-style="strip"] .body { flex-direction: row; align-items: center; gap: 10px; }
+.card[data-style="strip"] .killedBy { background: #ef8a8a; color: #1a0f10; font-weight: 700; border-radius: 999px; padding: 2px 9px; }
+.card[data-style="strip"] .name { font-size: 16px; }
+.card[data-style="strip"] .dps, .card[data-style="strip"] .fight { display: none; }

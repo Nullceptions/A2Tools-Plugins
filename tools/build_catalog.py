@@ -37,7 +37,10 @@ SKIP = {"README.md", "changes.json"}
 # event; meter 2.0.65). A meter without it simply has no a2.bossTimers.
 # "widgets": small windows of the plugin's own (a2.widgets, meter 2.0.68).
 # "fps": the game's frame rate (a2.watchFps, a2.fpsAdmin; meter 2.0.78).
-PERMISSIONS = {"storage", "notify", "events:character", "window", "feed:boss-timers", "widgets", "fps"}
+# Frames no decoder may read (the meter's REFUSED_OPCODES): another player
+# coming into view, and players' movement.
+REFUSED_OPCODES = {"44 36", "45 36", "1E 37", "1F 37", "20 37", "28 37", "29 37", "2A 37"}
+PERMISSIONS = {"storage", "notify", "events:character", "window", "feed:boss-timers", "widgets", "fps", "events:death-recap"}
 DECODER_TYPES = {"u8", "u16", "u32", "u64", "i32", "varint", "list"}
 
 
@@ -136,6 +139,9 @@ def check(folder):
             fail(name, f"decoder {decoder.get('name')} needs the permission decoder:{decoder.get('name')}")
         if not re.fullmatch(r"[0-9A-Fa-f]{2} [0-9A-Fa-f]{2}", decoder.get("opcode", "")):
             fail(name, f"decoder {decoder.get('name')}: opcode must look like \"0D 90\"")
+        # As the meter refuses them: players coming into view, and moving.
+        if decoder.get("opcode", "").upper() in REFUSED_OPCODES:
+            fail(name, f"decoder {decoder.get('name')}: frames {decoder['opcode']} can't be read by plugins")
         check_decoders(name, decoder.get("fields", []))
         if not isinstance(decoder.get("immediate", False), bool):
             fail(name, f"decoder {decoder.get('name')}: \"immediate\" must be true or false")

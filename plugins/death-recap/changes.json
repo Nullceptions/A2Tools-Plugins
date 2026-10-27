@@ -1,0 +1,15 @@
+[
+  {
+    "version": "0.1.0",
+    "en": "Who killed you, once you are dead: their name, legion, server, class, level, combat power and gear score, and the damage they did to you, in a popup and a history with tallies.",
+    "ko": "사망한 뒤 누가 처치했는지 보여 줍니다: 이름, 레기온, 서버, 클래스, 레벨, 전투력, 장비 점수와 당신에게 준 피해를 알림과 기록, 집계로 표시합니다.",
+    "ja": "死亡した後に、倒した相手を表示します：名前、レギオン、サーバー、クラス、レベル、戦闘力、装備スコア、与えられたダメージを通知と履歴・集計で。",
+    "de": "Wer dich getötet hat, sobald du tot bist: Name, Legion, Server, Klasse, Stufe, Kampfkraft und Ausrüstungswert sowie der Schaden an dir, als Hinweis und im Verlauf mit Statistik.",
+    "fr": "Qui vous a tué, une fois mort : nom, légion, serveur, classe, niveau, puissance de combat et score d'équipement, et les dégâts subis, en notification et dans un historique avec bilan.",
+    "es": "Quién te mató, una vez muerto: nombre, legión, servidor, clase, nivel, poder de combate y puntuación de equipo, y el daño que te hizo, en un aviso y un historial con recuentos.",
+    "pt": "Quem te matou, depois da morte: nome, legião, servidor, classe, nível, poder de combate e pontuação de equipamento, e o dano que te causou, num aviso e num histórico com contagens.",
+    "ru": "Кто вас убил — после смерти: имя, легион, сервер, класс, уровень, боевая мощь и очки снаряжения, и урон по вам; в уведомлении и в истории с итогами.",
+    "zh-Hant": "死亡後顯示擊殺你的人：名稱、軍團、伺服器、職業、等級、戰鬥力與裝備分數，以及對你造成的傷害，以提示、歷史與統計呈現。",
+    "zh-Hans": "死亡后显示击杀你的人：名称、军团、服务器、职业、等级、战斗力与装备分数，以及对你造成的伤害，以提示、历史与统计呈现。"
+  }
+]

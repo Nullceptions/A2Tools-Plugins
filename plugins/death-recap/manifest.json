@@ -9,7 +9,8 @@
     "storage",
     "window",
     "widgets",
-    "events:death-recap"
+    "events:death-recap",
+    "screenshot"
   ],
   "decoders": [],
   "ui": {

@@ -52,6 +52,13 @@ function translate() {
     const text = words[e.dataset.t];
     if (typeof text === "string") e.textContent = text;
   }
+  for (const e of document.querySelectorAll("[data-t-label]")) {
+    const text = words[e.dataset.tLabel];
+    if (typeof text === "string") {
+      e.setAttribute("aria-label", text);
+      e.title = text;
+    }
+  }
   for (const o of $(".hideAfter").options) if (o.value !== "0") o.textContent = words.seconds(o.value);
 }
 
@@ -228,6 +235,8 @@ function renderTally() {
 }
 
 function render() {
+  // The camera: on the last death, when there is one to show.
+  $(".shot").hidden = tab !== "last" || !history.length;
   renderLast();
   renderHistory();
   renderTally();
@@ -235,7 +244,7 @@ function render() {
 
 function setTab(name) {
   tab = name;
-  for (const b of document.querySelectorAll(".tabs button")) b.setAttribute("aria-selected", String(b.dataset.tab === tab));
+  for (const b of document.querySelectorAll(".tabs [role=tab]")) b.setAttribute("aria-selected", String(b.dataset.tab === tab));
   for (const v of document.querySelectorAll(".view")) v.hidden = v.dataset.view !== tab;
   render();
 }
@@ -342,7 +351,27 @@ a2.on("language", (code) => {
   render();
 });
 
-for (const b of document.querySelectorAll(".tabs button")) b.addEventListener("click", () => setTab(b.dataset.tab));
+for (const b of document.querySelectorAll(".tabs [role=tab]")) b.addEventListener("click", () => setTab(b.dataset.tab));
+
+// The recap as a picture: the card (not the tabs) to the clipboard and the
+// meter's screenshot folder. Meter 2.0.81 on.
+let shotTimer = null;
+const shotSay = (text) => {
+  $(".shotStatus").textContent = text;
+  clearTimeout(shotTimer);
+  shotTimer = setTimeout(() => ($(".shotStatus").textContent = ""), 4000);
+};
+$(".shot").addEventListener("click", async () => {
+  if (typeof a2.screenshot !== "function") return shotSay(words.old);
+  const r = $('[data-view="last"]').getBoundingClientRect();
+  const bottom = Math.min(r.bottom, window.innerHeight);
+  try {
+    const got = await a2.screenshot({ x: Math.max(0, r.left - 8), y: Math.max(0, r.top - 6), width: r.width + 16, height: bottom - r.top + 12 });
+    shotSay(got?.file ? words.shotSaved : got?.clipboard ? words.shotCopied : words.shotFailed);
+  } catch {
+    shotSay(words.shotFailed);
+  }
+});
 for (const b of document.querySelectorAll(".tallyBy button")) {
   b.addEventListener("click", () => {
     tallyBy = b.dataset.by;

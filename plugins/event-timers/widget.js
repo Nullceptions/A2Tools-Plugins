@@ -130,11 +130,14 @@ function renderGrid(g) {
     rowTop[row] = y;
     if (!up) y += h;
   }
+  // Every icon at its row's top, so a row's badges are in one line however
+  // many lines its names and countdowns take (growing up, they were set at
+  // the row's bottom, and a two-line name lifted its badge above the rest).
   for (const [i, pin] of pins.entries()) {
     if (pin.hidden) continue;
     const row = Math.floor(i / g.cols);
     pin.style.left = `${colX(i) + gapX / 2}px`;
-    pin.style.top = `${up ? rowTop[row] + heights[row] - gapY - pin.offsetHeight : rowTop[row]}px`;
+    pin.style.top = `${rowTop[row] + (up ? gapY : 0)}px`;
   }
   // While placing: every place outlined.
   const places = g.setup ? g.cols * g.rows : 0;

@@ -87,6 +87,26 @@
         "en": "Jump!", "ko": "점프!", "ja": "ジャンプ！", "de": "Springen!", "fr": "Sautez !", "es": "¡Salta!",
         "pt": "Pule!", "ru": "Прыгайте!", "zh-Hant": "跳！", "zh-Hans": "跳！"
       }
+    },
+    {
+      "key": "talisra-dark-spear",
+      "boss": "M_PD_Arkanis_Thalythra_01",
+      "trigger": "use", "id": 1801730,
+      "_how": "After 'With this spear forged of light and dark' (1801720) she shows the spears' order one at a time, 2 s apart: Skill10_Black (1801730) or Skill10_Blue (1801735); then throws them in that order (1801743, 1801751, 1801766, about 2 s apart from 2 s after the last shown). Black, Black, Blue in report 95G2AR (2026-10-27, 02:16:06 to 02:16:17); the game picks the order anew each time",
+      "call": {
+        "en": "Dark spear", "ko": "어둠의 창", "ja": "闇の槍", "de": "Dunkler Speer", "fr": "Lance sombre",
+        "es": "Lanza oscura", "pt": "Lança sombria", "ru": "Тёмное копьё", "zh-Hant": "暗之槍", "zh-Hans": "暗之枪"
+      }
+    },
+    {
+      "key": "talisra-light-spear",
+      "boss": "M_PD_Arkanis_Thalythra_01",
+      "trigger": "use", "id": 1801735,
+      "_how": "See talisra-dark-spear: Skill10_Blue, the light one",
+      "call": {
+        "en": "Light spear", "ko": "빛의 창", "ja": "光の槍", "de": "Heller Speer", "fr": "Lance de lumière",
+        "es": "Lanza de luz", "pt": "Lança de luz", "ru": "Светлое копьё", "zh-Hant": "光之槍", "zh-Hans": "光之枪"
+      }
     }
   ]
 }

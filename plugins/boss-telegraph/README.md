@@ -22,9 +22,10 @@ It knows only the bosses in its list (`bosses.js`). A boss or a mechanic that is
 | Thamon (Vakron Sky Island) | cast 1604670 "Surging violet!" (1.79 s) | Purple — stop magic attacks | boss buff 16046701 Mysterious Roar, 10 s: "Stop magic", then "Safe to attack" |
 | Thamon | cast 1604660 "Burn! Burn!!" (1.79 s) | Red — stop physical attacks | boss buff 16046601 Cry of Life, 10 s: "Stop physical", then "Safe to attack" |
 | Vakron | skill 1604390 (normal) / 1604393 (easy), no cast time | Jump! | a beep on each of its three waves (+1.7, +3.4, +5.1 s) |
+| Talisra of the Void (Transcendence) | skill 1801730 (her dark spear shown) / 1801735 (her light spear shown) | Dark spear / Light spear | after "With this spear forged of light and dark", she shows three spears one at a time, 2 s apart, then throws them in that order: each called as it is shown, so the order is heard before the throws |
 | Phantasmal Lakshmi (Draupnir) | cast 1605910 (0.73 s) | Reflect — stop attacking | boss buff 16059101 Damage Reflection, 8 s: "Stop attacking", then "Safe to attack" |
 
-Confirmed in captures on 2026-10-26. Not called: Bakarma's per-player debuffs 18006910 to 18006914 (2 s; their meaning is not known yet), and Vakron's other casts without a line (1604410, 1604400, 1604370).
+Confirmed in captures on 2026-10-26 (Talisra: 2026-10-27, one spear phase: dark, dark, light). Not called: Bakarma's per-player debuffs 18006910 to 18006914 (2 s; their meaning is not known yet), and Vakron's other casts without a line (1604410, 1604400, 1604370).
 
 ## What it reads
 
@@ -50,7 +51,7 @@ python tools/boss-telegraph/build.py --tables <extractor>/Output/AION2/Content/D
 
 It keeps NpcBehaviorCase rows of named bosses whose Casting, SkillUse or Abnormal event always (Prob 10000) plays an on-screen line, with the cast time from Skill and the names and lines in ten languages (Traditional Chinese from the TW client, Simplified made from it with OpenCC). Run it again after a patch and bump the version.
 
-`voice.js` (the built-in voice) is built from `bosses.js` by `tools/boss-telegraph/voice.py` (Kokoro, Python 3.10 to 3.12, ffmpeg with libopus): run it after `build.py`.
+`voice.js` (the built-in voice) is built from `bosses.js` by `tools/boss-telegraph/voice.py` (Kokoro, Python 3.10 to 3.12, no ffmpeg needed): run it after `build.py`.
 
 ## A mechanic missing or wrong?
 

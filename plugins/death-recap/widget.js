@@ -64,3 +64,5 @@ document.addEventListener("mouseup", (e) => {
 document.addEventListener("contextmenu", (e) => e.preventDefault());
 
 a2.ready();
+// Ready: ask for what to show, in case it was sent before this page loaded.
+a2.widget.post({ hello: true }).catch(() => {});

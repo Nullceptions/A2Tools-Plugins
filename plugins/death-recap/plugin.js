@@ -276,9 +276,15 @@ function popupData(h) {
   };
 }
 
+// What the popup shows now: sent again when its page says it is ready, as
+// the meter drops what is sent to a widget whose page is still loading (the
+// first popup after the meter starts never showed, 2026-10-28).
+let popupNow = null;
+
 async function closePopup() {
   clearTimeout(popupTimer);
   popupTimer = null;
+  popupNow = null;
   await a2.widgets.close("popup").catch(() => {});
 }
 
@@ -287,7 +293,8 @@ async function showPopup(h) {
   const [w, hgt] = POPUP_SIZE[prefs.style] || POPUP_SIZE.toast;
   const scale = Number(prefs.size) || 1;
   await a2.widgets.open("popup", { width: Math.round(w * scale), height: Math.round(hgt * scale) }).catch(() => {});
-  await a2.widgets.send("popup", popupData(h)).catch(() => {});
+  popupNow = popupData(h);
+  await a2.widgets.send("popup", popupNow).catch(() => {});
   clearTimeout(popupTimer);
   const secs = Number(prefs.hideAfter);
   if (secs > 0) popupTimer = setTimeout(closePopup, secs * 1000);
@@ -313,6 +320,10 @@ a2.on("deathRecap", async (recap) => {
   showPopup(history[0]);
 });
 a2.on("widget-message", async ({ data }) => {
+  if (data?.hello) {
+    if (popupNow) a2.widgets.send("popup", popupNow).catch(() => {});
+    return;
+  }
   if (!data || !data.open) return;
   await closePopup();
   shown = 0;

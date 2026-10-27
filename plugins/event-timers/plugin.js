@@ -542,11 +542,22 @@ const timeZone = () => REGIONS[region()] || null;
 // A wall-clock time in a time zone, as a moment (ms). The zone's offset is
 // read from Intl for that moment, twice, so a time next to a clock change
 // lands right.
+// One formatter per zone: making one is slow, and the timers asked for
+// thousands a second (half a CPU core, 2026-10-28).
+const zoneFormats = new Map();
+const zoneFormat = (tz) => {
+  let f = zoneFormats.get(tz);
+  if (!f) {
+    f = new Intl.DateTimeFormat("en-US", {
+      timeZone: tz, hourCycle: "h23", year: "numeric", month: "numeric", day: "numeric",
+      hour: "numeric", minute: "numeric", second: "numeric", weekday: "short",
+    });
+    zoneFormats.set(tz, f);
+  }
+  return f;
+};
 const partsIn = (tz, ms) => {
-  const parts = new Intl.DateTimeFormat("en-US", {
-    timeZone: tz, hourCycle: "h23", year: "numeric", month: "numeric", day: "numeric",
-    hour: "numeric", minute: "numeric", second: "numeric", weekday: "short",
-  }).formatToParts(new Date(ms));
+  const parts = zoneFormat(tz).formatToParts(new Date(ms));
   const get = (type) => parts.find((p) => p.type === type)?.value;
   return {
     y: Number(get("year")), m: Number(get("month")), d: Number(get("day")),
@@ -568,9 +579,21 @@ const wallToMs = (tz, y, m, d, minutes) => {
 // be entered for a while after it starts (the Shugo Festa and the Dimensional
 // Invasion: 3 minutes, then the game closes the entrance) counts as running
 // for that while only, so the next one shows once it can no longer be joined.
+// Each event's answer is kept until it is over (or, for one with no length,
+// until it starts), so most seconds work nothing out.
+const nextCache = new WeakMap();
 const nextOf = (ev, tz, now) => {
   const zone = ev.utc ? "UTC" : tz;
   const runMs = ev.enter ? ev.enter * 1000 : (ev.minutes || 0) * 60_000;
+  const kept = nextCache.get(ev);
+  if (kept && kept.zone === zone && kept.from <= now && (!kept.best || (runMs ? kept.best.end : kept.best.start) > now)) {
+    if (kept.best || now - kept.from < 60_000) return kept.best;
+  }
+  const best = nextFrom(ev, zone, runMs, now);
+  nextCache.set(ev, { zone, from: now, best });
+  return best;
+};
+const nextFrom = (ev, zone, runMs, now) => {
   let best = null;
   for (let back = -1; back <= 8; back++) {
     const p = partsIn(zone, now + back * 86_400_000);

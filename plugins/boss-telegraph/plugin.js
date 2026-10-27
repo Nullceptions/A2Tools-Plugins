@@ -8,7 +8,7 @@ const DEFAULTS = {
   enabled: true, widget: true, style: "both",
   size: "60", fg: "#ffff00", safe: "#66ff66", bg: "#000000", bgOpacity: 85,
   volume: 100, voiceName: "", rate: "1",
-  offBoss: {}, offCall: {}, waves: {},
+  offBoss: {}, offCall: {}, waves: {}, custom: {},
 };
 let prefs = { ...DEFAULTS };
 let lang = "en";
@@ -75,7 +75,9 @@ const volumeGain = (percent) => Math.pow(Math.max(0, Math.min(100, Number(percen
 const saying = new Map(); // utterance -> { at, prio }
 function say(text, prio = "high") {
   if (!text || prefs.volume <= 0) return;
-  if (builtIn()) return sayBuiltIn(text, prio);
+  // The built-in voice says only its own lines: the player's own words for a
+  // call go to the computer's voices, when it has any.
+  if (builtIn() && (clip(text) || !synth || !voices.length)) return sayBuiltIn(text, prio);
   if (!synth) return;
   const now = Date.now();
   for (const [u, s] of saying) if (now - s.at > 15_000) saying.delete(u);
@@ -337,10 +339,11 @@ function showPrefs() {
   els.voiceName.value = prefs.voiceName;
 }
 
-// What a call is, in the list: its short call (if curated), the boss's line,
-// the buff's name, and what sets it off.
+// What a call is, in the list: a card with its short call (if curated) over
+// the boss's line, what sets it off as tags, and ✎ for the player's own words.
 function callRow(c) {
   const li = document.createElement("li");
+  li.className = "callCard";
   const row = document.createElement("label");
   row.className = "call";
   const box = document.createElement("input");
@@ -349,27 +352,93 @@ function callRow(c) {
   box.addEventListener("change", () => {
     if (box.checked) delete prefs.offCall[c.k];
     else prefs.offCall[c.k] = true;
-    row.classList.toggle("isOff", !box.checked);
+    li.classList.toggle("isOff", !box.checked);
     save();
   });
   const what = document.createElement("span");
   what.className = "what";
-  if (c.act) {
-    const a = document.createElement("span");
-    a.className = "act";
-    a.textContent = T(c.act);
-    what.append(a, document.createTextNode(T(c.line) ? ` · ${T(c.line)}` : ""));
-  } else {
-    what.textContent = T(c.line) || T(c.n);
+  const main = document.createElement("span");
+  main.className = c.act ? "act" : "said";
+  main.textContent = T(c.act) || T(c.line) || T(c.n);
+  what.append(main);
+  if (c.act && T(c.line)) {
+    const line = document.createElement("span");
+    line.className = "line";
+    line.textContent = `“${T(c.line)}”`;
+    what.append(line);
   }
-  const kind = document.createElement("span");
-  kind.className = "kind";
+  // The player's own words, when set: what is said and shown now.
+  const mine = document.createElement("span");
+  mine.className = "mine";
+  what.append(mine);
+  const tags = document.createElement("span");
+  tags.className = "tags";
   const trig = c.t === "cast" ? words.trigCast : c.t === "use" ? words.trigUse : words.trigBuff;
-  const extra = [c.t === "abnormal" && T(c.n), c.lead ? `${(c.lead / 1000).toFixed(1).replace(/\.0$/, "")} s` : "", c.act ? words.tagCall : ""].filter(Boolean);
-  kind.textContent = [trig, ...extra].join(" · ");
-  row.append(box, what, kind);
-  row.classList.toggle("isOff", !box.checked);
+  const tag = (text, cls = "") => Object.assign(document.createElement("span"), { className: `tag ${cls}`.trim(), textContent: text });
+  tags.append(tag(trig));
+  if (c.t === "abnormal" && T(c.n)) tags.append(tag(T(c.n)));
+  if (c.lead) tags.append(tag(`${(c.lead / 1000).toFixed(1).replace(/\.0$/, "")} s`));
+  if (c.act) tags.append(tag(words.tagCall, "isCall"));
+  const pen = document.createElement("button");
+  pen.type = "button";
+  pen.className = "pen";
+  pen.textContent = "✎";
+  pen.title = words.custom;
+  pen.setAttribute("aria-label", words.custom);
+  row.append(box, what, pen, tags);
   li.append(row);
+
+  // ✎ opens a box for the player's own words: said and shown instead.
+  const edit = document.createElement("div");
+  edit.className = "ownBox";
+  const label = Object.assign(document.createElement("span"), { className: "ownLabel", textContent: words.custom });
+  const own = document.createElement("input");
+  own.type = "text";
+  own.maxLength = 80;
+  own.placeholder = T(c.act) || T(c.line) || T(c.n);
+  own.value = prefs.custom[c.k] || "";
+  own.setAttribute("aria-label", words.custom);
+  const clear = Object.assign(document.createElement("button"), { type: "button", className: "clear", textContent: "×", title: words.customReset });
+  const hint = Object.assign(document.createElement("p"), { className: "ownHint", textContent: words.customHint });
+  edit.append(label, own, clear, hint);
+  li.append(edit);
+  const showMine = () => {
+    const v = prefs.custom[c.k] || "";
+    mine.textContent = v ? `${words.custom}: ${v}` : "";
+    mine.hidden = !v;
+    pen.classList.toggle("isSet", !!v);
+    li.classList.toggle("hasOwn", !!v);
+  };
+  const setOwn = (v) => {
+    if (v) prefs.custom[c.k] = v;
+    else delete prefs.custom[c.k];
+    showMine();
+    save();
+  };
+  edit.hidden = true;
+  pen.addEventListener("click", (e) => {
+    e.preventDefault();
+    edit.hidden = !edit.hidden;
+    pen.classList.toggle("isOpen", !edit.hidden);
+    if (!edit.hidden) own.focus();
+  });
+  own.addEventListener("change", () => setOwn(own.value.trim()));
+  own.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") own.blur();
+    if (e.key === "Escape") {
+      own.value = prefs.custom[c.k] || "";
+      edit.hidden = true;
+      pen.classList.remove("isOpen");
+    }
+  });
+  clear.addEventListener("click", () => {
+    own.value = "";
+    setOwn("");
+    own.focus();
+  });
+  showMine();
+  li.classList.toggle("isOff", !box.checked);
+
   if (c.waves) {
     // Its waves' beep (03 38), on unless turned off.
     const w = document.createElement("label");
@@ -532,7 +601,7 @@ a2.on("widget-message", ({ data }) => {
   const stored = await a2.storage.get("prefs").catch(() => null);
   if (stored && typeof stored === "object") {
     prefs = { ...DEFAULTS, ...stored };
-    for (const k of ["offBoss", "offCall", "waves"]) prefs[k] = { ...(stored[k] || {}) };
+    for (const k of ["offBoss", "offCall", "waves", "custom"]) prefs[k] = { ...(stored[k] || {}) };
   }
   locked = await a2.widgets.locked().catch(() => false);
   $(".lock").checked = locked;

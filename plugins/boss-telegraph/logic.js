@@ -93,8 +93,13 @@
       return list.find((c) => !c.bind) || null;
     }
 
-    // What the call says and shows, by the player's call style.
+    // The player's own words for a call (Settings, ✎), if any.
+    const own = (c) => String((prefs().custom || {})[c.k] || "").trim();
+    // What the call says and shows, by the player's call style; the player's
+    // own words for it instead, whatever the style.
     function words(c) {
+      const mine = own(c);
+      if (mine) return { big: mine, sub: "", say: [mine] };
       const style = prefs().style || "both";
       const line = T(c.line);
       const act = T(c.act);
@@ -125,12 +130,13 @@
       const key = `${entity}:${c.mark}`;
       const was = orders.get(key);
       const order = was && at - was.at < MARK_GAP_MS ? was : { words: [] };
-      order.words.push(T(c.act));
+      const word = own(c) || T(c.act);
+      order.words.push(word);
       order.at = at;
       orders.set(key, order);
       if (orders.size > 20) for (const [k, o] of orders) if (at - o.at > 60_000) orders.delete(k);
       lastCall.set(c.k, at);
-      hooks.say(T(c.act), "high");
+      hooks.say(word, "high");
       show({ key: `m:${c.mark}:${entity}`, kind: "call", text: order.words.join(" → "), sub: "", end: 0, until: at + ORDER_SHOW_MS });
     }
 

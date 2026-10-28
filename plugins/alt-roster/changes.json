@@ -1,5 +1,18 @@
 [
   {
+    "version": "1.4.4",
+    "en": "Odyle Energy crafts are counted for Elyos characters too; they always showed 0.",
+    "ko": "천족 캐릭터의 오드 에너지 제작도 집계됩니다. 이전에는 항상 0으로 표시되었습니다.",
+    "ja": "天族キャラクターのオードエネルギー製作も数えるようになりました。これまでは常に0と表示されていました。",
+    "de": "Odyle-Energie-Herstellungen werden jetzt auch für Elyos-Charaktere gezählt; sie zeigten immer 0.",
+    "fr": "Les fabrications d'énergie d'Odyle sont aussi comptées pour les personnages Élyséens ; elles affichaient toujours 0.",
+    "es": "Las fabricaciones de energía de Odyle ahora también se cuentan para personajes Elyos; siempre mostraban 0.",
+    "pt": "As criações de energia de Odyle agora também são contadas para personagens Elyos; sempre mostravam 0.",
+    "ru": "Создание энергии Одила теперь учитывается и у элийцев; раньше всегда показывалось 0.",
+    "zh-Hant": "天族角色的奧德能量製作現在也會計算；之前一律顯示 0。",
+    "zh-Hans": "天族角色的奥德能量制作现在也会计算；之前一律显示 0。"
+  },
+  {
     "version": "1.4.3",
     "en": "No more empty copy of your last character when the meter starts before the game; one already made goes once the real one is known.",
     "ko": "게임보다 미터를 먼저 켜도 마지막 캐릭터의 빈 복사본이 생기지 않으며, 이미 생긴 것은 실제 캐릭터가 확인되면 사라집니다.",

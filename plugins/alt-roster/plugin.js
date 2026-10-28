@@ -101,7 +101,7 @@ a2.on("character", (c) => {
   const from = { shop: c.shopLimits, craft: c.crafts, kinah: { today: c.kinahToday }, abyss: { week: c.abyssPoints } };
   for (const x of OTHER) {
     const [kind, id] = x.id.split(":");
-    const v = from[kind]?.[id];
+    const v = from[kind]?.[id] ?? (x.elyos && from[kind]?.[x.elyos]);
     if (v == null) continue;
     const home = x.scope === "server" ? (state.servers[ch.serverId ?? ""] ||= {}) : ch;
     const n = Array.isArray(v) ? v[0] : v;
@@ -363,9 +363,11 @@ const CONTENT = [
 // "shop:<item>" or "craft:<recipe>" (as the meter names them, 2026-10-25:
 // Buy Rift Stones 0 to 1 as one was bought; the server's Odyle Energy craft
 // 1, 2, 3 and the character's 0 to 1, as the game showed 3/16 and 1/4).
+// Each side crafts its own recipe: 3207000N Asmodian, 3107000N Elyos (the
+// game's ConversionRecipe table; #123). Kept under the Asmodian id either way.
 const OTHER = [
-  { name: "odyleCraft", id: "craft:32070001", scope: "server", cap: 16, add: 16, every: "weekly", used: true },
-  { name: "odyleCraft", id: "craft:32070002", scope: "char", cap: 4, add: 4, every: "weekly", used: true },
+  { name: "odyleCraft", id: "craft:32070001", elyos: "31070001", scope: "server", cap: 16, add: 16, every: "weekly", used: true },
+  { name: "odyleCraft", id: "craft:32070002", elyos: "31070002", scope: "char", cap: 4, add: 4, every: "weekly", used: true },
   { name: "buyOdyle", id: "shop:100134", scope: "char", cap: 20, add: 20, every: "weekly", used: true },
   { name: "buyRift", id: "shop:100135", scope: "char", cap: 7, add: 7, every: "weekly", used: true },
   // The game's own: 1534 Kinah and 50659 Abyss Points of 2,000,000 as it

@@ -52,6 +52,11 @@ OWN_TEXT = {
 DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
 
+# How long a scheduled boss shows as up after it spawns: the tables give it
+# no length, and with none it jumped to its next spawn the moment it came
+# (Watcher Kaira, killed 5 minutes after spawning).
+BOSS_UP_MINUTES = 15
+
 def v(x):
     return x["Value"] if isinstance(x, dict) else x
 
@@ -192,7 +197,7 @@ def main():
         events.append({"id": "boss-" + "-".join(text[n]["en"].split()[-1].lower() for n in slot["names"]),
                        "kind": "boss", "name": slot["names"][0], "also": slot["names"][1:],
                        "where": [map_text(m) for m in sorted(slot["where"])], "side": None,
-                       "days": list(days), "starts": list(starts), "minutes": 0})
+                       "days": list(days), "starts": list(starts), "minutes": BOSS_UP_MINUTES})
     if rift_cycle:
         life = max((x["LifeTime"] for n, x in rifts.items() if "RiftPortal" in n and x["ArrivalMapId"]), default=0)
         events.append({"id": "rift", "kind": "event", "name": own("rift"),

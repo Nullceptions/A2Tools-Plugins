@@ -233,7 +233,7 @@ const EVENTS = [
    1140,
    1320
   ],
-  "minutes": 0
+  "minutes": 15
  },
  {
   "id": "boss-nahma",
@@ -251,7 +251,7 @@ const EVENTS = [
   "starts": [
    1260
   ],
-  "minutes": 0
+  "minutes": 15
  },
  {
   "id": "boss-tamasa-argo-kaira",
@@ -273,7 +273,7 @@ const EVENTS = [
   "starts": [
    1290
   ],
-  "minutes": 0
+  "minutes": 15
  },
  {
   "id": "rift",

@@ -1,5 +1,18 @@
 [
   {
+    "version": "0.6.18",
+    "en": "Scheduled bosses (Watcher Kaira, the Executors, Guardian Lord Nahma) show as up for 15 minutes after they spawn, instead of jumping straight to their next spawn.",
+    "ko": "예정된 보스(감시자 카이라, 집행자들, 수호 군주 나흐마)가 출현 후 15분 동안 출현 중으로 표시되며, 곧바로 다음 출현으로 넘어가지 않습니다.",
+    "ja": "定期ボス（監視者カイラ、執行者たち、守護領主ナフマ）は出現後15分間「出現中」と表示され、すぐ次の出現に切り替わらなくなりました。",
+    "de": "Geplante Bosse (Wächterin Kaira, die Vollstrecker, Wächterfürst Nahma) werden nach ihrem Erscheinen 15 Minuten lang als aktiv angezeigt, statt sofort zum nächsten Erscheinen zu springen.",
+    "fr": "Les boss programmés (Kaira la Gardienne, les Exécuteurs, Seigneur gardien Nahma) s'affichent comme présents pendant 15 minutes après leur apparition, au lieu de passer aussitôt à la suivante.",
+    "es": "Los jefes programados (Kaira la Vigilante, los Ejecutores, Señor guardián Nahma) se muestran activos 15 minutos tras aparecer, en vez de saltar enseguida a su próxima aparición.",
+    "pt": "Os chefes programados (Kaira, a Vigia, os Executores, Senhor Guardião Nahma) aparecem como ativos por 15 minutos após surgirem, em vez de pular direto para o próximo surgimento.",
+    "ru": "Боссы по расписанию (Страж Кайра, Палачи, Повелитель-страж Нахма) 15 минут после появления показываются как активные, а не сразу переходят к следующему появлению.",
+    "zh-Hant": "排程首領（監視者凱拉、執行者們、守護領主納赫瑪）出現後 15 分鐘內顯示為出現中，不會立刻跳到下一次出現。",
+    "zh-Hans": "排程首领（监视者凯拉、执行者们、守护领主纳赫玛）出现后 15 分钟内显示为出现中，不会立刻跳到下一次出现。"
+  },
+  {
     "version": "0.6.17",
     "en": "Far lighter on your PC: the timers used about half a CPU core and hundreds of MB working out times; now next to nothing.",
     "ko": "PC 부담이 크게 줄었습니다: 시간 계산에 CPU 코어 절반과 수백 MB를 쓰던 것이 이제 거의 들지 않습니다.",
@@ -50,18 +63,5 @@
     "ru": "Встроенный английский голос (Kokoro): оповещения звучат даже на ПК без голосов, например в Linux.",
     "zh-Hant": "內建英語語音（Kokoro）：即使電腦沒有語音（例如 Linux）也能唸出提醒。",
     "zh-Hans": "内置英语语音（Kokoro）：即使电脑没有语音（例如 Linux）也能念出提醒。"
-  },
-  {
-    "version": "0.6.12",
-    "en": "The Dimensional Invasion every hour at :30 again.",
-    "ko": "차원 침공이 다시 매시 30분에 표시됩니다.",
-    "ja": "次元侵攻が再び毎時30分に表示されます。",
-    "de": "Die Dimensionsinvasion wieder jede Stunde um :30.",
-    "fr": "L'Invasion dimensionnelle de nouveau toutes les heures à :30.",
-    "es": "La Invasión dimensional de nuevo cada hora a las :30.",
-    "pt": "A Invasão Dimensional de novo a cada hora aos :30.",
-    "ru": "Пространственное вторжение снова каждый час в :30.",
-    "zh-Hant": "次元入侵再次於每小時 30 分出現。",
-    "zh-Hans": "次元入侵再次于每小时 30 分出现。"
   }
 ]

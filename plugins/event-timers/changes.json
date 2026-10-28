@@ -1,5 +1,18 @@
 [
   {
+    "version": "0.6.19",
+    "en": "The Abyss's bosses get their own section, Abyss bosses: Watcher Kaira, the Executors, Guardian Lord Nahma and Argo, the Spirit King, with live HP while one is fought (meter 2.0.82 on).",
+    "ko": "어비스 보스가 별도 항목인 어비스 보스로 나뉩니다. 감시자 카이라, 집행자들, 수호군주 나흐마, 정령왕 아르고가 표시되며, 전투 중에는 실시간 HP가 보입니다(미터 2.0.82 이상).",
+    "ja": "アビスのボスは専用の「アビスボス」欄に分かれました。監視者カイラ、執行者たち、守護君主ナフマ、精霊王アルゴを表示し、戦闘中はHPをリアルタイムで表示します（メーター2.0.82以降）。",
+    "de": "Die Bosse des Abyss haben einen eigenen Abschnitt, Abyss-Bosse: Aufseherin Kaira, die Vollstrecker, Wächterfürst Nahma und Argo, der Geisterkönig, mit Live-HP während eines Kampfes (ab Meter 2.0.82).",
+    "fr": "Les boss des Abysses ont leur propre section, Boss des Abysses : Kaira la veilleuse, les exécuteurs, le Seigneur gardien Nahma et Argo, le roi des esprits, avec les PV en direct pendant un combat (compteur 2.0.82 et plus).",
+    "es": "Los jefes del Abismo tienen su propia sección, Jefes del Abismo: Velador Kaira, los ejecutantes, el Señor guardián Nahma y Argo, el rey espíritu, con PV en vivo mientras se lucha contra uno (medidor 2.0.82 o superior).",
+    "pt": "Os chefes do Abismo ganham sua própria seção, Chefes do Abismo: Vigilante Kairah, os executores, o Lorde guardião Nahma e Argo, o rei espírito, com PV ao vivo durante a luta (medidor 2.0.82 ou superior).",
+    "ru": "У боссов Бездны свой раздел, «Боссы Бездны»: Дозорщик Кайра, исполнители, Лорд-хранитель Нахма и Арго, Король духов, с HP в реальном времени во время боя (метр 2.0.82 и новее).",
+    "zh-Hant": "深淵首領有了自己的區塊「深淵首領」：監視者卡伊拉、執行者們、守護君主納赫瑪與精靈王阿爾戈，戰鬥中顯示即時 HP（計量器 2.0.82 起）。",
+    "zh-Hans": "深渊首领有了自己的区块「深渊首领」：监视者卡伊拉、执行者们、守护君主纳赫玛与精灵王阿尔戈，战斗中显示实时 HP（计量器 2.0.82 起）。"
+  },
+  {
     "version": "0.6.18",
     "en": "Scheduled bosses (Watcher Kaira, the Executors, Guardian Lord Nahma) show as up for 15 minutes after they spawn, instead of jumping straight to their next spawn.",
     "ko": "예정된 보스(감시자 카이라, 집행자들, 수호 군주 나흐마)가 출현 후 15분 동안 출현 중으로 표시되며, 곧바로 다음 출현으로 넘어가지 않습니다.",
@@ -50,18 +63,5 @@
     "ru": "Значки в каждом ряду сетки выровнены, даже если имя занимает две строки.",
     "zh-Hant": "網格每一列的圖示都會對齊，即使名稱佔兩行。",
     "zh-Hans": "网格每一行的图标都会对齐，即使名称占两行。"
-  },
-  {
-    "version": "0.6.14",
-    "en": "A built-in English voice (Kokoro), so alerts are spoken even on a PC with no voices, such as Linux.",
-    "ko": "내장 영어 음성(Kokoro): 음성이 없는 PC(예: Linux)에서도 알림을 읽어 줍니다.",
-    "ja": "内蔵の英語音声（Kokoro）：音声のないPC（Linuxなど）でも通知を読み上げます。",
-    "de": "Eine eingebaute englische Stimme (Kokoro): Alarme werden auch auf PCs ohne Stimmen gesprochen, etwa unter Linux.",
-    "fr": "Une voix anglaise intégrée (Kokoro) : les alertes sont dites même sur un PC sans voix, comme sous Linux.",
-    "es": "Una voz inglesa integrada (Kokoro): los avisos se dicen incluso en un PC sin voces, como en Linux.",
-    "pt": "Uma voz inglesa integrada (Kokoro): os alertas são falados mesmo num PC sem vozes, como no Linux.",
-    "ru": "Встроенный английский голос (Kokoro): оповещения звучат даже на ПК без голосов, например в Linux.",
-    "zh-Hant": "內建英語語音（Kokoro）：即使電腦沒有語音（例如 Linux）也能唸出提醒。",
-    "zh-Hans": "内置英语语音（Kokoro）：即使电脑没有语音（例如 Linux）也能念出提醒。"
   }
 ]

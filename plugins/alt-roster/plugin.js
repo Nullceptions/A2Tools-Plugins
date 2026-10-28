@@ -56,7 +56,10 @@ const kept = (prev, next) => (prev && same(prev, next) ? prev : next);
 
 // ── What the meter says ────────────────────────────────────────────────────
 a2.on("character", (c) => {
-  if (!c?.name) return;
+  // Only once the server is known: a meter started before the game says the
+  // last name played before it knows where, and that made a second, empty
+  // character of it (#122).
+  if (!c?.name || !c.serverId) return;
   const key = `${c.name}@${c.serverId ?? ""}`;
   // 560 until more is seen: only a membership goes over it.
   const ch = (state.chars[key] ||= { name: c.name, serverId: c.serverId, cap: CAPS[1] });
@@ -678,6 +681,18 @@ function applyLanguage() {
   if (servers && typeof servers === "object") state.servers = servers;
   Object.assign(state.prefs, prefs || {});
   for (const key of ["chars", "prefs", "servers"]) written[key] = JSON.stringify(state[key]);
+  // Characters kept with no server (#122): gone where the same name has its
+  // server, what they had that it lacks kept with it.
+  let merged = false;
+  for (const [key, ch] of Object.entries(state.chars)) {
+    if (ch?.serverId) continue;
+    const real = Object.values(state.chars).find((other) => other !== ch && other?.serverId && other.name === ch?.name);
+    if (!real) continue;
+    for (const [field, value] of Object.entries(ch)) if (real[field] == null) real[field] = value;
+    delete state.chars[key];
+    merged = true;
+  }
+  if (merged) save();
   $(".sort").value = state.prefs.sort;
   showTab(state.prefs.tab);
   a2.ready();

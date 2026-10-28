@@ -1,5 +1,18 @@
 [
   {
+    "version": "1.4.3",
+    "en": "No more empty copy of your last character when the meter starts before the game; one already made goes once the real one is known.",
+    "ko": "게임보다 미터를 먼저 켜도 마지막 캐릭터의 빈 복사본이 생기지 않으며, 이미 생긴 것은 실제 캐릭터가 확인되면 사라집니다.",
+    "ja": "ゲームより先にメーターを起動しても、最後のキャラクターの空のコピーが作られなくなりました。既にあるものは本来のキャラクターが分かると消えます。",
+    "de": "Startet das Meter vor dem Spiel, entsteht keine leere Kopie deines letzten Charakters mehr; eine bestehende verschwindet, sobald der echte bekannt ist.",
+    "fr": "Plus de copie vide de votre dernier personnage quand le compteur démarre avant le jeu ; une copie déjà créée disparaît une fois le vrai connu.",
+    "es": "Ya no aparece una copia vacía de tu último personaje si el medidor se inicia antes que el juego; la que ya exista desaparece al conocerse el real.",
+    "pt": "Não aparece mais uma cópia vazia do seu último personagem quando o medidor inicia antes do jogo; a que já existir some quando o verdadeiro for conhecido.",
+    "ru": "Если метр запущен раньше игры, пустая копия последнего персонажа больше не появляется; уже созданная исчезает, когда известен настоящий.",
+    "zh-Hant": "計量器比遊戲先啟動時，不再產生上次角色的空白副本；已產生的會在確認實際角色後消失。",
+    "zh-Hans": "计量器比游戏先启动时，不再产生上次角色的空白副本；已产生的会在确认实际角色后消失。"
+  },
+  {
     "version": "1.4.2",
     "en": "A membership's 840 energy cap now counts for every character, not only those seen above 560.",
     "ko": "멤버십의 840 에너지 상한이 560을 넘은 캐릭터뿐 아니라 모든 캐릭터에 적용됩니다.",

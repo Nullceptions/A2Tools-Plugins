@@ -105,6 +105,22 @@ const soundLength = (name) => Math.max(0, ...(SOUNDS[name] || []).map(([, start,
 let audio = null;
 // The notes still sounding, so a mute can cut them off.
 const sounding = new Set();
+// An AudioContext is an audio engine of its own: on Linux a GStreamer
+// pipeline with its own thread and buffers, some 40 MB, kept for the whole
+// run (2026-10-29). Closed once nothing has played for IDLE_MS, made again
+// for the next sound; decoded clips (AudioBuffers) work in the new one.
+const IDLE_MS = 30_000;
+let idleClose = null;
+function audioUsed() {
+  clearTimeout(idleClose);
+  idleClose = setTimeout(() => {
+    if (sounding.size) return audioUsed();
+    const ctx = audio;
+    audio = null;
+    output = null;
+    ctx?.close().catch(() => {});
+  }, IDLE_MS);
+}
 
 // The player's Volume setting (0-100 %) as a gain: squared, so the slider
 // follows how loud it sounds (half way is about half as loud).
@@ -165,6 +181,7 @@ async function playSound(name) {
   if (!notes) return;
   try {
     audio ||= new AudioContext();
+    audioUsed();
     if (audio.state !== "running") audio.resume().catch(() => {});
     const ctx = audio;
     const out = outputs(ctx);

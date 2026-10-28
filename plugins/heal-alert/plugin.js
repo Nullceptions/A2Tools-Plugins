@@ -112,6 +112,21 @@ let audio = null;
 // Every sound goes out through one gain, the Volume setting: squared, so the
 // slider follows how loud it sounds.
 let out = null;
+// An AudioContext is an audio engine of its own: on Linux a GStreamer
+// pipeline with its own thread and buffers, some 40 MB, kept for the whole
+// run (2026-10-29). Closed once nothing has played for IDLE_MS, made again
+// for the next sound; decoded clips (AudioBuffers) work in the new one.
+const IDLE_MS = 30_000;
+let idleClose = null;
+function audioUsed() {
+  clearTimeout(idleClose);
+  idleClose = setTimeout(() => {
+    const ctx = audio;
+    audio = null;
+    out = null;
+    ctx?.close().catch(() => {});
+  }, IDLE_MS);
+}
 const gainOf = (percent) => Math.pow(Math.max(0, Math.min(100, Number(percent) || 0)) / 100, 2);
 function setVolume() {
   if (out) out.gain.value = gainOf(prefs.volume);
@@ -130,6 +145,7 @@ function playSound(name) {
   if (!data && !notes) return;
   try {
     audio ||= new AudioContext();
+    audioUsed();
     if (!out) {
       out = audio.createGain();
       out.connect(audio.destination);

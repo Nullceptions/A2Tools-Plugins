@@ -32,6 +32,20 @@
       this.scene = { ...this.scene, ...scene };
       this.draw();
     }
+    // The map not shown (its option turned off): its pictures let go of, the
+    // decoded one (16 MB) and the webview's copy of each picture loaded. A
+    // picture's source is kept aside and put back when it is wanted again.
+    release() {
+      const decoded = this.decoded;
+      decoded.bitmap?.close?.();
+      Object.assign(decoded, { id: null, bitmap: null, pending: null });
+      for (const img of document.querySelectorAll("img.mapPic")) {
+        if (img.loading !== "eager" || !img.getAttribute("src")) continue;
+        img.dataset.src = img.getAttribute("src");
+        img.removeAttribute("src");
+        img.loading = "lazy";
+      }
+    }
     setZoom(zoom) {
       if (!ZOOMS.includes(Number(zoom)) || Number(zoom) === this.zoom) return;
       this.zoom = Number(zoom);
@@ -101,6 +115,8 @@
       const img = PET_MAPS[id] && document.querySelector(`img.mapPic[data-map="${Number(id)}"]`);
       if (!img) return null;
       if (img.loading === "lazy") img.loading = "eager";
+      // Let go of while the map was off (release): loaded again.
+      if (!img.getAttribute("src") && img.dataset.src) img.setAttribute("src", img.dataset.src);
       const decoded = this.decoded;
       if (decoded.id === id && decoded.bitmap) return decoded.bitmap;
       if (decoded.pending !== id && typeof createImageBitmap === "function") {

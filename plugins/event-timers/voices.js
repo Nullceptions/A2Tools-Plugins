@@ -155,6 +155,7 @@ function makeBuiltInVoice(clips, prefs) {
     // sounds.js' context when it's there: one for the page.
     if (typeof audio !== "undefined") {
       audio ||= new AudioContext();
+      if (typeof audioUsed === "function") audioUsed();
       if (audio.state !== "running") audio.resume().catch(() => {});
       return audio;
     }

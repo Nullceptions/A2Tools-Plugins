@@ -106,8 +106,25 @@ function say(text, prio = "high") {
 // so the clips are decoded from their bytes), with the same queue: the one
 // playing and one waiting, a "high" one cutting off a "low" one or a backlog.
 let audio = null;
+// An AudioContext is an audio engine of its own: on Linux a GStreamer
+// pipeline with its own thread and buffers, some 40 MB, kept for the whole
+// run (2026-10-29). Closed once nothing has played for IDLE_MS, made again
+// for the next sound; decoded clips (AudioBuffers) work in the new one.
+const IDLE_MS = 30_000;
+let idleClose = null;
+function audioUsed() {
+  clearTimeout(idleClose);
+  idleClose = setTimeout(() => {
+    // Not while a line is still being said.
+    if (playing && Date.now() < playing.until) return audioUsed();
+    const ctx = audio;
+    audio = null;
+    ctx?.close().catch(() => {});
+  }, IDLE_MS);
+}
 const context = () => {
   audio ||= new (window.AudioContext || window.webkitAudioContext)();
+  audioUsed();
   if (audio.state !== "running") audio.resume().catch(() => {});
   return audio;
 };

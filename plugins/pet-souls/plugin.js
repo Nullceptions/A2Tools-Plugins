@@ -702,7 +702,11 @@ function renderNearby() {
   // Off unless turned on (Filters → Show the map).
   const on = prefs.nearby === true;
   els.nearby.hidden = !on;
-  if (!on) return;
+  if (!on) {
+    // Its pictures out of memory while it is off.
+    minimap.release();
+    return;
+  }
   const t = mui();
   const now = Date.now();
   // Every monster in range, with its distance from you when you are known.

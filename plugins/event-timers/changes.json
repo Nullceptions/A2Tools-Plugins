@@ -1,5 +1,18 @@
 [
   {
+    "version": "0.6.20",
+    "en": "Uses less memory: its sound engine closes after 30 seconds of silence and starts again for the next alert.",
+    "ko": "메모리를 덜 사용합니다. 30초 동안 소리가 없으면 사운드 엔진을 닫고, 다음 알림 때 다시 시작합니다.",
+    "ja": "メモリ使用量が減りました。30秒間音がなければサウンドエンジンを閉じ、次の通知で再び起動します。",
+    "de": "Braucht weniger Speicher: Die Sound-Engine schließt nach 30 Sekunden Stille und startet beim nächsten Alarm neu.",
+    "fr": "Utilise moins de mémoire : son moteur audio se ferme après 30 secondes de silence et redémarre à la prochaine alerte.",
+    "es": "Usa menos memoria: su motor de sonido se cierra tras 30 segundos de silencio y se reinicia con la siguiente alerta.",
+    "pt": "Usa menos memória: o motor de som fecha após 30 segundos de silêncio e reinicia no próximo alerta.",
+    "ru": "Меньше расход памяти: звуковой движок закрывается после 30 секунд тишины и запускается снова при следующем оповещении.",
+    "zh-Hant": "佔用更少記憶體：靜音 30 秒後關閉音效引擎，下次提醒時再重新啟動。",
+    "zh-Hans": "占用更少内存：静音 30 秒后关闭音效引擎，下次提醒时再重新启动。"
+  },
+  {
     "version": "0.6.19",
     "en": "The Abyss's bosses get their own section, Abyss bosses: Watcher Kaira, the Executors, Guardian Lord Nahma and Argo, the Spirit King, with live HP while one is fought (meter 2.0.82 on).",
     "ko": "어비스 보스가 별도 항목인 어비스 보스로 나뉩니다. 감시자 카이라, 집행자들, 수호군주 나흐마, 정령왕 아르고가 표시되며, 전투 중에는 실시간 HP가 보입니다(미터 2.0.82 이상).",
@@ -50,18 +63,5 @@
     "ru": "Окно якоря закрывается, пока ему нечего показать, и не перехватывает щелчки.",
     "zh-Hant": "錨點沒有內容時視窗會關閉，不會攔截你的點擊。",
     "zh-Hans": "锚点没有内容时窗口会关闭，不会拦截你的点击。"
-  },
-  {
-    "version": "0.6.15",
-    "en": "Each row of icons in the grid lines up, even when a name takes two lines.",
-    "ko": "이름이 두 줄이어도 격자의 각 행 아이콘이 나란히 정렬됩니다.",
-    "ja": "名前が2行になっても、グリッドの各行のアイコンがそろいます。",
-    "de": "Jede Symbolzeile im Raster ist bündig, auch wenn ein Name zwei Zeilen braucht.",
-    "fr": "Chaque rangée d'icônes de la grille est alignée, même quand un nom tient sur deux lignes.",
-    "es": "Cada fila de iconos de la cuadrícula queda alineada, aunque un nombre ocupe dos líneas.",
-    "pt": "Cada linha de ícones da grade fica alinhada, mesmo quando um nome ocupa duas linhas.",
-    "ru": "Значки в каждом ряду сетки выровнены, даже если имя занимает две строки.",
-    "zh-Hant": "網格每一列的圖示都會對齊，即使名稱佔兩行。",
-    "zh-Hans": "网格每一行的图标都会对齐，即使名称占两行。"
   }
 ]

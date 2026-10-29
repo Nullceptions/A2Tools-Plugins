@@ -1,5 +1,18 @@
 [
   {
+    "version": "0.2.5",
+    "en": "\"Skills and buffs apart\" shows its icons at once (they stayed empty until a cooldown changed).",
+    "ko": "\"스킬과 버프 따로\"를 고르면 아이콘이 바로 표시됩니다 (재사용 대기 시간이 바뀔 때까지 비어 있었음).",
+    "ja": "「スキルとバフを分ける」でアイコンがすぐ表示されます（クールダウンが変わるまで空でした）。",
+    "de": "„Skills und Buffs getrennt“ zeigt seine Symbole sofort (sie blieben leer, bis sich eine Abklingzeit änderte).",
+    "fr": "« Compétences et buffs séparés » affiche ses icônes tout de suite (elles restaient vides jusqu'au prochain temps de recharge).",
+    "es": "«Habilidades y mejoras aparte» muestra sus iconos al instante (quedaban vacíos hasta el siguiente cambio de enfriamiento).",
+    "pt": "\"Habilidades e buffs separados\" mostra os ícones na hora (ficavam vazios até mudar uma recarga).",
+    "ru": "«Умения и баффы отдельно» сразу показывает значки (они оставались пустыми до смены перезарядки).",
+    "zh-Hant": "「技能與增益分開」會立即顯示圖示（之前要等到冷卻變化才出現）。",
+    "zh-Hans": "「技能与增益分开」会立即显示图标（之前要等到冷却变化才出现）。"
+  },
+  {
     "version": "0.2.4",
     "en": "Uses less memory: its sound engine closes after 30 seconds of silence and starts again for the next alert.",
     "ko": "메모리를 덜 사용합니다. 30초 동안 소리가 없으면 사운드 엔진을 닫고, 다음 알림 때 다시 시작합니다.",

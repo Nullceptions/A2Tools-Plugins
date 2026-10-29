@@ -183,3 +183,7 @@ document.addEventListener("mouseup", (e) => {
 document.addEventListener("contextmenu", (e) => e.preventDefault());
 
 a2.ready();
+// Ready for its icons: a widget just opened (a layout change) missed what
+// was sent while its page loaded, and stayed empty until the next cooldown
+// or buff changed (#130).
+a2.widget.post({ ready: true }).catch(() => {});

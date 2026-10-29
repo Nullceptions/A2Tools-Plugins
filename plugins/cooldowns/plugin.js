@@ -907,6 +907,8 @@ a2.on("locked", (on) => {
 });
 a2.on("widget-message", ({ data }) => {
   if (data && data.open) a2.window?.show?.();
+  // A widget's page has loaded: send it its icons (widget.js).
+  if (data && data.ready) send();
 });
 
 (async () => {

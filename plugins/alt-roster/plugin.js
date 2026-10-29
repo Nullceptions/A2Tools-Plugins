@@ -101,7 +101,10 @@ a2.on("character", (c) => {
   const from = { shop: c.shopLimits, craft: c.crafts, kinah: { today: c.kinahToday }, abyss: { week: c.abyssPoints } };
   for (const x of OTHER) {
     const [kind, id] = x.id.split(":");
-    const v = from[kind]?.[id] ?? (x.elyos && from[kind]?.[x.elyos]);
+    // An Elyos character's own recipe first: the game lists both sides'
+    // recipes, the other side's at 0, which used to win (#123).
+    const own = x.elyos && sideOf(ch.serverId) === "elyos" ? from[kind]?.[x.elyos] : undefined;
+    const v = own ?? from[kind]?.[id] ?? (x.elyos && from[kind]?.[x.elyos]);
     if (v == null) continue;
     const home = x.scope === "server" ? (state.servers[ch.serverId ?? ""] ||= {}) : ch;
     const n = Array.isArray(v) ? v[0] : v;

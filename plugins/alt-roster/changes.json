@@ -1,5 +1,18 @@
 [
   {
+    "version": "1.4.5",
+    "en": "Elyos characters' Odyle Energy crafts are counted (they showed 0).",
+    "ko": "천족 캐릭터의 오드 에너지 제작이 집계됩니다 (0으로 표시되었음).",
+    "ja": "天族キャラクターのオードエネルギー製作が数えられます（0と表示されていました）。",
+    "de": "Odyle-Energie-Herstellungen von Elyos-Charakteren werden gezählt (sie zeigten 0).",
+    "fr": "Les fabrications d'Énergie d'Odyle des personnages Élyséens sont comptées (elles affichaient 0).",
+    "es": "Se cuentan las fabricaciones de Energía de Odyle de los personajes Elyos (mostraban 0).",
+    "pt": "As fabricações de Energia de Odyle de personagens Elyos são contadas (mostravam 0).",
+    "ru": "Создание энергии Одила у персонажей Элийцев учитывается (показывалось 0).",
+    "zh-Hant": "天族角色的奧德能量製作會被計算（之前顯示 0）。",
+    "zh-Hans": "天族角色的奥德能量制作会被计算（之前显示 0）。"
+  },
+  {
     "version": "1.4.4",
     "en": "Odyle Energy crafts are counted for Elyos characters too; they always showed 0.",
     "ko": "천족 캐릭터의 오드 에너지 제작도 집계됩니다. 이전에는 항상 0으로 표시되었습니다.",
@@ -50,18 +63,5 @@
     "ru": "Коридоры Бездны учитывают более позднюю осаду, а пояснение о пределах стало понятнее.",
     "zh-Hant": "深淵迴廊會跟隨之後的攻城戰，上限說明也更清楚。",
     "zh-Hans": "深渊回廊会跟随之后的攻城战，上限说明也更清楚。"
-  },
-  {
-    "version": "1.4.0",
-    "en": "A new Other tab, and the Abyss Corridors each character has left.",
-    "ko": "새 '기타' 탭과 캐릭터별 남은 어비스 회랑이 추가되었습니다.",
-    "ja": "新しい「その他」タブと、キャラクターごとの残りアビス回廊を追加しました。",
-    "de": "Ein neuer Tab „Sonstiges“ und die verbleibenden Abyss-Korridore jedes Charakters.",
-    "fr": "Un nouvel onglet Autre, et les Corridors de l'Abysse restants de chaque personnage.",
-    "es": "Una nueva pestaña Otros y los Corredores del Abismo que le quedan a cada personaje.",
-    "pt": "Uma nova aba Outros e os Corredores do Abismo restantes de cada personagem.",
-    "ru": "Новая вкладка «Прочее» и оставшиеся Коридоры Бездны каждого персонажа.",
-    "zh-Hant": "新增「其他」分頁，以及每個角色剩餘的深淵迴廊。",
-    "zh-Hans": "新增“其他”标签页，以及每个角色剩余的深渊回廊。"
   }
 ]

@@ -364,15 +364,17 @@ const CONTENT = [
 
 // The Other tab: weekly limits from the shop and the crafting window. id:
 // "shop:<item>" or "craft:<recipe>" (as the meter names them, 2026-10-25:
-// Buy Rift Stones 0 to 1 as one was bought; the server's Odyle Energy craft
-// 1, 2, 3 and the character's 0 to 1, as the game showed 3/16 and 1/4).
+// the server's Odyle Energy craft 1, 2, 3 and the character's 0 to 1, as the
+// game showed 3/16 and 1/4). The shop's Odyle Energy, 4 a character and 16 a
+// server (BMShopGoods 1209 and 1210), replaced 20 a character (100134) and
+// Rift Stones (100135) on 2026-10-29 (#123).
 // Each side crafts its own recipe: 3207000N Asmodian, 3107000N Elyos (the
 // game's ConversionRecipe table; #123). Kept under the Asmodian id either way.
 const OTHER = [
   { name: "odyleCraft", id: "craft:32070001", elyos: "31070001", scope: "server", cap: 16, add: 16, every: "weekly", used: true },
   { name: "odyleCraft", id: "craft:32070002", elyos: "31070002", scope: "char", cap: 4, add: 4, every: "weekly", used: true },
-  { name: "buyOdyle", id: "shop:100134", scope: "char", cap: 20, add: 20, every: "weekly", used: true },
-  { name: "buyRift", id: "shop:100135", scope: "char", cap: 7, add: 7, every: "weekly", used: true },
+  { name: "buyOdyle", id: "shop:1210", scope: "server", cap: 16, add: 16, every: "weekly", used: true },
+  { name: "buyOdyle", id: "shop:1209", scope: "char", cap: 4, add: 4, every: "weekly", used: true },
   // The game's own: 1534 Kinah and 50659 Abyss Points of 2,000,000 as it
   // showed them (2026-10-25). The Abyss limit comes with the points.
   { name: "kinah", id: "kinah:today", scope: "char", cap: 1_000_000, add: 0, every: "daily", used: true },

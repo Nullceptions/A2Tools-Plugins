@@ -1,5 +1,18 @@
 [
   {
+    "version": "1.4.6",
+    "en": "Buy Odyle Energy follows the shop again: 4 per character and 16 per server a week. Buy Rift Stones is gone from the shop, so from the list too.",
+    "ko": "오드 에너지 구매가 다시 상점과 같아졌습니다: 주간 캐릭터당 4개, 서버당 16개. 균열석 구매는 상점에서 빠져 목록에서도 빠졌습니다.",
+    "ja": "オードエネルギー購入がショップに合わせて戻りました：週にキャラクターごと4個、サーバーごと16個。亀裂石購入はショップからなくなったため、一覧からも外しました。",
+    "de": "Odyle-Energie kaufen folgt wieder dem Shop: 4 pro Charakter und 16 pro Server pro Woche. Risssteine kaufen gibt es im Shop nicht mehr, daher auch nicht in der Liste.",
+    "fr": "L'achat d'énergie d'Odyle suit de nouveau la boutique : 4 par personnage et 16 par serveur chaque semaine. L'achat de pierres de faille a quitté la boutique, donc la liste aussi.",
+    "es": "Comprar energía de Odyle vuelve a seguir la tienda: 4 por personaje y 16 por servidor a la semana. Comprar piedras de grieta ya no está en la tienda, así que tampoco en la lista.",
+    "pt": "Comprar energia de Odyle volta a seguir a loja: 4 por personagem e 16 por servidor por semana. Comprar pedras de fenda saiu da loja, então saiu da lista também.",
+    "ru": "Покупка энергии Одила снова как в магазине: 4 на персонажа и 16 на сервер в неделю. Покупки камней разлома больше нет в магазине, поэтому и в списке.",
+    "zh-Hant": "購買奧德能量再次與商店一致：每週每個角色 4 個、每個伺服器 16 個。購買裂縫石已從商店移除，因此也從列表移除。",
+    "zh-Hans": "购买奥德能量再次与商店一致：每周每个角色 4 个、每个服务器 16 个。购买裂缝石已从商店移除，因此也从列表移除。"
+  },
+  {
     "version": "1.4.5",
     "en": "Elyos characters' Odyle Energy crafts are counted (they showed 0).",
     "ko": "천족 캐릭터의 오드 에너지 제작이 집계됩니다 (0으로 표시되었음).",

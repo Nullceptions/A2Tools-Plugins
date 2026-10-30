@@ -167,9 +167,9 @@ const TELEPORTS = {
  "field:101011": [
   {
    "elyos": {
-    "dist": 226,
-    "name": "1051027",
-    "tp": 38
+    "dist": 270,
+    "name": "1051060",
+    "tp": 44
    }
   }
  ],

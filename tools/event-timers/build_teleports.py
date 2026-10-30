@@ -54,6 +54,12 @@ HIDDEN_ORDER = 999
 # A spawner whose points are further than this (m) from their medoid spawns
 # somewhere different each time: no single nearest teleport.
 SPREAD_M = 300
+# Where players say to teleport instead of the nearest: the nearest by
+# distance is not the way there. Boss key -> side -> TeleportArtifact id.
+PREFERRED = {
+    # Black Tentacle Lawa: from 44, Ancient Zumion Temple Site, not 38 (2026-10-30).
+    "field:101011": {"elyos": 1051060},
+}
 
 
 def v(x):
@@ -199,6 +205,8 @@ def main():
             if not c:
                 continue
             aid, x = min(c, key=lambda t: math.dist(landing[(mid, t[1]["actor"])], med))
+            want = PREFERRED.get(key, {}).get(side)
+            aid, x = next(((a, y) for a, y in c if a == want), (aid, x))
             d = math.dist(landing[(mid, x["actor"])], med) / 100
             entry[side] = {**({"tp": x["order"]} if numbered else {}), "name": str(aid), "dist": round(d)}
             used.add(aid)

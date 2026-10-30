@@ -43,6 +43,9 @@ CLASSES = {"GLADIATOR": ("11", "GL"), "TEMPLAR": ("12", "TE"), "ASSASSIN": ("13"
 CDN = "https://assets.playnccdn.com/static-aion2-gamedata/resources/"
 PROXY = os.environ.get("CDN_PROXY", "http://192.168.0.113:16005")
 SIZE = 48
+# The tables give Zikel's Blessing and Lunge Stance each other's icon: the
+# game draws Zikel's Blessing with 040 and Lunge Stance with 024 (#130).
+SWAPPED = {"ICON_GL_SKILL_024": "ICON_GL_SKILL_040", "ICON_GL_SKILL_040": "ICON_GL_SKILL_024"}
 
 
 def rows(tables, name):
@@ -71,7 +74,8 @@ def named(table, key):
 
 
 def stem(icon_path):
-    return icon_path.rsplit("/", 1)[-1]
+    name = icon_path.rsplit("/", 1)[-1]
+    return SWAPPED.get(name, name)
 
 
 def fetch(name, cache):

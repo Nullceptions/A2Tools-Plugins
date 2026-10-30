@@ -1858,6 +1858,19 @@ function hpOfLife(entry, life) {
   if (entry?.state !== "up" || life?.state !== "up" || entry.hp == null || !entry.hpAt) return false;
   return !life.upSince || Number(entry.hpAt) >= Number(life.upSince);
 }
+// The feed file just read, keeping the newer HP held (pushed live): the file
+// is published at most once a minute, and each read put a boss's HP back up
+// by as much as it had fallen since (Kusan, 2026-10-30).
+function keepNewerHp(bosses, held) {
+  const out = { ...bosses };
+  for (const [id, have] of Object.entries(held || {})) {
+    const read = out[id];
+    if (read && hpOfLife(have, read) && (Number(have.hpAt) || 0) > (Number(read.hpAt) || 0)) {
+      out[id] = { ...read, hp: have.hp, hpAt: have.hpAt };
+    }
+  }
+  return out;
+}
 // Each boss's newest report, between the feed's and the player's own map's.
 function mergeOwn(bosses) {
   const out = { ...bosses };
@@ -1893,7 +1906,8 @@ async function readFeed() {
   feedReading = true;
   try {
     const data = await a2.bossTimers(server);
-    feed = { server, bosses: mergeOwn(data?.bosses || {}), at: Date.now() };
+    const held = feed?.server === server ? feed.bosses : null;
+    feed = { server, bosses: mergeOwn(keepNewerHp(data?.bosses || {}, held)), at: Date.now() };
   } catch {
     feed = { server, bosses: mergeOwn(feed?.server === server ? feed.bosses || {} : {}), error: true, at: Date.now() };
   } finally {

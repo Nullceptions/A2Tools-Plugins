@@ -1,5 +1,18 @@
 [
   {
+    "version": "0.6.24",
+    "en": "A world boss's HP on its icon no longer jumps back up mid-fight.",
+    "ko": "월드 보스 아이콘의 HP가 전투 중에 다시 올라가지 않습니다.",
+    "ja": "ワールドボスのアイコンのHPが戦闘中に戻って増えることがなくなりました。",
+    "de": "Die HP eines Weltbosses auf seinem Symbol springen im Kampf nicht mehr zurück nach oben.",
+    "fr": "Les PV d'un boss mondial sur son icône ne remontent plus en plein combat.",
+    "es": "Los PV de un jefe de mundo en su icono ya no vuelven a subir en pleno combate.",
+    "pt": "O HP de um chefe mundial no ícone não volta mais a subir no meio da luta.",
+    "ru": "HP мирового босса на значке больше не подскакивает обратно во время боя.",
+    "zh-Hant": "世界首領圖示上的 HP 不會在戰鬥中又跳回上升。",
+    "zh-Hans": "世界首领图标上的 HP 不会在战斗中又跳回上升。"
+  },
+  {
     "version": "0.6.23",
     "en": "Abyss bosses (Watcher Kaira, Nahma, the Executors) are world bosses now: live HP while you fight, a purple outline, and your alerts and icons carry over.",
     "ko": "어비스 보스(감시자 카이라, 나흐마, 집행자)가 이제 월드 보스로 표시됩니다: 전투 중 실시간 HP, 보라색 테두리, 기존 알림과 아이콘은 그대로 옮겨집니다.",
@@ -50,18 +63,5 @@
     "ru": "Меньше расход памяти: звуковой движок закрывается после 30 секунд тишины и запускается снова при следующем оповещении.",
     "zh-Hant": "佔用更少記憶體：靜音 30 秒後關閉音效引擎，下次提醒時再重新啟動。",
     "zh-Hans": "占用更少内存：静音 30 秒后关闭音效引擎，下次提醒时再重新启动。"
-  },
-  {
-    "version": "0.6.19",
-    "en": "The Abyss's bosses get their own section, Abyss bosses: Watcher Kaira, the Executors, Guardian Lord Nahma and Argo, the Spirit King, with live HP while one is fought (meter 2.0.82 on).",
-    "ko": "어비스 보스가 별도 항목인 어비스 보스로 나뉩니다. 감시자 카이라, 집행자들, 수호군주 나흐마, 정령왕 아르고가 표시되며, 전투 중에는 실시간 HP가 보입니다(미터 2.0.82 이상).",
-    "ja": "アビスのボスは専用の「アビスボス」欄に分かれました。監視者カイラ、執行者たち、守護君主ナフマ、精霊王アルゴを表示し、戦闘中はHPをリアルタイムで表示します（メーター2.0.82以降）。",
-    "de": "Die Bosse des Abyss haben einen eigenen Abschnitt, Abyss-Bosse: Aufseherin Kaira, die Vollstrecker, Wächterfürst Nahma und Argo, der Geisterkönig, mit Live-HP während eines Kampfes (ab Meter 2.0.82).",
-    "fr": "Les boss des Abysses ont leur propre section, Boss des Abysses : Kaira la veilleuse, les exécuteurs, le Seigneur gardien Nahma et Argo, le roi des esprits, avec les PV en direct pendant un combat (compteur 2.0.82 et plus).",
-    "es": "Los jefes del Abismo tienen su propia sección, Jefes del Abismo: Velador Kaira, los ejecutantes, el Señor guardián Nahma y Argo, el rey espíritu, con PV en vivo mientras se lucha contra uno (medidor 2.0.82 o superior).",
-    "pt": "Os chefes do Abismo ganham sua própria seção, Chefes do Abismo: Vigilante Kairah, os executores, o Lorde guardião Nahma e Argo, o rei espírito, com PV ao vivo durante a luta (medidor 2.0.82 ou superior).",
-    "ru": "У боссов Бездны свой раздел, «Боссы Бездны»: Дозорщик Кайра, исполнители, Лорд-хранитель Нахма и Арго, Король духов, с HP в реальном времени во время боя (метр 2.0.82 и новее).",
-    "zh-Hant": "深淵首領有了自己的區塊「深淵首領」：監視者卡伊拉、執行者們、守護君主納赫瑪與精靈王阿爾戈，戰鬥中顯示即時 HP（計量器 2.0.82 起）。",
-    "zh-Hans": "深渊首领有了自己的区块「深渊首领」：监视者卡伊拉、执行者们、守护君主纳赫玛与精灵王阿尔戈，战斗中显示实时 HP（计量器 2.0.82 起）。"
   }
 ]

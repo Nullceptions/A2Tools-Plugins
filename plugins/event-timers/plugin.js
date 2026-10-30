@@ -465,8 +465,16 @@ const TP_UI = {
   "zh-Hant": { label: "最近的傳送點", tp: (n) => `${n} 號` },
   "zh-Hans": { label: "最近的传送点", tp: (n) => `${n} 号` },
 };
+// A boss's teleports: a scheduled Abyss boss's are its event's (several
+// bosses, each named), only those for it.
+const spotsOf = (id) => {
+  if (typeof TELEPORTS !== "object") return null;
+  const b = id.startsWith("field:") ? FIELD_BOSSES[id.slice(6)] : null;
+  if (!b?.schedule) return TELEPORTS[id];
+  return (TELEPORTS[b.schedule] || []).filter((s) => !s.boss || s.boss === b.name);
+};
 const teleportTip = (id) => {
-  const spots = typeof TELEPORTS === "object" ? TELEPORTS[id] : null;
+  const spots = spotsOf(id);
   if (!spots?.length) return "";
   const u = TP_UI[language] || TP_UI.en;
   const side = serverSide();
@@ -492,7 +500,7 @@ const teleportTip = (id) => {
 // only (none before the side is known), each spawn point's once, nearest
 // first; up to two, "3/5", and "3/5+" past that.
 const teleportBadge = (id) => {
-  const spots = typeof TELEPORTS === "object" ? TELEPORTS[id] : null;
+  const spots = spotsOf(id);
   const side = serverSide();
   if (!spots?.length || !side) return "";
   const nums = [];
@@ -667,10 +675,13 @@ const fieldBosses = () => {
 // nobody may have opened their map since.
 const feedEntry = (id) => (feed && feed.server === serverId() ? feed.bosses?.[id] || null : null);
 const fieldTimer = (id) => {
-  const t = feedEntry(id);
+  let t = feedEntry(id);
   if (t?.state === "up" && t.hp === 0 && t.hpAt) {
-    return { ...t, state: "dead", nextSpawn: null, reportedAt: Math.max(t.reportedAt || 0, t.hpAt) };
+    t = { ...t, state: "dead", nextSpawn: null, reportedAt: Math.max(t.reportedAt || 0, t.hpAt) };
   }
+  const b = FIELD_BOSSES[id];
+  if (b?.schedule && (!t || (t.state === "dead" && !t.nextSpawn))) return scheduledTimer(b, t);
+  if (t?.state === "dead" && !t.nextSpawn) return t;
   if (t?.state === "dead" && t.nextSpawn && Date.now() >= t.nextSpawn * 1000) {
     return { ...t, state: "up", upSince: t.nextSpawn, nextSpawn: null, hp: null, hpAt: null };
   }
@@ -679,19 +690,34 @@ const fieldTimer = (id) => {
 // The Abyss's bosses (Reshanta) are listed apart from the world bosses: the
 // ones on a fixed schedule from it, Argo, the Spirit King from the feed.
 const isAbyssBoss = (b) => b.where === "String_STR_Map_Abyss_Reshanta_A_body";
-// Each scheduled Abyss boss's world-map ids, whose HP the feed carries while
-// one is up (meter 2.0.82 on shares it): Watcher Kaira; the three Guardian
-// Lord Nahmas; Executors Tamasa, Argo and Kaira (the game's WorldMapFieldNamed).
-const ABYSS_LIVE = { "boss-kaira": ["2002"], "boss-nahma": ["2003", "2004", "2005"], "boss-tamasa-argo-kaira": ["2006", "2007", "2008"] };
-// The lowest HP among a scheduled Abyss boss's spawns that are up, while the
-// feed has it fresh.
-const abyssLive = (ev) =>
-  (ABYSS_LIVE[ev.id] || []).map(fieldTimer).filter((t) => t?.state === "up" && t.hp != null && t.hpAt).sort((a, b) => a.hp - b.hp)[0] || null;
-// Whether every spawn of a scheduled Abyss boss was reported dead a minute
-// or more after `start` (ms): killed, this time round.
-const abyssKilledSince = (ev, start) => {
-  const ids = ABYSS_LIVE[ev.id] || [];
-  return ids.length > 0 && ids.map(fieldTimer).every((t) => t?.state === "dead" && t.reportedAt * 1000 >= start + 60_000);
+// The Abyss's scheduled bosses are world bosses, as the feed has them
+// (WorldMapFieldNamed: Watcher Kaira 2002; the three Guardian Lord Nahmas
+// 2003-2005; Executors Tamasa, Argo and Kaira 2006-2008), listed, followed
+// and alerted as the others are. Their next spawn comes from the game's
+// schedule (schedule.js EVENTS), the feed keeping none for them. Each spawn's
+// event, and its name's place in the event's names.
+const ABYSS_SPAWNS = { "boss-kaira": ["2002"], "boss-nahma": ["2003", "2004", "2005"], "boss-tamasa-argo-kaira": ["2006", "2007", "2008"] };
+for (const [evId, ids] of Object.entries(ABYSS_SPAWNS)) {
+  const ev = EVENTS.find((e) => e.id === evId);
+  if (!ev) continue;
+  ids.forEach((id, i) => {
+    const names = [ev.name, ...(ev.also || [])];
+    FIELD_BOSSES[id] ||= { name: names[ev.also?.length ? i : 0] || ev.name, side: ev.side, where: ev.where[0], schedule: evId };
+  });
+}
+// A scheduled boss's spawn as the schedule has it: up from its start, for
+// the spawn's window, unless reported killed since; else the next start.
+const scheduledTimer = (b, t) => {
+  const ev = EVENTS.find((e) => e.id === b.schedule);
+  const tz = timeZone() || "UTC";
+  const now = Date.now();
+  let next = ev && nextOf(ev, tz, now);
+  if (!next) return t;
+  const killed = t?.state === "dead" && Number(t.reportedAt) * 1000 >= next.start + 60_000;
+  if (next.start <= now && killed) next = nextOf(ev, tz, next.end + 1);
+  if (!next) return t;
+  if (next.start <= now) return { ...(t || {}), state: "up", upSince: Math.floor(next.start / 1000), nextSpawn: null, hp: null, hpAt: null };
+  return { ...(t || {}), state: "dead", nextSpawn: Math.floor(next.start / 1000), reportedAt: t?.reportedAt || 0 };
 };
 
 function renderStatic() {
@@ -1027,11 +1053,7 @@ function renderSchedule(list, events, now, { hideable, actions = false }) {
   const words = ui();
   const tz = timeZone();
   const fmt = clock();
-  const shown = events.filter((ev) => tz || ev.utc).map((ev) => {
-    const next = nextOf(ev, tz || "UTC", now);
-    // An Abyss boss killed since it spawned: its next spawn instead.
-    return { ev, next: next && next.start <= now && abyssKilledSince(ev, next.start) ? nextOf(ev, tz || "UTC", next.end + 1) : next };
-  }).filter((x) => x.next);
+  const shown = events.filter((ev) => tz || ev.utc).map((ev) => ({ ev, next: nextOf(ev, tz || "UTC", now) })).filter((x) => x.next);
   const visible = shown.filter((x) => !hideable || !prefs.hidden.includes(x.ev.id)).sort((a, b) => a.next.start - b.next.start);
   list.replaceChildren(...visible.map(({ ev, next }) => {
     const running = next.start <= now;
@@ -1048,21 +1070,12 @@ function renderSchedule(list, events, now, { hideable, actions = false }) {
         render();
       });
     }
-    // An Abyss boss fought now: its HP as players' meters report it. From
-    // its spawn time it is up, as a boss, until a kill is reported.
-    const live = ev.kind === "boss" ? abyssLive(ev) : null;
-    const spawned = running && ev.id in ABYSS_LIVE;
-    const li = row({
-      id: ev.id, name: eventName(ev), where: ev.where.map(text).join(", "), running: running && !spawned, hide, actions, up: !!live || spawned,
+    return row({
+      id: ev.id, name: eventName(ev), where: ev.where.map(text).join(", "), running, hide, actions,
       soon: next.start - now <= SOON_MS,
-      countdown: live || spawned ? words.up
-        : running ? `${ev.enter ? enterWord() : words.now} · ${words.left(span(next.end - now))}` : words.in(span(next.start - now)),
-      at: live ? `${words.hpLeft(live.hp)} · ${words.ago(age(now - live.hpAt * 1000))}`
-        : spawned ? words.upFor(span(now - next.start)) : fmt.format(new Date(next.start)),
+      countdown: running ? `${ev.enter ? enterWord() : words.now} · ${words.left(span(next.end - now))}` : words.in(span(next.start - now)),
+      at: fmt.format(new Date(next.start)),
     });
-    if (live) li.style.setProperty("--hp", `${Math.max(0, Math.min(100, live.hp))}%`);
-    li.classList.toggle("hasHp", !!live);
-    return li;
   }));
   return shown;
 }
@@ -1147,6 +1160,7 @@ function fieldItems(bosses, now, withHeads) {
     const name = text(b.name) + (b.level ? ` · Lv ${b.level}` : "");
     const soon = group === "window" || (group === "upcoming" && next - now <= SOON_MS);
     const li = row({ id: `field:${b.id}`, name, where: text(b.where), countdown, at, up: group === "up", soon, actions: true });
+    li.classList.toggle("abyss", isAbyssBoss(b));
     if (group === "up" && t.hp != null && t.hpAt) li.style.setProperty("--hp", `${Math.max(0, Math.min(100, t.hp))}%`);
     li.classList.toggle("hasHp", group === "up" && t.hp != null && !!t.hpAt);
     items.push(li);
@@ -1162,8 +1176,7 @@ function render() {
   if (rowPress) return;
   const focused = document.activeElement?.closest?.(".rowBtn");
   const refocus = focused && { act: focused.dataset.act, id: focused.dataset.id };
-  renderSchedule(els.scheduled, scheduled("boss"), now, { hideable: false, actions: true });
-  els.scheduled.append(...fieldItems(fieldBosses().filter(isAbyssBoss), now, false));
+  els.scheduled.replaceChildren(...fieldItems(fieldBosses().filter(isAbyssBoss), now, false));
   renderField(now);
   // Rows move as timers change: the teleport tooltip follows its row.
   if (tpRow) placeTip();
@@ -1357,7 +1370,6 @@ function renderAlerts() {
   };
   const field = fieldBosses().sort((x, y) => text(x.name).localeCompare(text(y.name)));
   const events = scheduled("event");
-  const bosses = scheduled("boss");
   const respawn = (b) => (typeof RESPAWN_MIN === "object" ? RESPAWN_MIN[b.id] || 0 : 0);
   // An alert's name, and where it is (a world boss's map), apart: the name
   // gets the line, the map goes under it with the timing.
@@ -1494,7 +1506,6 @@ function renderAlerts() {
   const q = alertView.search.trim().toLowerCase();
   const groups = [
     ["events", words.events, events.map((ev) => ({ id: ev.id, label: eventName(ev) }))],
-    ["scheduled", words.scheduled, bosses.map((ev) => ({ id: ev.id, label: eventName(ev) }))],
   ];
   const maps = new Map();
   for (const b of field) {
@@ -1795,7 +1806,7 @@ function checkAlerts(now) {
     }
     return false;
   };
-  for (const ev of [...scheduled("event"), ...scheduled("boss")]) {
+  for (const ev of scheduled("event")) {
     if (!(ev.id in prefs.alerts) || (!tz && !ev.utc)) continue;
     const lead = minutesFor(ev.id);
     if (lead === null) continue;
@@ -1814,13 +1825,16 @@ function checkAlerts(now) {
     const own = id in prefs.alerts;
     if (!own && !(ALL_FIELD in prefs.alerts)) continue;
     // The feed's own entry: its respawn time, which fieldTimer counts as up
-    // once reached (the "is back" alert is at that time).
+    // once reached (the "is back" alert is at that time). A scheduled one's
+    // comes from its schedule, the showing next once the lead is counted.
     const t = feedEntry(b.id);
-    if (t?.state !== "dead" || !t.nextSpawn) continue;
+    const ev = b.schedule && EVENTS.find((e) => e.id === b.schedule);
+    if (!ev && (t?.state !== "dead" || !t.nextSpawn)) continue;
     const lead = minutesFor(own ? id : ALL_FIELD);
     if (lead === null) continue;
     for (const minutes of alsoAtStart(lead)) {
-      if (due(`${id}+${minutes}`, t.nextSpawn * 1000, minutes)) {
+      const at = ev ? nextOf(ev, tz || "UTC", lastCheck + minutes * 60_000 - 1)?.start : t.nextSpawn * 1000;
+      if (at && due(`${id}+${minutes}`, at, minutes)) {
         const name = text(b.name);
         announce(id, minutes ? words.bossSoon(name, minutes) : words.bossNow(name), own ? id : ALL_FIELD,
           [SPOKEN.name(b.name), minutes ? SPOKEN.bossSoon(minutes) : SPOKEN.bossNow]);
@@ -2096,6 +2110,18 @@ a2.on("compact", (on) => document.body.classList.toggle("compact", !!on));
 (async () => {
   prefs = { ...prefs, ...((await a2.storage.get("prefs").catch(() => null)) || {}) };
   prefs.closedLeads = prefs.closedLeads || {};
+  // 0.6.22 and before listed the Abyss's scheduled bosses as events: their
+  // alerts, times and icon settings go to the world bosses they are.
+  let moved = false;
+  for (const [evId, ids] of Object.entries(ABYSS_SPAWNS)) {
+    for (const store of [prefs.alerts, prefs.leads, prefs.closedLeads, prefs.overrides || {}]) {
+      if (!store || !(evId in store)) continue;
+      for (const id of ids) store[`field:${id}`] ??= store[evId];
+      delete store[evId];
+      moved = true;
+    }
+  }
+  if (moved) savePrefs();
   setSoundVolume(prefs.volume);
   // The old single "timers" tab is the events one now.
   if (!els.views[prefs.tab]) prefs.tab = "events";

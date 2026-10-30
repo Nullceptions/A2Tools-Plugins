@@ -228,17 +228,7 @@ function pinState(id, now) {
   if (!ev) return null;
   const tz = timeZone();
   if (!tz && !ev.utc) return { name: text(ev.name), kind: ev.kind === "boss" ? "boss" : "event", start: null, running: false, end: null };
-  let next = nextOf(ev, tz || "UTC", now);
-  // A scheduled Abyss boss: up, as a boss, from its spawn time, with its HP
-  // once a meter reports it; killed since it spawned, its next spawn.
-  if (ev.id in ABYSS_LIVE) {
-    if (next && next.start <= now && abyssKilledSince(ev, next.start)) next = nextOf(ev, tz || "UTC", next.end + 1);
-    const live = abyssLive(ev);
-    return {
-      name: text(ev.name), kind: "boss", start: next ? next.start : null, end: null,
-      running: !!live || (!!next && next.start <= now), hp: live ? Math.max(0, Math.min(100, Number(live.hp))) : null,
-    };
-  }
+  const next = nextOf(ev, tz || "UTC", now);
   return {
     name: text(ev.name),
     kind: ev.kind === "boss" ? "boss" : "event",
@@ -258,7 +248,7 @@ function pinLine(id, state, now, fight) {
   const field = id.startsWith("field:");
   const ev = field ? null : EVENTS.find((e) => e.id === id);
   const abyss = field ? isAbyssBoss(fieldBosses().find((x) => `field:${x.id}` === id) || {}) : state.kind === "boss";
-  const hp = field ? state.hp : ev?.kind === "boss" ? abyssLive(ev)?.hp ?? null : null;
+  const hp = field ? state.hp : null;
   const until = state.start != null ? state.start - now : null;
   const say = state.killed ? c.killed(n)
     : hp != null && (state.running || field) ? c.hp(n, Math.round(hp))
@@ -562,7 +552,8 @@ async function updatePins(now) {
         data: { name: state.name, tip: teleportTip(id) && [state.name, teleportTip(id)].join("\n"),
           showName: !!pin.name, tp: pin.tp ? teleportBadge(id) : "", countdown, sub, hp: state.killed ? 0 : state.hp ?? null,
           running: state.running, due: due && !state.killed, effect: pin.effect, kind: state.kind, icon: pinIcon(id, state.kind),
-          copy: pinLine(id, state, now, fight) },
+          copy: pinLine(id, state, now, fight),
+          abyss: id.startsWith("field:") && isAbyssBoss(FIELD_BOSSES[id.slice(6)] || {}) },
       });
     }
     // Anchor mode: in its order, with what doesn't fit folded into "+N",

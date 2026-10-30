@@ -650,6 +650,13 @@ body.alertOnly .openFull:hover {
   border-bottom: 0;
 }
 .list li.subhead.up { color: #7ee0a0; }
+/* An Abyss boss up: purple, where a world boss is green. */
+.list li.abyss.up .name,
+.list li.abyss.up .countdown { color: #c9a2ff; }
+.list li.abyss.hasHp {
+  background: linear-gradient(90deg, rgba(192, 139, 255, 0.18) var(--hp, 0%), transparent var(--hp, 0%)) no-repeat
+    left bottom / 100% 2px;
+}
 .list li.subhead.window { color: #ffc163; }
 /* An up boss with a fresh HP: a thin bar of what is left under its row. */
 .list li.hasHp {

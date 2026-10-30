@@ -49,6 +49,8 @@ function renderPin(pin, d) {
   tp.hidden = !d.tp;
   pin.querySelector(".time").textContent = d.countdown || "";
   pin.dataset.copy = d.copy || "";
+  // An Abyss boss: purple, as a world boss is red, up or not.
+  pin.classList.toggle("abyss", !!d.abyss);
   sub.textContent = d.sub || "";
   // A world boss's HP: the ring drains from the top as it falls.
   const hasHp = typeof d.hp === "number";

@@ -1,5 +1,18 @@
 [
   {
+    "version": "0.6.23",
+    "en": "Abyss bosses (Watcher Kaira, Nahma, the Executors) are world bosses now: live HP while you fight, a purple outline, and your alerts and icons carry over.",
+    "ko": "어비스 보스(감시자 카이라, 나흐마, 집행자)가 이제 월드 보스로 표시됩니다: 전투 중 실시간 HP, 보라색 테두리, 기존 알림과 아이콘은 그대로 옮겨집니다.",
+    "ja": "アビスボス（監視者カイラ、ナフマ、執行者）がワールドボス扱いになりました：戦闘中のリアルタイムHP、紫の枠、アラームとアイコンはそのまま引き継がれます。",
+    "de": "Abyss-Bosse (Aufseherin Kaira, Nahma, die Vollstrecker) sind jetzt Weltbosse: Live-HP im Kampf, ein violetter Rahmen; Alarme und Symbole bleiben erhalten.",
+    "fr": "Les boss des Abysses (Kaira la veilleuse, Nahma, les Exécuteurs) sont désormais des boss mondiaux : PV en direct pendant le combat, un contour violet ; vos alertes et icônes sont conservées.",
+    "es": "Los jefes del Abismo (Velador Kaira, Nahma, los Ejecutantes) ahora son jefes mundiales: PV en directo mientras luchas, contorno morado; tus alertas e iconos se conservan.",
+    "pt": "Os chefes do Abismo (Vigilante Kairah, Nahma, os Executores) agora são chefes mundiais: PV ao vivo durante a luta, contorno roxo; seus alertas e ícones são mantidos.",
+    "ru": "Боссы Бездны (Надзирательница Кайра, Нахма, Исполнители) теперь мировые боссы: HP в реальном времени в бою, фиолетовая рамка; оповещения и значки сохраняются.",
+    "zh-Hant": "深淵首領（監視者凱拉、納赫瑪、執行者）現在視為世界首領：戰鬥中即時 HP、紫色外框，原有提醒與圖示會一併保留。",
+    "zh-Hans": "深渊首领（监视者凯拉、纳赫玛、执行者）现在视为世界首领：战斗中实时 HP、紫色外框，原有提醒与图标会一并保留。"
+  },
+  {
     "version": "0.6.22",
     "en": "Abyss bosses show as up from their spawn, with HP. A boss past its respawn time shows as up; one at 0% as killed. Double right-click an icon to copy its line for chat.",
     "ko": "어비스 보스가 출현 시각부터 HP와 함께 출현 중으로 표시됩니다. 재출현 시각이 지난 보스는 출현 중, HP 0%는 처치로 표시됩니다. 아이콘을 오른쪽 두 번 클릭하면 채팅용 문구가 복사됩니다.",
@@ -50,18 +63,5 @@
     "ru": "У боссов Бездны свой раздел, «Боссы Бездны»: Дозорщик Кайра, исполнители, Лорд-хранитель Нахма и Арго, Король духов, с HP в реальном времени во время боя (метр 2.0.82 и новее).",
     "zh-Hant": "深淵首領有了自己的區塊「深淵首領」：監視者卡伊拉、執行者們、守護君主納赫瑪與精靈王阿爾戈，戰鬥中顯示即時 HP（計量器 2.0.82 起）。",
     "zh-Hans": "深渊首领有了自己的区块「深渊首领」：监视者卡伊拉、执行者们、守护君主纳赫玛与精灵王阿尔戈，战斗中显示实时 HP（计量器 2.0.82 起）。"
-  },
-  {
-    "version": "0.6.18",
-    "en": "Scheduled bosses (Watcher Kaira, the Executors, Guardian Lord Nahma) show as up for 15 minutes after they spawn, instead of jumping straight to their next spawn.",
-    "ko": "예정된 보스(감시자 카이라, 집행자들, 수호 군주 나흐마)가 출현 후 15분 동안 출현 중으로 표시되며, 곧바로 다음 출현으로 넘어가지 않습니다.",
-    "ja": "定期ボス（監視者カイラ、執行者たち、守護領主ナフマ）は出現後15分間「出現中」と表示され、すぐ次の出現に切り替わらなくなりました。",
-    "de": "Geplante Bosse (Wächterin Kaira, die Vollstrecker, Wächterfürst Nahma) werden nach ihrem Erscheinen 15 Minuten lang als aktiv angezeigt, statt sofort zum nächsten Erscheinen zu springen.",
-    "fr": "Les boss programmés (Kaira la Gardienne, les Exécuteurs, Seigneur gardien Nahma) s'affichent comme présents pendant 15 minutes après leur apparition, au lieu de passer aussitôt à la suivante.",
-    "es": "Los jefes programados (Kaira la Vigilante, los Ejecutores, Señor guardián Nahma) se muestran activos 15 minutos tras aparecer, en vez de saltar enseguida a su próxima aparición.",
-    "pt": "Os chefes programados (Kaira, a Vigia, os Executores, Senhor Guardião Nahma) aparecem como ativos por 15 minutos após surgirem, em vez de pular direto para o próximo surgimento.",
-    "ru": "Боссы по расписанию (Страж Кайра, Палачи, Повелитель-страж Нахма) 15 минут после появления показываются как активные, а не сразу переходят к следующему появлению.",
-    "zh-Hant": "排程首領（監視者凱拉、執行者們、守護領主納赫瑪）出現後 15 分鐘內顯示為出現中，不會立刻跳到下一次出現。",
-    "zh-Hans": "排程首领（监视者凯拉、执行者们、守护领主纳赫玛）出现后 15 分钟内显示为出现中，不会立刻跳到下一次出现。"
   }
 ]

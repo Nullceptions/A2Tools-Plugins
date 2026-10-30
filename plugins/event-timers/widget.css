@@ -86,6 +86,7 @@ body.locked .pin { cursor: default; }
 .pin.boss .badge { --ring: #c08bff; }
 .pin.field .badge { --ring: #ff7a6b; }
 .pin.running .badge { --ring: #5fe08a; }
+.pin.abyss .badge, .pin.abyss.running .badge { --ring: #c08bff; }
 .glyph { font-size: 15px; letter-spacing: 0.5px; text-shadow: 0 1px 2px #000; }
 .art { width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 1px 1px #000); }
 .art[hidden], .glyph[hidden], .tp[hidden] { display: none; }

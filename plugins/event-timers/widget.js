@@ -48,6 +48,7 @@ function renderPin(pin, d) {
   tp.textContent = d.tp || "";
   tp.hidden = !d.tp;
   pin.querySelector(".time").textContent = d.countdown || "";
+  pin.dataset.copy = d.copy || "";
   sub.textContent = d.sub || "";
   // A world boss's HP: the ring drains from the top as it falls.
   const hasHp = typeof d.hp === "number";
@@ -275,11 +276,42 @@ document.addEventListener("mouseup", (e) => {
     lastClick = now;
   }
 });
-// A right-click stops its alert's sound (unlocked: a locked icon lets clicks
-// through to the game).
+// A right-click stops its alert's sound; a second on the same icon within
+// DOUBLE_MS copies a line about it for chat (unlocked: a locked icon lets
+// clicks through to the game). The click lets the page write there.
+let lastRight = null;
 document.addEventListener("contextmenu", (e) => {
   e.preventDefault();
+  const pin = e.target instanceof Element ? e.target.closest(".pin") : null;
+  const line = pin?.dataset.copy || "";
+  const now = Date.now();
+  if (line && lastRight && lastRight.line === line && now - lastRight.at <= DOUBLE_MS) {
+    lastRight = null;
+    copy(line, pin);
+    return;
+  }
+  lastRight = { line, at: now };
   a2.widget.post({ mute: true }).catch(() => {});
 });
+
+async function copy(line, pin) {
+  let ok = false;
+  try {
+    await navigator.clipboard.writeText(line);
+    ok = true;
+  } catch {
+    const area = Object.assign(document.createElement("textarea"), { value: line });
+    area.style.cssText = "position:fixed;opacity:0;";
+    document.body.append(area);
+    area.select();
+    try { ok = document.execCommand("copy"); } catch {}
+    area.remove();
+  }
+  if (!ok) return;
+  pin.classList.remove("copied");
+  void pin.offsetWidth;
+  pin.classList.add("copied");
+  setTimeout(() => pin.classList.remove("copied"), 900);
+}
 
 a2.ready();

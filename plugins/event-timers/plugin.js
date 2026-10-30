@@ -661,7 +661,21 @@ const fieldBosses = () => {
     .map(([id, b]) => ({ id, ...b }));
 };
 // A world boss's timer from the feed: { state, upSince, nextSpawn, reportedAt } (seconds), or null.
-const fieldTimer = (id) => (feed && feed.server === serverId() ? feed.bosses?.[id] || null : null);
+// One still up at 0% HP was killed: the meter that saw it fall did not see
+// it die, and until a map says so the feed has it up (Watcher Kaira, 0%).
+// One dead past its respawn time is up: the time is the game's own, and
+// nobody may have opened their map since.
+const feedEntry = (id) => (feed && feed.server === serverId() ? feed.bosses?.[id] || null : null);
+const fieldTimer = (id) => {
+  const t = feedEntry(id);
+  if (t?.state === "up" && t.hp === 0 && t.hpAt) {
+    return { ...t, state: "dead", nextSpawn: null, reportedAt: Math.max(t.reportedAt || 0, t.hpAt) };
+  }
+  if (t?.state === "dead" && t.nextSpawn && Date.now() >= t.nextSpawn * 1000) {
+    return { ...t, state: "up", upSince: t.nextSpawn, nextSpawn: null, hp: null, hpAt: null };
+  }
+  return t;
+};
 // The Abyss's bosses (Reshanta) are listed apart from the world bosses: the
 // ones on a fixed schedule from it, Argo, the Spirit King from the feed.
 const isAbyssBoss = (b) => b.where === "String_STR_Map_Abyss_Reshanta_A_body";
@@ -673,6 +687,12 @@ const ABYSS_LIVE = { "boss-kaira": ["2002"], "boss-nahma": ["2003", "2004", "200
 // feed has it fresh.
 const abyssLive = (ev) =>
   (ABYSS_LIVE[ev.id] || []).map(fieldTimer).filter((t) => t?.state === "up" && t.hp != null && t.hpAt).sort((a, b) => a.hp - b.hp)[0] || null;
+// Whether every spawn of a scheduled Abyss boss was reported dead a minute
+// or more after `start` (ms): killed, this time round.
+const abyssKilledSince = (ev, start) => {
+  const ids = ABYSS_LIVE[ev.id] || [];
+  return ids.length > 0 && ids.map(fieldTimer).every((t) => t?.state === "dead" && t.reportedAt * 1000 >= start + 60_000);
+};
 
 function renderStatic() {
   const words = ui();
@@ -867,6 +887,29 @@ for (const list of [els.scheduled, els.field]) {
     if (e.target.closest?.(".rowBtn")) rowPress = true;
   });
 }
+// A line about a timer for chat ("WB: Harvest Manager Moshav is at 76%"),
+// which a double right-click on its icon copies (pins.js pinLine, widget.js).
+const COPY = {
+  en: { wb: "WB", abyss: "Abyss", hp: (n, p) => `${n} is at ${p}%`, up: (n) => `${n} is up`, back: (n, t) => `${n} is back in ${t}`, due: (n) => `${n} is due now`, unknown: (n) => `${n}: no report yet`, starts: (n, t) => `${n} starts in ${t}`, on: (n, t) => `${n} is on now, ${t} left`, open: (n, t) => `${n} is open, ${t} left`, now: (n) => `${n} is on now`, fought: (n) => `${n} is being fought`, killed: (n) => `${n} was just killed`, copied: "Copied" },
+  ko: { wb: "월드보스", abyss: "어비스", hp: (n, p) => `${n} ${p}% 남음`, up: (n) => `${n} 출현 중`, back: (n, t) => `${n} ${t} 후 출현`, due: (n) => `${n} 곧 출현`, unknown: (n) => `${n}: 정보 없음`, starts: (n, t) => `${n} ${t} 후 시작`, on: (n, t) => `${n} 진행 중, ${t} 남음`, open: (n, t) => `${n} 입장 가능, ${t} 남음`, now: (n) => `${n} 지금 진행 중`, fought: (n) => `${n} 전투 중`, killed: (n) => `${n} 방금 처치됨`, copied: "복사됨" },
+  ja: { wb: "WB", abyss: "アビス", hp: (n, p) => `${n} 残りHP ${p}%`, up: (n) => `${n} 出現中`, back: (n, t) => `${n} あと${t}で出現`, due: (n) => `${n} まもなく出現`, unknown: (n) => `${n}: 情報なし`, starts: (n, t) => `${n} あと${t}で開始`, on: (n, t) => `${n} 開催中、残り${t}`, open: (n, t) => `${n} 入場可能、残り${t}`, now: (n) => `${n} 開催中`, fought: (n) => `${n} 戦闘中`, killed: (n) => `${n} 討伐されました`, copied: "コピーしました" },
+  de: { wb: "WB", abyss: "Abyss", hp: (n, p) => `${n} ist bei ${p} %`, up: (n) => `${n} ist da`, back: (n, t) => `${n} kommt in ${t}`, due: (n) => `${n} ist jetzt fällig`, unknown: (n) => `${n}: noch keine Meldung`, starts: (n, t) => `${n} beginnt in ${t}`, on: (n, t) => `${n} läuft, noch ${t}`, open: (n, t) => `${n} ist offen, noch ${t}`, now: (n) => `${n} läuft jetzt`, fought: (n) => `${n} wird bekämpft`, killed: (n) => `${n} wurde gerade besiegt`, copied: "Kopiert" },
+  fr: { wb: "WB", abyss: "Abysses", hp: (n, p) => `${n} est à ${p} %`, up: (n) => `${n} est là`, back: (n, t) => `${n} revient dans ${t}`, due: (n) => `${n} est attendu maintenant`, unknown: (n) => `${n} : pas encore de signalement`, starts: (n, t) => `${n} commence dans ${t}`, on: (n, t) => `${n} en cours, encore ${t}`, open: (n, t) => `${n} est ouvert, encore ${t}`, now: (n) => `${n} est en cours`, fought: (n) => `${n} est en combat`, killed: (n) => `${n} vient d'être vaincu`, copied: "Copié" },
+  es: { wb: "WB", abyss: "Abismo", hp: (n, p) => `${n} está al ${p}%`, up: (n) => `${n} ha aparecido`, back: (n, t) => `${n} vuelve en ${t}`, due: (n) => `${n} debería aparecer ya`, unknown: (n) => `${n}: sin informes aún`, starts: (n, t) => `${n} empieza en ${t}`, on: (n, t) => `${n} en curso, quedan ${t}`, open: (n, t) => `${n} está abierto, quedan ${t}`, now: (n) => `${n} está en curso`, fought: (n) => `${n} está en combate`, killed: (n) => `${n} acaba de caer`, copied: "Copiado" },
+  pt: { wb: "WB", abyss: "Abismo", hp: (n, p) => `${n} está com ${p}%`, up: (n) => `${n} apareceu`, back: (n, t) => `${n} volta em ${t}`, due: (n) => `${n} deve aparecer agora`, unknown: (n) => `${n}: sem relatos ainda`, starts: (n, t) => `${n} começa em ${t}`, on: (n, t) => `${n} acontecendo, faltam ${t}`, open: (n, t) => `${n} está aberto, faltam ${t}`, now: (n) => `${n} está acontecendo`, fought: (n) => `${n} está em combate`, killed: (n) => `${n} acabou de ser derrotado`, copied: "Copiado" },
+  ru: { wb: "WB", abyss: "Бездна", hp: (n, p) => `${n}: ${p}% HP`, up: (n) => `${n} появился`, back: (n, t) => `${n} появится через ${t}`, due: (n) => `${n} вот-вот появится`, unknown: (n) => `${n}: пока нет данных`, starts: (n, t) => `${n} начнётся через ${t}`, on: (n, t) => `${n} идёт, осталось ${t}`, open: (n, t) => `${n} открыт, осталось ${t}`, now: (n) => `${n} идёт сейчас`, fought: (n) => `${n}: идёт бой`, killed: (n) => `${n} только что убит`, copied: "Скопировано" },
+  "zh-Hant": { wb: "世界首領", abyss: "深淵", hp: (n, p) => `${n} 剩餘 ${p}%`, up: (n) => `${n} 已出現`, back: (n, t) => `${n} ${t}後出現`, due: (n) => `${n} 即將出現`, unknown: (n) => `${n}：尚無回報`, starts: (n, t) => `${n} ${t}後開始`, on: (n, t) => `${n} 進行中，剩餘 ${t}`, open: (n, t) => `${n} 開放中，剩餘 ${t}`, now: (n) => `${n} 進行中`, fought: (n) => `${n} 戰鬥中`, killed: (n) => `${n} 剛被擊敗`, copied: "已複製" },
+  "zh-Hans": { wb: "世界首领", abyss: "深渊", hp: (n, p) => `${n} 剩余 ${p}%`, up: (n) => `${n} 已出现`, back: (n, t) => `${n} ${t}后出现`, due: (n) => `${n} 即将出现`, unknown: (n) => `${n}：尚无回报`, starts: (n, t) => `${n} ${t}后开始`, on: (n, t) => `${n} 进行中，剩余 ${t}`, open: (n, t) => `${n} 开放中，剩余 ${t}`, now: (n) => `${n} 进行中`, fought: (n) => `${n} 战斗中`, killed: (n) => `${n} 刚被击败`, copied: "已复制" },
+};
+// A wait for chat: "45 sec", "3 min 20 sec" (under 10 minutes), "12 min",
+// "1 hr 5 min".
+const chatSpan = (ms) => {
+  const s = Math.max(0, Math.round(ms / 1000));
+  if (s < 60) return unit(s, "second");
+  if (s < 600) return s % 60 ? `${unit(Math.floor(s / 60), "minute")} ${unit(s % 60, "second")}` : unit(s / 60, "minute");
+  const m = Math.round(s / 60);
+  return m >= 60 ? `${unit(Math.floor(m / 60), "hour")} ${unit(m % 60, "minute")}` : unit(m, "minute");
+};
 // A boss row's nearest teleport, in a tooltip while the pointer is on it.
 // One tooltip for the page, placed by the row (the rows are drawn anew every
 // second; the tooltip stays). Positions are corrected by what the browser
@@ -984,7 +1027,11 @@ function renderSchedule(list, events, now, { hideable, actions = false }) {
   const words = ui();
   const tz = timeZone();
   const fmt = clock();
-  const shown = events.filter((ev) => tz || ev.utc).map((ev) => ({ ev, next: nextOf(ev, tz || "UTC", now) })).filter((x) => x.next);
+  const shown = events.filter((ev) => tz || ev.utc).map((ev) => {
+    const next = nextOf(ev, tz || "UTC", now);
+    // An Abyss boss killed since it spawned: its next spawn instead.
+    return { ev, next: next && next.start <= now && abyssKilledSince(ev, next.start) ? nextOf(ev, tz || "UTC", next.end + 1) : next };
+  }).filter((x) => x.next);
   const visible = shown.filter((x) => !hideable || !prefs.hidden.includes(x.ev.id)).sort((a, b) => a.next.start - b.next.start);
   list.replaceChildren(...visible.map(({ ev, next }) => {
     const running = next.start <= now;
@@ -1001,14 +1048,17 @@ function renderSchedule(list, events, now, { hideable, actions = false }) {
         render();
       });
     }
-    // An Abyss boss fought now: its HP as players' meters report it.
+    // An Abyss boss fought now: its HP as players' meters report it. From
+    // its spawn time it is up, as a boss, until a kill is reported.
     const live = ev.kind === "boss" ? abyssLive(ev) : null;
+    const spawned = running && ev.id in ABYSS_LIVE;
     const li = row({
-      id: ev.id, name: eventName(ev), where: ev.where.map(text).join(", "), running, hide, actions, up: !!live,
+      id: ev.id, name: eventName(ev), where: ev.where.map(text).join(", "), running: running && !spawned, hide, actions, up: !!live || spawned,
       soon: next.start - now <= SOON_MS,
-      countdown: live && !running ? words.up
+      countdown: live || spawned ? words.up
         : running ? `${ev.enter ? enterWord() : words.now} · ${words.left(span(next.end - now))}` : words.in(span(next.start - now)),
-      at: live ? `${words.hpLeft(live.hp)} · ${words.ago(age(now - live.hpAt * 1000))}` : fmt.format(new Date(next.start)),
+      at: live ? `${words.hpLeft(live.hp)} · ${words.ago(age(now - live.hpAt * 1000))}`
+        : spawned ? words.upFor(span(now - next.start)) : fmt.format(new Date(next.start)),
     });
     if (live) li.style.setProperty("--hp", `${Math.max(0, Math.min(100, live.hp))}%`);
     li.classList.toggle("hasHp", !!live);
@@ -1763,7 +1813,9 @@ function checkAlerts(now) {
     const id = `field:${b.id}`;
     const own = id in prefs.alerts;
     if (!own && !(ALL_FIELD in prefs.alerts)) continue;
-    const t = fieldTimer(b.id);
+    // The feed's own entry: its respawn time, which fieldTimer counts as up
+    // once reached (the "is back" alert is at that time).
+    const t = feedEntry(b.id);
     if (t?.state !== "dead" || !t.nextSpawn) continue;
     const lead = minutesFor(own ? id : ALL_FIELD);
     if (lead === null) continue;

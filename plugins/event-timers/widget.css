@@ -157,3 +157,10 @@ body.locked .pin { cursor: default; }
 @media (prefers-reduced-motion: reduce) {
   .pin.due:is(.shake, .bounce, .throb) .badge { animation: glow 1.1s ease-in-out infinite; }
 }
+
+/* Copied (a double right-click): a white flash around the icon. */
+.pin.copied .badge { animation: copied 0.9s ease-out; }
+@keyframes copied {
+  0% { box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.95); }
+  100% { box-shadow: 0 0 0 3px rgba(255, 255, 255, 0); }
+}

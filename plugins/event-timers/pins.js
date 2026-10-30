@@ -228,7 +228,17 @@ function pinState(id, now) {
   if (!ev) return null;
   const tz = timeZone();
   if (!tz && !ev.utc) return { name: text(ev.name), kind: ev.kind === "boss" ? "boss" : "event", start: null, running: false, end: null };
-  const next = nextOf(ev, tz || "UTC", now);
+  let next = nextOf(ev, tz || "UTC", now);
+  // A scheduled Abyss boss: up, as a boss, from its spawn time, with its HP
+  // once a meter reports it; killed since it spawned, its next spawn.
+  if (ev.id in ABYSS_LIVE) {
+    if (next && next.start <= now && abyssKilledSince(ev, next.start)) next = nextOf(ev, tz || "UTC", next.end + 1);
+    const live = abyssLive(ev);
+    return {
+      name: text(ev.name), kind: "boss", start: next ? next.start : null, end: null,
+      running: !!live || (!!next && next.start <= now), hp: live ? Math.max(0, Math.min(100, Number(live.hp))) : null,
+    };
+  }
   return {
     name: text(ev.name),
     kind: ev.kind === "boss" ? "boss" : "event",
@@ -238,6 +248,28 @@ function pinState(id, now) {
     // Open to enter until `end` (nextOf counts only that while as running).
     entry: !!ev.enter,
   };
+}
+
+// The line a double right-click on its icon copies, for chat: what the icon
+// shows, in words (plugin.js's COPY). World and Abyss bosses say which.
+function pinLine(id, state, now, fight) {
+  const c = COPY[language] || COPY.en;
+  const n = state.name;
+  const field = id.startsWith("field:");
+  const ev = field ? null : EVENTS.find((e) => e.id === id);
+  const abyss = field ? isAbyssBoss(fieldBosses().find((x) => `field:${x.id}` === id) || {}) : state.kind === "boss";
+  const hp = field ? state.hp : ev?.kind === "boss" ? abyssLive(ev)?.hp ?? null : null;
+  const until = state.start != null ? state.start - now : null;
+  const say = state.killed ? c.killed(n)
+    : hp != null && (state.running || field) ? c.hp(n, Math.round(hp))
+    : fight ? c.fought(n)
+    : state.running && state.kind !== "event" ? c.up(n)
+    : state.running && state.end > now ? (state.entry ? c.open : c.on)(n, chatSpan(state.end - now))
+    : state.running ? c.now(n)
+    : until == null ? c.unknown(n)
+    : until <= 0 ? c.due(n)
+    : (state.kind === "event" ? c.starts : c.back)(n, chatSpan(until));
+  return state.kind === "event" ? say : `${abyss ? c.abyss : c.wb}: ${say}`;
 }
 
 // "up" while a world boss with an icon is up, "soon" while one is due within
@@ -518,7 +550,7 @@ async function updatePins(now) {
       const countdown = state.killed ? p.killed
         : fight ? p.fighting
         : state.running
-          ? (lasts ? span(state.end - now) : state.kind === "field" ? words.up : p.now)
+          ? (lasts ? span(state.end - now) : state.kind !== "event" ? words.up : p.now)
           : until != null ? span(until) : "–";
       const sub = state.killed ? "" : state.running && state.entry ? enterWord() : lasts ? p.open
         : state.hp != null ? `${Math.round(state.hp)}%` : "";
@@ -529,7 +561,8 @@ async function updatePins(now) {
         // The icon's tooltip: its name, and a boss's nearest teleport.
         data: { name: state.name, tip: teleportTip(id) && [state.name, teleportTip(id)].join("\n"),
           showName: !!pin.name, tp: pin.tp ? teleportBadge(id) : "", countdown, sub, hp: state.killed ? 0 : state.hp ?? null,
-          running: state.running, due: due && !state.killed, effect: pin.effect, kind: state.kind, icon: pinIcon(id, state.kind) },
+          running: state.running, due: due && !state.killed, effect: pin.effect, kind: state.kind, icon: pinIcon(id, state.kind),
+          copy: pinLine(id, state, now, fight) },
       });
     }
     // Anchor mode: in its order, with what doesn't fit folded into "+N",

@@ -1,5 +1,18 @@
 [
   {
+    "version": "0.6.22",
+    "en": "Abyss bosses show as up from their spawn, with HP. A boss past its respawn time shows as up; one at 0% as killed. Double right-click an icon to copy its line for chat.",
+    "ko": "어비스 보스가 출현 시각부터 HP와 함께 출현 중으로 표시됩니다. 재출현 시각이 지난 보스는 출현 중, HP 0%는 처치로 표시됩니다. 아이콘을 오른쪽 두 번 클릭하면 채팅용 문구가 복사됩니다.",
+    "ja": "アビスボスが出現時刻からHPつきで出現中と表示されます。再出現時刻を過ぎたボスは出現中、HP 0%は討伐済みと表示されます。アイコンを右ダブルクリックするとチャット用の一文をコピーします。",
+    "de": "Abyss-Bosse gelten ab ihrem Erscheinen als da, mit HP. Ein Boss nach seiner Erscheinungszeit gilt als da, einer bei 0 % als besiegt. Doppelter Rechtsklick auf ein Symbol kopiert eine Zeile für den Chat.",
+    "fr": "Les boss des Abysses apparaissent présents dès leur apparition, avec leurs PV. Un boss passé son heure de retour est présent ; un boss à 0 % est vaincu. Double clic droit sur une icône pour copier une ligne pour le chat.",
+    "es": "Los jefes del Abismo aparecen activos desde su aparición, con PV. Un jefe pasada su hora de reaparición se muestra activo; uno al 0 %, derrotado. Doble clic derecho en un icono copia una línea para el chat.",
+    "pt": "Os chefes do Abismo aparecem ativos desde que surgem, com PV. Um chefe após o horário de retorno aparece ativo; um em 0%, derrotado. Clique duplo com o botão direito num ícone copia uma linha para o chat.",
+    "ru": "Боссы Бездны показаны на месте с момента появления, с HP. Босс после времени возрождения показан на месте, при 0% — убитым. Двойной щелчок правой кнопкой по значку копирует строку для чата.",
+    "zh-Hant": "深淵首領自出現時起顯示為已出現並附 HP。超過重生時間的首領顯示為已出現，HP 0% 顯示為已擊敗。在圖示上按兩下右鍵可複製聊天用文字。",
+    "zh-Hans": "深渊首领自出现时起显示为已出现并附 HP。超过重生时间的首领显示为已出现，HP 0% 显示为已击败。在图标上双击右键可复制聊天用文字。"
+  },
+  {
     "version": "0.6.21",
     "en": "Black Tentacle Lawa: the teleport shown is 44, Ancient Zumion Temple Site.",
     "ko": "검은 촉수 라와: 표시되는 텔레포트가 44번, 옛 주미온 신전 터입니다.",
@@ -50,18 +63,5 @@
     "ru": "Боссы по расписанию (Страж Кайра, Палачи, Повелитель-страж Нахма) 15 минут после появления показываются как активные, а не сразу переходят к следующему появлению.",
     "zh-Hant": "排程首領（監視者凱拉、執行者們、守護領主納赫瑪）出現後 15 分鐘內顯示為出現中，不會立刻跳到下一次出現。",
     "zh-Hans": "排程首领（监视者凯拉、执行者们、守护领主纳赫玛）出现后 15 分钟内显示为出现中，不会立刻跳到下一次出现。"
-  },
-  {
-    "version": "0.6.17",
-    "en": "Far lighter on your PC: the timers used about half a CPU core and hundreds of MB working out times; now next to nothing.",
-    "ko": "PC 부담이 크게 줄었습니다: 시간 계산에 CPU 코어 절반과 수백 MB를 쓰던 것이 이제 거의 들지 않습니다.",
-    "ja": "PCへの負担が大幅に軽くなりました。時刻の計算にCPUコアの半分と数百MBを使っていたのが、ほぼゼロに。",
-    "de": "Deutlich leichter für deinen PC: Die Timer brauchten zum Rechnen etwa einen halben CPU-Kern und Hunderte MB, jetzt fast nichts mehr.",
-    "fr": "Bien plus léger pour votre PC : le calcul des horaires prenait environ un demi-cœur de CPU et des centaines de Mo, presque rien maintenant.",
-    "es": "Mucho más ligero para tu PC: calcular los horarios usaba casi medio núcleo de CPU y cientos de MB; ahora casi nada.",
-    "pt": "Bem mais leve para o seu PC: calcular os horários usava cerca de meio núcleo de CPU e centenas de MB; agora quase nada.",
-    "ru": "Гораздо легче для ПК: расчёт времени занимал около половины ядра процессора и сотни МБ, теперь почти ничего.",
-    "zh-Hant": "大幅減輕電腦負擔：計算時間原本要用約半個 CPU 核心和數百 MB，現在幾乎不佔資源。",
-    "zh-Hans": "大幅减轻电脑负担：计算时间原本要用约半个 CPU 核心和数百 MB，现在几乎不占资源。"
   }
 ]

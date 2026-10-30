@@ -20,6 +20,7 @@ import json
 import re
 import shutil
 import sys
+import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -213,12 +214,16 @@ def main():
             target = dist / e["id"] / e["version"] / rel
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(PLUGINS / e["id"] / rel, target)
-    catalog = {"format": 1, "plugins": entries}
+    # Each build's serial, its time: a meter (2.0.87 on) refuses a catalog
+    # older than one it has read, so an old signed index can't be served
+    # again to hold back an update (audit L2).
+    serial = int(time.time())
+    catalog = {"format": 1, "serial": serial, "plugins": entries}
     (dist / "index.json").write_text(json.dumps(catalog, ensure_ascii=False, indent=1, sort_keys=True) + "\n", encoding="utf-8")
     print(f"wrote {dist}/index.json")
     if tests:
         (dist / "test").mkdir(parents=True, exist_ok=True)
-        test_catalog = {"format": 1, "plugins": tests}
+        test_catalog = {"format": 1, "serial": serial, "plugins": tests}
         (dist / "test" / "index.json").write_text(json.dumps(test_catalog, ensure_ascii=False, indent=1, sort_keys=True) + chr(10), encoding="utf-8")
         print(f"wrote {dist}/test/index.json")
 
